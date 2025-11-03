@@ -1,0 +1,142 @@
+import { generateText } from 'ai'
+import { createOpenAI } from '@ai-sdk/openai'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { createAnthropic } from '@ai-sdk/anthropic'
+import { createMistral } from '@ai-sdk/mistral'
+
+/**
+ * Supported AI providers
+ */
+export type AIProvider = 'openai' | 'google' | 'anthropic' | 'mistral'
+
+/**
+ * AI provider configuration
+ */
+interface AIConfig {
+  provider: AIProvider
+  model: string
+}
+
+/**
+ * Get AI provider and model from environment variables
+ */
+function getAIConfig(): AIConfig {
+  const provider = (process.env.AI_PROVIDER || 'openai').toLowerCase() as AIProvider
+
+  // Default models for each provider
+  const defaultModels: Record<AIProvider, string> = {
+    openai: process.env.OPENAI_MODEL || 'gpt-4-turbo',
+    google: process.env.GOOGLE_MODEL || 'gemini-1.5-pro',
+    anthropic: process.env.ANTHROPIC_MODEL || 'claude-3-5-sonnet-20241022',
+    mistral: process.env.MISTRAL_MODEL || 'mistral-large-latest',
+  }
+
+  return {
+    provider,
+    model: defaultModels[provider],
+  }
+}
+
+/**
+ * Initialize AI provider based on configuration
+ */
+function getAIModel(modelOverride?: string) {
+  const config = getAIConfig()
+  const modelName = modelOverride || config.model
+
+  switch (config.provider) {
+    case 'openai': {
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OPENAI_API_KEY environment variable is not set')
+      }
+      const openai = createOpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+      })
+      return openai(modelName)
+    }
+
+    case 'google': {
+      if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+        throw new Error('GOOGLE_GENERATIVE_AI_API_KEY environment variable is not set')
+      }
+      const google = createGoogleGenerativeAI({
+        apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      })
+      return google(modelName)
+    }
+
+    case 'anthropic': {
+      if (!process.env.ANTHROPIC_API_KEY) {
+        throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+      }
+      const anthropic = createAnthropic({
+        apiKey: process.env.ANTHROPIC_API_KEY,
+      })
+      return anthropic(modelName)
+    }
+
+    case 'mistral': {
+      if (!process.env.MISTRAL_API_KEY) {
+        throw new Error('MISTRAL_API_KEY environment variable is not set')
+      }
+      const mistral = createMistral({
+        apiKey: process.env.MISTRAL_API_KEY,
+      })
+      return mistral(modelName)
+    }
+
+    default:
+      throw new Error(`Unsupported AI provider: ${config.provider}`)
+  }
+}
+
+/**
+ * Get the default model for the configured provider
+ */
+export function getDefaultModel(): string {
+  return getAIConfig().model
+}
+
+/**
+ * Get the current AI provider
+ */
+export function getCurrentProvider(): AIProvider {
+  return getAIConfig().provider
+}
+
+/**
+ * Generate text completion using Vercel AI SDK
+ *
+ * The AI SDK provides:
+ * - Multi-provider support (OpenAI, Google, Anthropic, Mistral)
+ * - Better streaming support
+ * - Unified interface across providers
+ * - Built-in error handling
+ * - Token usage tracking
+ *
+ * Configure provider via AI_PROVIDER env var (default: openai)
+ * Configure model via provider-specific env var (e.g., OPENAI_MODEL)
+ */
+export async function generateCompletion(
+  systemPrompt: string,
+  userPrompt: string,
+  options?: {
+    model?: string
+    temperature?: number
+    maxTokens?: number
+  }
+): Promise<string> {
+  const { text } = await generateText({
+    model: getAIModel(options?.model),
+    system: systemPrompt,
+    prompt: userPrompt,
+    temperature: options?.temperature ?? 0.7,
+    maxTokens: options?.maxTokens ?? 2000,
+  })
+
+  if (!text) {
+    throw new Error('No content generated from AI')
+  }
+
+  return text.trim()
+}
