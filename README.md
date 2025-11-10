@@ -11,10 +11,12 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - 🎨 **Personalization**: Custom preferences for genres, tropes, spice level, and pacing
 - 💾 **Progress Tracking**: Resume stories anytime, all choices cached
 - 🤖 **AI-Powered**: Each scene uniquely generated based on your decisions
+- 📊 **Smart Metadata**: Automatic emotional tracking, tension threads, and relationship progression
+- 🛡️ **Safety First**: Enhanced content guardrails and age verification in prompts
 
 ## Project Status
 
-**Current Phase**: Foundation Complete (~50% to MVP)
+**Current Phase**: MVP Complete! 🎉
 
 ### 📚 Documentation
 
@@ -22,6 +24,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - **[SESSION_SUMMARY.md](SESSION_SUMMARY.md)** - Complete session recap and quick reference
 - **[DOCKER.md](DOCKER.md)** - Docker setup and deployment guide
 - **[AI_PROVIDERS.md](AI_PROVIDERS.md)** - Multi-provider AI configuration guide
+- **[SCENE_METADATA.md](SCENE_METADATA.md)** - Metadata system documentation
 
 ## Tech Stack
 
