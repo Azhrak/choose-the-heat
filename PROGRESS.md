@@ -429,6 +429,38 @@ docker-compose up --build
 - ✅ Per-story override capability (uses override → user default → "medium")
 - ✅ Future-ready architecture for custom word count input
 
+### Phase 14: Preferences Management Page (100% Complete)
+
+**Files Enhanced:**
+
+- [src/routes/preferences.tsx](src/routes/preferences.tsx) - Complete redesign from wizard to settings page
+- [src/routes/profile.tsx](src/routes/profile.tsx) - Updated navigation links and scene length display
+
+**Preferences Page Features:**
+
+- ✅ Single-page form layout (no wizard steps)
+- ✅ All preference sections visible at once
+- ✅ Loading state with spinner while fetching preferences
+- ✅ Success message with auto-hide (3 seconds)
+- ✅ Form validation (requires at least one genre and trope)
+- ✅ Settings-focused UI with proper navigation
+- ✅ Back to Profile link and Cancel/Save buttons
+- ✅ No redirect on save (stays on preferences page)
+- ✅ Changes clear success message for better UX
+- ✅ Profile page integration:
+  - Links to `/preferences` instead of onboarding
+  - Displays scene length preference in 3-column grid
+  - Shows current preferences with formatted display
+
+**User Flow:**
+
+1. User navigates to Profile page
+2. Clicks "Update Preferences" button
+3. Preferences page loads with current settings
+4. User modifies preferences (genres, tropes, spice, pacing, scene length)
+5. Clicks "Save Preferences" or "Cancel"
+6. Returns to Profile page with updated preferences displayed
+
 **Word Count Ranges by Phase/Length:**
 
 | Phase         | Short   | Medium  | Long     |
@@ -443,7 +475,7 @@ docker-compose up --build
 
 ## 🚧 In Progress / Next Steps
 
-### Phase 14: Polish & UX (NEXT - Priority 1)
+### Phase 15: Polish & UX (NEXT - Priority 1)
 
 **To Create:**
 
@@ -454,7 +486,6 @@ docker-compose up --build
 5. Toast notifications for user feedback
 6. Improved empty states
 7. 404 page
-8. Settings page
 
 **Improvements Needed:**
 
@@ -465,7 +496,7 @@ docker-compose up --build
 - SEO metadata for public pages
 - Performance optimization (code splitting, lazy loading)
 
-### Phase 15: Advanced Features (Priority 2)
+### Phase 16: Advanced Features (Priority 2)
 
 **To Create:**
 
@@ -605,7 +636,7 @@ pnpm start
 
 ## 📊 Current Status Summary
 
-**Overall Progress**: 100% (Phases 1-13 complete, MVP feature-complete with AI enhancements)
+**Overall Progress**: 100% (Phases 1-14 complete, MVP feature-complete with preferences management)
 
 **Can Currently Run**:
 
@@ -620,6 +651,7 @@ pnpm start
 - ✅ Reading interface at `/story/$id/read`
 - ✅ User library at `/library`
 - ✅ User profile at `/profile`
+- ✅ Preferences management at `/preferences`
 
 **Remaining Work**:
 
@@ -747,7 +779,7 @@ Remaining work is polish, testing, and optimization for production readiness.
 
 ---
 
-**Last Session Context**: Completed Phase 13 (Scene Length Control Feature). MVP is now 100% feature-complete with comprehensive AI enhancements! Ready for polish, testing, and deployment. Next priority: Phase 14 (Polish & UX).
+**Last Session Context**: Completed Phase 14 (Preferences Management Page). Redesigned preferences page from multi-step wizard to single-page settings form with proper navigation integration with profile page. Scene length preference now displayed in profile. MVP is 100% feature-complete! Next priority: Phase 15 (Polish & UX).
 
 ### Preference Structure (JSONB)
 

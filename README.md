@@ -9,15 +9,19 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - 🔐 **Authentication**: Google OAuth + Email/Password with session management
 - 📚 **Interactive Stories**: AI-generated romance novels with choice-based branching
 - 🎨 **Personalization**: Custom preferences for genres, tropes, spice level, pacing, and scene length
+- ⚙️ **Preferences Management**: Dedicated settings page to update your story generation preferences anytime
 - 💾 **Progress Tracking**: Resume stories anytime, all choices cached
+- 👤 **User Profiles**: Manage account details, change password, view preferences
 - 🤖 **AI-Powered**: Each scene uniquely generated based on your decisions
 - 📊 **Smart Metadata**: Automatic emotional tracking, tension threads, and relationship progression
-- � **Scene Length Control**: Choose short (230-585 words), medium (350-900 words), or long (490-1260 words) scenes
-- �🛡️ **Safety First**: Enhanced content guardrails and age verification in prompts
+- 📏 **Scene Length Control**: Choose short (230-585 words), medium (350-900 words), or long (490-1260 words) scenes
+- �️ **Safety First**: Enhanced content guardrails and age verification in prompts
 
 ## Project Status
 
-**Current Phase**: MVP Complete with AI Enhancements & Scene Length Control! 🎉
+**Current Phase**: MVP Complete with Preferences Management! 🎉
+
+All core features implemented including dedicated preferences management page for updating story generation settings.
 
 ### 📚 Documentation
 
@@ -192,11 +196,12 @@ src/
 ## How It Works
 
 1. **Sign Up**: Create account via Google or email
-2. **Set Preferences**: Choose genres, tropes, spice level, pacing
+2. **Set Preferences**: Choose genres, tropes, spice level, pacing, and scene length during onboarding
 3. **Browse**: Select from curated novel templates
 4. **Read**: AI generates scenes based on your preferences
 5. **Choose**: Make decisions at key plot points
 6. **Continue**: Your choices shape the story uniquely
+7. **Manage**: Update preferences anytime from your profile page
 
 ## Development Notes
 

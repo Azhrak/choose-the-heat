@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PreferencesRouteImport } from './routes/preferences'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
@@ -37,6 +38,11 @@ import { Route as ApiAuthCallbackGoogleRouteImport } from './routes/api/auth/cal
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreferencesRoute = PreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/library': typeof LibraryRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/library': typeof LibraryRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/library': typeof LibraryRoute
+  '/preferences': typeof PreferencesRoute
   '/profile': typeof ProfileRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/library'
+    | '/preferences'
     | '/profile'
     | '/api/preferences'
     | '/auth/login'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/library'
+    | '/preferences'
     | '/profile'
     | '/api/preferences'
     | '/auth/login'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/library'
+    | '/preferences'
     | '/profile'
     | '/api/preferences'
     | '/auth/login'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrowseRoute: typeof BrowseRoute
   LibraryRoute: typeof LibraryRoute
+  PreferencesRoute: typeof PreferencesRoute
   ProfileRoute: typeof ProfileRoute
   ApiPreferencesRoute: typeof ApiPreferencesRoute
   AuthLoginRoute: typeof AuthLoginRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preferences': {
+      id: '/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof PreferencesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
   LibraryRoute: LibraryRoute,
+  PreferencesRoute: PreferencesRoute,
   ProfileRoute: ProfileRoute,
   ApiPreferencesRoute: ApiPreferencesRoute,
   AuthLoginRoute: AuthLoginRoute,
