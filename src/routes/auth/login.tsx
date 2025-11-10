@@ -1,7 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { useState } from "react";
-import { cn } from "~/lib/utils";
+import { Button } from "~/components/Button";
+import { ErrorMessage } from "~/components/ErrorMessage";
+import { FormInput } from "~/components/FormInput";
 
 export const Route = createFileRoute("/auth/login")({
 	component: LoginPage,
@@ -50,7 +52,7 @@ function LoginPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center px-4">
+		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center px-4">
 			<div className="max-w-md w-full">
 				{/* Logo */}
 				<div className="text-center mb-8">
@@ -62,11 +64,7 @@ function LoginPage() {
 				</div>
 
 				{/* Error Message */}
-				{error && (
-					<div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-						{error}
-					</div>
-				)}
+				{error && <ErrorMessage message={error} className="mb-4" />}
 
 				{/* Google Sign In */}
 				<button
@@ -107,52 +105,25 @@ function LoginPage() {
 
 				{/* Email/Password Form */}
 				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
-						<label
-							htmlFor="email"
-							className="block text-sm font-medium text-slate-700 mb-1"
-						>
-							Email
-						</label>
-						<input
-							id="email"
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-							className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-romance-500 focus:border-transparent"
-						/>
-					</div>
+					<FormInput
+						label="Email"
+						type="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						required
+					/>
 
-					<div>
-						<label
-							htmlFor="password"
-							className="block text-sm font-medium text-slate-700 mb-1"
-						>
-							Password
-						</label>
-						<input
-							id="password"
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-							className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-romance-500 focus:border-transparent"
-						/>
-					</div>
+					<FormInput
+						label="Password"
+						type="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
 
-					<button
-						type="submit"
-						disabled={loading}
-						className={cn(
-							"w-full px-4 py-3 bg-romance-600 text-white rounded-lg font-semibold transition-colors",
-							loading
-								? "opacity-50 cursor-not-allowed"
-								: "hover:bg-romance-700",
-						)}
-					>
-						{loading ? "Signing in..." : "Sign In"}
-					</button>
+					<Button type="submit" loading={loading} className="w-full">
+						Sign In
+					</Button>
 				</form>
 
 				{/* Sign Up Link */}

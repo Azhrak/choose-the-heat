@@ -64,7 +64,7 @@ export function Header({ currentPath = "" }: HeaderProps) {
 						</Link>
 						<button
 							onClick={handleLogout}
-							className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-romance-600 font-medium transition-colors"
+							className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-romance-600 font-medium transition-colors cursor-pointer"
 							type="button"
 						>
 							<LogOut className="w-4 h-4" />

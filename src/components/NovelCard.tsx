@@ -23,7 +23,7 @@ export function NovelCard({
 		<div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
 			{/* Gradient Cover */}
 			<div
-				className={`h-48 bg-gradient-to-br ${coverGradient} flex items-center justify-center`}
+				className={`h-48 bg-linear-to-br ${coverGradient} flex items-center justify-center`}
 			>
 				<BookOpen
 					className="w-20 h-20 text-white opacity-80"
