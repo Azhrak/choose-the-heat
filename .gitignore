@@ -38,6 +38,9 @@ coverage
 *.sqlite
 *.sqlite3
 *.db-journal
+schema.sql
+*.dump
+*.backup
 
 # Logs
 *.log

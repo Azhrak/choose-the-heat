@@ -33,23 +33,66 @@ export async function getNovelTemplateWithChoices(templateId: string) {
 }
 
 /**
- * Create a new user story
+ * Create a new user story with auto-generated title
  */
 export async function createUserStory(
 	userId: string,
 	templateId: string,
 	preferences: any,
+	customTitle?: string,
 ) {
+	// Get template title for auto-generation
+	const template = await db
+		.selectFrom("novel_templates")
+		.select("title")
+		.where("id", "=", templateId)
+		.executeTakeFirst();
+
+	if (!template) {
+		throw new Error("Template not found");
+	}
+
+	let storyTitle = customTitle;
+
+	// Auto-generate title if not provided
+	if (!storyTitle) {
+		// Count existing stories from this template by this user
+		const existingCount = await db
+			.selectFrom("user_stories")
+			.where("user_id", "=", userId)
+			.where("template_id", "=", templateId)
+			.select((eb) => eb.fn.count<number>("id").as("count"))
+			.executeTakeFirst();
+
+		const count = existingCount?.count || 0;
+
+		if (count === 0) {
+			// First story: use template title as-is
+			storyTitle = template.title;
+		} else {
+			// Subsequent stories: add counter
+			storyTitle = `${template.title} #${count + 1}`;
+		}
+	}
+
 	return db
 		.insertInto("user_stories")
 		.values({
 			user_id: userId,
 			template_id: templateId,
+			story_title: storyTitle,
 			preferences: JSON.stringify(preferences),
 			current_scene: 1,
 			status: "in-progress",
 		})
-		.returning(["id", "user_id", "template_id", "current_scene", "status"])
+		.returning([
+			"id",
+			"user_id",
+			"template_id",
+			"story_title",
+			"current_scene",
+			"status",
+		])
 		.executeTakeFirstOrThrow();
 }
 

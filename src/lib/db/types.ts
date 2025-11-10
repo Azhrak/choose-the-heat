@@ -85,6 +85,7 @@ export interface UserStoriesTable {
 	id: Generated<string>;
 	user_id: string;
 	template_id: string;
+	story_title: string | null;
 	preferences: unknown; // JSONB snapshot of preferences
 	current_scene: Generated<number>;
 	status: Generated<"in-progress" | "completed">;

@@ -20,8 +20,10 @@ import { Route as AuthOnboardingRouteImport } from './routes/auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiPreferencesRouteImport } from './routes/api/preferences'
 import { Route as ApiTemplatesIndexRouteImport } from './routes/api/templates/index'
+import { Route as ApiStoriesIndexRouteImport } from './routes/api/stories/index'
 import { Route as ApiProfileIndexRouteImport } from './routes/api/profile/index'
 import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
+import { Route as ApiStoriesUserRouteImport } from './routes/api/stories/user'
 import { Route as ApiProfilePasswordRouteImport } from './routes/api/profile/password'
 import { Route as ApiAuthSignupRouteImport } from './routes/api/auth/signup'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
@@ -84,6 +86,11 @@ const ApiTemplatesIndexRoute = ApiTemplatesIndexRouteImport.update({
   path: '/api/templates/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStoriesIndexRoute = ApiStoriesIndexRouteImport.update({
+  id: '/api/stories/',
+  path: '/api/stories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiProfileIndexRoute = ApiProfileIndexRouteImport.update({
   id: '/api/profile/',
   path: '/api/profile/',
@@ -92,6 +99,11 @@ const ApiProfileIndexRoute = ApiProfileIndexRouteImport.update({
 const ApiTemplatesIdRoute = ApiTemplatesIdRouteImport.update({
   id: '/api/templates/$id',
   path: '/api/templates/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStoriesUserRoute = ApiStoriesUserRouteImport.update({
+  id: '/api/stories/user',
+  path: '/api/stories/user',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiProfilePasswordRoute = ApiProfilePasswordRouteImport.update({
@@ -141,8 +153,10 @@ export interface FileRoutesByFullPath {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile': typeof ApiProfileIndexRoute
+  '/api/stories': typeof ApiStoriesIndexRoute
   '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
@@ -162,8 +176,10 @@ export interface FileRoutesByTo {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile': typeof ApiProfileIndexRoute
+  '/api/stories': typeof ApiStoriesIndexRoute
   '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
@@ -184,8 +200,10 @@ export interface FileRoutesById {
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile/': typeof ApiProfileIndexRoute
+  '/api/stories/': typeof ApiStoriesIndexRoute
   '/api/templates/': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
@@ -207,8 +225,10 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/stories/user'
     | '/api/templates/$id'
     | '/api/profile'
+    | '/api/stories'
     | '/api/templates'
     | '/api/auth/callback/google'
   fileRoutesByTo: FileRoutesByTo
@@ -228,8 +248,10 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/stories/user'
     | '/api/templates/$id'
     | '/api/profile'
+    | '/api/stories'
     | '/api/templates'
     | '/api/auth/callback/google'
   id:
@@ -249,8 +271,10 @@ export interface FileRouteTypes {
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/stories/user'
     | '/api/templates/$id'
     | '/api/profile/'
+    | '/api/stories/'
     | '/api/templates/'
     | '/api/auth/callback/google'
   fileRoutesById: FileRoutesById
@@ -271,8 +295,10 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthSignupRoute: typeof ApiAuthSignupRoute
   ApiProfilePasswordRoute: typeof ApiProfilePasswordRoute
+  ApiStoriesUserRoute: typeof ApiStoriesUserRoute
   ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
   ApiProfileIndexRoute: typeof ApiProfileIndexRoute
+  ApiStoriesIndexRoute: typeof ApiStoriesIndexRoute
   ApiTemplatesIndexRoute: typeof ApiTemplatesIndexRoute
   ApiAuthCallbackGoogleRoute: typeof ApiAuthCallbackGoogleRoute
 }
@@ -356,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTemplatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/stories/': {
+      id: '/api/stories/'
+      path: '/api/stories'
+      fullPath: '/api/stories'
+      preLoaderRoute: typeof ApiStoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/profile/': {
       id: '/api/profile/'
       path: '/api/profile'
@@ -368,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/api/templates/$id'
       fullPath: '/api/templates/$id'
       preLoaderRoute: typeof ApiTemplatesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stories/user': {
+      id: '/api/stories/user'
+      path: '/api/stories/user'
+      fullPath: '/api/stories/user'
+      preLoaderRoute: typeof ApiStoriesUserRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/profile/password': {
@@ -431,8 +471,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthSignupRoute: ApiAuthSignupRoute,
   ApiProfilePasswordRoute: ApiProfilePasswordRoute,
+  ApiStoriesUserRoute: ApiStoriesUserRoute,
   ApiTemplatesIdRoute: ApiTemplatesIdRoute,
   ApiProfileIndexRoute: ApiProfileIndexRoute,
+  ApiStoriesIndexRoute: ApiStoriesIndexRoute,
   ApiTemplatesIndexRoute: ApiTemplatesIndexRoute,
   ApiAuthCallbackGoogleRoute: ApiAuthCallbackGoogleRoute,
 }

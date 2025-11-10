@@ -16,21 +16,35 @@ export const Route = createFileRoute("/api/templates/")({
 					const tropesParam = url.searchParams.get("tropes");
 					const searchParam = url.searchParams.get("search");
 
-					// If search query provided, search templates
-					if (searchParam) {
-						const templates = await searchTemplates(searchParam);
-						return json({ templates });
-					}
+					let templates;
 
-					// If tropes filter provided, filter by tropes
-					if (tropesParam) {
+					// If both tropes and search are provided, filter by both
+					if (tropesParam && searchParam) {
 						const tropes = tropesParam.split(",") as Trope[];
-						const templates = await getTemplatesByTropes(tropes);
-						return json({ templates });
+						const tropeFiltered = await getTemplatesByTropes(tropes);
+						const searchTerm = searchParam.toLowerCase();
+
+						templates = tropeFiltered.filter((template) => {
+							return (
+								template.title.toLowerCase().includes(searchTerm) ||
+								template.description.toLowerCase().includes(searchTerm)
+							);
+						});
+					}
+					// If only tropes filter provided
+					else if (tropesParam) {
+						const tropes = tropesParam.split(",") as Trope[];
+						templates = await getTemplatesByTropes(tropes);
+					}
+					// If only search query provided
+					else if (searchParam) {
+						templates = await searchTemplates(searchParam);
+					}
+					// Otherwise, return all templates
+					else {
+						templates = await getAllTemplates();
 					}
 
-					// Otherwise, return all templates
-					const templates = await getAllTemplates();
 					return json({ templates });
 				} catch (error) {
 					console.error("Error fetching templates:", error);
