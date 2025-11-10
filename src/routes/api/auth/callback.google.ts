@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getGoogleUser, google, verifyOAuthState } from "~/lib/auth/oauth";
+import { getGoogleUser, getPKCEVerifier, google, verifyOAuthState } from "~/lib/auth/oauth";
 import { createSession, createSessionCookie } from "~/lib/auth/session";
-import { getOrCreateGoogleUser } from "~/lib/db/queries/users";
+import { getOrCreateGoogleUser, getUserById } from "~/lib/db/queries/users";
 
 export const Route = createFileRoute("/api/auth/callback/google")({
 	server: {
@@ -30,18 +30,32 @@ export const Route = createFileRoute("/api/auth/callback/google")({
 				}
 
 				try {
-					// Exchange code for tokens
-					const tokens = await google.validateAuthorizationCode(code);
-					const googleUser = await getGoogleUser(tokens.accessToken());
+					// Get the PKCE code verifier
+					const codeVerifier = getPKCEVerifier(state);
+					if (!codeVerifier) {
+						return new Response("Missing code verifier", { status: 400 });
+					}
+
+					// Exchange code for tokens (Arctic's validateAuthorizationCode handles PKCE)
+					const tokens = await google.validateAuthorizationCode(code, codeVerifier);
+					const accessToken = tokens.accessToken;
+					const googleUser = await getGoogleUser(accessToken);
 
 					// Create or get user
-					const user = await getOrCreateGoogleUser(
+					const createdUser = await getOrCreateGoogleUser(
 						googleUser,
-						tokens.accessToken(),
+						accessToken,
 					);
 
-					if (!user) {
+					if (!createdUser) {
 						return new Response("Failed to create user", { status: 500 });
+					}
+
+					// Get full user data including preferences
+					const user = await getUserById(createdUser.id);
+
+					if (!user) {
+						return new Response("Failed to load user", { status: 500 });
 					}
 
 					// Create session
