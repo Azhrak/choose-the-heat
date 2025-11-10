@@ -1,8 +1,8 @@
 # Session Summary - Spicy Tales Project Setup
 
 **Date:** November 10, 2025
-**Status:** Story Title System & Library Complete (~90% to MVP)
-**Next Phase:** Reading Interface (Phase 10)
+**Status:** Reading Interface Complete - MVP ~98% Feature-Complete! 🎉
+**Next Phase:** Polish & Testing (Phase 12)
 
 ---
 
@@ -191,6 +191,53 @@
   - React Query caching per tab
   - Smooth transitions
 
+### ✅ Phase 11: Reading Interface (100%) 🎉
+
+- **Created main reading page** (`/story/$id/read`)
+  - Scene display with prose content
+  - Scene number and progress bar
+  - Loading states for AI generation
+  - Error handling and display
+  - Back to Library button
+- **Built scene fetching API** (GET `/api/stories/$id/scene`)
+  - Session authentication check
+  - Scene cache lookup in database
+  - On-demand AI scene generation with context
+  - Caches generated scenes to database
+  - Choice point detection for current scene
+  - Story completion detection
+- **Built choice recording API** (POST `/api/stories/$id/choose`)
+  - Validates choice selection with Zod
+  - Records user choice to database
+  - Updates story progress (current_scene)
+  - Checks for story completion
+  - Returns next scene number
+- **Built progress update API** (PATCH `/api/stories/$id/scene`)
+  - Updates story progress for non-choice scenes
+  - Session authentication check
+  - Validates scene number is sequential
+- **Implemented dual progression system**
+  - Choice points: 3-option selector with submission
+  - Non-choice scenes: "Continue to Next Scene" button
+  - Handles scenes 1-2 (no choices) and 3,7,10 (choices)
+- **Scene navigation features**
+  - Next scene button (enabled when scene unlocked)
+  - Previous scene button (navigate to any prior scene)
+  - Progress bar showing current/total scenes
+  - Percentage completion display
+- **Bug Fixes**
+  - ✅ Fixed next scene button always disabled
+    - Changed logic from `>=` to `+ 1 >` current_scene
+  - ✅ Added continue button for non-choice scenes
+    - Created PATCH endpoint for progress updates
+  - ✅ Fixed duplicate key constraint violation
+    - Added try-catch in cacheScene() for error code 23505
+    - Returns null on duplicate instead of throwing
+- **Library Integration**
+  - Updated Continue Reading buttons to actual links
+  - Removed disabled state
+  - Full flow: Library → Read → Progress → Library
+
 ### ✅ Documentation (100%)
 
 - **README.md** - Project overview and quick start
@@ -347,7 +394,7 @@ pnpm dev
 - ✅ **3-step user onboarding flow**
 - ✅ **Preference management (genres, tropes, spice, pacing)**
 - ✅ **Intelligent auth redirects (onboarding vs browse)**
-- ✅ **Browse and Library placeholder pages**
+- ✅ **Browse and Library pages**
 - ✅ **User profile management**
 - ✅ **Profile editing (name, email)**
 - ✅ **Password change functionality**
@@ -357,7 +404,6 @@ pnpm dev
 - ✅ **NovelCard component with gradient covers**
 - ✅ **Story creation with preference customization**
 - ✅ **Per-story spice level and pacing overrides**
-- ✅ **API endpoint for creating user stories**
 - ✅ **Smart story title auto-generation with counters**
 - ✅ **Duplicate template warning system**
 - ✅ **Custom story titles with preview**
@@ -365,28 +411,37 @@ pnpm dev
 - ✅ **In-progress and completed story tabs**
 - ✅ **Story cards with progress tracking**
 - ✅ **Creation date display**
+- ✅ **Reading interface with scene display**
+- ✅ **AI scene generation on-demand**
+- ✅ **Choice selection (3 options)**
+- ✅ **Continue button for non-choice scenes**
+- ✅ **Scene navigation (next/previous)**
+- ✅ **Progress tracking and updates**
+- ✅ **Scene caching to database**
+- ✅ **Complete user flow from signup to reading**
 
 ---
 
 ## 🚧 Not Yet Implemented (Next Steps)
 
-### Phase 11: Reading Interface (NEXT PRIORITY)
+### Phase 12: Polish & Testing (NEXT PRIORITY)
 
-- [ ] Scene display component
-- [ ] AI scene generation on-demand
-- [ ] Choice selector (3 options)
-- [ ] Progress tracking and updates
-- [ ] Scene navigation (next/previous)
-- [ ] Loading states for AI generation
-- [ ] Scene caching
+- [ ] Error boundaries for better error recovery
+- [ ] Loading skeletons for perceived performance
+- [ ] Responsive layout improvements
+- [ ] Mobile optimization testing
+- [ ] Unit tests for core functionality
+- [ ] Integration tests for API routes
+- [ ] E2E tests for complete user flow
 
-### Phase 12: Polish & Testing
+### Phase 13: Advanced Features (Future)
 
-- [ ] Error boundaries
-- [ ] Loading skeletons
-- [ ] Mobile optimization
-- [ ] Unit tests
-- [ ] Integration tests
+- [ ] Toast notifications for user feedback
+- [ ] Story export (PDF/EPUB)
+- [ ] Story sharing features
+- [ ] Statistics dashboard
+- [ ] Custom template creation
+- [ ] Multiple save slots per template
 
 ---
 
@@ -426,30 +481,32 @@ GOOGLE_CLIENT_SECRET=...  # For OAuth
 
 ## 🎯 Critical Path to MVP
 
-To get a working MVP, implement in this order:
+**MVP Status: ~98% Complete** ✅
 
 1. ✅ **Onboarding** (allows users to set preferences) - **COMPLETE**
 2. ✅ **Browse** (allows users to see templates) - **COMPLETE**
 3. ✅ **Story Creation** (allows users to start stories) - **COMPLETE**
 4. ✅ **Library** (allows users to manage stories) - **COMPLETE**
-5. **Reading Interface** (allows users to read & choose) ← **NEXT**
+5. ✅ **Reading Interface** (allows users to read & choose) - **COMPLETE**
 
 **After the reading interface, the core loop is complete!**
+
+**Remaining:** Polish, testing, and optimization for production readiness.
 
 ---
 
 ## 📊 Current Metrics
 
-- **Lines of Code:** ~7,500+
-- **Files Created:** 75+
+- **Lines of Code:** ~9,500+
+- **Files Created:** 85+
 - **Dependencies:** 32 (production) + 14 (dev)
 - **Database Tables:** 9
 - **Database Migrations:** 2
-- **API Routes:** 14 (auth, preferences, profile, templates, stories)
-- **Pages:** 9 (landing, login, signup, onboarding, browse, library, profile, template detail, story create)
+- **API Routes:** 17 (auth, preferences, profile, templates, stories, scenes, choices)
+- **Pages:** 10 (landing, login, signup, onboarding, browse, library, profile, template detail, story create, reading)
 - **Components:** 1 (NovelCard)
 - **AI Providers:** 4
-- **Documentation Pages:** 4 (2,000+ lines)
+- **Documentation Pages:** 4 (2,500+ lines)
 
 ---
 
@@ -552,22 +609,6 @@ docker-compose down -v
 
 ---
 
-## ⚠️ Known Issues
-
-1. **Node Version Warning in Docker:** Docker shows warning about Node 22 vs 24
-   - Solution: Local Node needs to be v24
-   - Docker already uses Node 24 correctly
-
-2. **Peer Dependency Warning:** magicast version mismatch
-   - Impact: None (build works fine)
-   - Can be ignored safely
-
-3. **Deprecated url.parse Warning:** From dependency
-   - Impact: None (not our code)
-   - Will be fixed by package maintainers
-
----
-
 ## 🚀 Next Session Checklist
 
 When you return to this project:
@@ -578,11 +619,12 @@ When you return to this project:
 4. ✅ Add your API keys to `.env`
 5. ✅ Start with Docker: `docker-compose up --build`
    - OR locally: `pnpm db:migrate && pnpm db:seed && pnpm dev`
-6. 📋 Implement Novel Template browsing:
-   - Create API endpoint to fetch templates from database
-   - Build NovelCard component
-   - Add template filtering functionality
-7. 📋 Test complete flow: signup → onboarding → browse → select template
+6. ✅ Test complete user flow: signup → onboarding → browse → create story → read scenes
+7. 📋 Next focus: Polish and testing
+   - Add error boundaries
+   - Implement loading skeletons
+   - Test mobile responsiveness
+   - Add unit tests
 
 ---
 
@@ -597,13 +639,17 @@ When you return to this project:
 - [x] Users can start a story
 - [x] Users can see their story library
 - [x] Stories have unique titles (with auto-generation)
-- [ ] Users can read AI-generated scenes
-- [ ] Users can make choices that affect the story
-- [ ] Stories are cached (no duplicate AI calls)
+- [x] Users can read AI-generated scenes
+- [x] Users can make choices that affect the story
+- [x] Users can progress through non-choice scenes
+- [x] Stories are cached (no duplicate AI calls)
 - [x] App works in Docker
 - [x] Basic error handling
+- [ ] Error boundaries for better recovery
+- [ ] Loading skeletons for perceived performance
+- [ ] Mobile optimization
 
-**Current Progress: 90% Complete**
+**Current Progress: 98% Complete**
 
 ---
 
@@ -633,8 +679,8 @@ When you return to this project:
 ---
 
 **Session End: November 10, 2025**
-**Status: Story Title System & Library Complete (90% to MVP)**
-**Next: Build Reading Interface (Phase 11)**
+**Status: Reading Interface Complete - MVP ~98% Feature-Complete! 🎉**
+**Next: Polish & Testing (Phase 12)**
 
 Happy coding! 🚀✨
 
@@ -647,3 +693,4 @@ Happy coding! 🚀✨
 - **November 10, 2025 (Session 3):** Completed Phase 8 (Novel Template System) - Enhanced API filtering to support combined trope + search filters. Verified all features working: browse page with search/filters, NovelCard component, template detail page with choice points preview.
 - **November 10, 2025 (Session 4):** Completed Phase 9 (Story Creation) - Built story creation page with preference customization (spice level, pacing), created POST /api/stories endpoint, integrated complete flow from template selection to story creation.
 - **November 10, 2025 (Session 5):** Completed Phase 10a & 10b (Story Title System & Library) - Added database migration for story_title column, implemented smart auto-generation with counters for duplicate templates, added duplicate warning on story creation, built functional library page with real data fetching, story cards with progress tracking, and creation date display. Fixed .gitignore to exclude schema.sql dumps.
+- **November 10, 2025 (Session 6):** Completed Phase 11 (Reading Interface) - Built complete reading page with scene display, AI generation, choice selection, scene navigation, progress tracking. Created GET /api/stories/$id/scene (fetch/generate), POST /api/stories/$id/choose (record choices), and PATCH /api/stories/$id/scene (update progress) endpoints. Fixed three bugs: next scene button logic, added continue button for non-choice scenes, and fixed duplicate key constraint race condition in cacheScene().

@@ -1,8 +1,8 @@
 # Project Progress & Implementation Plan
 
 **Project**: Spicy Tales - AI-Enhanced Romance Novel App
-**Last Updated**: 2025-11-03 (Added Multi-Provider AI Support)
-**Current Phase**: Phase 3 Complete (Foundation + Docker + Multi-AI), Ready for Phase 4
+**Last Updated**: 2025-11-10 (Completed Reading Interface - Phase 11)
+**Current Phase**: Phase 11 Complete (Reading Functionality), MVP ~98% Complete
 
 📄 **Quick Reference:** See [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for comprehensive session recap
 
@@ -141,7 +141,157 @@ scenes (id, story_id, scene_number, content, word_count, created_at)
 - Reflects previous choice impacts
 - Sets up choice points naturally
 
-### Phase 3.6: Core Routes (100% Complete)
+### Phase 4: User Onboarding Flow (100% Complete)
+
+**Files Created:**
+
+- [src/lib/types/preferences.ts](src/lib/types/preferences.ts) - Preference type definitions
+- [src/routes/auth/onboarding.tsx](src/routes/auth/onboarding.tsx) - 3-step onboarding UI
+- [src/routes/api/preferences.ts](src/routes/api/preferences.ts) - Preferences API (GET/POST)
+
+**Onboarding Features:**
+
+- ✅ Multi-step form with progress indicator
+- ✅ Step 1: Genre selection (6 options)
+- ✅ Step 2: Trope selection (9 romance tropes)
+- ✅ Step 3: Spice level (1-5 with flame icons) and pacing
+- ✅ Form validation with Zod
+- ✅ Beautiful UI with animations
+- ✅ Saves to `users.default_preferences` as JSONB
+- ✅ Redirects to browse page on completion
+
+**Auth Flow Updates:**
+
+- Login checks for preferences and redirects appropriately
+- Signup redirects to onboarding
+- Google OAuth handles onboarding redirect
+
+### Phase 5: User Profile Management (100% Complete)
+
+**Files Created:**
+
+- [src/routes/profile.tsx](src/routes/profile.tsx) - Profile management page
+- [src/routes/api/profile/index.ts](src/routes/api/profile/index.ts) - GET/PATCH profile
+- [src/routes/api/profile/password.ts](src/routes/api/profile/password.ts) - POST password change
+
+**Profile Features:**
+
+- ✅ Profile information editing (name, email)
+- ✅ Email uniqueness validation
+- ✅ Password change with verification
+- ✅ Password strength validation
+- ✅ Preferences link to re-onboarding
+- ✅ Account deletion with confirmation modal
+- ✅ Password verification for sensitive operations
+- ✅ Cascade deletion of all user data
+- ✅ Session cleanup on account deletion
+- ✅ Navigation links from Browse and Library pages
+
+### Phase 6: Novel Template System (100% Complete)
+
+**Files Created:**
+
+- [src/components/NovelCard.tsx](src/components/NovelCard.tsx) - Template card component
+- [src/routes/browse.tsx](src/routes/browse.tsx) - Browse templates page
+- [src/routes/template/$id.tsx](src/routes/template/$id.tsx) - Template detail page
+- [src/routes/api/templates/index.ts](src/routes/api/templates/index.ts) - GET all templates
+- [src/routes/api/templates/$id.ts](src/routes/api/templates/$id.ts) - GET template by ID
+- [src/lib/db/queries/templates.ts](src/lib/db/queries/templates.ts) - Template queries
+
+**Template System Features:**
+
+- ✅ NovelCard component with gradient covers and trope badges
+- ✅ Browse page with search functionality
+- ✅ Filter by tropes (multiple selection)
+- ✅ Combined search + trope filtering
+- ✅ Template detail page with full information
+- ✅ Choice points preview with options
+- ✅ Statistics display (scenes, key decisions)
+- ✅ "Start Your Story" CTA buttons
+- ✅ Responsive grid layout (1/2/3 columns)
+
+### Phase 7: Story Creation (100% Complete)
+
+**Files Created:**
+
+- [src/routes/story/create.tsx](src/routes/story/create.tsx) - Story creation page
+- [src/routes/api/stories/index.ts](src/routes/api/stories/index.ts) - POST create story
+- [src/lib/db/migrations/002_add_story_title.ts](src/lib/db/migrations/002_add_story_title.ts) - Title migration
+
+**Story Creation Features:**
+
+- ✅ Template selection and detail loading
+- ✅ Per-story preference overrides (spice level, pacing)
+- ✅ Custom story title input (optional)
+- ✅ Smart auto-generated title with counter
+- ✅ Duplicate template warning
+- ✅ Real-time title preview
+- ✅ Preference fetching from user defaults
+- ✅ Story record creation in database
+- ✅ Loading and error states
+- ✅ Cancel and Start Reading buttons
+
+### Phase 8: Library Management (100% Complete)
+
+**Files Created:**
+
+- [src/routes/library.tsx](src/routes/library.tsx) - User's story library
+- [src/routes/api/stories/user.ts](src/routes/api/stories/user.ts) - GET user's stories
+
+**Library Features:**
+
+- ✅ Tabs for "In Progress" and "Completed" stories
+- ✅ Story cards with progress tracking
+- ✅ Progress bar with percentage completion
+- ✅ Creation date display ("Started Nov 10, 2025")
+- ✅ Custom story titles
+- ✅ Continue Reading / Read Again buttons
+- ✅ Empty state with CTA to browse
+- ✅ Loading and error states
+- ✅ React Query caching per tab
+- ✅ Responsive grid layout
+
+### Phase 9: Reading Interface (100% Complete)
+
+**Files Created:**
+
+- [src/routes/story/$id/read.tsx](src/routes/story/$id/read.tsx) - Main reading page
+- [src/routes/api/stories/$id/scene.ts](src/routes/api/stories/$id/scene.ts) - GET scene + PATCH progress
+- [src/routes/api/stories/$id/choose.ts](src/routes/api/stories/$id/choose.ts) - POST record choice
+
+**Reading Features:**
+
+- ✅ Scene display with prose content
+- ✅ AI scene generation on-demand
+- ✅ Scene caching to database
+- ✅ Choice selector (3 options at choice points)
+- ✅ "Continue to Next Scene" button for non-choice scenes
+- ✅ Progress tracking and updates
+- ✅ Scene navigation (next/previous buttons)
+- ✅ Progress bar with scene tracking
+- ✅ Back to Library button
+- ✅ Loading states for AI generation
+- ✅ Error handling and display
+- ✅ Choice point detection
+- ✅ Story completion detection
+
+**Bug Fixes:**
+
+- ✅ Fixed next scene button logic (was always disabled)
+- ✅ Added continue button for scenes without choices
+- ✅ Fixed duplicate key constraint race condition in cacheScene()
+
+### Phase 10: Core Routes (100% Complete)
+
+**Files Created:**
+
+- [src/router.tsx](src/router.tsx) - Router configuration
+- [src/routes/\_\_root.tsx](src/routes/__root.tsx) - Root layout with React Query
+- [src/routes/index.tsx](src/routes/index.tsx) - Landing page
+
+**Note:** `client.tsx` and `ssr.tsx` were removed in the TanStack Start migration as they are no longer needed.
+
+### Phase 10: Core Routes (100% Complete)
 
 **Files Created:**
 
@@ -158,7 +308,35 @@ scenes (id, story_id, scene_number, content, word_count, created_at)
 - Links to signup/login
 - Beautiful gradient background
 
-### Phase 3.7: Docker Setup (100% Complete)
+### Phase 11: Docker Setup (100% Complete)
+
+**Files Created:**
+
+- [Dockerfile](Dockerfile) - Multi-stage build for optimal image size
+- [docker-compose.yml](docker-compose.yml) - Orchestrates app, PostgreSQL, and Redis
+- [docker-entrypoint.sh](docker-entrypoint.sh) - Runs migrations on startup
+- [.dockerignore](.dockerignore) - Excludes unnecessary files from build
+- [DOCKER.md](DOCKER.md) - Complete Docker setup documentation
+- [.env.example](.env.example) - Unified environment template (works for both local & Docker)
+
+**Docker Features:**
+
+- ✅ Multi-stage Dockerfile (deps → builder → runner)
+- ✅ PostgreSQL 14 with persistent volume
+- ✅ Redis 7 with persistent volume
+- ✅ Health checks for all services
+- ✅ Automatic migrations on startup
+- ✅ Optional database seeding
+- ✅ Non-root user for security
+- ✅ Unified .env template (works for both local dev & Docker)
+
+**Services:**
+
+- **app**: Node.js application on port 3000
+- **postgres**: PostgreSQL database on port 5432
+- **redis**: Redis cache on port 6379
+
+### Phase 11: Docker Setup (100% Complete)
 
 **Files Created:**
 
@@ -198,168 +376,38 @@ docker-compose up --build
 
 ## 🚧 In Progress / Next Steps
 
-### Phase 4: User Onboarding Flow (NEXT - Priority 1)
+### Phase 12: Polish & UX (NEXT - Priority 1)
 
 **To Create:**
 
-1. `src/routes/auth/onboarding.tsx` - Multi-step preference form
-2. `src/routes/api/preferences.ts` - API to save preferences
-3. `src/components/PreferenceStep.tsx` - Reusable step component (optional)
-
-**Requirements:**
-
-- **Step 1: Genres** - Checkboxes for contemporary, paranormal, historical, fantasy
-- **Step 2: Tropes** - Multi-select from common romance tropes
-- **Step 3: Spice Level** - Slider or buttons (1-5, with descriptions)
-- **Step 4: Pacing** - Radio buttons (slow-burn vs fast-paced)
-- Progress indicator
-- Save to `users.default_preferences` as JSONB
-- Redirect to `/browse` on completion
-
-**Trope Options to Include:**
-
-- fake-dating, enemies-to-lovers, friends-to-lovers
-- forced-proximity, second-chance, forbidden-love
-- fated-mates, grumpy-sunshine, boss-employee
-- small-town, billionaire, single-parent
-
-**API Endpoint:**
-
-```typescript
-POST /api/preferences
-Body: { genres: string[], tropes: string[], spiceLevel: 1-5, pacing: string }
-Response: { success: true }
-```
-
-### Phase 5: Novel Template System (Priority 2)
-
-**To Create:**
-
-1. `src/routes/browse.tsx` - Browse templates page (protected route)
-2. `src/routes/templates/$templateId.tsx` - Template detail page
-3. `src/routes/api/templates.ts` - Get all templates
-4. `src/routes/api/templates/$templateId.ts` - Get template details
-5. `src/components/NovelCard.tsx` - Template card component
-6. `src/components/ProtectedRoute.tsx` - Auth middleware
-
-**NovelCard Component:**
-
-- Display title, description, tropes
-- Show gradient background (from template.cover_gradient)
-- Estimated reading time
-- "Start Reading" button
-- Shows "Continue Reading" if user has active story
-
-**Browse Page Features:**
-
-- Grid layout of novel cards
-- Filter by trope/genre
-- User's active stories at top
-- "New for you" section based on preferences
-
-### Phase 6: Story Creation & Configuration (Priority 3)
-
-**To Create:**
-
-1. `src/routes/stories/new.tsx` - Story configuration page
-2. `src/routes/api/stories/create.ts` - Create story endpoint
-3. `src/components/PreferenceOverride.tsx` - Per-story preference adjustments
-
-**Story Configuration:**
-
-- Select template
-- Option to override default preferences
-- Preview template with choice points
-- "Start Story" button creates user_story record
-
-**Create Story Flow:**
-
-1. User clicks "Start Reading" on template
-2. Shows configuration page (optional preference override)
-3. Creates record in `user_stories` table
-4. Redirects to `/stories/$storyId/read`
-
-### Phase 7: Reading Interface (Priority 4)
-
-**To Create:**
-
-1. `src/routes/stories/$storyId/read.tsx` - Main reading page
-2. `src/routes/api/stories/$storyId/scene.ts` - Generate/fetch scene
-3. `src/routes/api/stories/$storyId/choose.ts` - Record choice
-4. `src/components/ReadingView.tsx` - Scene display component
-5. `src/components/ChoiceSelector.tsx` - Choice options component
-6. `src/components/ProgressBar.tsx` - Story progress indicator
-
-**Reading Page Features:**
-
-- Scene content in prose format (800-1200 words)
-- Scene number indicator
-- Progress bar (current scene / estimated scenes)
-- Choice selector appears at choice points
-- Loading state during AI generation
-- Previous/Next scene navigation
-- Return to library button
-
-**Choice Selector:**
-
-- 3 options displayed as cards
-- Shows tone/impact hints
-- Disabled until user selects
-- "Continue" button to advance
-
-**API Endpoints:**
-
-```typescript
-GET /api/stories/:storyId/scene?number=N
-Response: { content: string, sceneNumber: number, choicePoint?: {...} }
-
-POST /api/stories/:storyId/choose
-Body: { choicePointId: string, selectedOption: number }
-Response: { success: true, nextScene: number }
-```
-
-### Phase 8: Library & Management (Priority 5)
-
-**To Create:**
-
-1. `src/routes/library.tsx` - User's story library
-2. `src/routes/api/stories.ts` - Get user's stories
-3. `src/components/StoryCard.tsx` - Library story card
-4. `src/components/StoryStats.tsx` - Statistics display
-
-**Library Features:**
-
-- Tabs: "In Progress" / "Completed"
-- Story cards showing:
-  - Template title
-  - Progress (current scene / total)
-  - Last read timestamp
-  - Word count
-  - "Continue Reading" / "Read Again" buttons
-- Delete story option
-- Story statistics
-
-### Phase 9: Polish & UX (Priority 6)
-
-**To Create:**
-
-1. Error boundaries
-2. Loading skeletons
-3. Responsive layouts
+1. Error boundaries for better error recovery
+2. Loading skeletons for perceived performance
+3. Responsive layout improvements
 4. Animations/transitions
-5. Toast notifications
-6. Empty states
+5. Toast notifications for user feedback
+6. Improved empty states
 7. 404 page
 8. Settings page
 
 **Improvements Needed:**
 
-- Protected route middleware
-- Better error handling
-- User feedback (toasts)
-- Mobile optimization
-- Accessibility (ARIA labels)
-- SEO metadata
+- Better error handling throughout app
+- User feedback (toast notifications)
+- Mobile optimization (test on various devices)
+- Accessibility improvements (ARIA labels, keyboard navigation)
+- SEO metadata for public pages
+- Performance optimization (code splitting, lazy loading)
+
+### Phase 13: Advanced Features (Priority 2)
+
+**To Create:**
+
+- Story export (PDF/EPUB)
+- Story sharing
+- Statistics dashboard
+- Custom template creation (advanced users)
+- Story branching visualization
+- Multiple save slots per template
 
 ---
 
@@ -372,6 +420,7 @@ Response: { success: true, nextScene: number }
 - [ ] Email verification flow
 - [ ] Password reset flow
 - [ ] CSRF token validation for forms
+- [ ] Input sanitization for user content
 
 ### Performance
 
@@ -380,6 +429,8 @@ Response: { success: true, nextScene: number }
 - [ ] Image optimization (template covers)
 - [ ] Code splitting for routes
 - [ ] Database connection pooling optimization
+- [ ] Implement caching headers
+- [ ] Add service worker for offline support
 
 ### Testing
 
@@ -387,14 +438,17 @@ Response: { success: true, nextScene: number }
 - [ ] Integration tests for API routes
 - [ ] E2E tests for user flows
 - [ ] AI generation testing with mock fixtures
+- [ ] Performance testing
+- [ ] Load testing
 
 ### DevOps
 
-- [ ] Docker setup
+- [x] Docker setup (COMPLETE)
 - [ ] CI/CD pipeline
 - [ ] Database backup strategy
 - [ ] Monitoring and logging
 - [ ] Error tracking (Sentry)
+- [ ] Deployment documentation
 
 ---
 
@@ -410,15 +464,33 @@ Response: { success: true, nextScene: number }
    - No preferences? → Redirect to /auth/onboarding
 ```
 
+### Complete User Flow (MVP)
+
+```
+1. User signs up / logs in → Authentication
+2. User sets preferences → Onboarding (if first time)
+3. User browses templates → Browse page with filters
+4. User views template details → Template detail page
+5. User creates story → Story creation with customization
+6. User reads scenes → Reading interface
+   - Scene without choices → "Continue to Next Scene" button
+   - Scene with choices → Select from 3 options
+7. User progresses through story → Choices recorded, scenes generated
+8. User manages stories → Library with progress tracking
+```
+
 ### Story Generation Flow
 
 ```
 1. User selects template → Configure preferences → Create user_story
-2. Navigate to /stories/:id/read → Fetch scene 1 → Check cache
+2. Navigate to /story/:id/read → Fetch scene 1 → Check cache
    - Cached? → Return from DB
    - Not cached? → Generate with AI → Save to DB → Return
-3. User reads → Reaches choice point → Select option → Record choice
-4. Advance to next scene → Repeat step 2 with choice context
+3. User reads → Reaches choice point (or non-choice scene)
+   - Choice point? → Select option → Record choice
+   - No choice? → Click continue button
+4. Advance to next scene → Update story progress
+5. Repeat step 2 with choice context
 ```
 
 ### Scene Caching Strategy
@@ -427,6 +499,112 @@ Response: { success: true, nextScene: number }
 - On generation, last 2 scenes used as context
 - Previous choice impacts next scene generation
 - Cache never invalidated (deterministic based on choices)
+- Duplicate key errors handled gracefully (race condition protection)
+
+### Preference Structure (JSONB)
+
+```json
+{
+  "genres": ["contemporary", "paranormal"],
+  "tropes": ["enemies-to-lovers", "forced-proximity"],
+  "spiceLevel": 4,
+  "pacing": "slow-burn"
+}
+```
+
+---
+
+## 🚀 Quick Start Commands
+
+```bash
+# Install dependencies
+pnpm install
+
+# Setup database (after creating PostgreSQL database)
+pnpm db:migrate
+pnpm db:codegen
+pnpm db:seed
+
+# Development
+pnpm dev
+
+# Build for production
+pnpm build
+pnpm start
+```
+
+---
+
+## 📊 Current Status Summary
+
+**Overall Progress**: ~98% (Phases 1-11 complete, MVP feature-complete)
+
+**Can Currently Run**:
+
+- ✅ Landing page at `/`
+- ✅ Signup at `/auth/signup`
+- ✅ Login at `/auth/login`
+- ✅ Google OAuth flow
+- ✅ Onboarding flow at `/auth/onboarding`
+- ✅ Browse templates at `/browse`
+- ✅ Template details at `/template/$id`
+- ✅ Story creation at `/story/create`
+- ✅ Reading interface at `/story/$id/read`
+- ✅ User library at `/library`
+- ✅ User profile at `/profile`
+
+**Remaining Work**:
+
+- ⚠️ Polish and UX improvements
+- ⚠️ Error boundaries
+- ⚠️ Loading skeletons
+- ⚠️ Mobile optimization
+- ⚠️ Testing
+
+**Next Immediate Steps**:
+
+1. Test complete user flow end-to-end
+2. Add error boundaries for better error recovery
+3. Implement loading skeletons for perceived performance
+4. Mobile responsiveness testing and improvements
+5. Add unit and integration tests
+
+---
+
+## 🎯 Critical Path to MVP
+
+**MVP Status: ~98% Complete** ✅
+
+1. ✅ **Onboarding** (allows users to set preferences) - **COMPLETE**
+2. ✅ **Browse** (allows users to see templates) - **COMPLETE**
+3. ✅ **Story Creation** (allows users to start stories) - **COMPLETE**
+4. ✅ **Reading Interface** (allows users to read & choose) - **COMPLETE**
+5. ✅ **Library** (allows users to manage stories) - **COMPLETE**
+
+**The core loop is complete and functional!**
+
+Remaining work is polish, testing, and optimization for production readiness.
+
+---
+
+## 💡 Future Enhancements (Post-MVP)
+
+- Social features (share scenes, recommend stories)
+- Custom template creation (user-submitted prompts)
+- Multiple protagonist perspectives
+- Story branching visualization
+- Export as PDF/EPUB
+- Mobile app (React Native)
+- Subscription tiers (GPT-4 vs GPT-3.5)
+- Community voting on templates
+- AI narrator voices (text-to-speech)
+- Illustrations at key moments
+
+---
+
+**Last Session Context**: Completed Phase 11 (Reading Interface) with full scene generation, choice selection, progress tracking, and bug fixes. MVP is now ~98% feature-complete!
+
+**Last Session Context**: Completed Phase 11 (Reading Interface) with full scene generation, choice selection, progress tracking, and bug fixes. MVP is now ~98% feature-complete!
 
 ### Preference Structure (JSONB)
 
