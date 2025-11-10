@@ -1,351 +1,370 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { Heart, BookOpen, Flame, ChevronRight, ChevronLeft } from 'lucide-react'
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
-  GENRES,
-  TROPES,
-  PACING_OPTIONS,
-  GENRE_LABELS,
-  TROPE_LABELS,
-  SPICE_LABELS,
-  PACING_LABELS,
-  type Genre,
-  type Trope,
-  type SpiceLevel,
-  type PacingOption,
-  type UserPreferences,
-} from '~/lib/types/preferences'
+	BookOpen,
+	ChevronLeft,
+	ChevronRight,
+	Flame,
+	Heart,
+} from "lucide-react";
+import { useState } from "react";
+import {
+	GENRE_LABELS,
+	GENRES,
+	type Genre,
+	PACING_LABELS,
+	PACING_OPTIONS,
+	type PacingOption,
+	SPICE_LABELS,
+	type SpiceLevel,
+	TROPE_LABELS,
+	TROPES,
+	type Trope,
+	type UserPreferences,
+} from "~/lib/types/preferences";
 
-export const Route = createFileRoute('/auth/onboarding')({
-  component: OnboardingPage,
-})
+export const Route = createFileRoute("/auth/onboarding")({
+	component: OnboardingPage,
+});
 
 function OnboardingPage() {
-  const navigate = useNavigate()
-  const [step, setStep] = useState(1)
-  const [preferences, setPreferences] = useState<UserPreferences>({
-    genres: [],
-    tropes: [],
-    spiceLevel: 3,
-    pacing: 'slow-burn',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+	const navigate = useNavigate();
+	const [step, setStep] = useState(1);
+	const [preferences, setPreferences] = useState<UserPreferences>({
+		genres: [],
+		tropes: [],
+		spiceLevel: 3,
+		pacing: "slow-burn",
+	});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-  const handleGenreToggle = (genre: Genre) => {
-    setPreferences((prev) => ({
-      ...prev,
-      genres: prev.genres.includes(genre)
-        ? prev.genres.filter((g) => g !== genre)
-        : [...prev.genres, genre],
-    }))
-  }
+	const handleGenreToggle = (genre: Genre) => {
+		setPreferences((prev) => ({
+			...prev,
+			genres: prev.genres.includes(genre)
+				? prev.genres.filter((g) => g !== genre)
+				: [...prev.genres, genre],
+		}));
+	};
 
-  const handleTropeToggle = (trope: Trope) => {
-    setPreferences((prev) => ({
-      ...prev,
-      tropes: prev.tropes.includes(trope)
-        ? prev.tropes.filter((t) => t !== trope)
-        : [...prev.tropes, trope],
-    }))
-  }
+	const handleTropeToggle = (trope: Trope) => {
+		setPreferences((prev) => ({
+			...prev,
+			tropes: prev.tropes.includes(trope)
+				? prev.tropes.filter((t) => t !== trope)
+				: [...prev.tropes, trope],
+		}));
+	};
 
-  const handleSpiceLevelChange = (level: SpiceLevel) => {
-    setPreferences((prev) => ({ ...prev, spiceLevel: level }))
-  }
+	const handleSpiceLevelChange = (level: SpiceLevel) => {
+		setPreferences((prev) => ({ ...prev, spiceLevel: level }));
+	};
 
-  const handlePacingChange = (pacing: PacingOption) => {
-    setPreferences((prev) => ({ ...prev, pacing }))
-  }
+	const handlePacingChange = (pacing: PacingOption) => {
+		setPreferences((prev) => ({ ...prev, pacing }));
+	};
 
-  const canProceedFromStep1 = preferences.genres.length > 0
-  const canProceedFromStep2 = preferences.tropes.length > 0
+	const canProceedFromStep1 = preferences.genres.length > 0;
+	const canProceedFromStep2 = preferences.tropes.length > 0;
 
-  const handleNext = () => {
-    if (step === 1 && !canProceedFromStep1) {
-      setError('Please select at least one genre')
-      return
-    }
-    if (step === 2 && !canProceedFromStep2) {
-      setError('Please select at least one trope')
-      return
-    }
-    setError(null)
-    setStep((s) => Math.min(s + 1, 3))
-  }
+	const handleNext = () => {
+		if (step === 1 && !canProceedFromStep1) {
+			setError("Please select at least one genre");
+			return;
+		}
+		if (step === 2 && !canProceedFromStep2) {
+			setError("Please select at least one trope");
+			return;
+		}
+		setError(null);
+		setStep((s) => Math.min(s + 1, 3));
+	};
 
-  const handleBack = () => {
-    setError(null)
-    setStep((s) => Math.max(s - 1, 1))
-  }
+	const handleBack = () => {
+		setError(null);
+		setStep((s) => Math.max(s - 1, 1));
+	};
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-    setError(null)
+	const handleSubmit = async () => {
+		setIsSubmitting(true);
+		setError(null);
 
-    try {
-      const response = await fetch('/api/preferences', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(preferences),
-        credentials: 'include',
-      })
+		try {
+			const response = await fetch("/api/preferences", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(preferences),
+				credentials: "include",
+			});
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to save preferences')
-      }
+			if (!response.ok) {
+				const data = await response.json();
+				throw new Error(data.error || "Failed to save preferences");
+			}
 
-      // Redirect to browse page
-      navigate({ to: '/browse' })
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+			// Redirect to browse page
+			navigate({ to: "/browse" });
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "An error occurred");
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-romance-50 via-white to-romance-100">
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <Heart className="w-16 h-16 text-romance-500 mx-auto mb-4" fill="currentColor" />
-            <h1 className="text-4xl font-bold text-slate-900 mb-2">
-              Let's Personalize Your Experience
-            </h1>
-            <p className="text-slate-600">
-              Tell us what you love, and we'll craft stories just for you
-            </p>
-          </div>
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-romance-50 via-white to-romance-100">
+			<div className="container mx-auto px-4 py-12">
+				<div className="max-w-3xl mx-auto">
+					{/* Header */}
+					<div className="text-center mb-8">
+						<Heart
+							className="w-16 h-16 text-romance-500 mx-auto mb-4"
+							fill="currentColor"
+						/>
+						<h1 className="text-4xl font-bold text-slate-900 mb-2">
+							Let's Personalize Your Experience
+						</h1>
+						<p className="text-slate-600">
+							Tell us what you love, and we'll craft stories just for you
+						</p>
+					</div>
 
-          {/* Progress Stepper */}
-          <div className="flex items-center justify-center mb-12">
-            {[1, 2, 3].map((s) => (
-              <div key={s} className="flex items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-                    s === step
-                      ? 'bg-romance-600 text-white'
-                      : s < step
-                        ? 'bg-romance-400 text-white'
-                        : 'bg-slate-200 text-slate-500'
-                  }`}
-                >
-                  {s}
-                </div>
-                {s < 3 && (
-                  <div
-                    className={`w-16 h-1 mx-2 transition-colors ${
-                      s < step ? 'bg-romance-400' : 'bg-slate-200'
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
+					{/* Progress Stepper */}
+					<div className="flex items-center justify-center mb-12">
+						{[1, 2, 3].map((s) => (
+							<div key={s} className="flex items-center">
+								<div
+									className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+										s === step
+											? "bg-romance-600 text-white"
+											: s < step
+												? "bg-romance-400 text-white"
+												: "bg-slate-200 text-slate-500"
+									}`}
+								>
+									{s}
+								</div>
+								{s < 3 && (
+									<div
+										className={`w-16 h-1 mx-2 transition-colors ${
+											s < step ? "bg-romance-400" : "bg-slate-200"
+										}`}
+									/>
+								)}
+							</div>
+						))}
+					</div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-              {error}
-            </div>
-          )}
+					{/* Error Message */}
+					{error && (
+						<div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+							{error}
+						</div>
+					)}
 
-          {/* Step Content */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
-            {step === 1 && (
-              <div>
-                <div className="flex items-center mb-6">
-                  <BookOpen className="w-6 h-6 text-romance-500 mr-2" />
-                  <h2 className="text-2xl font-bold text-slate-900">Choose Your Genres</h2>
-                </div>
-                <p className="text-slate-600 mb-6">Select all that interest you</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {GENRES.map((genre) => (
-                    <button
-                      key={genre}
-                      onClick={() => handleGenreToggle(genre)}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        preferences.genres.includes(genre)
-                          ? 'border-romance-500 bg-romance-50 text-romance-700'
-                          : 'border-slate-200 hover:border-romance-300 text-slate-700'
-                      }`}
-                    >
-                      <div className="font-semibold">{GENRE_LABELS[genre]}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+					{/* Step Content */}
+					<div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
+						{step === 1 && (
+							<div>
+								<div className="flex items-center mb-6">
+									<BookOpen className="w-6 h-6 text-romance-500 mr-2" />
+									<h2 className="text-2xl font-bold text-slate-900">
+										Choose Your Genres
+									</h2>
+								</div>
+								<p className="text-slate-600 mb-6">
+									Select all that interest you
+								</p>
+								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+									{GENRES.map((genre) => (
+										<button
+											key={genre}
+											onClick={() => handleGenreToggle(genre)}
+											className={`p-4 rounded-lg border-2 transition-all ${
+												preferences.genres.includes(genre)
+													? "border-romance-500 bg-romance-50 text-romance-700"
+													: "border-slate-200 hover:border-romance-300 text-slate-700"
+											}`}
+										>
+											<div className="font-semibold">{GENRE_LABELS[genre]}</div>
+										</button>
+									))}
+								</div>
+							</div>
+						)}
 
-            {step === 2 && (
-              <div>
-                <div className="flex items-center mb-6">
-                  <Heart className="w-6 h-6 text-romance-500 mr-2" />
-                  <h2 className="text-2xl font-bold text-slate-900">Pick Your Tropes</h2>
-                </div>
-                <p className="text-slate-600 mb-6">
-                  What romance tropes make your heart race?
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {TROPES.map((trope) => (
-                    <button
-                      key={trope}
-                      onClick={() => handleTropeToggle(trope)}
-                      className={`p-4 rounded-lg border-2 transition-all text-left ${
-                        preferences.tropes.includes(trope)
-                          ? 'border-romance-500 bg-romance-50 text-romance-700'
-                          : 'border-slate-200 hover:border-romance-300 text-slate-700'
-                      }`}
-                    >
-                      <div className="font-semibold">{TROPE_LABELS[trope]}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+						{step === 2 && (
+							<div>
+								<div className="flex items-center mb-6">
+									<Heart className="w-6 h-6 text-romance-500 mr-2" />
+									<h2 className="text-2xl font-bold text-slate-900">
+										Pick Your Tropes
+									</h2>
+								</div>
+								<p className="text-slate-600 mb-6">
+									What romance tropes make your heart race?
+								</p>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									{TROPES.map((trope) => (
+										<button
+											key={trope}
+											onClick={() => handleTropeToggle(trope)}
+											className={`p-4 rounded-lg border-2 transition-all text-left ${
+												preferences.tropes.includes(trope)
+													? "border-romance-500 bg-romance-50 text-romance-700"
+													: "border-slate-200 hover:border-romance-300 text-slate-700"
+											}`}
+										>
+											<div className="font-semibold">{TROPE_LABELS[trope]}</div>
+										</button>
+									))}
+								</div>
+							</div>
+						)}
 
-            {step === 3 && (
-              <div>
-                <div className="flex items-center mb-6">
-                  <Flame className="w-6 h-6 text-romance-500 mr-2" />
-                  <h2 className="text-2xl font-bold text-slate-900">Set Your Preferences</h2>
-                </div>
+						{step === 3 && (
+							<div>
+								<div className="flex items-center mb-6">
+									<Flame className="w-6 h-6 text-romance-500 mr-2" />
+									<h2 className="text-2xl font-bold text-slate-900">
+										Set Your Preferences
+									</h2>
+								</div>
 
-                {/* Spice Level */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-4">Spice Level</h3>
-                  <div className="space-y-3">
-                    {([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
-                      <button
-                        key={level}
-                        onClick={() => handleSpiceLevelChange(level)}
-                        className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                          preferences.spiceLevel === level
-                            ? 'border-romance-500 bg-romance-50'
-                            : 'border-slate-200 hover:border-romance-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-semibold text-slate-900">
-                                {SPICE_LABELS[level].label}
-                              </span>
-                              <div className="flex gap-1">
-                                {Array.from({ length: level }).map((_, i) => (
-                                  <Flame
-                                    key={i}
-                                    className="w-4 h-4 text-romance-500"
-                                    fill="currentColor"
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                            <p className="text-sm text-slate-600">
-                              {SPICE_LABELS[level].description}
-                            </p>
-                          </div>
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                              preferences.spiceLevel === level
-                                ? 'border-romance-500 bg-romance-500'
-                                : 'border-slate-300'
-                            }`}
-                          >
-                            {preferences.spiceLevel === level && (
-                              <div className="w-2 h-2 bg-white rounded-full" />
-                            )}
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+								{/* Spice Level */}
+								<div className="mb-8">
+									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+										Spice Level
+									</h3>
+									<div className="space-y-3">
+										{([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
+											<button
+												key={level}
+												onClick={() => handleSpiceLevelChange(level)}
+												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+													preferences.spiceLevel === level
+														? "border-romance-500 bg-romance-50"
+														: "border-slate-200 hover:border-romance-300"
+												}`}
+											>
+												<div className="flex items-center justify-between">
+													<div>
+														<div className="flex items-center gap-2">
+															<span className="font-semibold text-slate-900">
+																{SPICE_LABELS[level].label}
+															</span>
+															<div className="flex gap-1">
+																{Array.from({ length: level }).map((_, i) => (
+																	<Flame
+																		key={i}
+																		className="w-4 h-4 text-romance-500"
+																		fill="currentColor"
+																	/>
+																))}
+															</div>
+														</div>
+														<p className="text-sm text-slate-600">
+															{SPICE_LABELS[level].description}
+														</p>
+													</div>
+													<div
+														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+															preferences.spiceLevel === level
+																? "border-romance-500 bg-romance-500"
+																: "border-slate-300"
+														}`}
+													>
+														{preferences.spiceLevel === level && (
+															<div className="w-2 h-2 bg-white rounded-full" />
+														)}
+													</div>
+												</div>
+											</button>
+										))}
+									</div>
+								</div>
 
-                {/* Pacing */}
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-4">
-                    Relationship Pacing
-                  </h3>
-                  <div className="space-y-3">
-                    {PACING_OPTIONS.map((pacing) => (
-                      <button
-                        key={pacing}
-                        onClick={() => handlePacingChange(pacing)}
-                        className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-                          preferences.pacing === pacing
-                            ? 'border-romance-500 bg-romance-50'
-                            : 'border-slate-200 hover:border-romance-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold text-slate-900">
-                              {PACING_LABELS[pacing].label}
-                            </div>
-                            <p className="text-sm text-slate-600">
-                              {PACING_LABELS[pacing].description}
-                            </p>
-                          </div>
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                              preferences.pacing === pacing
-                                ? 'border-romance-500 bg-romance-500'
-                                : 'border-slate-300'
-                            }`}
-                          >
-                            {preferences.pacing === pacing && (
-                              <div className="w-2 h-2 bg-white rounded-full" />
-                            )}
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+								{/* Pacing */}
+								<div>
+									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+										Relationship Pacing
+									</h3>
+									<div className="space-y-3">
+										{PACING_OPTIONS.map((pacing) => (
+											<button
+												key={pacing}
+												onClick={() => handlePacingChange(pacing)}
+												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+													preferences.pacing === pacing
+														? "border-romance-500 bg-romance-50"
+														: "border-slate-200 hover:border-romance-300"
+												}`}
+											>
+												<div className="flex items-center justify-between">
+													<div>
+														<div className="font-semibold text-slate-900">
+															{PACING_LABELS[pacing].label}
+														</div>
+														<p className="text-sm text-slate-600">
+															{PACING_LABELS[pacing].description}
+														</p>
+													</div>
+													<div
+														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+															preferences.pacing === pacing
+																? "border-romance-500 bg-romance-500"
+																: "border-slate-300"
+														}`}
+													>
+														{preferences.pacing === pacing && (
+															<div className="w-2 h-2 bg-white rounded-full" />
+														)}
+													</div>
+												</div>
+											</button>
+										))}
+									</div>
+								</div>
+							</div>
+						)}
+					</div>
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between">
-            <button
-              onClick={handleBack}
-              disabled={step === 1}
-              className={`flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${
-                step === 1
-                  ? 'invisible'
-                  : 'border-2 border-slate-300 text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              <ChevronLeft className="w-5 h-5 mr-1" />
-              Back
-            </button>
+					{/* Navigation Buttons */}
+					<div className="flex justify-between">
+						<button
+							onClick={handleBack}
+							disabled={step === 1}
+							className={`flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${
+								step === 1
+									? "invisible"
+									: "border-2 border-slate-300 text-slate-700 hover:bg-slate-50"
+							}`}
+						>
+							<ChevronLeft className="w-5 h-5 mr-1" />
+							Back
+						</button>
 
-            {step < 3 ? (
-              <button
-                onClick={handleNext}
-                className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors"
-              >
-                Next
-                <ChevronRight className="w-5 h-5 ml-1" />
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? 'Saving...' : 'Complete Setup'}
-                <ChevronRight className="w-5 h-5 ml-1" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+						{step < 3 ? (
+							<button
+								onClick={handleNext}
+								className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors"
+							>
+								Next
+								<ChevronRight className="w-5 h-5 ml-1" />
+							</button>
+						) : (
+							<button
+								onClick={handleSubmit}
+								disabled={isSubmitting}
+								className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							>
+								{isSubmitting ? "Saving..." : "Complete Setup"}
+								<ChevronRight className="w-5 h-5 ml-1" />
+							</button>
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }

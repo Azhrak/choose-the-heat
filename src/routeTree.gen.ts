@@ -13,11 +13,15 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TemplateIdRouteImport } from './routes/template/$id'
+import { Route as StoryCreateRouteImport } from './routes/story/create'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthOnboardingRouteImport } from './routes/auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiPreferencesRouteImport } from './routes/api/preferences'
+import { Route as ApiTemplatesIndexRouteImport } from './routes/api/templates/index'
 import { Route as ApiProfileIndexRouteImport } from './routes/api/profile/index'
+import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
 import { Route as ApiProfilePasswordRouteImport } from './routes/api/profile/password'
 import { Route as ApiAuthSignupRouteImport } from './routes/api/auth/signup'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
@@ -45,6 +49,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemplateIdRoute = TemplateIdRouteImport.update({
+  id: '/template/$id',
+  path: '/template/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryCreateRoute = StoryCreateRouteImport.update({
+  id: '/story/create',
+  path: '/story/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/auth/signup',
   path: '/auth/signup',
@@ -65,9 +79,19 @@ const ApiPreferencesRoute = ApiPreferencesRouteImport.update({
   path: '/api/preferences',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTemplatesIndexRoute = ApiTemplatesIndexRouteImport.update({
+  id: '/api/templates/',
+  path: '/api/templates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiProfileIndexRoute = ApiProfileIndexRouteImport.update({
   id: '/api/profile/',
   path: '/api/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTemplatesIdRoute = ApiTemplatesIdRouteImport.update({
+  id: '/api/templates/$id',
+  path: '/api/templates/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiProfilePasswordRoute = ApiProfilePasswordRouteImport.update({
@@ -110,12 +134,16 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/story/create': typeof StoryCreateRoute
+  '/template/$id': typeof TemplateIdRoute
   '/api/auth/google': typeof ApiAuthGoogleRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile': typeof ApiProfileIndexRoute
+  '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
 export interface FileRoutesByTo {
@@ -127,12 +155,16 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/story/create': typeof StoryCreateRoute
+  '/template/$id': typeof TemplateIdRoute
   '/api/auth/google': typeof ApiAuthGoogleRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile': typeof ApiProfileIndexRoute
+  '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
 export interface FileRoutesById {
@@ -145,12 +177,16 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/story/create': typeof StoryCreateRoute
+  '/template/$id': typeof TemplateIdRoute
   '/api/auth/google': typeof ApiAuthGoogleRoute
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
+  '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/profile/': typeof ApiProfileIndexRoute
+  '/api/templates/': typeof ApiTemplatesIndexRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
 }
 export interface FileRouteTypes {
@@ -164,12 +200,16 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
+    | '/story/create'
+    | '/template/$id'
     | '/api/auth/google'
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/templates/$id'
     | '/api/profile'
+    | '/api/templates'
     | '/api/auth/callback/google'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -181,12 +221,16 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
+    | '/story/create'
+    | '/template/$id'
     | '/api/auth/google'
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/templates/$id'
     | '/api/profile'
+    | '/api/templates'
     | '/api/auth/callback/google'
   id:
     | '__root__'
@@ -198,12 +242,16 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
+    | '/story/create'
+    | '/template/$id'
     | '/api/auth/google'
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
     | '/api/profile/password'
+    | '/api/templates/$id'
     | '/api/profile/'
+    | '/api/templates/'
     | '/api/auth/callback/google'
   fileRoutesById: FileRoutesById
 }
@@ -216,12 +264,16 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthOnboardingRoute: typeof AuthOnboardingRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  StoryCreateRoute: typeof StoryCreateRoute
+  TemplateIdRoute: typeof TemplateIdRoute
   ApiAuthGoogleRoute: typeof ApiAuthGoogleRoute
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthSignupRoute: typeof ApiAuthSignupRoute
   ApiProfilePasswordRoute: typeof ApiProfilePasswordRoute
+  ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
   ApiProfileIndexRoute: typeof ApiProfileIndexRoute
+  ApiTemplatesIndexRoute: typeof ApiTemplatesIndexRoute
   ApiAuthCallbackGoogleRoute: typeof ApiAuthCallbackGoogleRoute
 }
 
@@ -255,6 +307,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/template/$id': {
+      id: '/template/$id'
+      path: '/template/$id'
+      fullPath: '/template/$id'
+      preLoaderRoute: typeof TemplateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/create': {
+      id: '/story/create'
+      path: '/story/create'
+      fullPath: '/story/create'
+      preLoaderRoute: typeof StoryCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/auth/signup'
@@ -283,11 +349,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPreferencesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/templates/': {
+      id: '/api/templates/'
+      path: '/api/templates'
+      fullPath: '/api/templates'
+      preLoaderRoute: typeof ApiTemplatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/profile/': {
       id: '/api/profile/'
       path: '/api/profile'
       fullPath: '/api/profile'
       preLoaderRoute: typeof ApiProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/templates/$id': {
+      id: '/api/templates/$id'
+      path: '/api/templates/$id'
+      fullPath: '/api/templates/$id'
+      preLoaderRoute: typeof ApiTemplatesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/profile/password': {
@@ -344,12 +424,16 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthOnboardingRoute: AuthOnboardingRoute,
   AuthSignupRoute: AuthSignupRoute,
+  StoryCreateRoute: StoryCreateRoute,
+  TemplateIdRoute: TemplateIdRoute,
   ApiAuthGoogleRoute: ApiAuthGoogleRoute,
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthSignupRoute: ApiAuthSignupRoute,
   ApiProfilePasswordRoute: ApiProfilePasswordRoute,
+  ApiTemplatesIdRoute: ApiTemplatesIdRoute,
   ApiProfileIndexRoute: ApiProfileIndexRoute,
+  ApiTemplatesIndexRoute: ApiTemplatesIndexRoute,
   ApiAuthCallbackGoogleRoute: ApiAuthCallbackGoogleRoute,
 }
 export const routeTree = rootRouteImport

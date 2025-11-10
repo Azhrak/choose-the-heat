@@ -1,89 +1,92 @@
-import { Google } from 'arctic'
+import { Google } from "arctic";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-  throw new Error('Missing Google OAuth credentials in environment variables')
+	throw new Error("Missing Google OAuth credentials in environment variables");
 }
 
 if (!process.env.APP_URL) {
-  throw new Error('Missing APP_URL in environment variables')
+	throw new Error("Missing APP_URL in environment variables");
 }
 
 /**
  * Google OAuth client instance
  */
 export const google = new Google(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  `${process.env.APP_URL}/api/auth/callback/google`
-)
+	process.env.GOOGLE_CLIENT_ID,
+	process.env.GOOGLE_CLIENT_SECRET,
+	`${process.env.APP_URL}/api/auth/callback/google`,
+);
 
 /**
  * OAuth state management (store temporarily)
  * In production, use Redis or similar
  */
-const oauthStates = new Map<string, { expiresAt: number }>()
+const oauthStates = new Map<string, { expiresAt: number }>();
 
 /**
  * Generate and store OAuth state
  */
 export function generateOAuthState(): string {
-  const state = crypto.randomUUID()
-  oauthStates.set(state, {
-    expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
-  })
+	const state = crypto.randomUUID();
+	oauthStates.set(state, {
+		expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
+	});
 
-  // Cleanup expired states
-  for (const [key, value] of oauthStates.entries()) {
-    if (value.expiresAt < Date.now()) {
-      oauthStates.delete(key)
-    }
-  }
+	// Cleanup expired states
+	for (const [key, value] of oauthStates.entries()) {
+		if (value.expiresAt < Date.now()) {
+			oauthStates.delete(key);
+		}
+	}
 
-  return state
+	return state;
 }
 
 /**
  * Verify OAuth state
  */
 export function verifyOAuthState(state: string): boolean {
-  const stored = oauthStates.get(state)
-  if (!stored) {
-    return false
-  }
+	const stored = oauthStates.get(state);
+	if (!stored) {
+		return false;
+	}
 
-  if (stored.expiresAt < Date.now()) {
-    oauthStates.delete(state)
-    return false
-  }
+	if (stored.expiresAt < Date.now()) {
+		oauthStates.delete(state);
+		return false;
+	}
 
-  oauthStates.delete(state)
-  return true
+	oauthStates.delete(state);
+	return true;
 }
 
 /**
  * Google user info structure
  */
 export interface GoogleUser {
-  sub: string // User ID
-  email: string
-  name: string
-  picture: string
-  email_verified: boolean
+	sub: string; // User ID
+	email: string;
+	name: string;
+	picture: string;
+	email_verified: boolean;
 }
 
 /**
  * Fetch Google user info from OAuth token
  */
 export async function getGoogleUser(accessToken: string): Promise<GoogleUser> {
-  const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
+	const response = await fetch(
+		"https://www.googleapis.com/oauth2/v3/userinfo",
+		{
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		},
+	);
 
-  if (!response.ok) {
-    throw new Error('Failed to fetch Google user info')
-  }
+	if (!response.ok) {
+		throw new Error("Failed to fetch Google user info");
+	}
 
-  return response.json()
+	return response.json();
 }
