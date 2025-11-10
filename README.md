@@ -8,15 +8,16 @@ A full-stack TypeScript application that generates personalized, interactive rom
 
 - 🔐 **Authentication**: Google OAuth + Email/Password with session management
 - 📚 **Interactive Stories**: AI-generated romance novels with choice-based branching
-- 🎨 **Personalization**: Custom preferences for genres, tropes, spice level, and pacing
+- 🎨 **Personalization**: Custom preferences for genres, tropes, spice level, pacing, and scene length
 - 💾 **Progress Tracking**: Resume stories anytime, all choices cached
 - 🤖 **AI-Powered**: Each scene uniquely generated based on your decisions
 - 📊 **Smart Metadata**: Automatic emotional tracking, tension threads, and relationship progression
-- 🛡️ **Safety First**: Enhanced content guardrails and age verification in prompts
+- � **Scene Length Control**: Choose short (230-585 words), medium (350-900 words), or long (490-1260 words) scenes
+- �🛡️ **Safety First**: Enhanced content guardrails and age verification in prompts
 
 ## Project Status
 
-**Current Phase**: MVP Complete! 🎉
+**Current Phase**: MVP Complete with AI Enhancements & Scene Length Control! 🎉
 
 ### 📚 Documentation
 

@@ -25,9 +25,12 @@ export const TROPES = [
 
 export const PACING_OPTIONS = ["slow-burn", "fast-paced"] as const;
 
+export const SCENE_LENGTH_OPTIONS = ["short", "medium", "long"] as const;
+
 export type Genre = (typeof GENRES)[number];
 export type Trope = (typeof TROPES)[number];
 export type PacingOption = (typeof PACING_OPTIONS)[number];
+export type SceneLengthOption = (typeof SCENE_LENGTH_OPTIONS)[number];
 export type SpiceLevel = 1 | 2 | 3 | 4 | 5;
 
 export interface UserPreferences {
@@ -35,6 +38,7 @@ export interface UserPreferences {
 	tropes: Trope[];
 	spiceLevel: SpiceLevel;
 	pacing: PacingOption;
+	sceneLength?: SceneLengthOption; // Optional with default "medium"
 }
 
 export const GENRE_LABELS: Record<Genre, string> = {
@@ -80,5 +84,26 @@ export const PACING_LABELS: Record<
 	"fast-paced": {
 		label: "Fast-Paced",
 		description: "Quick chemistry and passion",
+	},
+};
+
+export const SCENE_LENGTH_LABELS: Record<
+	SceneLengthOption,
+	{ label: string; description: string; wordCount: string }
+> = {
+	short: {
+		label: "Short",
+		description: "Quick, punchy scenes",
+		wordCount: "~500-700 words",
+	},
+	medium: {
+		label: "Medium",
+		description: "Balanced pacing",
+		wordCount: "~800-1100 words",
+	},
+	long: {
+		label: "Long",
+		description: "Detailed, immersive scenes",
+		wordCount: "~1100-1500 words",
 	},
 };

@@ -14,6 +14,9 @@ import {
 	PACING_LABELS,
 	PACING_OPTIONS,
 	type PacingOption,
+	SCENE_LENGTH_LABELS,
+	SCENE_LENGTH_OPTIONS,
+	type SceneLengthOption,
 	SPICE_LABELS,
 	type SpiceLevel,
 	TROPE_LABELS,
@@ -34,6 +37,7 @@ function OnboardingPage() {
 		tropes: [],
 		spiceLevel: 3,
 		pacing: "slow-burn",
+		sceneLength: "medium",
 	});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -62,6 +66,10 @@ function OnboardingPage() {
 
 	const handlePacingChange = (pacing: PacingOption) => {
 		setPreferences((prev) => ({ ...prev, pacing }));
+	};
+
+	const handleSceneLengthChange = (sceneLength: SceneLengthOption) => {
+		setPreferences((prev) => ({ ...prev, sceneLength }));
 	};
 
 	const canProceedFromStep1 = preferences.genres.length > 0;
@@ -317,6 +325,51 @@ function OnboardingPage() {
 														}`}
 													>
 														{preferences.pacing === pacing && (
+															<div className="w-2 h-2 bg-white rounded-full" />
+														)}
+													</div>
+												</div>
+											</button>
+										))}
+									</div>
+								</div>
+
+								{/* Scene Length */}
+								<div>
+									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+										Scene Length
+									</h3>
+									<div className="space-y-3">
+										{SCENE_LENGTH_OPTIONS.map((length) => (
+											<button
+												key={length}
+												onClick={() => handleSceneLengthChange(length)}
+												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+													preferences.sceneLength === length
+														? "border-romance-500 bg-romance-50"
+														: "border-slate-200 hover:border-romance-300"
+												}`}
+											>
+												<div className="flex items-center justify-between">
+													<div className="flex-1">
+														<div className="font-semibold text-slate-900">
+															{SCENE_LENGTH_LABELS[length].label}
+														</div>
+														<p className="text-sm text-slate-600">
+															{SCENE_LENGTH_LABELS[length].description}
+														</p>
+														<p className="text-xs text-slate-500 mt-1">
+															{SCENE_LENGTH_LABELS[length].wordCount}
+														</p>
+													</div>
+													<div
+														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+															preferences.sceneLength === length
+																? "border-romance-500 bg-romance-500"
+																: "border-slate-300"
+														}`}
+													>
+														{preferences.sceneLength === length && (
 															<div className="w-2 h-2 bg-white rounded-full" />
 														)}
 													</div>

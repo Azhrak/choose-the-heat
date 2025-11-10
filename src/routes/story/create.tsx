@@ -13,8 +13,11 @@ import { useState } from "react";
 import {
 	PACING_LABELS,
 	PACING_OPTIONS,
+	SCENE_LENGTH_LABELS,
+	SCENE_LENGTH_OPTIONS,
 	SPICE_LABELS,
 	type PacingOption,
+	type SceneLengthOption,
 	type SpiceLevel,
 	type UserPreferences,
 } from "~/lib/types/preferences";
@@ -42,6 +45,9 @@ function StoryCreatePage() {
 	const navigate = useNavigate();
 	const [spiceLevel, setSpiceLevel] = useState<SpiceLevel | null>(null);
 	const [pacing, setPacing] = useState<PacingOption | null>(null);
+	const [sceneLength, setSceneLength] = useState<SceneLengthOption | null>(
+		null,
+	);
 	const [storyTitle, setStoryTitle] = useState("");
 	const [isCreating, setIsCreating] = useState(false);
 
@@ -116,9 +122,15 @@ function StoryCreatePage() {
 				: "";
 
 	// Initialize overrides with user's preferences
-	if (userPreferences && spiceLevel === null && pacing === null) {
+	if (
+		userPreferences &&
+		spiceLevel === null &&
+		pacing === null &&
+		sceneLength === null
+	) {
 		setSpiceLevel(userPreferences.spiceLevel);
 		setPacing(userPreferences.pacing);
+		setSceneLength(userPreferences.sceneLength || "medium");
 	}
 
 	// Create story mutation
@@ -135,6 +147,10 @@ function StoryCreatePage() {
 						...userPreferences,
 						spiceLevel: spiceLevel || userPreferences?.spiceLevel,
 						pacing: pacing || userPreferences?.pacing,
+						sceneLength:
+							sceneLength ||
+							userPreferences?.sceneLength ||
+							"medium",
 					},
 				}),
 			});
@@ -355,6 +371,37 @@ function StoryCreatePage() {
 											))}
 										</div>
 									</div>
+
+									{/* Scene Length */}
+									<div className="mb-6">
+										<label className="block text-sm font-semibold text-slate-700 mb-3">
+											Scene Length
+										</label>
+										<div className="grid grid-cols-3 gap-3">
+											{SCENE_LENGTH_OPTIONS.map((option) => (
+												<button
+													key={option}
+													type="button"
+													onClick={() => setSceneLength(option)}
+													className={`p-4 rounded-lg border-2 transition-all text-center ${
+														sceneLength === option
+															? "border-romance-600 bg-romance-50"
+															: "border-slate-200 bg-white hover:border-slate-300"
+													}`}
+												>
+													<div className="font-semibold text-slate-900 mb-1">
+														{SCENE_LENGTH_LABELS[option].label}
+													</div>
+													<div className="text-xs text-slate-600 mb-1">
+														{SCENE_LENGTH_LABELS[option].description}
+													</div>
+													<div className="text-xs text-slate-500">
+														{SCENE_LENGTH_LABELS[option].wordCount}
+													</div>
+												</button>
+											))}
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -379,7 +426,9 @@ function StoryCreatePage() {
 								</Link>
 								<button
 									onClick={handleCreateStory}
-									disabled={isCreating || !spiceLevel || !pacing}
+									disabled={
+										isCreating || !spiceLevel || !pacing || !sceneLength
+									}
 									className="flex-1 px-6 py-3 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 								>
 									{isCreating ? (

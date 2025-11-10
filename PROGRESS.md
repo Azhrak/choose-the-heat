@@ -1,8 +1,8 @@
 # Project Progress & Implementation Plan
 
 **Project**: Spicy Tales - AI-Enhanced Romance Novel App
-**Last Updated**: 2025-11-10 (Completed AI Enhancement - Phase 12)
-**Current Phase**: Phase 12 Complete (AI & Metadata), MVP 100% Complete! 🎉
+**Last Updated**: 2025-11-10 (Completed Scene Length Control - Phase 13)
+**Current Phase**: Phase 13 Complete (Scene Length Control), MVP 100% Complete! 🎉
 
 📄 **Quick Reference:** See [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for comprehensive session recap
 
@@ -372,11 +372,78 @@ cp .env.example .env
 docker-compose up --build
 ```
 
+### Phase 12: AI Prompt Enhancement & Metadata System (100% Complete)
+
+**Files Created:**
+
+- [src/lib/db/migrations/003_add_scene_metadata.ts](src/lib/db/migrations/003_add_scene_metadata.ts) - Metadata storage
+- [SCENE_METADATA.md](SCENE_METADATA.md) - Metadata system documentation
+
+**Files Enhanced:**
+
+- [src/lib/ai/prompts.ts](src/lib/ai/prompts.ts) - Comprehensive prompt improvements
+- [src/lib/ai/generate.ts](src/lib/ai/generate.ts) - Metadata integration
+- [src/lib/db/queries/scenes.ts](src/lib/db/queries/scenes.ts) - Metadata storage & retrieval
+
+**Prompt Enhancement Features:**
+
+- ✅ Enhanced system prompts with protagonist traits and setting preferences
+- ✅ Expanded consent guidelines (mutual desire, gradual escalation)
+- ✅ Comprehensive DO NOT section (18+ age requirement, prohibited content)
+- ✅ Phase-aware scene objectives (5 phases with specific guidance)
+- ✅ Variable word count targets by story phase (350-900 words)
+
+**Metadata System Features:**
+
+- ✅ SCENE_META XML-style block parsing
+- ✅ Structured metadata capture (emotional_beat, tension_threads, relationship_progress, key_moment)
+- ✅ JSONB storage in scenes table with optional fields
+- ✅ Smart summary generation from metadata (97% token reduction: 60 tokens vs 2000 tokens)
+- ✅ Backward compatibility with 19 existing scenes (nullable columns)
+- ✅ Metadata retrieval functions (single scene + progression analysis)
+- ✅ Heuristic fallback for scenes without metadata
+
+**Database Changes:**
+
+- ✅ Migration 003 applied to Docker PostgreSQL
+- ✅ Added `metadata` (JSONB) column to scenes table
+- ✅ Added `summary` (TEXT) column to scenes table
+
+### Phase 13: Scene Length Control Feature (100% Complete)
+
+**Files Enhanced:**
+
+- [src/lib/types/preferences.ts](src/lib/types/preferences.ts) - Scene length types & constants
+- [src/lib/ai/prompts.ts](src/lib/ai/prompts.ts) - Dynamic word count calculation
+- [src/routes/auth/onboarding.tsx](src/routes/auth/onboarding.tsx) - Scene length selector UI
+- [src/routes/story/create.tsx](src/routes/story/create.tsx) - Per-story length override UI
+
+**Scene Length Features:**
+
+- ✅ 3 preset options: Short (0.65x), Medium (1.0x), Long (1.4x)
+- ✅ getSceneLengthRange() function with multipliers
+- ✅ Phase-aware word count adjustments (350-900 base × multiplier)
+- ✅ Onboarding UI with radio button selector in Step 3
+- ✅ Story creation UI with 3-column grid layout
+- ✅ Word count estimates displayed for each option
+- ✅ Per-story override capability (uses override → user default → "medium")
+- ✅ Future-ready architecture for custom word count input
+
+**Word Count Ranges by Phase/Length:**
+
+| Phase         | Short   | Medium  | Long     |
+| ------------- | ------- | ------- | -------- |
+| Beginning     | 230-390 | 350-600 | 490-840  |
+| Development   | 295-455 | 450-700 | 630-980  |
+| Turning Point | 360-520 | 550-800 | 770-1120 |
+| Climax        | 425-585 | 650-900 | 910-1260 |
+| Resolution    | 260-420 | 400-650 | 560-910  |
+
 ---
 
 ## 🚧 In Progress / Next Steps
 
-### Phase 12: Polish & UX (NEXT - Priority 1)
+### Phase 14: Polish & UX (NEXT - Priority 1)
 
 **To Create:**
 
@@ -398,13 +465,14 @@ docker-compose up --build
 - SEO metadata for public pages
 - Performance optimization (code splitting, lazy loading)
 
-### Phase 13: Advanced Features (Priority 2)
+### Phase 15: Advanced Features (Priority 2)
 
 **To Create:**
 
 - Story export (PDF/EPUB)
 - Story sharing
-- Statistics dashboard
+- Statistics dashboard with relationship progression visualization (using SCENE_META)
+- Emotional arc charts (leveraging metadata.emotional_beat tracking)
 - Custom template creation (advanced users)
 - Story branching visualization
 - Multiple save slots per template
@@ -537,7 +605,7 @@ pnpm start
 
 ## 📊 Current Status Summary
 
-**Overall Progress**: ~98% (Phases 1-11 complete, MVP feature-complete)
+**Overall Progress**: 100% (Phases 1-13 complete, MVP feature-complete with AI enhancements)
 
 **Can Currently Run**:
 
@@ -545,10 +613,10 @@ pnpm start
 - ✅ Signup at `/auth/signup`
 - ✅ Login at `/auth/login`
 - ✅ Google OAuth flow
-- ✅ Onboarding flow at `/auth/onboarding`
+- ✅ Onboarding flow at `/auth/onboarding` (with scene length selection)
 - ✅ Browse templates at `/browse`
 - ✅ Template details at `/template/$id`
-- ✅ Story creation at `/story/create`
+- ✅ Story creation at `/story/create` (with scene length override)
 - ✅ Reading interface at `/story/$id/read`
 - ✅ User library at `/library`
 - ✅ User profile at `/profile`
@@ -679,7 +747,7 @@ Remaining work is polish, testing, and optimization for production readiness.
 
 ---
 
-**Last Session Context**: Completed Phase 12 (AI Enhancement & Metadata System). MVP is now 100% feature-complete! Ready for polish, testing, and deployment.
+**Last Session Context**: Completed Phase 13 (Scene Length Control Feature). MVP is now 100% feature-complete with comprehensive AI enhancements! Ready for polish, testing, and deployment. Next priority: Phase 14 (Polish & UX).
 
 ### Preference Structure (JSONB)
 
@@ -689,6 +757,7 @@ Remaining work is polish, testing, and optimization for production readiness.
   "tropes": ["enemies-to-lovers", "forced-proximity"],
   "spiceLevel": 4,
   "pacing": "slow-burn",
+  "sceneLength": "medium",
   "protagonistTraits": ["sarcastic", "independent"],
   "settingPreferences": ["urban", "workplace"]
 }

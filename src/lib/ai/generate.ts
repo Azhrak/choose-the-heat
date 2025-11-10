@@ -76,6 +76,7 @@ export async function generateScene(
 				}
 			: undefined,
 		estimatedScenes,
+		sceneLength: preferences.sceneLength,
 	});
 
 	// Generate with OpenAI

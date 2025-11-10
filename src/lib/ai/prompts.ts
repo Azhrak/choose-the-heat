@@ -6,6 +6,7 @@ export interface StoryPreferences {
 	tropes: string[];
 	spiceLevel: 1 | 2 | 3 | 4 | 5;
 	pacing: "slow-burn" | "fast-paced";
+	sceneLength?: "short" | "medium" | "long" | number; // preset or custom word count
 	protagonistTraits?: string[];
 	settingPreferences?: string[];
 }
@@ -109,6 +110,7 @@ export function buildScenePrompt(params: {
 	lastChoice?: { text: string; tone: string };
 	choicePoint?: { sceneNumber: number; promptText: string };
 	estimatedScenes: number;
+	sceneLength?: "short" | "medium" | "long" | number;
 }): string {
 	const {
 		templateTitle,
@@ -117,6 +119,7 @@ export function buildScenePrompt(params: {
 		lastChoice,
 		choicePoint,
 		estimatedScenes,
+		sceneLength,
 	} = params;
 
 	const phaseRatio = sceneNumber / estimatedScenes;
@@ -182,14 +185,9 @@ export function buildScenePrompt(params: {
 		choiceDirective = `UPCOMING DECISION SETUP: End BEFORE resolving: "${choicePoint.promptText}".\nBuild escalation toward this decision; end on poised tension (gesture, silence, sensory cue)—avoid forced question if unnatural.\n\n`;
 	}
 
-	const targetWords =
-		sceneNumber === 1
-			? "Aim ~850 words"
-			: phase === "Resolution"
-				? "Aim 700–950 words"
-				: phase === "Pre-Climax"
-					? "Aim 900–1100 words"
-					: "Aim 800–1050 words";
+	// Calculate word target based on scene length preference
+	const lengthRange = getSceneLengthRange(sceneLength, phase, sceneNumber);
+	const targetWords = lengthRange.target;
 
 	return `STORY: "${templateTitle}"\nSCENE: ${sceneNumber} / ~${estimatedScenes}\nPHASE: ${phase}\nOBJECTIVES:\n${objectivesBlock}\n\n${contextSection}${choiceImpact}${choiceDirective}${targetWords}.\nWrite immersive narrative now (no meta, no lists).
 
@@ -210,6 +208,55 @@ export interface SceneMetadata {
 	tension_threads?: string;
 	relationship_progress?: number;
 	key_moment?: string;
+}
+
+/**
+ * Calculate word count range based on scene length preference and phase
+ */
+export function getSceneLengthRange(
+	sceneLength: "short" | "medium" | "long" | number | undefined,
+	phase: string,
+	sceneNumber: number,
+): { min: number; max: number; target: string } {
+	// If custom word count provided, use it with ±15% flexibility
+	if (typeof sceneLength === "number") {
+		const min = Math.floor(sceneLength * 0.85);
+		const max = Math.floor(sceneLength * 1.15);
+		return { min, max, target: `Aim ${min}–${max} words` };
+	}
+
+	// Base multipliers for presets
+	const lengthMultiplier = {
+		short: 0.65, // ~500-700 words
+		medium: 1.0, // ~800-1100 words
+		long: 1.4, // ~1100-1500 words
+	};
+
+	const multiplier = lengthMultiplier[sceneLength || "medium"];
+
+	// Phase-specific base ranges (for medium)
+	let baseMin: number;
+	let baseMax: number;
+
+	if (sceneNumber === 1) {
+		baseMin = 800;
+		baseMax = 900;
+	} else if (phase === "Resolution") {
+		baseMin = 700;
+		baseMax = 950;
+	} else if (phase === "Pre-Climax") {
+		baseMin = 900;
+		baseMax = 1100;
+	} else {
+		baseMin = 800;
+		baseMax = 1050;
+	}
+
+	// Apply multiplier
+	const min = Math.floor(baseMin * multiplier);
+	const max = Math.floor(baseMax * multiplier);
+
+	return { min, max, target: `Aim ${min}–${max} words` };
 }
 
 /**

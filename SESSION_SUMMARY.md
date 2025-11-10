@@ -1,7 +1,7 @@
 # Session Summary - Spicy Tales Project Setup
 
 **Date:** November 10, 2025
-**Status:** MVP Complete with AI Enhancement! 🎉🤖
+**Status:** MVP Complete with AI Enhancement + Scene Length Control! 🎉🤖📏
 **Next Phase:** Polish & Testing (Phase 13)
 
 ---
@@ -292,6 +292,45 @@
   - Foundation for analytics and visualizations
   - Significant cost reduction per story generation
 
+### ✅ Phase 13: Scene Length Control Feature (100%) 📏
+
+- **User-Controlled Scene Length**
+  - Added 3 preset options: Short, Medium, Long
+  - Smart word count ranges that adapt to story phase
+  - Architecture supports custom word counts (future enhancement)
+
+- **Type System Updates**
+  - Added `SCENE_LENGTH_OPTIONS` constant
+  - Created `SceneLengthOption` type
+  - Updated `UserPreferences` interface with optional `sceneLength`
+  - Added `SCENE_LENGTH_LABELS` with descriptions and word counts
+
+- **AI Prompt System Enhancement**
+  - Created `getSceneLengthRange()` function:
+    - Handles presets with multipliers (0.65x, 1.0x, 1.4x)
+    - Phase-aware adjustments (shorter for resolutions)
+    - Supports future custom word counts with ±15% flexibility
+  - Updated `buildScenePrompt()` to use dynamic word targets
+
+- **Word Count Ranges by Length**
+  - **Short**: ~500-700 words (quick, punchy scenes)
+  - **Medium**: ~800-1100 words (balanced pacing) - default
+  - **Long**: ~1100-1500 words (detailed, immersive)
+  - Automatically adjusts based on story phase
+
+- **UI Integration**
+  - Added scene length selector to onboarding (Step 3)
+  - Added scene length override in story creation form
+  - 3-column grid layout with descriptions and word counts
+  - Defaults to "medium" for optimal experience
+
+- **Benefits**
+  - User control over reading experience length
+  - Faster reads for time-constrained users
+  - Deep immersion for dedicated readers
+  - Cost optimization (shorter scenes = fewer tokens)
+  - Future-ready for custom word count input
+
 ### ✅ Documentation (100%)
 
 - **README.md** - Project overview and quick start
@@ -456,6 +495,7 @@ pnpm dev
 - ✅ Automatic database migrations
 - ✅ **3-step user onboarding flow**
 - ✅ **Preference management (genres, tropes, spice, pacing)**
+- ✅ **Scene length control (short, medium, long presets)**
 - ✅ **Intelligent auth redirects (onboarding vs browse)**
 - ✅ **Browse and Library pages**
 - ✅ **User profile management**
@@ -487,6 +527,8 @@ pnpm dev
 - ✅ **Smart summary generation from metadata**
 - ✅ **97% token reduction for context passing**
 - ✅ **Metadata-based scene continuity**
+- ✅ **User-controlled scene length (short/medium/long with phase-aware word counts)**
+- ✅ **Dynamic AI word targets based on preferences and story phase**
 
 ---
 
@@ -559,6 +601,7 @@ GOOGLE_CLIENT_SECRET=...  # For OAuth
 4. ✅ **Library** (allows users to manage stories) - **COMPLETE**
 5. ✅ **Reading Interface** (allows users to read & choose) - **COMPLETE**
 6. ✅ **AI Enhancement** (metadata, safety, continuity) - **COMPLETE**
+7. ✅ **Scene Length Control** (user-controlled pacing) - **COMPLETE**
 
 **The core loop is complete! Ready for polish and user testing.**
 
@@ -566,8 +609,8 @@ GOOGLE_CLIENT_SECRET=...  # For OAuth
 
 ## 📊 Current Metrics
 
-- **Lines of Code:** ~11,000+
-- **Files Created:** 90+
+- **Lines of Code:** ~11,500+
+- **Files Created:** 92+
 - **Dependencies:** 32 (production) + 14 (dev)
 - **Database Tables:** 9
 - **Database Migrations:** 3
@@ -575,7 +618,8 @@ GOOGLE_CLIENT_SECRET=...  # For OAuth
 - **Pages:** 10 (landing, login, signup, onboarding, browse, library, profile, template detail, story create, reading)
 - **Components:** 1 (NovelCard)
 - **AI Providers:** 4
-- **Documentation Pages:** 5 (3,000+ lines)
+- **Scene Length Options:** 3 (short, medium, long)
+- **Documentation Pages:** 5 (3,100+ lines)
 
 ---
 
