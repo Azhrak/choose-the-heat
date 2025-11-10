@@ -1,4 +1,5 @@
 import { db } from "~/lib/db";
+import type { SceneMetadata } from "~/lib/ai/prompts";
 
 /**
  * Get a cached scene
@@ -19,6 +20,8 @@ export async function cacheScene(
 	storyId: string,
 	sceneNumber: number,
 	content: string,
+	metadata: SceneMetadata | null = null,
+	summary: string | null = null,
 ) {
 	const wordCount = content.split(/\s+/).length;
 
@@ -30,6 +33,8 @@ export async function cacheScene(
 				scene_number: sceneNumber,
 				content,
 				word_count: wordCount,
+				metadata: metadata ? JSON.stringify(metadata) : null,
+				summary,
 			})
 			.returning("id")
 			.executeTakeFirstOrThrow();
@@ -57,18 +62,24 @@ export async function getStoryScenes(storyId: string) {
 
 /**
  * Get the last N scenes for context
+ * Returns summaries for efficient context passing
  */
 export async function getRecentScenes(storyId: string, count: number) {
 	const scenes = await db
 		.selectFrom("scenes")
-		.selectAll()
+		.select(["scene_number", "summary", "content"])
 		.where("story_id", "=", storyId)
 		.orderBy("scene_number", "desc")
 		.limit(count)
 		.execute();
 
 	// Reverse to get chronological order
-	return scenes.reverse();
+	// Prefer summary over content for context
+	return scenes.reverse().map((scene) => ({
+		scene_number: scene.scene_number,
+		// Use summary if available, otherwise fall back to content
+		content: scene.summary || scene.content,
+	}));
 }
 
 /**
@@ -95,4 +106,43 @@ export async function getStoryStats(storyId: string) {
 		sceneCount: Number(result?.sceneCount || 0),
 		totalWords: Number(result?.totalWords || 0),
 	};
+}
+
+/**
+ * Get scene metadata for a specific scene
+ */
+export async function getSceneMetadata(
+	storyId: string,
+	sceneNumber: number,
+): Promise<SceneMetadata | null> {
+	const scene = await db
+		.selectFrom("scenes")
+		.select("metadata")
+		.where("story_id", "=", storyId)
+		.where("scene_number", "=", sceneNumber)
+		.executeTakeFirst();
+
+	if (!scene?.metadata) {
+		return null;
+	}
+
+	return scene.metadata as SceneMetadata;
+}
+
+/**
+ * Get all metadata for a story (for analysis/progression tracking)
+ */
+export async function getStoryMetadataProgression(storyId: string) {
+	const scenes = await db
+		.selectFrom("scenes")
+		.select(["scene_number", "metadata", "summary"])
+		.where("story_id", "=", storyId)
+		.orderBy("scene_number", "asc")
+		.execute();
+
+	return scenes.map((scene) => ({
+		scene_number: scene.scene_number,
+		metadata: scene.metadata as SceneMetadata | null,
+		summary: scene.summary,
+	}));
 }

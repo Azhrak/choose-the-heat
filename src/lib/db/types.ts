@@ -107,5 +107,7 @@ export interface ScenesTable {
 	scene_number: number;
 	content: string;
 	word_count: number;
+	metadata: unknown | null; // JSONB
+	summary: string | null;
 	created_at: Generated<Timestamp>;
 }

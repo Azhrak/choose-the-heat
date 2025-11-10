@@ -8,6 +8,7 @@ import { generateCompletion } from "./client";
 import {
 	buildScenePrompt,
 	buildSystemPrompt,
+	parseSceneMeta,
 	type StoryPreferences,
 } from "./prompts";
 
@@ -83,11 +84,20 @@ export async function generateScene(
 		maxTokens: 2000, // ~1500 words
 	});
 
-	// Cache the generated scene
-	await cacheScene(storyId, sceneNumber, content);
+	// Parse content and extract metadata
+	const parsed = parseSceneMeta(content);
+
+	// Cache the generated scene with metadata and summary
+	await cacheScene(
+		storyId,
+		sceneNumber,
+		parsed.content,
+		parsed.metadata,
+		parsed.summary,
+	);
 
 	return {
-		content,
+		content: parsed.content,
 		cached: false,
 	};
 }
