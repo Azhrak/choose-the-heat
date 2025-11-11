@@ -1,16 +1,50 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
-	FileMigrationProvider,
 	Kysely,
 	Migrator,
 	PostgresDialect,
+	type Migration,
+	type MigrationProvider,
 } from "kysely";
 import { Pool } from "pg";
+import { config } from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load environment variables
+config({ path: path.resolve(__dirname, "../../../.env") });
+
+/**
+ * Custom migration provider that works cross-platform (Windows, Linux, macOS)
+ * Converts file paths to file:// URLs to avoid ESM loader issues with dynamic imports
+ */
+class CustomFileMigrationProvider implements MigrationProvider {
+	constructor(private migrationFolder: string) {}
+
+	async getMigrations(): Promise<Record<string, Migration>> {
+		const migrations: Record<string, Migration> = {};
+		const files = await fs.readdir(this.migrationFolder);
+
+		for (const fileName of files) {
+			if (
+				fileName.endsWith(".ts") ||
+				(fileName.endsWith(".js") && !fileName.endsWith(".d.ts"))
+			) {
+				const migrationKey = fileName.substring(0, fileName.lastIndexOf("."));
+				const filePath = path.join(this.migrationFolder, fileName);
+				// Convert platform-specific path to file:// URL (works on Windows, Linux, macOS)
+				const fileUrl = pathToFileURL(filePath).href;
+				const migration = await import(fileUrl);
+				migrations[migrationKey] = migration;
+			}
+		}
+
+		return migrations;
+	}
+}
 
 async function migrateToLatest() {
 	// Create database connection
@@ -24,11 +58,9 @@ async function migrateToLatest() {
 
 	const migrator = new Migrator({
 		db,
-		provider: new FileMigrationProvider({
-			fs,
-			path,
-			migrationFolder: path.join(__dirname, "migrations"),
-		}),
+		provider: new CustomFileMigrationProvider(
+			path.join(__dirname, "migrations"),
+		),
 	});
 
 	const { error, results } = await migrator.migrateToLatest();
