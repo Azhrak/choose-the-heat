@@ -63,6 +63,7 @@
     "autoprefixer": "^10.4.20",
     "jsdom": "^27.0.0",
     "kysely-codegen": "^0.18.1",
+    "nitro": "3.0.1-alpha.1",
     "postcss": "^8.4.49",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",

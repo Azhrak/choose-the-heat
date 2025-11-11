@@ -11,16 +11,17 @@ This guide walks you through deploying Spicy Tales to Vercel with Neon PostgreSQ
 
 ## How It Works
 
-TanStack Start uses **Nitro** under the hood, which automatically detects deployment platforms:
+TanStack Start uses **Nitro** to build for different deployment platforms:
 
-- ✅ **Auto-Detection**: Vercel sets `VERCEL=1` during builds, Nitro detects this automatically
-- ✅ **No Manual Config**: The `vercel` preset is applied automatically
-- ✅ **Optimized Builds**: Serverless functions are optimized for Vercel's infrastructure
-- ✅ **Zero Config**: Just push to GitHub and deploy!
+- ✅ **Auto-Detection**: Vercel sets `VERCEL=1` during builds, Nitro detects this and uses the `vercel` preset
+- ✅ **Serverless Functions**: Automatically generates `.vercel/output/functions/` for server-side rendering
+- ✅ **Static Assets**: Optimized static files in `.vercel/output/static/`
+- ✅ **Node.js 22**: Uses the latest Node.js runtime on Vercel
 
-Configuration files are already set up in your project:
-- [vercel.json](vercel.json) - Specifies build commands
-- [vite.config.ts](vite.config.ts) - TanStack Start configuration
+Configuration files already set up:
+- [vercel.json](vercel.json) - Ensures devDependencies are installed
+- [vite.config.ts](vite.config.ts) - Includes Nitro Vite plugin for Vercel deployment
+- [package.json](package.json) - Includes `nitro` package
 
 ## Prerequisites
 
