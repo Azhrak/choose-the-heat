@@ -1,13 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, LogOut, Menu, User, X } from "lucide-react";
+import { Heart, LogOut, Menu, User, X, Shield } from "lucide-react";
 import { useState } from "react";
+import type { UserRole } from "~/lib/db/types";
 
 interface HeaderProps {
 	currentPath?: string;
+	userRole?: UserRole;
 }
 
-export function Header({ currentPath = "" }: HeaderProps) {
+export function Header({ currentPath = "", userRole }: HeaderProps) {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const isEditorOrAdmin = userRole === "editor" || userRole === "admin";
 
 	const handleLogout = async () => {
 		try {
@@ -53,6 +56,17 @@ export function Header({ currentPath = "" }: HeaderProps) {
 						>
 							My Library
 						</Link>
+						{isEditorOrAdmin && (
+							<Link
+								to="/admin"
+								className={`flex items-center gap-2 text-slate-700 hover:text-romance-600 font-medium transition-colors ${
+									isActive("/admin") || currentPath.startsWith("/admin") ? "text-romance-600" : ""
+								}`}
+							>
+								<Shield className="w-4 h-4" />
+								Admin Panel
+							</Link>
+						)}
 						<Link
 							to="/profile"
 							className={`flex items-center gap-2 text-slate-700 hover:text-romance-600 font-medium transition-colors ${
@@ -109,6 +123,18 @@ export function Header({ currentPath = "" }: HeaderProps) {
 							>
 								My Library
 							</Link>
+							{isEditorOrAdmin && (
+								<Link
+									to="/admin"
+									onClick={() => setMobileMenuOpen(false)}
+									className={`flex items-center gap-2 px-4 py-2 rounded-lg text-slate-700 hover:bg-romance-50 hover:text-romance-600 font-medium transition-colors ${
+										isActive("/admin") || currentPath.startsWith("/admin") ? "bg-romance-50 text-romance-600" : ""
+									}`}
+								>
+									<Shield className="w-4 h-4" />
+									Admin Panel
+								</Link>
+							)}
 							<Link
 								to="/profile"
 								onClick={() => setMobileMenuOpen(false)}

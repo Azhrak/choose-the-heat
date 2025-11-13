@@ -3,6 +3,7 @@ import { AlertTriangle, Lock, Settings, User } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Header } from "~/components/Header";
 import { PageContainer } from "~/components/PageContainer";
+import type { UserRole } from "~/lib/db/types";
 
 export const Route = createFileRoute("/profile")({
 	component: ProfilePage,
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/profile")({
 interface UserProfile {
 	name: string;
 	email: string;
+	role: UserRole;
 	createdAt: string;
 	preferences: any;
 }
@@ -186,7 +188,7 @@ function ProfilePage() {
 
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
-			<Header currentPath="/profile" />
+			<Header currentPath="/profile" userRole={profile?.role} />
 
 			{/* Main Content */}
 			<PageContainer maxWidth="md">

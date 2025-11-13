@@ -31,6 +31,7 @@ export const Route = createFileRoute("/api/profile/")({
 							"avatar_url",
 							"default_preferences",
 							"email_verified",
+							"role",
 							"created_at",
 						])
 						.where("id", "=", session.userId)
@@ -47,6 +48,7 @@ export const Route = createFileRoute("/api/profile/")({
 						avatarUrl: user.avatar_url,
 						preferences: user.default_preferences,
 						emailVerified: user.email_verified,
+						role: user.role,
 						createdAt: user.created_at,
 					});
 				} catch (error) {

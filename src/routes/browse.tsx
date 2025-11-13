@@ -8,6 +8,7 @@ import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
 import { PageContainer } from "~/components/PageContainer";
+import type { UserRole } from "~/lib/db/types";
 import { TROPE_LABELS, TROPES, type Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
@@ -36,6 +37,18 @@ function BrowsePage() {
 		queryParams.set("search", searchQuery);
 	}
 
+	// Fetch current user profile
+	const { data: profileData } = useQuery({
+		queryKey: ["currentUser"],
+		queryFn: async () => {
+			const response = await fetch("/api/profile", {
+				credentials: "include",
+			});
+			if (!response.ok) return null;
+			return response.json() as Promise<{ role: UserRole }>;
+		},
+	});
+
 	// Fetch templates
 	const { data, isLoading, error } = useQuery({
 		queryKey: ["templates", selectedTropes, searchQuery],
@@ -57,7 +70,7 @@ function BrowsePage() {
 
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
-			<Header currentPath="/browse" />
+			<Header currentPath="/browse" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="full">
 				{/* Welcome Section */}

@@ -7,6 +7,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
+import type { UserRole } from "~/lib/db/types";
 
 export const Route = createFileRoute("/library")({
 	component: LibraryPage,
@@ -39,6 +40,18 @@ function LibraryPage() {
 	);
 	const [deletingId, setDeletingId] = useState<string | null>(null);
 	const queryClient = useQueryClient();
+
+	// Fetch current user profile
+	const { data: profileData } = useQuery({
+		queryKey: ["currentUser"],
+		queryFn: async () => {
+			const response = await fetch("/api/profile", {
+				credentials: "include",
+			});
+			if (!response.ok) return null;
+			return response.json() as Promise<{ role: UserRole }>;
+		},
+	});
 
 	const { data, isLoading, error } = useQuery({
 		queryKey: ["user-stories", activeTab],
@@ -90,7 +103,7 @@ function LibraryPage() {
 
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
-			<Header currentPath="/library" />
+			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl">
 				<h1 className="text-4xl font-bold text-slate-900 mb-8">My Library</h1>

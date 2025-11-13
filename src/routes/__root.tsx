@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	createRootRoute,
 	HeadContent,
@@ -56,6 +57,7 @@ function RootComponent() {
 			<body>
 				<QueryClientProvider client={queryClient}>
 					<Outlet />
+					<ReactQueryDevtools initialIsOpen={false} />
 					<Scripts />
 				</QueryClientProvider>
 			</body>

@@ -8,6 +8,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
+import type { UserRole } from "~/lib/db/types";
 import {
 	PACING_LABELS,
 	PACING_OPTIONS,
@@ -48,6 +49,18 @@ function StoryCreatePage() {
 	);
 	const [storyTitle, setStoryTitle] = useState("");
 	const [isCreating, setIsCreating] = useState(false);
+
+	// Fetch current user profile
+	const { data: profileData } = useQuery({
+		queryKey: ["currentUser"],
+		queryFn: async () => {
+			const response = await fetch("/api/profile", {
+				credentials: "include",
+			});
+			if (!response.ok) return null;
+			return response.json() as Promise<{ role: UserRole }>;
+		},
+	});
 
 	// Fetch template details
 	const { data: templateData, isLoading: isLoadingTemplate } = useQuery({
@@ -165,7 +178,7 @@ function StoryCreatePage() {
 
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
-			<Header currentPath="" />
+			<Header currentPath="" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="md">
 				{/* Back Button */}
