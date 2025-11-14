@@ -1,29 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { FileText, Users, Archive, Eye, EyeOff, FilePlus } from "lucide-react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAdminDashboardQuery } from "~/hooks/useAdminDashboardQuery";
 
 export const Route = createFileRoute("/admin/")({
 	component: AdminDashboard,
 });
-
-interface DashboardStats {
-	templates?: {
-		total: number;
-		draft: number;
-		published: number;
-		archived: number;
-	};
-	users?: {
-		total: number;
-		user: number;
-		editor: number;
-		admin: number;
-	};
-}
 
 function AdminDashboard() {
 	const navigate = useNavigate();
@@ -32,23 +17,7 @@ function AdminDashboard() {
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
 
 	// Fetch dashboard stats
-	const { data: stats, isLoading: statsLoading, error } = useQuery({
-		queryKey: ["adminDashboard"],
-		queryFn: async () => {
-			const response = await fetch("/api/admin/dashboard", {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 403) {
-					navigate({ to: "/browse" });
-					return null;
-				}
-				throw new Error("Failed to fetch dashboard statistics");
-			}
-			return response.json() as Promise<{ stats: DashboardStats }>;
-		},
-		enabled: !!userData,
-	});
+	const { data: stats, isLoading: statsLoading, error } = useAdminDashboardQuery(!!userData);
 
 	if (userLoading || statsLoading) {
 		return (

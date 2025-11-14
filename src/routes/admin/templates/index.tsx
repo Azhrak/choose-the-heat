@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { FileText, Plus, Eye, EyeOff, Archive } from "lucide-react";
 import { AdminLayout, DataTable, StatusBadge } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAdminTemplatesQuery } from "~/hooks/useAdminTemplatesQuery";
 import type { Template } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/templates/")({
@@ -22,23 +22,7 @@ function TemplatesListPage() {
 		data: templatesData,
 		isLoading: templatesLoading,
 		error,
-	} = useQuery({
-		queryKey: ["adminTemplates"],
-		queryFn: async () => {
-			const response = await fetch("/api/admin/templates", {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 403) {
-					navigate({ to: "/browse" });
-					return null;
-				}
-				throw new Error("Failed to fetch templates");
-			}
-			return response.json() as Promise<{ templates: Template[] }>;
-		},
-		enabled: !!userData,
-	});
+	} = useAdminTemplatesQuery(!!userData);
 
 	if (userLoading || templatesLoading) {
 		return (

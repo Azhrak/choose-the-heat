@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
@@ -18,6 +17,10 @@ import {
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
+import { useUpdateTemplateMutation } from "~/hooks/useUpdateTemplateMutation";
+import { useUpdateTemplateStatusMutation } from "~/hooks/useUpdateTemplateStatusMutation";
+import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
 import type { Template, TemplateStatus } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/templates/$id/edit")({
@@ -34,7 +37,6 @@ interface TemplateFormData {
 
 function EditTemplatePage() {
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const { id } = Route.useParams();
 
 	const [formData, setFormData] = useState<TemplateFormData | null>(null);
@@ -53,26 +55,7 @@ function EditTemplatePage() {
 		data: templateData,
 		isLoading: templateLoading,
 		error,
-	} = useQuery({
-		queryKey: ["adminTemplate", id],
-		queryFn: async () => {
-			const response = await fetch(`/api/admin/templates/${id}`, {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 404) {
-					throw new Error("Template not found");
-				}
-				if (response.status === 403) {
-					navigate({ to: "/browse" });
-					return null;
-				}
-				throw new Error("Failed to fetch template");
-			}
-			return response.json() as Promise<{ template: Template }>;
-		},
-		enabled: !!userData,
-	});
+	} = useAdminTemplateQuery(id, !!userData);
 
 	// Initialize form data when template loads
 	if (templateData?.template && !formData) {
@@ -86,92 +69,39 @@ function EditTemplatePage() {
 	}
 
 	// Update template mutation
-	const updateMutation = useMutation({
-		mutationFn: async (data: TemplateFormData) => {
-			const response = await fetch(`/api/admin/templates/${id}`, {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({
-					title: data.title,
-					description: data.description,
-					base_tropes: data.base_tropes.split(",").map((t) => t.trim()),
-					estimated_scenes: data.estimated_scenes,
-					cover_gradient: data.cover_gradient,
-				}),
-			});
+	const updateMutation = useUpdateTemplateMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to update template");
-			}
+	const handleUpdateSuccess = () => {
+		setFormError(null);
+	};
 
-			return response.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["adminTemplate", id] });
-			queryClient.invalidateQueries({ queryKey: ["adminTemplates"] });
-			setFormError(null);
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-		},
-	});
+	const handleUpdateError = (error: Error) => {
+		setFormError(error.message);
+	};
 
 	// Update status mutation
-	const statusMutation = useMutation({
-		mutationFn: async (status: TemplateStatus) => {
-			const response = await fetch(`/api/admin/templates/${id}/status`, {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({ status }),
-			});
+	const statusMutation = useUpdateTemplateStatusMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to update status");
-			}
+	const handleStatusSuccess = () => {
+		setShowStatusDialog(false);
+		setPendingStatus(null);
+	};
 
-			return response.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["adminTemplate", id] });
-			queryClient.invalidateQueries({ queryKey: ["adminTemplates"] });
-			queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
-			setShowStatusDialog(false);
-			setPendingStatus(null);
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-		},
-	});
+	const handleStatusError = (error: Error) => {
+		setFormError(error.message);
+	};
 
 	// Delete template mutation
-	const deleteMutation = useMutation({
-		mutationFn: async () => {
-			const response = await fetch(`/api/admin/templates/${id}`, {
-				method: "DELETE",
-				credentials: "include",
-			});
+	const deleteMutation = useDeleteTemplateMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to delete template");
-			}
+	const handleDeleteSuccess = () => {
+		navigate({ to: "/admin/templates" });
+	};
 
-			return response.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["adminTemplates"] });
-			queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
-			navigate({ to: "/admin/templates" });
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-			setShowDeleteDialog(false);
-		},
-	});
+	const handleDeleteError = (error: Error) => {
+		setFormError(error.message);
+		setShowDeleteDialog(false);
+	};
 
 	if (userLoading || templateLoading) {
 		return (
@@ -220,7 +150,10 @@ function EditTemplatePage() {
 			return;
 		}
 
-		updateMutation.mutate(formData);
+		updateMutation.mutate(formData, {
+			onSuccess: handleUpdateSuccess,
+			onError: handleUpdateError,
+		});
 	};
 
 	const handleStatusChange = (status: TemplateStatus) => {
@@ -230,7 +163,10 @@ function EditTemplatePage() {
 
 	const confirmStatusChange = () => {
 		if (pendingStatus) {
-			statusMutation.mutate(pendingStatus);
+			statusMutation.mutate(pendingStatus, {
+				onSuccess: handleStatusSuccess,
+				onError: handleStatusError,
+			});
 		}
 	};
 
@@ -524,7 +460,10 @@ function EditTemplatePage() {
 			<ConfirmDialog
 				isOpen={showDeleteDialog}
 				onClose={() => setShowDeleteDialog(false)}
-				onConfirm={() => deleteMutation.mutate()}
+				onConfirm={() => deleteMutation.mutate(undefined, {
+					onSuccess: handleDeleteSuccess,
+					onError: handleDeleteError,
+				})}
 				title="Delete Template?"
 				message="This action cannot be undone. All choice points will be deleted. User stories will remain but may have orphaned data."
 				confirmText="Delete Template"

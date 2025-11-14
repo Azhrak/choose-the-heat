@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, Heart, Sparkles } from "lucide-react";
 import { ErrorMessage } from "~/components/ErrorMessage";
@@ -6,6 +5,7 @@ import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useTemplateQuery } from "~/hooks/useTemplateQuery";
 import { TROPE_LABELS } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/template/$id")({
@@ -44,35 +44,7 @@ function TemplateDetailPage() {
 	const { data: profileData } = useCurrentUserQuery();
 
 	// Fetch template details
-	const { data, isLoading, error } = useQuery({
-		queryKey: ["template", id],
-		queryFn: async () => {
-			const response = await fetch(`/api/templates/${id}`, {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 404) {
-					throw new Error("Template not found");
-				}
-				throw new Error("Failed to fetch template");
-			}
-			const result = await response.json();
-			// Parse options JSON string
-			return {
-				...result,
-				template: {
-					...result.template,
-					choicePoints: result.template.choicePoints.map((cp: any) => ({
-						...cp,
-						options:
-							typeof cp.options === "string"
-								? JSON.parse(cp.options)
-								: cp.options,
-					})),
-				},
-			} as { template: Template };
-		},
-	});
+	const { data, isLoading, error } = useTemplateQuery(id);
 
 	const template = data?.template;
 

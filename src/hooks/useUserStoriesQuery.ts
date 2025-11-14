@@ -5,13 +5,15 @@ interface UserStoriesResponse {
 	stories: UserStory[];
 }
 
+export const userStoriesQueryKey = (status: StoryStatus) => ["user-stories", status] as const;
+
 /**
  * Custom hook to fetch user's stories filtered by status
  * @param status - Filter stories by "in-progress" or "completed"
  */
 export function useUserStoriesQuery(status: StoryStatus) {
 	return useQuery({
-		queryKey: ["user-stories", status],
+		queryKey: userStoriesQueryKey(status),
 		queryFn: async () => {
 			const response = await fetch(`/api/stories/user?status=${status}`, {
 				credentials: "include",

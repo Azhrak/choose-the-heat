@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
 	BookOpen,
@@ -11,6 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { FullPageLoader } from "~/components/FullPageLoader";
+import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
+import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
 
 export const Route = createFileRoute("/story/$id/read")({
 	component: ReadingPage,
@@ -43,65 +44,28 @@ type SceneData = {
 function ReadingPage() {
 	const { id } = Route.useParams();
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const [selectedOption, setSelectedOption] = useState<number | null>(null);
 	const [currentSceneNumber, setCurrentSceneNumber] = useState<number | null>(
 		null,
 	);
 
 	// Fetch scene data
-	const { data, isLoading, error } = useQuery<SceneData>({
-		queryKey: ["story-scene", id, currentSceneNumber],
-		queryFn: async () => {
-			const url =
-				currentSceneNumber !== null
-					? `/api/stories/${id}/scene?number=${currentSceneNumber}`
-					: `/api/stories/${id}/scene`;
-			const response = await fetch(url);
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to fetch scene");
-			}
-			return response.json();
-		},
-	});
+	const { data, isLoading, error } = useStorySceneQuery(id, currentSceneNumber);
 
 	// Record choice mutation
-	const choiceMutation = useMutation({
-		mutationFn: async (choiceData: {
-			choicePointId: string;
-			selectedOption: number;
-		}) => {
-			const response = await fetch(`/api/stories/${id}/choose`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(choiceData),
-			});
+	const choiceMutation = useMakeChoiceMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to record choice");
-			}
+	const handleChoiceSuccess = (result: any) => {
+		setSelectedOption(null);
 
-			return response.json();
-		},
-		onSuccess: async (result) => {
-			setSelectedOption(null);
-
-			if (result.completed) {
-				// Story complete - redirect to library
-				navigate({ to: "/library" });
-			} else {
-				// Move to next scene and refetch
-				setCurrentSceneNumber(result.nextScene);
-				// Invalidate all queries for this story to get fresh data
-				await queryClient.invalidateQueries({
-					queryKey: ["story-scene", id],
-					refetchType: "all",
-				});
-			}
-		},
-	});
+		if (result.completed) {
+			// Story complete - redirect to library
+			navigate({ to: "/library" });
+		} else {
+			// Move to next scene and refetch
+			setCurrentSceneNumber(result.nextScene);
+		}
+	};
 
 	const handleMakeChoice = () => {
 		if (selectedOption === null || !data?.choicePoint) return;
@@ -109,6 +73,8 @@ function ReadingPage() {
 		choiceMutation.mutate({
 			choicePointId: data.choicePoint.id,
 			selectedOption,
+		}, {
+			onSuccess: handleChoiceSuccess,
 		});
 	};
 
@@ -287,9 +253,6 @@ function ReadingPage() {
 								});
 								// Navigate to next scene
 								setCurrentSceneNumber(nextScene);
-								queryClient.invalidateQueries({
-									queryKey: ["story-scene", id],
-								});
 							}}
 							className="px-8 py-3 bg-linear-to-r from-rose-600 to-purple-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-purple-700 transition-all inline-flex items-center gap-2"
 						>

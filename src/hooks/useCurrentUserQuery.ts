@@ -6,13 +6,15 @@ export interface CurrentUser {
 	role: UserRole;
 }
 
+export const currentUserQueryKey = ["currentUser"] as const;
+
 /**
  * Custom hook to fetch the current user's profile data
  * Returns null if the user is not authenticated
  */
 export function useCurrentUserQuery() {
 	return useQuery({
-		queryKey: ["currentUser"],
+		queryKey: currentUserQueryKey,
 		queryFn: async () => {
 			const response = await fetch("/api/profile", {
 				credentials: "include",

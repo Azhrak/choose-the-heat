@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Users as UsersIcon, Shield, Edit2 } from "lucide-react";
 import { AdminLayout, DataTable, RoleBadge, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAdminUsersQuery } from "~/hooks/useAdminUsersQuery";
 import type { User } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/users/")({
@@ -22,23 +22,7 @@ function UsersListPage() {
 		data: usersData,
 		isLoading: usersLoading,
 		error,
-	} = useQuery({
-		queryKey: ["adminUsers"],
-		queryFn: async () => {
-			const response = await fetch("/api/admin/users", {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 403) {
-					navigate({ to: "/admin" });
-					return null;
-				}
-				throw new Error("Failed to fetch users");
-			}
-			return response.json() as Promise<{ users: User[] }>;
-		},
-		enabled: !!userData && userData.role === "admin",
-	});
+	} = useAdminUsersQuery(!!userData && userData.role === "admin");
 
 	if (userLoading || usersLoading) {
 		return (

@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, Heart } from "lucide-react";
 import { useState } from "react";
@@ -12,6 +11,9 @@ import { RadioButtonGroup } from "~/components/RadioButtonGroup";
 import { SpiceLevelSelector } from "~/components/SpiceLevelSelector";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
+import { useTemplateQuery } from "~/hooks/useTemplateQuery";
+import { useExistingStoriesQuery } from "~/hooks/useExistingStoriesQuery";
+import { useCreateStoryMutation } from "~/hooks/useCreateStoryMutation";
 import {
 	PACING_LABELS,
 	PACING_OPTIONS,
@@ -35,7 +37,6 @@ export const Route = createFileRoute("/story/create")({
 function StoryCreatePage() {
 	const { templateId } = Route.useSearch();
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const [spiceLevel, setSpiceLevel] = useState<SpiceLevel | null>(null);
 	const [pacing, setPacing] = useState<PacingOption | null>(null);
 	const [sceneLength, setSceneLength] = useState<SceneLengthOption | null>(
@@ -48,36 +49,13 @@ function StoryCreatePage() {
 	const { data: profileData } = useCurrentUserQuery();
 
 	// Fetch template details
-	const { data: templateData, isLoading: isLoadingTemplate } = useQuery({
-		queryKey: ["template", templateId],
-		queryFn: async () => {
-			const response = await fetch(`/api/templates/${templateId}`, {
-				credentials: "include",
-			});
-			if (!response.ok) throw new Error("Failed to fetch template");
-			return response.json() as Promise<{ template: Template }>;
-		},
-		enabled: !!templateId,
-	});
+	const { data: templateData, isLoading: isLoadingTemplate } = useTemplateQuery(templateId, !!templateId);
 
 	// Fetch user preferences
 	const { data: prefsData, isLoading: isLoadingPrefs } = useUserPreferencesQuery();
 
 	// Fetch existing stories for this template
-	const { data: existingStoriesData } = useQuery({
-		queryKey: ["existing-stories", templateId],
-		queryFn: async () => {
-			const response = await fetch("/api/stories/user?status=in-progress", {
-				credentials: "include",
-			});
-			if (!response.ok) throw new Error("Failed to fetch stories");
-			const data = (await response.json()) as Promise<{
-				stories: Array<{ template_id: string; story_title: string }>;
-			}>;
-			return data;
-		},
-		enabled: !!templateId,
-	});
+	const { data: existingStoriesData } = useExistingStoriesQuery(!!templateId);
 
 	const template = templateData?.template;
 	const userPreferences = prefsData?.preferences;
@@ -109,45 +87,24 @@ function StoryCreatePage() {
 	}
 
 	// Create story mutation
-	const createStory = useMutation({
-		mutationFn: async () => {
-			const response = await fetch("/api/stories", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({
-					templateId,
-					storyTitle: storyTitle.trim() || undefined,
-					preferences: {
-						...userPreferences,
-						spiceLevel: spiceLevel || userPreferences?.spiceLevel,
-						pacing: pacing || userPreferences?.pacing,
-						sceneLength:
-							sceneLength || userPreferences?.sceneLength || "medium",
-					},
-				}),
-			});
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to create story");
-			}
-			return response.json() as Promise<{ story: { id: string } }>;
-		},
-		onSuccess: (data) => {
-			// Invalidate user stories cache to refresh library
-			queryClient.invalidateQueries({ queryKey: ["user-stories"] });
-			// Invalidate existing stories cache for this template
-			queryClient.invalidateQueries({ queryKey: ["existing-stories", templateId] });
-			// TODO: Create reading interface and navigate to /story/$id
-			// For now, redirect to library
-			navigate({ to: "/library" });
-		},
-	});
+	const createStory = useCreateStoryMutation();
 
 	const handleCreateStory = async () => {
 		setIsCreating(true);
 		try {
-			await createStory.mutateAsync();
+			const result = await createStory.mutateAsync({
+				templateId,
+				storyTitle: storyTitle.trim() || undefined,
+				preferences: {
+					...userPreferences!,
+					spiceLevel: spiceLevel || userPreferences?.spiceLevel!,
+					pacing: pacing || userPreferences?.pacing!,
+					sceneLength:
+						sceneLength || userPreferences?.sceneLength || "medium",
+				},
+			});
+			// Navigate to library after successful creation
+			navigate({ to: "/library" });
 		} catch (error) {
 			console.error("Failed to create story:", error);
 			setIsCreating(false);

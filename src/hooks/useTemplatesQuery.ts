@@ -11,6 +11,8 @@ interface UseTemplatesQueryOptions {
 	search?: string;
 }
 
+export const templatesQueryKey = (tropes: Trope[] = [], search = "") => ["templates", tropes, search] as const;
+
 /**
  * Custom hook to fetch templates with optional filtering
  * @param options - Filter options for tropes and search
@@ -19,7 +21,7 @@ export function useTemplatesQuery(options: UseTemplatesQueryOptions = {}) {
 	const { tropes = [], search = "" } = options;
 
 	return useQuery({
-		queryKey: ["templates", tropes, search],
+		queryKey: templatesQueryKey(tropes, search),
 		queryFn: async () => {
 			const queryParams = new URLSearchParams();
 			if (tropes.length > 0) {

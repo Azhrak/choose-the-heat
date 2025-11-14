@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Save } from "lucide-react";
@@ -6,6 +5,7 @@ import { AdminLayout } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useCreateTemplateMutation } from "~/hooks/useCreateTemplateMutation";
 
 export const Route = createFileRoute("/admin/templates/new")({
 	component: NewTemplatePage,
@@ -21,7 +21,6 @@ interface TemplateFormData {
 
 function NewTemplatePage() {
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const [formData, setFormData] = useState<TemplateFormData>({
 		title: "",
 		description: "",
@@ -35,37 +34,15 @@ function NewTemplatePage() {
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
 
 	// Create template mutation
-	const createMutation = useMutation({
-		mutationFn: async (data: TemplateFormData) => {
-			const response = await fetch("/api/admin/templates", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({
-					title: data.title,
-					description: data.description,
-					base_tropes: data.base_tropes.split(",").map((t) => t.trim()),
-					estimated_scenes: data.estimated_scenes,
-					cover_gradient: data.cover_gradient,
-				}),
-			});
+	const createMutation = useCreateTemplateMutation();
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to create template");
-			}
+	const handleMutationSuccess = (data: any) => {
+		navigate({ to: `/admin/templates/${data.template.id}/edit` });
+	};
 
-			return response.json();
-		},
-		onSuccess: (data) => {
-			queryClient.invalidateQueries({ queryKey: ["adminTemplates"] });
-			queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
-			navigate({ to: `/admin/templates/${data.template.id}/edit` });
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-		},
-	});
+	const handleMutationError = (error: Error) => {
+		setFormError(error.message);
+	};
 
 	if (userLoading) {
 		return (
@@ -103,7 +80,10 @@ function NewTemplatePage() {
 			return;
 		}
 
-		createMutation.mutate(formData);
+		createMutation.mutate(formData, {
+			onSuccess: handleMutationSuccess,
+			onError: handleMutationError,
+		});
 	};
 
 	const gradientOptions = [

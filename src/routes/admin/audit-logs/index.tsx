@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { FileText, Users, Search, Calendar } from "lucide-react";
@@ -6,6 +5,7 @@ import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
 import type { AuditEntityType } from "~/lib/db/types";
 
 export const Route = createFileRoute("/admin/audit-logs/")({
@@ -40,31 +40,13 @@ function AuditLogsPage() {
 		data: logsData,
 		isLoading: logsLoading,
 		error,
-	} = useQuery({
-		queryKey: ["auditLogs", filters],
-		queryFn: async () => {
-			const params = new URLSearchParams();
-			if (filters.entityType !== "all") {
-				params.append("entityType", filters.entityType);
-			}
-			if (filters.userId) {
-				params.append("userId", filters.userId);
-			}
-
-			const response = await fetch(`/api/admin/audit-logs?${params.toString()}`, {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 403) {
-					navigate({ to: "/admin" });
-					return null;
-				}
-				throw new Error("Failed to fetch audit logs");
-			}
-			return response.json() as Promise<{ logs: AuditLog[] }>;
+	} = useAuditLogsQuery(
+		{
+			entityType: filters.entityType !== "all" ? filters.entityType : undefined,
+			userId: filters.userId || undefined,
 		},
-		enabled: !!userData && userData.role === "admin",
-	});
+		!!userData && userData.role === "admin",
+	);
 
 	if (userLoading || logsLoading) {
 		return (

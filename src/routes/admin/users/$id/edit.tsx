@@ -1,4 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Save, Trash2, Shield } from "lucide-react";
@@ -6,6 +5,9 @@ import { AdminLayout, RoleBadge, ConfirmDialog, NoPermissions } from "~/componen
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useAdminUserQuery } from "~/hooks/useAdminUserQuery";
+import { useUpdateUserMutation } from "~/hooks/useUpdateUserMutation";
+import { useDeleteUserMutation } from "~/hooks/useDeleteUserMutation";
 import type { User } from "~/lib/api/types";
 import type { UserRole } from "~/lib/db/types";
 
@@ -21,7 +23,6 @@ interface UserFormData {
 
 function EditUserPage() {
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
 	const { id } = Route.useParams();
 
 	const [formData, setFormData] = useState<UserFormData | null>(null);
@@ -36,27 +37,7 @@ function EditUserPage() {
 		data: userData,
 		isLoading: userLoading,
 		error,
-	} = useQuery({
-		queryKey: ["adminUser", id],
-		queryFn: async () => {
-			const response = await fetch(`/api/admin/users/${id}`, {
-				credentials: "include",
-			});
-			if (!response.ok) {
-				if (response.status === 404) {
-					throw new Error("User not found");
-				}
-				if (response.status === 403) {
-					navigate({ to: "/admin" });
-					return null;
-				}
-				throw new Error("Failed to fetch user");
-			}
-			return response.json() as Promise<{ user: User }>;
-		},
-		enabled:
-			!!currentUserData && currentUserData.role === "admin",
-	});
+	} = useAdminUserQuery(id, !!currentUserData && currentUserData.role === "admin");
 
 	// Initialize form data when user loads
 	if (userData?.user && !formData) {
@@ -68,58 +49,27 @@ function EditUserPage() {
 	}
 
 	// Update user mutation
-	const updateMutation = useMutation({
-		mutationFn: async (data: UserFormData) => {
-			const response = await fetch(`/api/admin/users/${id}`, {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify(data),
-			});
+	const updateMutation = useUpdateUserMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to update user");
-			}
+	const handleUpdateSuccess = () => {
+		setFormError(null);
+	};
 
-			return response.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["adminUser", id] });
-			queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
-			queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
-			setFormError(null);
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-		},
-	});
+	const handleUpdateError = (error: Error) => {
+		setFormError(error.message);
+	};
 
 	// Delete user mutation
-	const deleteMutation = useMutation({
-		mutationFn: async () => {
-			const response = await fetch(`/api/admin/users/${id}`, {
-				method: "DELETE",
-				credentials: "include",
-			});
+	const deleteMutation = useDeleteUserMutation(id);
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to delete user");
-			}
+	const handleDeleteSuccess = () => {
+		navigate({ to: "/admin/users" });
+	};
 
-			return response.json();
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
-			queryClient.invalidateQueries({ queryKey: ["adminDashboard"] });
-			navigate({ to: "/admin/users" });
-		},
-		onError: (error) => {
-			setFormError(error instanceof Error ? error.message : "An error occurred");
-			setShowDeleteDialog(false);
-		},
-	});
+	const handleDeleteError = (error: Error) => {
+		setFormError(error.message);
+		setShowDeleteDialog(false);
+	};
 
 	if (currentUserLoading || userLoading) {
 		return (
@@ -182,7 +132,10 @@ function EditUserPage() {
 			return;
 		}
 
-		updateMutation.mutate(formData);
+		updateMutation.mutate(formData, {
+			onSuccess: handleUpdateSuccess,
+			onError: handleUpdateError,
+		});
 	};
 
 	const handleDelete = () => {
@@ -192,7 +145,10 @@ function EditUserPage() {
 			return;
 		}
 
-		deleteMutation.mutate();
+		deleteMutation.mutate(undefined, {
+			onSuccess: handleDeleteSuccess,
+			onError: handleDeleteError,
+		});
 	};
 
 	return (
