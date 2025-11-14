@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import {
 	GenresSection,

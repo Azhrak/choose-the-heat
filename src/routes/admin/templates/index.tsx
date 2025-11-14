@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { FileText, Plus, Eye, EyeOff, Archive } from "lucide-react";
 import { AdminLayout, DataTable, StatusBadge } from "~/components/admin";
+import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";

@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, Heart, Sparkles } from "lucide-react";
+import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
@@ -54,13 +55,14 @@ function TemplateDetailPage() {
 
 			<PageContainer maxWidth="xl">
 				{/* Back Button */}
-				<button
+				<Button
+					variant="ghost"
 					onClick={() => navigate({ to: "/browse" })}
-					className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 font-medium"
+					className="mb-6"
 				>
 					<ArrowLeft className="w-5 h-5" />
 					Back to Browse
-				</button>
+				</Button>
 
 				{/* Loading State */}
 				{isLoading && <LoadingSpinner />}

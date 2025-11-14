@@ -53,13 +53,12 @@ function StoryCreatePage() {
 	const { data: templateData, isLoading: isLoadingTemplate } = useTemplateQuery(templateId, !!templateId);
 
 	// Fetch user preferences
-	const { data: prefsData, isLoading: isLoadingPrefs } = useUserPreferencesQuery();
+	const { data: userPreferences, isLoading: isLoadingPrefs } = useUserPreferencesQuery();
 
 	// Fetch existing stories for this template
 	const { data: existingStoriesData } = useExistingStoriesQuery(!!templateId);
 
 	const template = templateData?.template;
-	const userPreferences = prefsData?.preferences;
 
 	// Count existing stories for this template
 	const existingStories =
@@ -120,13 +119,14 @@ function StoryCreatePage() {
 
 			<PageContainer maxWidth="md">
 				{/* Back Button */}
-				<button
+				<Button
+					variant="ghost"
 					onClick={() => navigate({ to: "/browse" })}
-					className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-6 font-medium"
+					className="mb-6"
 				>
 					<ArrowLeft className="w-5 h-5" />
 					Back to Browse
-				</button>
+				</Button>
 
 				{/* Loading State */}
 				{isLoading && <LoadingSpinner message="Loading your story..." />}

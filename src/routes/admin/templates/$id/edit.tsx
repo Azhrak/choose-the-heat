@@ -9,6 +9,7 @@ import {
 	Archive,
 	ArchiveRestore,
 } from "lucide-react";
+import { Button } from "~/components/Button";
 import {
 	AdminLayout,
 	StatusBadge,

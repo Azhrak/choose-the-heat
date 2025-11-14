@@ -1,4 +1,5 @@
 import { User } from "lucide-react";
+import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
 
 interface ProfileInformationProps {
@@ -66,13 +67,13 @@ export function ProfileInformation({
 					</div>
 				)}
 
-				<button
+				<Button
 					type="submit"
-					disabled={isUpdating}
-					className="px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+					loading={isUpdating}
+					variant="primary"
 				>
-					{isUpdating ? "Updating..." : "Update Profile"}
-				</button>
+					Update Profile
+				</Button>
 			</form>
 		</div>
 	);

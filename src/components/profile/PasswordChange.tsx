@@ -1,4 +1,5 @@
 import { Lock } from "lucide-react";
+import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
 
 interface PasswordChangeProps {
@@ -68,13 +69,13 @@ export function PasswordChange({
 					</div>
 				)}
 
-				<button
+				<Button
 					type="submit"
-					disabled={isUpdating}
-					className="px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+					loading={isUpdating}
+					variant="primary"
 				>
-					{isUpdating ? "Changing..." : "Change Password"}
-				</button>
+					Change Password
+				</Button>
 			</form>
 		</div>
 	);

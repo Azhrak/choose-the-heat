@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Save, Trash2, Shield } from "lucide-react";
 import { AdminLayout, RoleBadge, ConfirmDialog, NoPermissions } from "~/components/admin";
+import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
@@ -290,26 +291,18 @@ function EditUserPage() {
 							</p>
 						</div>
 
-						{/* Save Button */}
-						<div className="pt-4 border-t border-slate-200">
-							<button
-								type="submit"
-								disabled={updateMutation.isPending}
-								className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{updateMutation.isPending ? (
-									<LoadingSpinner />
-								) : (
-									<>
-										<Save className="w-5 h-5" />
-										Save Changes
-									</>
-								)}
-							</button>
-						</div>
-					</form>
-
-					{/* Danger Zone */}
+					{/* Save Button */}
+					<div className="pt-4 border-t border-slate-200">
+						<Button
+							type="submit"
+							loading={updateMutation.isPending}
+							variant="primary"
+						>
+							<Save className="w-5 h-5" />
+							Save Changes
+						</Button>
+					</div>
+				</form>					{/* Danger Zone */}
 					{!isEditingSelf && (
 						<div className="mt-8 pt-8 border-t border-red-200">
 							<h2 className="text-xl font-semibold text-red-900 mb-4">
