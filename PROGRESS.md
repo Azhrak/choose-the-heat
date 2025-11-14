@@ -1,7 +1,7 @@
 # Spicy Tales - Project Progress
 
 **Project**: Spicy Tales - AI-Enhanced Romance Novel App
-**Last Updated**: 2025-01-14 | **Status**: MVP 100% Complete + Admin Choice Points Management! 🎉
+**Last Updated**: 2025-11-14 | **Status**: MVP 100% Complete + Admin Bulk Operations! 🎉
 📄 **Details**: See [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for comprehensive recap
 
 ---
@@ -634,19 +634,21 @@ pnpm build && pnpm start # Production
 
 ## 🚧 Next Phases
 
-### Phase 16: Admin Dashboard Frontend (80% Complete)
+### Phase 16: Admin Dashboard Frontend (85% Complete)
 
 **Files Created:**
 
 - [src/components/admin/ChoicePointForm.tsx](src/components/admin/ChoicePointForm.tsx) - Choice point management component
 - [src/routes/api/admin/templates/$id/choice-points.ts](src/routes/api/admin/templates/$id/choice-points.ts) - Choice points API
+- [src/routes/api/admin/templates/bulk-delete.ts](src/routes/api/admin/templates/bulk-delete.ts) - Bulk delete templates endpoint
 - [src/hooks/useUpdateChoicePointsMutation.ts](src/hooks/useUpdateChoicePointsMutation.ts) - Choice points mutation hook
 
 **Files Enhanced:**
 
-- [src/lib/db/queries/templates.ts](src/lib/db/queries/templates.ts) - Added `updateChoicePoints()` and `createTemplateWithChoicePoints()`
+- [src/lib/db/queries/templates.ts](src/lib/db/queries/templates.ts) - Added `updateChoicePoints()`, `createTemplateWithChoicePoints()`, and `bulkDeleteTemplates()`
 - [src/routes/api/admin/templates/index.ts](src/routes/api/admin/templates/index.ts) - Enhanced to handle choice points on creation
 - [src/routes/api/admin/templates/$id.ts](src/routes/api/admin/templates/$id.ts) - Returns templates with choice points
+- [src/routes/admin/templates/index.tsx](src/routes/admin/templates/index.tsx) - Added bulk delete functionality with role-based access
 - [src/routes/admin/templates/new.tsx](src/routes/admin/templates/new.tsx) - Added choice point creation
 - [src/routes/admin/templates/$id/edit.tsx](src/routes/admin/templates/$id/edit.tsx) - Added choice point editing
 - [src/lib/api/types.ts](src/lib/api/types.ts) - Added ChoiceOption and ChoicePoint interfaces
@@ -719,17 +721,45 @@ pnpm build && pnpm start # Production
    - Click "Save Choice Points" (separate from template save)
    - Changes persisted with audit trail
 
+**Bulk Operations Features:**
+
+**Bulk Delete Templates (Admin Only):**
+- ✅ Bulk delete button in template list bulk actions toolbar
+- ✅ Role-based visibility (only shown to admin users)
+- ✅ Confirmation dialog before deletion
+- ✅ `bulkDeleteTemplates()` database function with audit logging
+- ✅ `POST /api/admin/templates/bulk-delete` API endpoint
+- ✅ `requireAdmin()` authorization middleware
+- ✅ Transaction-based deletion with cascade (choice points removed)
+- ✅ Deleted count reporting
+- ✅ Success/error feedback in UI
+
+**Bulk Status Update (Editor/Admin):**
+- ✅ Bulk publish, draft, and archive buttons
+- ✅ Status update for multiple templates at once
+- ✅ Shared loading state with bulk delete
+
+**Bulk Actions UI:**
+- ✅ Selection toolbar appears when templates selected
+- ✅ Selected count display
+- ✅ Clear selection button
+- ✅ Publish, Draft, Archive buttons (all roles)
+- ✅ Delete button (admin only, danger variant)
+- ✅ Loading states and error handling
+
 **Completed Admin Features:**
 - ✅ Template creation with choice points
 - ✅ Template editing with choice points
 - ✅ Choice point CRUD operations
+- ✅ Bulk status updates (publish, draft, archive)
+- ✅ Bulk delete templates (admin only)
+- ✅ Role-based bulk action visibility
 - ✅ Type-safe API integration
 - ✅ Transaction-based database updates
 
 **Pending Admin Features:**
 - ⏳ Admin UI components (full Layout, Navigation, Tables)
 - ⏳ Admin dashboard page with statistics
-- ⏳ Template list page improvements
 - ⏳ User management pages (list, edit)
 - ⏳ Audit log viewer page
 - ⏳ Header navigation update for admin/editor access
@@ -777,6 +807,8 @@ pnpm build && pnpm start # Production
 - ✅ Profile management
 - ✅ Admin template creation with choice points
 - ✅ Admin template editing with choice points
+- ✅ Bulk status updates (publish, draft, archive)
+- ✅ Bulk delete templates (admin only)
 - ✅ Choice point CRUD operations (create, read, update, delete)
 
 **Deployed At**: `/`
