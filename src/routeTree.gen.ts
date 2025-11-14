@@ -51,6 +51,7 @@ import { Route as ApiAdminTemplatesIdRouteImport } from './routes/api/admin/temp
 import { Route as AdminUsersIdEditRouteImport } from './routes/admin/users/$id/edit'
 import { Route as AdminTemplatesIdEditRouteImport } from './routes/admin/templates/$id/edit'
 import { Route as ApiAdminTemplatesIdStatusRouteImport } from './routes/api/admin/templates/$id.status'
+import { Route as ApiAdminTemplatesIdChoicePointsRouteImport } from './routes/api/admin/templates/$id/choice-points'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -263,6 +264,12 @@ const ApiAdminTemplatesIdStatusRoute =
     path: '/status',
     getParentRoute: () => ApiAdminTemplatesIdRoute,
   } as any)
+const ApiAdminTemplatesIdChoicePointsRoute =
+  ApiAdminTemplatesIdChoicePointsRouteImport.update({
+    id: '/choice-points',
+    path: '/choice-points',
+    getParentRoute: () => ApiAdminTemplatesIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
+  '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
 }
 export interface FileRoutesByTo {
@@ -350,6 +358,7 @@ export interface FileRoutesByTo {
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
+  '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
 }
 export interface FileRoutesById {
@@ -395,6 +404,7 @@ export interface FileRoutesById {
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates/': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/users/': typeof ApiAdminUsersIndexRoute
+  '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
 }
 export interface FileRouteTypes {
@@ -441,6 +451,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/scene'
     | '/api/admin/templates'
     | '/api/admin/users'
+    | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -485,6 +496,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/scene'
     | '/api/admin/templates'
     | '/api/admin/users'
+    | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
   id:
     | '__root__'
@@ -529,6 +541,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/scene'
     | '/api/admin/templates/'
     | '/api/admin/users/'
+    | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
   fileRoutesById: FileRoutesById
 }
@@ -870,6 +883,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminTemplatesIdStatusRouteImport
       parentRoute: typeof ApiAdminTemplatesIdRoute
     }
+    '/api/admin/templates/$id/choice-points': {
+      id: '/api/admin/templates/$id/choice-points'
+      path: '/choice-points'
+      fullPath: '/api/admin/templates/$id/choice-points'
+      preLoaderRoute: typeof ApiAdminTemplatesIdChoicePointsRouteImport
+      parentRoute: typeof ApiAdminTemplatesIdRoute
+    }
   }
 }
 
@@ -888,10 +908,12 @@ const ApiStoriesIdRouteWithChildren = ApiStoriesIdRoute._addFileChildren(
 )
 
 interface ApiAdminTemplatesIdRouteChildren {
+  ApiAdminTemplatesIdChoicePointsRoute: typeof ApiAdminTemplatesIdChoicePointsRoute
   ApiAdminTemplatesIdStatusRoute: typeof ApiAdminTemplatesIdStatusRoute
 }
 
 const ApiAdminTemplatesIdRouteChildren: ApiAdminTemplatesIdRouteChildren = {
+  ApiAdminTemplatesIdChoicePointsRoute: ApiAdminTemplatesIdChoicePointsRoute,
   ApiAdminTemplatesIdStatusRoute: ApiAdminTemplatesIdStatusRoute,
 }
 

@@ -1,20 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import type { Template } from "~/lib/api/types";
-
-interface ChoiceOption {
-	id: string;
-	text: string;
-	tone: string;
-	impact: string;
-}
-
-interface ChoicePoint {
-	id: string;
-	scene_number: number;
-	prompt_text: string;
-	options: ChoiceOption[];
-}
+import type { ChoicePoint, Template } from "~/lib/api/types";
 
 interface TemplateWithChoices extends Template {
 	choicePoints: ChoicePoint[];

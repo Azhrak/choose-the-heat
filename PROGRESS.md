@@ -1,7 +1,7 @@
 # Spicy Tales - Project Progress
 
-**Project**: Spicy Tales - AI-Enhanced Romance Novel App  
-**Last Updated**: 2025-11-14 | **Status**: MVP 100% Complete! 🎉
+**Project**: Spicy Tales - AI-Enhanced Romance Novel App
+**Last Updated**: 2025-01-14 | **Status**: MVP 100% Complete + Admin Choice Points Management! 🎉
 📄 **Details**: See [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for comprehensive recap
 
 ---
@@ -634,14 +634,105 @@ pnpm build && pnpm start # Production
 
 ## 🚧 Next Phases
 
-### Phase 16: Admin Dashboard Frontend (In Progress)
+### Phase 16: Admin Dashboard Frontend (80% Complete)
 
-- Admin UI components (Layout, Navigation, Tables, Forms)
-- Admin dashboard page with statistics
-- Template management pages (list, create, edit)
-- User management pages (list, edit)
-- Audit log viewer page
-- Header navigation update for admin/editor access
+**Files Created:**
+
+- [src/components/admin/ChoicePointForm.tsx](src/components/admin/ChoicePointForm.tsx) - Choice point management component
+- [src/routes/api/admin/templates/$id/choice-points.ts](src/routes/api/admin/templates/$id/choice-points.ts) - Choice points API
+- [src/hooks/useUpdateChoicePointsMutation.ts](src/hooks/useUpdateChoicePointsMutation.ts) - Choice points mutation hook
+
+**Files Enhanced:**
+
+- [src/lib/db/queries/templates.ts](src/lib/db/queries/templates.ts) - Added `updateChoicePoints()` and `createTemplateWithChoicePoints()`
+- [src/routes/api/admin/templates/index.ts](src/routes/api/admin/templates/index.ts) - Enhanced to handle choice points on creation
+- [src/routes/api/admin/templates/$id.ts](src/routes/api/admin/templates/$id.ts) - Returns templates with choice points
+- [src/routes/admin/templates/new.tsx](src/routes/admin/templates/new.tsx) - Added choice point creation
+- [src/routes/admin/templates/$id/edit.tsx](src/routes/admin/templates/$id/edit.tsx) - Added choice point editing
+- [src/lib/api/types.ts](src/lib/api/types.ts) - Added ChoiceOption and ChoicePoint interfaces
+- [src/hooks/useCreateTemplateMutation.ts](src/hooks/useCreateTemplateMutation.ts) - Enhanced to include choice points
+- [src/hooks/useTemplateQuery.ts](src/hooks/useTemplateQuery.ts) - Updated to use shared types
+
+**Choice Points Management Features:**
+
+**Create & Edit Choice Points:**
+- ✅ Dynamic choice point form component with add/remove functionality
+- ✅ Maximum enforcement: up to (scenes - 1) choice points
+- ✅ Scene number selection with duplicate prevention
+- ✅ 2-4 options per choice point with validation
+- ✅ Each option has: text, tone, and impact fields
+- ✅ Real-time validation (client and server-side)
+- ✅ Separate save button for choice points vs template details
+
+**Database Operations:**
+- ✅ Transaction-based updates for atomicity
+- ✅ `createTemplateWithChoicePoints()` for new templates
+- ✅ `updateChoicePoints()` with delete-and-replace strategy
+- ✅ Audit logging for all choice point changes
+- ✅ Proper JSON serialization/parsing of options
+
+**API Endpoints:**
+- ✅ `POST /api/admin/templates` - Accepts optional choicePoints array
+- ✅ `GET /api/admin/templates/:id` - Returns template with parsed choice points
+- ✅ `PUT /api/admin/templates/:id/choice-points` - Update all choice points
+
+**UI/UX Features:**
+- ✅ Intuitive nested forms with collapsible sections
+- ✅ Visual feedback for add/remove operations
+- ✅ Loading states during save operations
+- ✅ Error messages with field-level validation
+- ✅ Empty state with helpful instructions
+- ✅ Scene-based organization (choice after Scene X)
+
+**Type Safety:**
+- ✅ Full TypeScript support throughout stack
+- ✅ Shared types between components and API
+- ✅ Zod validation schemas for runtime safety
+- ✅ Type-safe mutation hooks with React Query
+
+**Architecture Decisions:**
+- ✅ Choice points saved separately from template metadata
+- ✅ Delete-and-replace strategy for updates (simpler than differential sync)
+- ✅ Transaction-based operations prevent partial updates
+- ✅ Client-side validation mirrors server validation
+
+**Validation Rules:**
+- ✅ Minimum 2 options, maximum 4 options per choice point
+- ✅ All fields required (prompt text, option text/tone/impact)
+- ✅ Scene numbers must be unique within template
+- ✅ Cannot exceed (scenes - 1) total choice points
+
+**User Flow:**
+
+1. **Creating Template with Choice Points:**
+   - Navigate to `/admin/templates/new`
+   - Fill out template details (title, description, tropes, scenes, gradient)
+   - Scroll to "Choice Points" section
+   - Click "Add Choice Point" to add choice points
+   - Select scene number, enter prompt, add 2-4 options
+   - Save template (includes choice points)
+
+2. **Editing Existing Choice Points:**
+   - Navigate to `/admin/templates/:id/edit`
+   - Scroll to "Choice Points" section (loads existing choice points)
+   - Modify/add/remove choice points as needed
+   - Click "Save Choice Points" (separate from template save)
+   - Changes persisted with audit trail
+
+**Completed Admin Features:**
+- ✅ Template creation with choice points
+- ✅ Template editing with choice points
+- ✅ Choice point CRUD operations
+- ✅ Type-safe API integration
+- ✅ Transaction-based database updates
+
+**Pending Admin Features:**
+- ⏳ Admin UI components (full Layout, Navigation, Tables)
+- ⏳ Admin dashboard page with statistics
+- ⏳ Template list page improvements
+- ⏳ User management pages (list, edit)
+- ⏳ Audit log viewer page
+- ⏳ Header navigation update for admin/editor access
 
 ### Phase 17: Polish & UX (Priority 1)
 
@@ -684,6 +775,9 @@ pnpm build && pnpm start # Production
 - ✅ Scene length control
 - ✅ Story deletion
 - ✅ Profile management
+- ✅ Admin template creation with choice points
+- ✅ Admin template editing with choice points
+- ✅ Choice point CRUD operations (create, read, update, delete)
 
 **Deployed At**: `/`
 
@@ -706,6 +800,38 @@ pnpm build && pnpm start # Production
 5. Advance to next scene with choice context
 
 **Scene Caching**: Each scene cached with unique `(story_id, scene_number)`. Last 2 scenes used as context. Previous choice impacts generation. Cache never invalidated.
+
+**Choice Points Structure**:
+
+```json
+{
+  "scene_number": 3,
+  "prompt_text": "How do you respond to their unexpected proposal?",
+  "options": [
+    {
+      "id": "option-1",
+      "text": "Challenge them directly with skepticism",
+      "tone": "confrontational",
+      "impact": "bold"
+    },
+    {
+      "id": "option-2",
+      "text": "Express cautious interest",
+      "tone": "diplomatic",
+      "impact": "reserved"
+    }
+  ]
+}
+```
+
+**Admin Choice Points Management**:
+
+- Maximum: (estimated_scenes - 1) choice points per template
+- 2-4 options per choice point (minimum 2, maximum 4)
+- Each option requires: text, tone, and impact
+- Scene numbers must be unique (no duplicate choices on same scene)
+- Separate save operation from template details
+- Transaction-based updates with audit logging
 
 **Preference Structure**:
 

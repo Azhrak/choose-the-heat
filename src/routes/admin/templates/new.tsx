@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Save } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout } from "~/components/admin";
+import { AdminLayout, ChoicePointForm } from "~/components/admin";
+import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
@@ -19,6 +20,7 @@ interface TemplateFormData {
 	base_tropes: string;
 	estimated_scenes: number;
 	cover_gradient: string;
+	choicePoints: ChoicePoint[];
 }
 
 interface CreateTemplateResponse {
@@ -35,6 +37,7 @@ function NewTemplatePage() {
 		base_tropes: "",
 		estimated_scenes: 10,
 		cover_gradient: "from-purple-600 to-pink-600",
+		choicePoints: [],
 	});
 	const [formError, setFormError] = useState<string | null>(null);
 
@@ -86,6 +89,28 @@ function NewTemplatePage() {
 		if (formData.estimated_scenes < 1 || formData.estimated_scenes > 100) {
 			setFormError("Estimated scenes must be between 1 and 100");
 			return;
+		}
+
+		// Validate choice points
+		if (formData.choicePoints.length > 0) {
+			for (const cp of formData.choicePoints) {
+				if (!cp.prompt_text.trim()) {
+					setFormError("All choice points must have a prompt text");
+					return;
+				}
+				if (cp.options.length < 2 || cp.options.length > 4) {
+					setFormError("Each choice point must have 2-4 options");
+					return;
+				}
+				for (const opt of cp.options) {
+					if (!opt.text.trim() || !opt.tone.trim() || !opt.impact.trim()) {
+						setFormError(
+							"All option fields (text, tone, impact) must be filled",
+						);
+						return;
+					}
+				}
+			}
 		}
 
 		createMutation.mutate(formData, {
@@ -225,6 +250,17 @@ function NewTemplatePage() {
 									className={`h-24 rounded-lg bg-linear-to-br ${formData.cover_gradient}`}
 								/>
 							</div>
+						</div>
+
+						{/* Choice Points */}
+						<div className="pt-6 border-t border-slate-200">
+							<ChoicePointForm
+								choicePoints={formData.choicePoints}
+								onChange={(choicePoints) =>
+									setFormData({ ...formData, choicePoints })
+								}
+								maxScenes={formData.estimated_scenes}
+							/>
 						</div>
 
 						{/* Actions */}

@@ -3,6 +3,22 @@ import type { TemplateStatus, UserRole } from "~/lib/db/types";
 // Template types are re-exported from db/types for consistency
 export type { TemplateStatus };
 
+export interface ChoiceOption {
+	id: string;
+	text: string;
+	tone: string;
+	impact: string;
+}
+
+export interface ChoicePoint {
+	id: string;
+	template_id: string;
+	scene_number: number;
+	prompt_text: string;
+	options: ChoiceOption[];
+	created_at: string;
+}
+
 export interface Template {
 	id: string;
 	title: string;
@@ -14,6 +30,7 @@ export interface Template {
 	created_at: string;
 	updated_at: string;
 	archived_at: string | null;
+	choicePoints?: ChoicePoint[];
 }
 
 // User types

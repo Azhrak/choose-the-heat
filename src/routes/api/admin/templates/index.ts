@@ -4,10 +4,29 @@ import { z } from "zod";
 import { requireEditorOrAdmin } from "~/lib/auth/authorization";
 import {
 	createTemplate,
+	createTemplateWithChoicePoints,
 	getAllTemplates,
 	getTemplatesByStatus,
 } from "~/lib/db/queries/templates";
 import type { TemplateStatus } from "~/lib/db/types";
+
+// Validation schema for choice point options
+const choiceOptionSchema = z.object({
+	id: z.string(),
+	text: z.string().min(1, "Option text is required"),
+	tone: z.string().min(1, "Tone is required"),
+	impact: z.string().min(1, "Impact is required"),
+});
+
+// Validation schema for choice points
+const choicePointSchema = z.object({
+	scene_number: z.number().int().min(1),
+	prompt_text: z.string().min(1, "Prompt text is required"),
+	options: z
+		.array(choiceOptionSchema)
+		.min(2, "At least 2 options are required")
+		.max(4, "Maximum 4 options allowed"),
+});
 
 // Validation schema for creating a template
 const createTemplateSchema = z.object({
@@ -17,6 +36,7 @@ const createTemplateSchema = z.object({
 	estimated_scenes: z.number().int().min(1).max(100),
 	cover_gradient: z.string().min(1, "Cover gradient is required"),
 	status: z.enum(["draft", "published", "archived"]).optional(),
+	choicePoints: z.array(choicePointSchema).optional(),
 });
 
 export const Route = createFileRoute("/api/admin/templates/")({
@@ -60,7 +80,40 @@ export const Route = createFileRoute("/api/admin/templates/")({
 					const body = await request.json();
 					const validatedData = createTemplateSchema.parse(body);
 
-					const newTemplate = await createTemplate(validatedData, user.userId);
+					// Extract choice points from validated data
+					const { choicePoints, ...templateData } = validatedData;
+
+					// Validate choice points if provided
+					if (choicePoints && choicePoints.length > 0) {
+						// Check that choice points don't exceed max (scenes - 1)
+						const maxChoicePoints = templateData.estimated_scenes - 1;
+						if (choicePoints.length > maxChoicePoints) {
+							return json(
+								{
+									error: `Too many choice points. Maximum allowed is ${maxChoicePoints} (scenes - 1)`,
+								},
+								{ status: 400 },
+							);
+						}
+
+						// Create template with choice points
+						const newTemplate = await createTemplateWithChoicePoints(
+							templateData,
+							choicePoints,
+							user.userId,
+						);
+
+						return json(
+							{
+								template: newTemplate,
+								message: "Template created successfully with choice points",
+							},
+							{ status: 201 },
+						);
+					}
+
+					// Create template without choice points
+					const newTemplate = await createTemplate(templateData, user.userId);
 
 					return json(
 						{

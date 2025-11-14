@@ -9,7 +9,13 @@ import {
 	Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout, ConfirmDialog, StatusBadge } from "~/components/admin";
+import {
+	AdminLayout,
+	ChoicePointForm,
+	ConfirmDialog,
+	StatusBadge,
+} from "~/components/admin";
+import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
@@ -17,6 +23,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
+import { useUpdateChoicePointsMutation } from "~/hooks/useUpdateChoicePointsMutation";
 import { useUpdateTemplateMutation } from "~/hooks/useUpdateTemplateMutation";
 import { useUpdateTemplateStatusMutation } from "~/hooks/useUpdateTemplateStatusMutation";
 import type { TemplateStatus } from "~/lib/api/types";
@@ -38,6 +45,7 @@ function EditTemplatePage() {
 	const { id } = Route.useParams();
 
 	const [formData, setFormData] = useState<TemplateFormData | null>(null);
+	const [choicePoints, setChoicePoints] = useState<ChoicePoint[]>([]);
 	const [formError, setFormError] = useState<string | null>(null);
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const [showStatusDialog, setShowStatusDialog] = useState(false);
@@ -64,6 +72,10 @@ function EditTemplatePage() {
 			estimated_scenes: templateData.template.estimated_scenes,
 			cover_gradient: templateData.template.cover_gradient,
 		});
+		// Initialize choice points if they exist
+		if (templateData.template.choicePoints) {
+			setChoicePoints(templateData.template.choicePoints);
+		}
 	}
 
 	// Update template mutation
@@ -75,6 +87,47 @@ function EditTemplatePage() {
 
 	const handleUpdateError = (error: Error) => {
 		setFormError(error.message);
+	};
+
+	// Update choice points mutation
+	const updateChoicePointsMutation = useUpdateChoicePointsMutation(id);
+
+	const handleSaveChoicePoints = () => {
+		setFormError(null);
+
+		// Validate choice points
+		if (choicePoints.length > 0) {
+			for (const cp of choicePoints) {
+				if (!cp.prompt_text.trim()) {
+					setFormError("All choice points must have a prompt text");
+					return;
+				}
+				if (cp.options.length < 2 || cp.options.length > 4) {
+					setFormError("Each choice point must have 2-4 options");
+					return;
+				}
+				for (const opt of cp.options) {
+					if (!opt.text.trim() || !opt.tone.trim() || !opt.impact.trim()) {
+						setFormError(
+							"All option fields (text, tone, impact) must be filled",
+						);
+						return;
+					}
+				}
+			}
+		}
+
+		updateChoicePointsMutation.mutate(
+			{ choicePoints },
+			{
+				onSuccess: () => {
+					setFormError(null);
+				},
+				onError: (error: Error) => {
+					setFormError(error.message);
+				},
+			},
+		);
 	};
 
 	// Update status mutation
@@ -318,7 +371,7 @@ function EditTemplatePage() {
 							</div>
 						</div>
 
-						{/* Save Button */}
+						{/* Save Template Changes Button */}
 						<div className="pt-4 border-t border-slate-200">
 							<Button
 								type="submit"
@@ -326,10 +379,41 @@ function EditTemplatePage() {
 								variant="primary"
 							>
 								<Save className="w-5 h-5" />
-								Save Changes
+								Save Template Changes
 							</Button>
 						</div>
 					</form>
+
+					{/* Choice Points Management */}
+					<div className="mt-8 pt-8 border-t border-slate-200">
+						<div className="mb-6">
+							<h2 className="text-xl font-semibold text-slate-900 mb-2">
+								Choice Points
+							</h2>
+							<p className="text-slate-600">
+								Manage choice points that appear throughout the story. Changes
+								are saved separately from template details.
+							</p>
+						</div>
+
+						<ChoicePointForm
+							choicePoints={choicePoints}
+							onChange={setChoicePoints}
+							maxScenes={formData.estimated_scenes}
+						/>
+
+						<div className="mt-6">
+							<Button
+								type="button"
+								onClick={handleSaveChoicePoints}
+								loading={updateChoicePointsMutation.isPending}
+								variant="primary"
+							>
+								<Save className="w-5 h-5" />
+								Save Choice Points
+							</Button>
+						</div>
+					</div>
 
 					{/* Status Management */}
 					<div className="mt-8 pt-8 border-t border-slate-200">

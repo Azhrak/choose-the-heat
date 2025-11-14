@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireAdmin, requireEditorOrAdmin } from "~/lib/auth/authorization";
 import {
 	deleteTemplate,
-	getTemplateById,
+	getTemplateWithChoicePoints,
 	updateTemplate,
 } from "~/lib/db/queries/templates";
 
@@ -25,18 +25,32 @@ const _updateStatusSchema = z.object({
 export const Route = createFileRoute("/api/admin/templates/$id")({
 	server: {
 		handlers: {
-			// GET /api/admin/templates/:id - Get single template
+			// GET /api/admin/templates/:id - Get single template with choice points
 			GET: async ({ request, params }) => {
 				try {
 					await requireEditorOrAdmin(request);
 
-					const template = await getTemplateById(params.id);
+					const templateData = await getTemplateWithChoicePoints(params.id);
 
-					if (!template) {
+					if (!templateData) {
 						return json({ error: "Template not found" }, { status: 404 });
 					}
 
-					return json({ template });
+					// Parse the JSON options field for each choice point
+					const choicePoints = templateData.choicePoints?.map((cp) => ({
+						...cp,
+						options:
+							typeof cp.options === "string"
+								? JSON.parse(cp.options)
+								: cp.options,
+					}));
+
+					return json({
+						template: {
+							...templateData,
+							choicePoints,
+						},
+					});
 				} catch (error) {
 					if (error instanceof Response) {
 						throw error;

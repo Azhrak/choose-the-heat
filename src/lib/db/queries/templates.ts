@@ -145,6 +145,75 @@ export async function createTemplate(
 }
 
 /**
+ * Create a new template with choice points (admin/editor only)
+ */
+export async function createTemplateWithChoicePoints(
+	template: {
+		title: string;
+		description: string;
+		base_tropes: string[];
+		estimated_scenes: number;
+		cover_gradient: string;
+		status?: TemplateStatus;
+	},
+	choicePoints: Array<{
+		scene_number: number;
+		prompt_text: string;
+		options: Array<{
+			id: string;
+			text: string;
+			tone: string;
+			impact: string;
+		}>;
+	}>,
+	userId: string,
+) {
+	// Use a transaction to ensure atomicity
+	return await db.transaction().execute(async (trx) => {
+		// Create the template
+		const [newTemplate] = await trx
+			.insertInto("novel_templates")
+			.values({
+				...template,
+				status: template.status || "draft",
+			})
+			.returning(["id", "title", "status"])
+			.execute();
+
+		// Create choice points if any
+		if (choicePoints.length > 0) {
+			await trx
+				.insertInto("choice_points")
+				.values(
+					choicePoints.map((cp) => ({
+						template_id: newTemplate.id,
+						scene_number: cp.scene_number,
+						prompt_text: cp.prompt_text,
+						options: JSON.stringify(cp.options),
+					})),
+				)
+				.execute();
+		}
+
+		// Log the creation
+		await createAuditLog({
+			userId,
+			action: "create_template",
+			entityType: "template",
+			entityId: newTemplate.id,
+			changes: {
+				created: {
+					...template,
+					choicePoints: choicePoints.length,
+				},
+			},
+		});
+
+		return newTemplate;
+	});
+}
+
+/**
  * Update template
  */
 export async function updateTemplate(
@@ -280,4 +349,60 @@ export async function getTemplateCountByStatus() {
 		},
 		{} as Record<TemplateStatus, number>,
 	);
+}
+
+/**
+ * Update choice points for a template
+ * Replaces all existing choice points with the new ones
+ */
+export async function updateChoicePoints(
+	templateId: string,
+	choicePoints: Array<{
+		scene_number: number;
+		prompt_text: string;
+		options: Array<{
+			id: string;
+			text: string;
+			tone: string;
+			impact: string;
+		}>;
+	}>,
+	userId: string,
+) {
+	return await db.transaction().execute(async (trx) => {
+		// Delete existing choice points
+		await trx
+			.deleteFrom("choice_points")
+			.where("template_id", "=", templateId)
+			.execute();
+
+		// Insert new choice points if any
+		if (choicePoints.length > 0) {
+			await trx
+				.insertInto("choice_points")
+				.values(
+					choicePoints.map((cp) => ({
+						template_id: templateId,
+						scene_number: cp.scene_number,
+						prompt_text: cp.prompt_text,
+						options: JSON.stringify(cp.options),
+					})),
+				)
+				.execute();
+		}
+
+		// Log the update
+		await createAuditLog({
+			userId,
+			action: "update_template_choice_points",
+			entityType: "template",
+			entityId: templateId,
+			changes: {
+				choicePoints: {
+					old: null,
+					new: choicePoints.length,
+				},
+			},
+		});
+	});
 }
