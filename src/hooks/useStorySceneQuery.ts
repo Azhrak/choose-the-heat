@@ -25,7 +25,10 @@ interface SceneData {
 	} | null;
 }
 
-export const storySceneQueryKey = (storyId: string, sceneNumber: number | null = null) => ["story-scene", storyId, sceneNumber] as const;
+export const storySceneQueryKey = (
+	storyId: string,
+	sceneNumber: number | null = null,
+) => ["story-scene", storyId, sceneNumber] as const;
 
 /**
  * Custom hook to fetch a scene from a story
@@ -39,9 +42,10 @@ export function useStorySceneQuery(
 ) {
 	return useQuery<SceneData>({
 		queryKey: storySceneQueryKey(storyId, sceneNumber),
-		queryFn: () => api.get<SceneData>(`/api/stories/${storyId}/scene`, {
-			params: sceneNumber !== null ? { number: sceneNumber } : undefined,
-		}),
+		queryFn: () =>
+			api.get<SceneData>(`/api/stories/${storyId}/scene`, {
+				params: sceneNumber !== null ? { number: sceneNumber } : undefined,
+			}),
 		enabled,
 	});
 }

@@ -35,27 +35,24 @@ export function ConfirmDialog({
 
 			{/* Dialog */}
 			<div className="flex min-h-full items-center justify-center p-4">
-			<div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-				{/* Close button */}
-				<Button
-					onClick={onClose}
-					variant="ghost"
-					size="sm"
-					className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
-					aria-label="Close"
-				>
-					<X className="w-5 h-5" />
-				</Button>					{/* Icon */}
+				<div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+					{/* Close button */}
+					<Button
+						onClick={onClose}
+						variant="ghost"
+						size="sm"
+						className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+						aria-label="Close"
+					>
+						<X className="w-5 h-5" />
+					</Button>{" "}
+					{/* Icon */}
 					<div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mb-4">
 						<AlertTriangle className="w-6 h-6 text-red-600" />
 					</div>
-
 					{/* Content */}
-					<h3 className="text-lg font-semibold text-slate-900 mb-2">
-						{title}
-					</h3>
+					<h3 className="text-lg font-semibold text-slate-900 mb-2">{title}</h3>
 					<div className="text-sm text-slate-600 mb-6">{message}</div>
-
 					{/* Actions */}
 					<div className="flex gap-3 justify-end">
 						<Button

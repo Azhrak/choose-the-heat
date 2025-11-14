@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import {
-	LayoutDashboard,
-	FileText,
-	Users,
-	ScrollText,
 	ArrowLeft,
+	FileText,
+	LayoutDashboard,
+	ScrollText,
+	Users,
 } from "lucide-react";
-import { cn } from "~/lib/utils";
 import type { UserRole } from "~/lib/db/types";
+import { cn } from "~/lib/utils";
 
 interface AdminNavProps {
 	currentPath: string;

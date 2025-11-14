@@ -2,7 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
 import type { User } from "~/lib/api/types";
 
-export const adminUserQueryKey = (userId: string) => ["adminUser", userId] as const;
+export const adminUserQueryKey = (userId: string) =>
+	["adminUser", userId] as const;
 
 /**
  * Custom hook to fetch a single user for admin editing

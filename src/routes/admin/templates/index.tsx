@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { FileText, Plus, Eye, EyeOff, Archive } from "lucide-react";
+import { Archive, Eye, EyeOff, FileText, Plus } from "lucide-react";
 import { AdminLayout, DataTable, StatusBadge } from "~/components/admin";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAdminTemplatesQuery } from "~/hooks/useAdminTemplatesQuery";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { Template } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/templates/")({
@@ -70,7 +70,14 @@ function TemplatesListPage() {
 							Manage novel templates, including drafts and archived content.
 						</p>
 					</div>
-					<Button type="button" onClick={() => navigate({ to: "/admin/templates/new" })} variant="primary"><Plus className="w-5 h-5" />New Template</Button>
+					<Button
+						type="button"
+						onClick={() => navigate({ to: "/admin/templates/new" })}
+						variant="primary"
+					>
+						<Plus className="w-5 h-5" />
+						New Template
+					</Button>
 				</div>
 
 				{/* Statistics */}
@@ -87,7 +94,12 @@ function TemplatesListPage() {
 						icon={Eye}
 						color="green"
 					/>
-					<StatBox label="Drafts" value={stats.draft} icon={EyeOff} color="yellow" />
+					<StatBox
+						label="Drafts"
+						value={stats.draft}
+						icon={EyeOff}
+						color="yellow"
+					/>
 					<StatBox
 						label="Archived"
 						value={stats.archived}

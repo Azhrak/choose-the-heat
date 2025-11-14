@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import { adminTemplatesQueryKey } from "./useAdminTemplatesQuery";
 import { adminDashboardQueryKey } from "./useAdminDashboardQuery";
+import { adminTemplatesQueryKey } from "./useAdminTemplatesQuery";
 
-export const deleteTemplateMutationKey = (templateId: string) => ["deleteTemplate", templateId] as const;
+export const deleteTemplateMutationKey = (templateId: string) =>
+	["deleteTemplate", templateId] as const;
 
 /**
  * Custom hook to delete a template

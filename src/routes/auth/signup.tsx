@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
-import { api, ApiError } from "~/lib/api/client";
+import { ApiError, api } from "~/lib/api/client";
 
 export const Route = createFileRoute("/auth/signup")({
 	component: SignupPage,

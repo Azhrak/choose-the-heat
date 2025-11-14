@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import type { Trope } from "~/lib/types/preferences";
 import type { Template } from "~/lib/api/types";
+import type { Trope } from "~/lib/types/preferences";
 
 interface TemplatesResponse {
 	templates: Template[];
@@ -12,7 +12,8 @@ interface UseTemplatesQueryOptions {
 	search?: string;
 }
 
-export const templatesQueryKey = (tropes: Trope[] = [], search = "") => ["templates", tropes, search] as const;
+export const templatesQueryKey = (tropes: Trope[] = [], search = "") =>
+	["templates", tropes, search] as const;
 
 /**
  * Custom hook to fetch templates with optional filtering

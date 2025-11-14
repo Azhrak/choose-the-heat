@@ -16,9 +16,7 @@ export function SceneLengthSection({
 	return (
 		<div className="bg-white rounded-2xl shadow-lg p-6">
 			<h3 className="text-xl font-bold text-slate-900 mb-4">Scene Length</h3>
-			<p className="text-slate-600 mb-6">
-				Choose your preferred scene length
-			</p>
+			<p className="text-slate-600 mb-6">Choose your preferred scene length</p>
 			<div className="space-y-3">
 				{SCENE_LENGTH_OPTIONS.map((length) => (
 					<button

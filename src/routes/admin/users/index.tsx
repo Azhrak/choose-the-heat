@@ -1,10 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Users as UsersIcon, Shield, Edit2 } from "lucide-react";
-import { AdminLayout, DataTable, RoleBadge, NoPermissions } from "~/components/admin";
+import { Edit2, Shield, Users as UsersIcon } from "lucide-react";
+import {
+	AdminLayout,
+	DataTable,
+	NoPermissions,
+	RoleBadge,
+} from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAdminUsersQuery } from "~/hooks/useAdminUsersQuery";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { User } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/users/")({

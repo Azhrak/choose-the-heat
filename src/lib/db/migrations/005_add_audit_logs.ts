@@ -55,10 +55,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 export async function down(db: Kysely<any>): Promise<void> {
 	// Drop indexes
-	await db.schema
-		.dropIndex("admin_audit_logs_entity_idx")
-		.ifExists()
-		.execute();
+	await db.schema.dropIndex("admin_audit_logs_entity_idx").ifExists().execute();
 	await db.schema
 		.dropIndex("admin_audit_logs_entity_type_idx")
 		.ifExists()

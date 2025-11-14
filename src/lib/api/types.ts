@@ -1,4 +1,4 @@
-import type { UserRole, TemplateStatus } from "~/lib/db/types";
+import type { TemplateStatus, UserRole } from "~/lib/db/types";
 
 // Template types are re-exported from db/types for consistency
 export type { TemplateStatus };

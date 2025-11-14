@@ -1,28 +1,24 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import {
-	ArrowLeft,
-	Save,
-	Trash2,
-	Eye,
-	EyeOff,
 	Archive,
 	ArchiveRestore,
+	ArrowLeft,
+	Eye,
+	EyeOff,
+	Save,
+	Trash2,
 } from "lucide-react";
+import { useState } from "react";
+import { AdminLayout, ConfirmDialog, StatusBadge } from "~/components/admin";
 import { Button } from "~/components/Button";
-import {
-	AdminLayout,
-	StatusBadge,
-	ConfirmDialog,
-} from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
 import { useUpdateTemplateMutation } from "~/hooks/useUpdateTemplateMutation";
 import { useUpdateTemplateStatusMutation } from "~/hooks/useUpdateTemplateStatusMutation";
-import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
 import type { Template, TemplateStatus } from "~/lib/api/types";
 
 export const Route = createFileRoute("/admin/templates/$id/edit")({
@@ -202,7 +198,14 @@ function EditTemplatePage() {
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div>
 				<div className="mb-6">
-					<Button variant="ghost" onClick={() => navigate({ to: "/admin/templates" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Templates</Button>
+					<Button
+						variant="ghost"
+						onClick={() => navigate({ to: "/admin/templates" })}
+						className="mb-4"
+					>
+						<ArrowLeft className="w-4 h-4" />
+						Back to Templates
+					</Button>
 					<div className="flex items-start justify-between">
 						<div>
 							<h1 className="text-3xl font-bold text-slate-900 mb-2">
@@ -317,7 +320,14 @@ function EditTemplatePage() {
 
 						{/* Save Button */}
 						<div className="pt-4 border-t border-slate-200">
-							<Button type="submit" loading={updateMutation.isPending} variant="primary"><Save className="w-5 h-5" />Save Changes</Button>
+							<Button
+								type="submit"
+								loading={updateMutation.isPending}
+								variant="primary"
+							>
+								<Save className="w-5 h-5" />
+								Save Changes
+							</Button>
 						</div>
 					</form>
 
@@ -379,8 +389,8 @@ function EditTemplatePage() {
 							<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 								<p className="text-sm text-red-800 mb-4">
 									Deleting a template is permanent and will remove all
-									associated choice points. User stories will remain but may have
-									orphaned data.
+									associated choice points. User stories will remain but may
+									have orphaned data.
 								</p>
 								<button
 									type="button"
@@ -414,10 +424,12 @@ function EditTemplatePage() {
 			<ConfirmDialog
 				isOpen={showDeleteDialog}
 				onClose={() => setShowDeleteDialog(false)}
-				onConfirm={() => deleteMutation.mutate(undefined, {
-					onSuccess: handleDeleteSuccess,
-					onError: handleDeleteError,
-				})}
+				onConfirm={() =>
+					deleteMutation.mutate(undefined, {
+						onSuccess: handleDeleteSuccess,
+						onError: handleDeleteError,
+					})
+				}
 				title="Delete Template?"
 				message="This action cannot be undone. All choice points will be deleted. User stories will remain but may have orphaned data."
 				confirmText="Delete Template"

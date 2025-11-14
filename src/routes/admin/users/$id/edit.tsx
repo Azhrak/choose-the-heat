@@ -1,15 +1,20 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { ArrowLeft, Save, Shield, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { ArrowLeft, Save, Trash2, Shield } from "lucide-react";
-import { AdminLayout, RoleBadge, ConfirmDialog, NoPermissions } from "~/components/admin";
+import {
+	AdminLayout,
+	ConfirmDialog,
+	NoPermissions,
+	RoleBadge,
+} from "~/components/admin";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAdminUserQuery } from "~/hooks/useAdminUserQuery";
-import { useUpdateUserMutation } from "~/hooks/useUpdateUserMutation";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteUserMutation } from "~/hooks/useDeleteUserMutation";
+import { useUpdateUserMutation } from "~/hooks/useUpdateUserMutation";
 import type { User } from "~/lib/api/types";
 import type { UserRole } from "~/lib/db/types";
 
@@ -32,14 +37,18 @@ function EditUserPage() {
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 	// Fetch current user to get role
-	const { data: currentUserData, isLoading: currentUserLoading } = useCurrentUserQuery();
+	const { data: currentUserData, isLoading: currentUserLoading } =
+		useCurrentUserQuery();
 
 	// Fetch user to edit
 	const {
 		data: userData,
 		isLoading: userLoading,
 		error,
-	} = useAdminUserQuery(id, !!currentUserData && currentUserData.role === "admin");
+	} = useAdminUserQuery(
+		id,
+		!!currentUserData && currentUserData.role === "admin",
+	);
 
 	// Initialize form data when user loads
 	if (userData?.user && !formData) {
@@ -157,7 +166,14 @@ function EditUserPage() {
 		<AdminLayout currentPath="/admin/users" userRole={currentUser.role}>
 			<div>
 				<div className="mb-6">
-					<Button variant="ghost" onClick={() => navigate({ to: "/admin/users" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Users</Button>
+					<Button
+						variant="ghost"
+						onClick={() => navigate({ to: "/admin/users" })}
+						className="mb-4"
+					>
+						<ArrowLeft className="w-4 h-4" />
+						Back to Users
+					</Button>
 					<div className="flex items-start justify-between">
 						<div>
 							<h1 className="text-3xl font-bold text-slate-900 mb-2">
@@ -271,7 +287,9 @@ function EditUserPage() {
 								className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-slate-100 disabled:cursor-not-allowed"
 								required
 							>
-								<option value="user">User - Can create stories and read templates</option>
+								<option value="user">
+									User - Can create stories and read templates
+								</option>
 								<option value="editor">
 									Editor - Can manage all templates
 								</option>
@@ -284,18 +302,19 @@ function EditUserPage() {
 							</p>
 						</div>
 
-					{/* Save Button */}
-					<div className="pt-4 border-t border-slate-200">
-						<Button
-							type="submit"
-							loading={updateMutation.isPending}
-							variant="primary"
-						>
-							<Save className="w-5 h-5" />
-							Save Changes
-						</Button>
-					</div>
-				</form>					{/* Danger Zone */}
+						{/* Save Button */}
+						<div className="pt-4 border-t border-slate-200">
+							<Button
+								type="submit"
+								loading={updateMutation.isPending}
+								variant="primary"
+							>
+								<Save className="w-5 h-5" />
+								Save Changes
+							</Button>
+						</div>
+					</form>{" "}
+					{/* Danger Zone */}
 					{!isEditingSelf && (
 						<div className="mt-8 pt-8 border-t border-red-200">
 							<h2 className="text-xl font-semibold text-red-900 mb-4">
@@ -303,11 +322,19 @@ function EditUserPage() {
 							</h2>
 							<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 								<p className="text-sm text-red-800 mb-4">
-									Deleting a user is permanent and will remove their account, but
-									their stories and choices will remain in the database. This
-									action cannot be undone.
+									Deleting a user is permanent and will remove their account,
+									but their stories and choices will remain in the database.
+									This action cannot be undone.
 								</p>
-								<Button type="button" onClick={() => setShowDeleteDialog(true)} variant="danger" size="sm"><Trash2 className="w-4 h-4" />Delete User</Button>
+								<Button
+									type="button"
+									onClick={() => setShowDeleteDialog(true)}
+									variant="danger"
+									size="sm"
+								>
+									<Trash2 className="w-4 h-4" />
+									Delete User
+								</Button>
 							</div>
 						</div>
 					)}

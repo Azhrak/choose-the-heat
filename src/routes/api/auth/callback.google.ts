@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getGoogleUser, getPKCEVerifier, google, verifyOAuthState } from "~/lib/auth/oauth";
+import {
+	getGoogleUser,
+	getPKCEVerifier,
+	google,
+	verifyOAuthState,
+} from "~/lib/auth/oauth";
 import { createSession, createSessionCookie } from "~/lib/auth/session";
 import { getOrCreateGoogleUser, getUserById } from "~/lib/db/queries/users";
 
@@ -37,7 +42,10 @@ export const Route = createFileRoute("/api/auth/callback/google")({
 					}
 
 					// Exchange code for tokens (Arctic's validateAuthorizationCode handles PKCE)
-					const tokens = await google.validateAuthorizationCode(code, codeVerifier);
+					const tokens = await google.validateAuthorizationCode(
+						code,
+						codeVerifier,
+					);
 					const accessToken = tokens.accessToken;
 					const googleUser = await getGoogleUser(accessToken);
 

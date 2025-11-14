@@ -69,11 +69,7 @@ export function PasswordChange({
 					</div>
 				)}
 
-				<Button
-					type="submit"
-					loading={isUpdating}
-					variant="primary"
-				>
+				<Button type="submit" loading={isUpdating} variant="primary">
 					Change Password
 				</Button>
 			</form>

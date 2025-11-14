@@ -8,15 +8,15 @@ import type { ColumnType } from "kysely";
 export type AuditEntityType = "template" | "user";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S, I | undefined, U>
-  : ColumnType<T, T | undefined, T>;
+	? ColumnType<S, I | undefined, U>
+	: ColumnType<T, T | undefined, T>;
 
 export type Json = JsonValue;
 
 export type JsonArray = JsonValue[];
 
 export type JsonObject = {
-  [x: string]: JsonValue | undefined;
+	[x: string]: JsonValue | undefined;
 };
 
 export type JsonPrimitive = boolean | number | string | null;
@@ -30,116 +30,116 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type UserRole = "admin" | "editor" | "user";
 
 export interface AdminAuditLogs {
-  action: string;
-  changes: Json | null;
-  created_at: Generated<Timestamp>;
-  entity_id: string;
-  entity_type: AuditEntityType;
-  id: Generated<string>;
-  user_id: string;
+	action: string;
+	changes: Json | null;
+	created_at: Generated<Timestamp>;
+	entity_id: string;
+	entity_type: AuditEntityType;
+	id: Generated<string>;
+	user_id: string;
 }
 
 export interface ChoicePoints {
-  created_at: Generated<Timestamp>;
-  id: Generated<string>;
-  options: Json;
-  prompt_text: string;
-  scene_number: number;
-  template_id: string;
+	created_at: Generated<Timestamp>;
+	id: Generated<string>;
+	options: Json;
+	prompt_text: string;
+	scene_number: number;
+	template_id: string;
 }
 
 export interface Choices {
-  choice_point_id: string;
-  created_at: Generated<Timestamp>;
-  id: Generated<string>;
-  selected_option: number;
-  story_id: string;
+	choice_point_id: string;
+	created_at: Generated<Timestamp>;
+	id: Generated<string>;
+	selected_option: number;
+	story_id: string;
 }
 
 export interface NovelTemplates {
-  archived_at: Timestamp | null;
-  archived_by: string | null;
-  base_tropes: string[];
-  cover_gradient: string;
-  created_at: Generated<Timestamp>;
-  description: string;
-  estimated_scenes: number;
-  id: Generated<string>;
-  status: Generated<TemplateStatus>;
-  title: string;
-  updated_at: Generated<Timestamp>;
+	archived_at: Timestamp | null;
+	archived_by: string | null;
+	base_tropes: string[];
+	cover_gradient: string;
+	created_at: Generated<Timestamp>;
+	description: string;
+	estimated_scenes: number;
+	id: Generated<string>;
+	status: Generated<TemplateStatus>;
+	title: string;
+	updated_at: Generated<Timestamp>;
 }
 
 export interface OauthAccounts {
-  access_token: string | null;
-  created_at: Generated<Timestamp>;
-  expires_at: Timestamp | null;
-  id: Generated<string>;
-  provider: string;
-  provider_user_id: string;
-  refresh_token: string | null;
-  user_id: string;
+	access_token: string | null;
+	created_at: Generated<Timestamp>;
+	expires_at: Timestamp | null;
+	id: Generated<string>;
+	provider: string;
+	provider_user_id: string;
+	refresh_token: string | null;
+	user_id: string;
 }
 
 export interface PasswordAccounts {
-  created_at: Generated<Timestamp>;
-  hashed_password: string;
-  id: Generated<string>;
-  updated_at: Generated<Timestamp>;
-  user_id: string;
+	created_at: Generated<Timestamp>;
+	hashed_password: string;
+	id: Generated<string>;
+	updated_at: Generated<Timestamp>;
+	user_id: string;
 }
 
 export interface Scenes {
-  content: string;
-  created_at: Generated<Timestamp>;
-  id: Generated<string>;
-  metadata: Json | null;
-  scene_number: number;
-  story_id: string;
-  summary: string | null;
-  word_count: number;
+	content: string;
+	created_at: Generated<Timestamp>;
+	id: Generated<string>;
+	metadata: Json | null;
+	scene_number: number;
+	story_id: string;
+	summary: string | null;
+	word_count: number;
 }
 
 export interface Sessions {
-  created_at: Generated<Timestamp>;
-  expires_at: Timestamp;
-  id: string;
-  user_id: string;
+	created_at: Generated<Timestamp>;
+	expires_at: Timestamp;
+	id: string;
+	user_id: string;
 }
 
 export interface Users {
-  avatar_url: string | null;
-  created_at: Generated<Timestamp>;
-  default_preferences: Json | null;
-  email: string;
-  email_verified: Generated<boolean>;
-  id: Generated<string>;
-  name: string | null;
-  role: Generated<UserRole>;
-  updated_at: Generated<Timestamp>;
+	avatar_url: string | null;
+	created_at: Generated<Timestamp>;
+	default_preferences: Json | null;
+	email: string;
+	email_verified: Generated<boolean>;
+	id: Generated<string>;
+	name: string | null;
+	role: Generated<UserRole>;
+	updated_at: Generated<Timestamp>;
 }
 
 export interface UserStories {
-  created_at: Generated<Timestamp>;
-  current_scene: Generated<number>;
-  id: Generated<string>;
-  preferences: Json;
-  status: Generated<string>;
-  story_title: string | null;
-  template_id: string;
-  updated_at: Generated<Timestamp>;
-  user_id: string;
+	created_at: Generated<Timestamp>;
+	current_scene: Generated<number>;
+	id: Generated<string>;
+	preferences: Json;
+	status: Generated<string>;
+	story_title: string | null;
+	template_id: string;
+	updated_at: Generated<Timestamp>;
+	user_id: string;
 }
 
 export interface DB {
-  admin_audit_logs: AdminAuditLogs;
-  choice_points: ChoicePoints;
-  choices: Choices;
-  novel_templates: NovelTemplates;
-  oauth_accounts: OauthAccounts;
-  password_accounts: PasswordAccounts;
-  scenes: Scenes;
-  sessions: Sessions;
-  user_stories: UserStories;
-  users: Users;
+	admin_audit_logs: AdminAuditLogs;
+	choice_points: ChoicePoints;
+	choices: Choices;
+	novel_templates: NovelTemplates;
+	oauth_accounts: OauthAccounts;
+	password_accounts: PasswordAccounts;
+	scenes: Scenes;
+	sessions: Sessions;
+	user_stories: UserStories;
+	users: Users;
 }

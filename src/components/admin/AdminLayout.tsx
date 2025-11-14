@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { AdminNav } from "./AdminNav";
 import type { UserRole } from "~/lib/db/types";
+import { AdminNav } from "./AdminNav";
 
 interface AdminLayoutProps {
 	children: ReactNode;

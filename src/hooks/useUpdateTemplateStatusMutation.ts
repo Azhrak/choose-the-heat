@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
 import type { TemplateStatus } from "~/lib/api/types";
+import { adminDashboardQueryKey } from "./useAdminDashboardQuery";
 import { adminTemplateQueryKey } from "./useAdminTemplateQuery";
 import { adminTemplatesQueryKey } from "./useAdminTemplatesQuery";
-import { adminDashboardQueryKey } from "./useAdminDashboardQuery";
 
-export const updateTemplateStatusMutationKey = (templateId: string) => ["updateTemplateStatus", templateId] as const;
+export const updateTemplateStatusMutationKey = (templateId: string) =>
+	["updateTemplateStatus", templateId] as const;
 
 /**
  * Custom hook to update a template's status
@@ -16,9 +17,12 @@ export function useUpdateTemplateStatusMutation(templateId: string) {
 
 	return useMutation({
 		mutationKey: updateTemplateStatusMutationKey(templateId),
-		mutationFn: (status: TemplateStatus) => api.patch(`/api/admin/templates/${templateId}/status`, { status }),
+		mutationFn: (status: TemplateStatus) =>
+			api.patch(`/api/admin/templates/${templateId}/status`, { status }),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: adminTemplateQueryKey(templateId) });
+			queryClient.invalidateQueries({
+				queryKey: adminTemplateQueryKey(templateId),
+			});
 			queryClient.invalidateQueries({ queryKey: adminTemplatesQueryKey });
 			queryClient.invalidateQueries({ queryKey: adminDashboardQueryKey });
 		},

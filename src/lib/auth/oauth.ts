@@ -28,7 +28,10 @@ const oauthStates = new Map<string, { expiresAt: number }>();
  * PKCE code verifier storage
  * In production, use Redis or similar
  */
-const pkceVerifiers = new Map<string, { verifier: string; expiresAt: number }>();
+const pkceVerifiers = new Map<
+	string,
+	{ verifier: string; expiresAt: number }
+>();
 
 /**
  * Generate and store OAuth state

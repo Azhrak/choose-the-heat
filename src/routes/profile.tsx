@@ -5,16 +5,16 @@ import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
 import { PageContainer } from "~/components/PageContainer";
 import {
-	ProfileInformation,
-	PasswordChange,
-	PreferencesDisplay,
 	DangerZone,
 	DeleteAccountModal,
+	PasswordChange,
+	PreferencesDisplay,
+	ProfileInformation,
 } from "~/components/profile";
-import { useProfileQuery } from "~/hooks/useProfileQuery";
-import { useUpdateProfileMutation } from "~/hooks/useUpdateProfileMutation";
 import { useChangePasswordMutation } from "~/hooks/useChangePasswordMutation";
 import { useDeleteAccountMutation } from "~/hooks/useDeleteAccountMutation";
+import { useProfileQuery } from "~/hooks/useProfileQuery";
+import { useUpdateProfileMutation } from "~/hooks/useUpdateProfileMutation";
 import { ApiError } from "~/lib/api/client";
 
 export const Route = createFileRoute("/profile")({

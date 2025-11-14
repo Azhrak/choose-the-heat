@@ -1,8 +1,5 @@
 import { Flame } from "lucide-react";
-import {
-	SPICE_LABELS,
-	type SpiceLevel,
-} from "~/lib/types/preferences";
+import { SPICE_LABELS, type SpiceLevel } from "~/lib/types/preferences";
 
 interface SpiceLevelSectionProps {
 	selectedLevel: SpiceLevel;

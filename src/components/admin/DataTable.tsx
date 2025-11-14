@@ -38,7 +38,12 @@ export function DataTable<T extends { id: string }>({
 	}
 
 	return (
-		<div className={cn("bg-white rounded-lg border border-slate-200 overflow-hidden", className)}>
+		<div
+			className={cn(
+				"bg-white rounded-lg border border-slate-200 overflow-hidden",
+				className,
+			)}
+		>
 			<div className="overflow-x-auto">
 				<table className="w-full">
 					<thead>

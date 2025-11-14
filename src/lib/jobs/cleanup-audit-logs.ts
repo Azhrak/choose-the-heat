@@ -1,6 +1,6 @@
-import { config } from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
 import { db } from "../db";
 import { cleanupOldAuditLogs } from "../db/queries/audit";
 
@@ -32,16 +32,16 @@ async function cleanup() {
 			process.exit(1);
 		}
 
-		console.log(`🧹 Cleaning up audit logs older than ${retentionDays} days...`);
+		console.log(
+			`🧹 Cleaning up audit logs older than ${retentionDays} days...`,
+		);
 
 		const deletedCount = await cleanupOldAuditLogs(retentionDays);
 
 		console.log(`✅ Deleted ${deletedCount} audit log(s)`);
 
 		if (deletedCount === 0) {
-			console.log(
-				`ℹ️  No audit logs found older than ${retentionDays} days`,
-			);
+			console.log(`ℹ️  No audit logs found older than ${retentionDays} days`);
 		}
 	} catch (error) {
 		console.error("❌ Error cleaning up audit logs:", error);

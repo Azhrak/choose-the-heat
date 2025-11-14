@@ -19,18 +19,23 @@ interface AuditLogsFilters {
 	userId?: string;
 }
 
-export const auditLogsQueryKey = (filters: AuditLogsFilters = {}) => ["auditLogs", filters] as const;
+export const auditLogsQueryKey = (filters: AuditLogsFilters = {}) =>
+	["auditLogs", filters] as const;
 
 /**
  * Custom hook to fetch audit logs with optional filters
  * Requires admin role
  */
-export function useAuditLogsQuery(filters: AuditLogsFilters = {}, enabled = true) {
+export function useAuditLogsQuery(
+	filters: AuditLogsFilters = {},
+	enabled = true,
+) {
 	return useQuery({
 		queryKey: auditLogsQueryKey(filters),
-		queryFn: () => api.get<{ logs: AuditLog[] }>("/api/admin/audit-logs", { 
-			params: filters as Record<string, string | undefined>,
-		}),
+		queryFn: () =>
+			api.get<{ logs: AuditLog[] }>("/api/admin/audit-logs", {
+				params: filters as Record<string, string | undefined>,
+			}),
 		enabled,
 	});
 }

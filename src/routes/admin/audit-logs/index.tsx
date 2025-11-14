@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Calendar, FileText, Search, Users } from "lucide-react";
 import { useState } from "react";
-import { FileText, Users, Search, Calendar } from "lucide-react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AuditEntityType } from "~/lib/db/types";
 
 export const Route = createFileRoute("/admin/audit-logs/")({
@@ -107,8 +107,7 @@ function AuditLogsPage() {
 		template: logs.filter((l) => l.entityType === "template").length,
 		user: logs.filter((l) => l.entityType === "user").length,
 		today: logs.filter(
-			(l) =>
-				new Date(l.createdAt).toDateString() === new Date().toDateString(),
+			(l) => new Date(l.createdAt).toDateString() === new Date().toDateString(),
 		).length,
 	};
 
@@ -116,9 +115,7 @@ function AuditLogsPage() {
 		<AdminLayout currentPath="/admin/audit-logs" userRole={role}>
 			<div>
 				<div className="mb-6">
-					<h1 className="text-3xl font-bold text-slate-900 mb-2">
-						Audit Logs
-					</h1>
+					<h1 className="text-3xl font-bold text-slate-900 mb-2">Audit Logs</h1>
 					<p className="text-slate-600">
 						View all administrative actions and changes. Logs are retained for
 						90 days.
@@ -278,7 +275,9 @@ function AuditLogsPage() {
 												</span>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-600">
-												{log.entityId ? `${log.entityId.substring(0, 8)}...` : "N/A"}
+												{log.entityId
+													? `${log.entityId.substring(0, 8)}...`
+													: "N/A"}
 											</td>
 											<td className="px-6 py-4 text-sm text-slate-600">
 												{log.changes ? (
@@ -307,7 +306,10 @@ function AuditLogsPage() {
 					<p className="text-sm text-blue-800">
 						<strong>Retention Policy:</strong> Audit logs are automatically
 						deleted after 90 days. Use the cleanup script to manually remove
-						older logs: <code className="bg-blue-100 px-2 py-1 rounded">pnpm cleanup:audit-logs [days]</code>
+						older logs:{" "}
+						<code className="bg-blue-100 px-2 py-1 rounded">
+							pnpm cleanup:audit-logs [days]
+						</code>
 					</p>
 				</div>
 			</div>

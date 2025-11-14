@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { ArrowLeft, Save } from "lucide-react";
+import { useState } from "react";
 import { AdminLayout } from "~/components/admin";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useCreateTemplateMutation } from "~/hooks/useCreateTemplateMutation";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
 export const Route = createFileRoute("/admin/templates/new")({
 	component: NewTemplatePage,
@@ -103,7 +103,14 @@ function NewTemplatePage() {
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div>
 				<div className="mb-6">
-					<Button variant="ghost" onClick={() => navigate({ to: "/admin/templates" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Templates</Button>
+					<Button
+						variant="ghost"
+						onClick={() => navigate({ to: "/admin/templates" })}
+						className="mb-4"
+					>
+						<ArrowLeft className="w-4 h-4" />
+						Back to Templates
+					</Button>
 					<h1 className="text-3xl font-bold text-slate-900 mb-2">
 						Create New Template
 					</h1>
@@ -216,8 +223,21 @@ function NewTemplatePage() {
 
 						{/* Actions */}
 						<div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-							<Button type="submit" loading={createMutation.isPending} variant="primary"><Save className="w-5 h-5" />Create Template</Button>
-							<Button type="button" onClick={() => navigate({ to: "/admin/templates" })} variant="ghost">Cancel</Button>
+							<Button
+								type="submit"
+								loading={createMutation.isPending}
+								variant="primary"
+							>
+								<Save className="w-5 h-5" />
+								Create Template
+							</Button>
+							<Button
+								type="button"
+								onClick={() => navigate({ to: "/admin/templates" })}
+								variant="ghost"
+							>
+								Cancel
+							</Button>
 						</div>
 					</form>
 				</div>

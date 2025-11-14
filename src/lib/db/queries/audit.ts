@@ -105,7 +105,11 @@ export async function getAuditLogs(
 	}
 
 	if (filters.entityType) {
-		query = query.where("admin_audit_logs.entity_type", "=", filters.entityType);
+		query = query.where(
+			"admin_audit_logs.entity_type",
+			"=",
+			filters.entityType,
+		);
 	}
 
 	if (filters.entityId) {
@@ -179,9 +183,7 @@ export async function getEntityAuditLogs(
  * Delete audit logs older than the specified number of days
  * Default: 90 days (3 months)
  */
-export async function cleanupOldAuditLogs(
-	retentionDays = 90,
-): Promise<number> {
+export async function cleanupOldAuditLogs(retentionDays = 90): Promise<number> {
 	const cutoffDate = new Date();
 	cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
 

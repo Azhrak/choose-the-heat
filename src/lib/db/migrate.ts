@@ -1,15 +1,15 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { config } from "dotenv";
 import {
 	Kysely,
-	Migrator,
-	PostgresDialect,
 	type Migration,
 	type MigrationProvider,
+	Migrator,
+	PostgresDialect,
 } from "kysely";
 import { Pool } from "pg";
-import { config } from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

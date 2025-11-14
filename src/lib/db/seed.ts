@@ -1,8 +1,8 @@
-import { config } from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { db } from "./index";
+import { config } from "dotenv";
 import { hashPassword } from "../auth/password";
+import { db } from "./index";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

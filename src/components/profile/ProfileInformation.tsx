@@ -67,11 +67,7 @@ export function ProfileInformation({
 					</div>
 				)}
 
-				<Button
-					type="submit"
-					loading={isUpdating}
-					variant="primary"
-				>
+				<Button type="submit" loading={isUpdating} variant="primary">
 					Update Profile
 				</Button>
 			</form>

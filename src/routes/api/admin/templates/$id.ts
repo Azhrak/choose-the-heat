@@ -3,10 +3,10 @@ import { json } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAdmin, requireEditorOrAdmin } from "~/lib/auth/authorization";
 import {
-	updateTemplate,
-	updateTemplateStatus,
 	deleteTemplate,
 	getTemplateById,
+	updateTemplate,
+	updateTemplateStatus,
 } from "~/lib/db/queries/templates";
 import type { TemplateStatus } from "~/lib/db/types";
 

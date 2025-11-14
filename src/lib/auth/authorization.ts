@@ -72,10 +72,7 @@ export async function requireRole(
 		.executeTakeFirst();
 
 	if (!user) {
-		throw json(
-			{ error: "Unauthorized - User not found" },
-			{ status: 401 },
-		);
+		throw json({ error: "Unauthorized - User not found" }, { status: 401 });
 	}
 
 	if (!hasRole(user.role, allowedRoles)) {

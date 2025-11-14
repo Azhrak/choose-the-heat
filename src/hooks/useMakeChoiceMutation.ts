@@ -12,7 +12,8 @@ interface ChoiceResult {
 	nextScene?: number;
 }
 
-export const makeChoiceMutationKey = (storyId: string) => ["makeChoice", storyId] as const;
+export const makeChoiceMutationKey = (storyId: string) =>
+	["makeChoice", storyId] as const;
 
 /**
  * Custom hook to record a user's choice in a story
@@ -23,7 +24,8 @@ export function useMakeChoiceMutation(storyId: string) {
 
 	return useMutation({
 		mutationKey: makeChoiceMutationKey(storyId),
-		mutationFn: (data: ChoiceData) => api.post<ChoiceResult>(`/api/stories/${storyId}/choose`, data),
+		mutationFn: (data: ChoiceData) =>
+			api.post<ChoiceResult>(`/api/stories/${storyId}/choose`, data),
 		onSuccess: () => {
 			// Invalidate all queries for this story to get fresh data
 			queryClient.invalidateQueries({

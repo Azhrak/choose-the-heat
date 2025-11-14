@@ -395,10 +395,7 @@ export async function deleteUser(userId: string, adminUserId: string) {
 export async function getUserCountByRole() {
 	const result = await db
 		.selectFrom("users")
-		.select(({ fn }) => [
-			"role",
-			fn.count<number>("id").as("count"),
-		])
+		.select(({ fn }) => ["role", fn.count<number>("id").as("count")])
 		.groupBy("role")
 		.execute();
 

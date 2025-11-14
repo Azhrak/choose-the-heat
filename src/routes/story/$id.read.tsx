@@ -11,9 +11,9 @@ import {
 import { useState } from "react";
 import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
-import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
-import { api, ApiError } from "~/lib/api/client";
+import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
+import { ApiError, api } from "~/lib/api/client";
 
 export const Route = createFileRoute("/story/$id/read")({
 	component: ReadingPage,
@@ -72,12 +72,15 @@ function ReadingPage() {
 	const handleMakeChoice = () => {
 		if (selectedOption === null || !data?.choicePoint) return;
 
-		choiceMutation.mutate({
-			choicePointId: data.choicePoint.id,
-			selectedOption,
-		}, {
-			onSuccess: handleChoiceSuccess,
-		});
+		choiceMutation.mutate(
+			{
+				choicePointId: data.choicePoint.id,
+				selectedOption,
+			},
+			{
+				onSuccess: handleChoiceSuccess,
+			},
+		);
 	};
 
 	const handleNavigateScene = (sceneNum: number) => {
@@ -181,7 +184,6 @@ function ReadingPage() {
 						)}
 					</div>
 				</div>
-
 				{/* Choice Point */}
 				{choicePoint && !isLastScene && (
 					<div className="bg-white rounded-xl shadow-lg p-8 mb-6">
@@ -216,46 +218,48 @@ function ReadingPage() {
 									</div>
 								</button>
 							))}
-					</div>
+						</div>
 
-					<Button
-						type="button"
-						onClick={handleMakeChoice}
-						disabled={selectedOption === null}
-						loading={choiceMutation.isPending}
-						variant="primary"
-						className="w-full mt-6 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
-					>
-						<span>Continue Story</span>
-						<ChevronRight className="w-5 h-5" />
-					</Button>
-				</div>
-			)}				{/* No Choice Point - Continue to Next Scene */}
+						<Button
+							type="button"
+							onClick={handleMakeChoice}
+							disabled={selectedOption === null}
+							loading={choiceMutation.isPending}
+							variant="primary"
+							className="w-full mt-6 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
+						>
+							<span>Continue Story</span>
+							<ChevronRight className="w-5 h-5" />
+						</Button>
+					</div>
+				)}{" "}
+				{/* No Choice Point - Continue to Next Scene */}
 				{!choicePoint && !isLastScene && (
-				<div className="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
-					<p className="text-gray-600 mb-6">Ready to continue?</p>
-					<Button
-						type="button"
-						onClick={async () => {
-							const nextScene = scene.number + 1;
-							// Update story progress in database
-							try {
-								await api.patch(`/api/stories/${id}/scene`, { currentScene: nextScene });
-								// Navigate to next scene
-								setCurrentSceneNumber(nextScene);
-							} catch (error) {
-								console.error('Failed to update scene:', error);
-							}
-						}}
-						variant="primary"
-						className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
-					>
-						<span>Continue to Next Scene</span>
-						<ChevronRight className="w-5 h-5" />
-					</Button>
+					<div className="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
+						<p className="text-gray-600 mb-6">Ready to continue?</p>
+						<Button
+							type="button"
+							onClick={async () => {
+								const nextScene = scene.number + 1;
+								// Update story progress in database
+								try {
+									await api.patch(`/api/stories/${id}/scene`, {
+										currentScene: nextScene,
+									});
+									// Navigate to next scene
+									setCurrentSceneNumber(nextScene);
+								} catch (error) {
+									console.error("Failed to update scene:", error);
+								}
+							}}
+							variant="primary"
+							className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
+						>
+							<span>Continue to Next Scene</span>
+							<ChevronRight className="w-5 h-5" />
+						</Button>
 					</div>
 				)}
-
 				{/* Story Complete */}
 				{isLastScene && (
 					<div className="bg-linear-to-br from-purple-100 to-rose-100 rounded-xl shadow-lg p-8 text-center">
@@ -273,7 +277,6 @@ function ReadingPage() {
 						</Link>
 					</div>
 				)}
-
 				{/* Navigation */}
 				<div className="flex items-center justify-between mt-6">
 					<Button

@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import { Button } from "~/components/Button";
 import { RadioButton } from "~/components/RadioButton";
-import { api, ApiError } from "~/lib/api/client";
+import { ApiError, api } from "~/lib/api/client";
 import {
 	GENRE_LABELS,
 	GENRES,
@@ -340,39 +340,36 @@ function OnboardingPage() {
 						)}
 					</div>
 
-				{/* Navigation Buttons */}
-				<div className="flex justify-between">
-					<Button
-						onClick={handleBack}
-						disabled={step === 1}
-						variant="secondary"
-						className={step === 1 ? "invisible" : ""}
-					>
-						<ChevronLeft className="w-5 h-5" />
-						Back
-					</Button>
+					{/* Navigation Buttons */}
+					<div className="flex justify-between">
+						<Button
+							onClick={handleBack}
+							disabled={step === 1}
+							variant="secondary"
+							className={step === 1 ? "invisible" : ""}
+						>
+							<ChevronLeft className="w-5 h-5" />
+							Back
+						</Button>
 
-					{step < 3 ? (
-						<Button
-							onClick={handleNext}
-							variant="primary"
-						>
-							Next
-							<ChevronRight className="w-5 h-5" />
-						</Button>
-					) : (
-						<Button
-							onClick={handleSubmit}
-							loading={isSubmitting}
-							variant="primary"
-						>
-							Complete Setup
-							<ChevronRight className="w-5 h-5" />
-						</Button>
-					)}
+						{step < 3 ? (
+							<Button onClick={handleNext} variant="primary">
+								Next
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						) : (
+							<Button
+								onClick={handleSubmit}
+								loading={isSubmitting}
+								variant="primary"
+							>
+								Complete Setup
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	);
 }

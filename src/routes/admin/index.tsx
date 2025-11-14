@@ -1,10 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { FileText, Users, Archive, Eye, EyeOff, FilePlus } from "lucide-react";
+import { Archive, Eye, EyeOff, FilePlus, FileText, Users } from "lucide-react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useAdminDashboardQuery } from "~/hooks/useAdminDashboardQuery";
+import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
 export const Route = createFileRoute("/admin/")({
 	component: AdminDashboard,
@@ -17,7 +17,11 @@ function AdminDashboard() {
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
 
 	// Fetch dashboard stats
-	const { data: stats, isLoading: statsLoading, error } = useAdminDashboardQuery(!!userData);
+	const {
+		data: stats,
+		isLoading: statsLoading,
+		error,
+	} = useAdminDashboardQuery(!!userData);
 
 	if (userLoading || statsLoading) {
 		return (
@@ -44,9 +48,7 @@ function AdminDashboard() {
 	// Check if user has editor or admin role
 	if (userData.role !== "editor" && userData.role !== "admin") {
 		return (
-			<NoPermissions
-				message="You don't have permission to access the admin panel. This area is restricted to editors and administrators only."
-			/>
+			<NoPermissions message="You don't have permission to access the admin panel. This area is restricted to editors and administrators only." />
 		);
 	}
 

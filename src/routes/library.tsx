@@ -9,8 +9,8 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
-import { useUserStoriesQuery } from "~/hooks/useUserStoriesQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
+import { useUserStoriesQuery } from "~/hooks/useUserStoriesQuery";
 
 export const Route = createFileRoute("/library")({
 	component: LibraryPage,
@@ -57,7 +57,6 @@ function LibraryPage() {
 
 			<PageContainer maxWidth="2xl">
 				<h1 className="text-4xl font-bold text-slate-900 mb-8">My Library</h1>
-
 				{/* Tabs */}
 				<div className="flex gap-4 mb-8">
 					<button
@@ -70,7 +69,9 @@ function LibraryPage() {
 					>
 						<div className="flex items-center gap-2">
 							<Clock className="w-5 h-5" />
-							In Progress</div></button>
+							In Progress
+						</div>
+					</button>
 					<button
 						onClick={() => setActiveTab("completed")}
 						className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
@@ -79,19 +80,18 @@ function LibraryPage() {
 								: "bg-white text-slate-700 hover:bg-slate-50"
 						}`}
 					>
-				<div className="flex items-center gap-2">
-					<Sparkles className="w-5 h-5" />
-					Completed
-				</div>
-			</button>
-		</div>				{/* Loading State */}
+						<div className="flex items-center gap-2">
+							<Sparkles className="w-5 h-5" />
+							Completed
+						</div>
+					</button>
+				</div>{" "}
+				{/* Loading State */}
 				{isLoading && <LoadingSpinner />}
-
 				{/* Error State */}
 				{error && (
 					<ErrorMessage message="Failed to load stories" variant="centered" />
 				)}
-
 				{/* Empty State */}
 				{!isLoading && !error && stories.length === 0 && (
 					<EmptyState
@@ -105,7 +105,6 @@ function LibraryPage() {
 						action={{ label: "Browse Stories", href: "/browse" }}
 					/>
 				)}
-
 				{/* Stories Grid */}
 				{!isLoading && !error && stories.length > 0 && (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -157,7 +156,19 @@ function LibraryPage() {
 												? "Continue Reading"
 												: "Read Again"}
 										</Link>
-										<Button onClick={() => handleDeleteClick(story.id, story.story_title || story.template.title)} loading={deletingId === story.id} variant="danger" size="sm" className="bg-red-50 text-red-600 hover:bg-red-100" title="Delete story">
+										<Button
+											onClick={() =>
+												handleDeleteClick(
+													story.id,
+													story.story_title || story.template.title,
+												)
+											}
+											loading={deletingId === story.id}
+											variant="danger"
+											size="sm"
+											className="bg-red-50 text-red-600 hover:bg-red-100"
+											title="Delete story"
+										>
 											<Trash2 className="w-5 h-5" />
 										</Button>
 									</div>

@@ -8,7 +8,9 @@ interface FullPageLoaderProps {
  * Full-page loading component with centered spinner
  * Used for initial page loads and major state transitions
  */
-export function FullPageLoader({ message = "Loading..." }: FullPageLoaderProps) {
+export function FullPageLoader({
+	message = "Loading...",
+}: FullPageLoaderProps) {
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center">
 			<div className="text-center">

@@ -1,25 +1,22 @@
 import { Heart } from "lucide-react";
-import {
-	TROPE_LABELS,
-	TROPES,
-	type Trope,
-} from "~/lib/types/preferences";
+import { TROPE_LABELS, TROPES, type Trope } from "~/lib/types/preferences";
 
 interface TropesSectionProps {
 	selectedTropes: Trope[];
 	onToggle: (trope: Trope) => void;
 }
 
-export function TropesSection({ selectedTropes, onToggle }: TropesSectionProps) {
+export function TropesSection({
+	selectedTropes,
+	onToggle,
+}: TropesSectionProps) {
 	return (
 		<div className="bg-white rounded-2xl shadow-lg p-6">
 			<div className="flex items-center mb-6">
 				<Heart className="w-6 h-6 text-romance-500 mr-2" />
 				<h2 className="text-2xl font-bold text-slate-900">Tropes</h2>
 			</div>
-			<p className="text-slate-600 mb-6">
-				Choose your favorite romance tropes
-			</p>
+			<p className="text-slate-600 mb-6">Choose your favorite romance tropes</p>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{TROPES.map((trope) => (
 					<button

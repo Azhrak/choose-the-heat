@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import type { UserStory, StoryStatus } from "~/lib/api/types";
+import type { StoryStatus, UserStory } from "~/lib/api/types";
 
 interface UserStoriesResponse {
 	stories: UserStory[];
 }
 
-export const userStoriesQueryKey = (status: StoryStatus) => ["user-stories", status] as const;
+export const userStoriesQueryKey = (status: StoryStatus) =>
+	["user-stories", status] as const;
 
 /**
  * Custom hook to fetch user's stories filtered by status

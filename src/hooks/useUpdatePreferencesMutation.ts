@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import { userPreferencesQueryKey } from "./useUserPreferencesQuery";
 import type { UserPreferences } from "~/lib/types/preferences";
+import { userPreferencesQueryKey } from "./useUserPreferencesQuery";
 
 export const updatePreferencesMutationKey = ["updatePreferences"] as const;
 

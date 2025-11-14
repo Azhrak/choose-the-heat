@@ -29,9 +29,9 @@ export const Route = createFileRoute("/api/admin/templates/")({
 					await requireEditorOrAdmin(request);
 
 					const url = new URL(request.url);
-					const statusParam = url.searchParams.get("status") as
-						| TemplateStatus
-						| null;
+					const statusParam = url.searchParams.get(
+						"status",
+					) as TemplateStatus | null;
 
 					let templates;
 
@@ -60,10 +60,7 @@ export const Route = createFileRoute("/api/admin/templates/")({
 					const body = await request.json();
 					const validatedData = createTemplateSchema.parse(body);
 
-					const newTemplate = await createTemplate(
-						validatedData,
-						user.userId,
-					);
+					const newTemplate = await createTemplate(validatedData, user.userId);
 
 					return json(
 						{

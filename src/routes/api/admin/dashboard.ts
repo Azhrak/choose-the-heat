@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { requireEditorOrAdmin } from "~/lib/auth/authorization";
-import { getUserCountByRole } from "~/lib/db/queries/users";
 import { getTemplateCountByStatus } from "~/lib/db/queries/templates";
+import { getUserCountByRole } from "~/lib/db/queries/users";
 
 interface DashboardStats {
 	templates?: {

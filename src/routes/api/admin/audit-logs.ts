@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { requireAdmin } from "~/lib/auth/authorization";
-import { getAuditLogs, getAuditLogCount } from "~/lib/db/queries/audit";
+import { getAuditLogCount, getAuditLogs } from "~/lib/db/queries/audit";
 import type { AuditEntityType } from "~/lib/db/types";
 
 export const Route = createFileRoute("/api/admin/audit-logs")({

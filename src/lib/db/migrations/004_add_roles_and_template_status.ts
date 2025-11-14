@@ -72,10 +72,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 		.dropColumn("archived_at")
 		.execute();
 
-	await db.schema
-		.alterTable("novel_templates")
-		.dropColumn("status")
-		.execute();
+	await db.schema.alterTable("novel_templates").dropColumn("status").execute();
 
 	// Drop column from users
 	await db.schema.alterTable("users").dropColumn("role").execute();

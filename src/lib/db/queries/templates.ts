@@ -1,6 +1,6 @@
 import { db } from "~/lib/db";
-import type { Trope } from "~/lib/types/preferences";
 import type { TemplateStatus } from "~/lib/db/types";
+import type { Trope } from "~/lib/types/preferences";
 import { createAuditLog, extractChanges } from "./audit";
 
 /**
@@ -264,10 +264,7 @@ export async function deleteTemplate(templateId: string, userId: string) {
 export async function getTemplateCountByStatus() {
 	const result = await db
 		.selectFrom("novel_templates")
-		.select(({ fn }) => [
-			"status",
-			fn.count<number>("id").as("count"),
-		])
+		.select(({ fn }) => ["status", fn.count<number>("id").as("count")])
 		.groupBy("status")
 		.execute();
 

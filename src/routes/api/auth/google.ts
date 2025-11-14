@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { generateOAuthState, generatePKCE, google, storePKCEVerifier } from "~/lib/auth/oauth";
+import {
+	generateOAuthState,
+	generatePKCE,
+	google,
+	storePKCEVerifier,
+} from "~/lib/auth/oauth";
 
 export const Route = createFileRoute("/api/auth/google")({
 	server: {
@@ -7,10 +12,10 @@ export const Route = createFileRoute("/api/auth/google")({
 			GET: async () => {
 				const state = generateOAuthState();
 				const { codeVerifier } = generatePKCE();
-				
+
 				// Store the code verifier for later use in the callback
 				storePKCEVerifier(state, codeVerifier);
-				
+
 				// Arctic's createAuthorizationURL takes the code verifier directly
 				// and generates the challenge internally
 				const url = await google.createAuthorizationURL(state, codeVerifier, {

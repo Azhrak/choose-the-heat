@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
-import { adminUsersQueryKey } from "./useAdminUsersQuery";
 import { adminDashboardQueryKey } from "./useAdminDashboardQuery";
+import { adminUsersQueryKey } from "./useAdminUsersQuery";
 
-export const deleteUserMutationKey = (userId: string) => ["deleteUser", userId] as const;
+export const deleteUserMutationKey = (userId: string) =>
+	["deleteUser", userId] as const;
 
 /**
  * Custom hook to delete a user

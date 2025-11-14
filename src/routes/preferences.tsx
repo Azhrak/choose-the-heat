@@ -5,13 +5,13 @@ import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import {
 	GenresSection,
-	TropesSection,
-	SpiceLevelSection,
 	PacingSection,
 	SceneLengthSection,
+	SpiceLevelSection,
+	TropesSection,
 } from "~/components/preferences";
-import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
 import { useUpdatePreferencesMutation } from "~/hooks/useUpdatePreferencesMutation";
+import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
 import { ApiError } from "~/lib/api/client";
 import type {
 	Genre,
@@ -28,9 +28,13 @@ export const Route = createFileRoute("/preferences")({
 
 function PreferencesPage() {
 	const navigate = useNavigate();
-	const { data: preferencesData, isLoading, error: queryError } = useUserPreferencesQuery();
+	const {
+		data: preferencesData,
+		isLoading,
+		error: queryError,
+	} = useUserPreferencesQuery();
 	const updatePreferences = useUpdatePreferencesMutation();
-	
+
 	const [preferences, setPreferences] = useState<UserPreferences>({
 		genres: [],
 		tropes: [],

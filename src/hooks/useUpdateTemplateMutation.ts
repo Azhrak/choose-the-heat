@@ -11,7 +11,8 @@ interface TemplateFormData {
 	cover_gradient: string;
 }
 
-export const updateTemplateMutationKey = (templateId: string) => ["updateTemplate", templateId] as const;
+export const updateTemplateMutationKey = (templateId: string) =>
+	["updateTemplate", templateId] as const;
 
 /**
  * Custom hook to update a template's information
@@ -22,15 +23,18 @@ export function useUpdateTemplateMutation(templateId: string) {
 
 	return useMutation({
 		mutationKey: updateTemplateMutationKey(templateId),
-		mutationFn: (data: TemplateFormData) => api.patch(`/api/admin/templates/${templateId}`, {
-			title: data.title,
-			description: data.description,
-			base_tropes: data.base_tropes.split(",").map((t) => t.trim()),
-			estimated_scenes: data.estimated_scenes,
-			cover_gradient: data.cover_gradient,
-		}),
+		mutationFn: (data: TemplateFormData) =>
+			api.patch(`/api/admin/templates/${templateId}`, {
+				title: data.title,
+				description: data.description,
+				base_tropes: data.base_tropes.split(",").map((t) => t.trim()),
+				estimated_scenes: data.estimated_scenes,
+				cover_gradient: data.cover_gradient,
+			}),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: adminTemplateQueryKey(templateId) });
+			queryClient.invalidateQueries({
+				queryKey: adminTemplateQueryKey(templateId),
+			});
 			queryClient.invalidateQueries({ queryKey: adminTemplatesQueryKey });
 		},
 	});

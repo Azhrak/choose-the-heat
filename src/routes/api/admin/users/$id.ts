@@ -2,11 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireAdmin } from "~/lib/auth/authorization";
-import {
-	getUserById,
-	updateUser,
-	deleteUser,
-} from "~/lib/db/queries/users";
+import { deleteUser, getUserById, updateUser } from "~/lib/db/queries/users";
 import type { UserRole } from "~/lib/db/types";
 
 // Validation schema for updating a user

@@ -9,9 +9,9 @@ import { Header } from "~/components/Header";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
 import { PageContainer } from "~/components/PageContainer";
-import { TROPE_LABELS, TROPES, type Trope } from "~/lib/types/preferences";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
+import { TROPE_LABELS, TROPES, type Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
 	component: BrowsePage,
@@ -50,22 +50,22 @@ function BrowsePage() {
 						Select a story template and start your personalized journey
 					</p>
 				</div>
-
-			{/* Search Bar */}
-			<div className="mb-6">
-				<div className="relative max-w-2xl mx-auto">
-					<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 z-10" />
-					<FormInput
-						label=""
-						type="text"
-						placeholder="Search for novels..."
-						value={searchQuery}
-						onChange={(e) => setSearchQuery(e.target.value)}
-						containerClassName="mb-0"
-						className="pl-12"
-					/>
-				</div>
-			</div>				{/* Trope Filters */}
+				{/* Search Bar */}
+				<div className="mb-6">
+					<div className="relative max-w-2xl mx-auto">
+						<Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 z-10" />
+						<FormInput
+							label=""
+							type="text"
+							placeholder="Search for novels..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							containerClassName="mb-0"
+							className="pl-12"
+						/>
+					</div>
+				</div>{" "}
+				{/* Trope Filters */}
 				<div className="mb-8">
 					<h2 className="text-sm font-semibold text-slate-700 mb-3">
 						Filter by Tropes:
@@ -86,13 +86,18 @@ function BrowsePage() {
 						))}
 					</div>
 					{selectedTropes.length > 0 && (
-						<Button onClick={() => setSelectedTropes([])} variant="ghost" size="sm" className="mt-3 text-romance-600 hover:text-romance-700">Clear filters</Button>
+						<Button
+							onClick={() => setSelectedTropes([])}
+							variant="ghost"
+							size="sm"
+							className="mt-3 text-romance-600 hover:text-romance-700"
+						>
+							Clear filters
+						</Button>
 					)}
 				</div>
-
 				{/* Loading State */}
 				{isLoading && <LoadingSpinner />}
-
 				{/* Error State */}
 				{error && (
 					<ErrorMessage
@@ -100,7 +105,6 @@ function BrowsePage() {
 						variant="centered"
 					/>
 				)}
-
 				{/* Templates Grid */}
 				{!isLoading && !error && data && (
 					<>
