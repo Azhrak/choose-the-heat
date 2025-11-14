@@ -103,14 +103,7 @@ function NewTemplatePage() {
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div>
 				<div className="mb-6">
-					<button
-						type="button"
-						onClick={() => navigate({ to: "/admin/templates" })}
-						className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
-					>
-						<ArrowLeft className="w-4 h-4" />
-						Back to Templates
-					</button>
+					<Button variant="ghost" onClick={() => navigate({ to: "/admin/templates" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Templates</Button>
 					<h1 className="text-3xl font-bold text-slate-900 mb-2">
 						Create New Template
 					</h1>
@@ -223,27 +216,8 @@ function NewTemplatePage() {
 
 						{/* Actions */}
 						<div className="flex items-center gap-4 pt-4 border-t border-slate-200">
-							<button
-								type="submit"
-								disabled={createMutation.isPending}
-								className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{createMutation.isPending ? (
-									<LoadingSpinner />
-								) : (
-									<>
-										<Save className="w-5 h-5" />
-										Create Template
-									</>
-								)}
-							</button>
-							<button
-								type="button"
-								onClick={() => navigate({ to: "/admin/templates" })}
-								className="px-6 py-2 text-slate-600 hover:text-slate-900 transition-colors"
-							>
-								Cancel
-							</button>
+							<Button type="submit" loading={createMutation.isPending} variant="primary"><Save className="w-5 h-5" />Create Template</Button>
+							<Button type="button" onClick={() => navigate({ to: "/admin/templates" })} variant="ghost">Cancel</Button>
 						</div>
 					</form>
 				</div>

@@ -202,14 +202,7 @@ function EditTemplatePage() {
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div>
 				<div className="mb-6">
-					<button
-						type="button"
-						onClick={() => navigate({ to: "/admin/templates" })}
-						className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
-					>
-						<ArrowLeft className="w-4 h-4" />
-						Back to Templates
-					</button>
+					<Button variant="ghost" onClick={() => navigate({ to: "/admin/templates" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Templates</Button>
 					<div className="flex items-start justify-between">
 						<div>
 							<h1 className="text-3xl font-bold text-slate-900 mb-2">
@@ -324,20 +317,7 @@ function EditTemplatePage() {
 
 						{/* Save Button */}
 						<div className="pt-4 border-t border-slate-200">
-							<button
-								type="submit"
-								disabled={updateMutation.isPending}
-								className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{updateMutation.isPending ? (
-									<LoadingSpinner />
-								) : (
-									<>
-										<Save className="w-5 h-5" />
-										Save Changes
-									</>
-								)}
-							</button>
+							<Button type="submit" loading={updateMutation.isPending} variant="primary"><Save className="w-5 h-5" />Save Changes</Button>
 						</div>
 					</form>
 

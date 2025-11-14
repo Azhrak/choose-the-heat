@@ -70,14 +70,7 @@ function TemplatesListPage() {
 							Manage novel templates, including drafts and archived content.
 						</p>
 					</div>
-					<button
-						type="button"
-						onClick={() => navigate({ to: "/admin/templates/new" })}
-						className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-					>
-						<Plus className="w-5 h-5" />
-						New Template
-					</button>
+					<Button type="button" onClick={() => navigate({ to: "/admin/templates/new" })} variant="primary"><Plus className="w-5 h-5" />New Template</Button>
 				</div>
 
 				{/* Statistics */}

@@ -9,6 +9,7 @@ import {
 	Sparkles,
 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
@@ -215,35 +216,26 @@ function ReadingPage() {
 									</div>
 								</button>
 							))}
-						</div>
-
-						<button
-							type="button"
-							onClick={handleMakeChoice}
-							disabled={selectedOption === null || choiceMutation.isPending}
-							className="w-full mt-6 py-3 px-6 bg-linear-to-r from-rose-600 to-purple-600 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:from-rose-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2"
-						>
-							{choiceMutation.isPending ? (
-								<>
-									<Loader2 className="w-5 h-5 animate-spin" />
-									<span>Making your choice...</span>
-								</>
-							) : (
-								<>
-									<span>Continue Story</span>
-									<ChevronRight className="w-5 h-5" />
-								</>
-							)}
-						</button>
 					</div>
-				)}
 
-				{/* No Choice Point - Continue to Next Scene */}
+					<Button
+						type="button"
+						onClick={handleMakeChoice}
+						disabled={selectedOption === null}
+						loading={choiceMutation.isPending}
+						variant="primary"
+						className="w-full mt-6 bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
+					>
+						<span>Continue Story</span>
+						<ChevronRight className="w-5 h-5" />
+					</Button>
+				</div>
+			)}				{/* No Choice Point - Continue to Next Scene */}
 				{!choicePoint && !isLastScene && (
-					<div className="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
-						<p className="text-gray-600 mb-6">Ready to continue?</p>
-						<button
-							type="button"
+				<div className="bg-white rounded-xl shadow-lg p-8 mb-6 text-center">
+					<p className="text-gray-600 mb-6">Ready to continue?</p>
+					<Button
+						type="button"
 						onClick={async () => {
 							const nextScene = scene.number + 1;
 							// Update story progress in database
@@ -255,11 +247,12 @@ function ReadingPage() {
 								console.error('Failed to update scene:', error);
 							}
 						}}
-							className="px-8 py-3 bg-linear-to-r from-rose-600 to-purple-600 text-white font-semibold rounded-lg hover:from-rose-700 hover:to-purple-700 transition-all inline-flex items-center gap-2"
-						>
-							<span>Continue to Next Scene</span>
-							<ChevronRight className="w-5 h-5" />
-						</button>
+						variant="primary"
+						className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
+					>
+						<span>Continue to Next Scene</span>
+						<ChevronRight className="w-5 h-5" />
+					</Button>
 					</div>
 				)}
 
@@ -283,24 +276,28 @@ function ReadingPage() {
 
 				{/* Navigation */}
 				<div className="flex items-center justify-between mt-6">
-					<button
+					<Button
 						type="button"
 						onClick={() => handleNavigateScene(scene.number - 1)}
 						disabled={scene.number === 1}
-						className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						variant="ghost"
+						size="sm"
+						className="text-gray-600 hover:text-rose-600"
 					>
 						<ChevronLeft className="w-5 h-5" />
 						Previous Scene
-					</button>
+					</Button>
 
-					<button
+					<Button
 						type="button"
 						onClick={() => handleNavigateScene(scene.number + 1)}
 						disabled={
 							scene.number + 1 > story.currentScene ||
 							scene.number >= story.estimatedScenes
 						}
-						className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+						variant="ghost"
+						size="sm"
+						className="text-gray-600 hover:text-rose-600"
 						title={
 							scene.number + 1 > story.currentScene
 								? "Make a choice to unlock the next scene"
@@ -309,7 +306,7 @@ function ReadingPage() {
 					>
 						Next Scene
 						<ChevronRight className="w-5 h-5" />
-					</button>
+					</Button>
 				</div>
 			</main>
 		</div>

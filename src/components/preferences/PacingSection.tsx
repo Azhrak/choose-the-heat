@@ -3,6 +3,7 @@ import {
 	PACING_OPTIONS,
 	type PacingOption,
 } from "~/lib/types/preferences";
+import { RadioButton } from "~/components/RadioButton";
 
 interface PacingSectionProps {
 	selectedPacing: PacingOption;
@@ -20,38 +21,18 @@ export function PacingSection({ selectedPacing, onSelect }: PacingSectionProps) 
 			</p>
 			<div className="space-y-3">
 				{PACING_OPTIONS.map((pacing) => (
-					<button
+					<RadioButton
 						key={pacing}
-						type="button"
+						selected={selectedPacing === pacing}
 						onClick={() => onSelect(pacing)}
-						className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-							selectedPacing === pacing
-								? "border-romance-500 bg-romance-50"
-								: "border-slate-200 hover:border-romance-300"
-						}`}
 					>
-						<div className="flex items-center justify-between">
-							<div>
-								<div className="font-semibold text-slate-900">
-									{PACING_LABELS[pacing].label}
-								</div>
-								<p className="text-sm text-slate-600">
-									{PACING_LABELS[pacing].description}
-								</p>
-							</div>
-							<div
-								className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-									selectedPacing === pacing
-										? "border-romance-500 bg-romance-500"
-										: "border-slate-300"
-								}`}
-							>
-								{selectedPacing === pacing && (
-									<div className="w-2 h-2 bg-white rounded-full" />
-								)}
-							</div>
+						<div className="font-semibold text-slate-900">
+							{PACING_LABELS[pacing].label}
 						</div>
-					</button>
+						<p className="text-sm text-slate-600">
+							{PACING_LABELS[pacing].description}
+						</p>
+					</RadioButton>
 				))}
 			</div>
 		</div>

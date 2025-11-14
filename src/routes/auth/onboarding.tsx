@@ -7,6 +7,8 @@ import {
 	Heart,
 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "~/components/Button";
+import { RadioButton } from "~/components/RadioButton";
 import { api, ApiError } from "~/lib/api/client";
 import {
 	GENRE_LABELS,
@@ -293,37 +295,18 @@ function OnboardingPage() {
 									</h3>
 									<div className="space-y-3">
 										{PACING_OPTIONS.map((pacing) => (
-											<button
+											<RadioButton
 												key={pacing}
+												selected={preferences.pacing === pacing}
 												onClick={() => handlePacingChange(pacing)}
-												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-													preferences.pacing === pacing
-														? "border-romance-500 bg-romance-50"
-														: "border-slate-200 hover:border-romance-300"
-												}`}
 											>
-												<div className="flex items-center justify-between">
-													<div>
-														<div className="font-semibold text-slate-900">
-															{PACING_LABELS[pacing].label}
-														</div>
-														<p className="text-sm text-slate-600">
-															{PACING_LABELS[pacing].description}
-														</p>
-													</div>
-													<div
-														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-															preferences.pacing === pacing
-																? "border-romance-500 bg-romance-500"
-																: "border-slate-300"
-														}`}
-													>
-														{preferences.pacing === pacing && (
-															<div className="w-2 h-2 bg-white rounded-full" />
-														)}
-													</div>
+												<div className="font-semibold text-slate-900">
+													{PACING_LABELS[pacing].label}
 												</div>
-											</button>
+												<p className="text-sm text-slate-600">
+													{PACING_LABELS[pacing].description}
+												</p>
+											</RadioButton>
 										))}
 									</div>
 								</div>
@@ -335,40 +318,21 @@ function OnboardingPage() {
 									</h3>
 									<div className="space-y-3">
 										{SCENE_LENGTH_OPTIONS.map((length) => (
-											<button
+											<RadioButton
 												key={length}
+												selected={preferences.sceneLength === length}
 												onClick={() => handleSceneLengthChange(length)}
-												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-													preferences.sceneLength === length
-														? "border-romance-500 bg-romance-50"
-														: "border-slate-200 hover:border-romance-300"
-												}`}
 											>
-												<div className="flex items-center justify-between">
-													<div className="flex-1">
-														<div className="font-semibold text-slate-900">
-															{SCENE_LENGTH_LABELS[length].label}
-														</div>
-														<p className="text-sm text-slate-600">
-															{SCENE_LENGTH_LABELS[length].description}
-														</p>
-														<p className="text-xs text-slate-500 mt-1">
-															{SCENE_LENGTH_LABELS[length].wordCount}
-														</p>
-													</div>
-													<div
-														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-															preferences.sceneLength === length
-																? "border-romance-500 bg-romance-500"
-																: "border-slate-300"
-														}`}
-													>
-														{preferences.sceneLength === length && (
-															<div className="w-2 h-2 bg-white rounded-full" />
-														)}
-													</div>
+												<div className="font-semibold text-slate-900">
+													{SCENE_LENGTH_LABELS[length].label}
 												</div>
-											</button>
+												<p className="text-sm text-slate-600">
+													{SCENE_LENGTH_LABELS[length].description}
+												</p>
+												<p className="text-xs text-slate-500 mt-1">
+													{SCENE_LENGTH_LABELS[length].wordCount}
+												</p>
+											</RadioButton>
 										))}
 									</div>
 								</div>
@@ -376,42 +340,39 @@ function OnboardingPage() {
 						)}
 					</div>
 
-					{/* Navigation Buttons */}
-					<div className="flex justify-between">
-						<button
-							onClick={handleBack}
-							disabled={step === 1}
-							className={`flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${
-								step === 1
-									? "invisible"
-									: "border-2 border-slate-300 text-slate-700 hover:bg-slate-50"
-							}`}
-						>
-							<ChevronLeft className="w-5 h-5 mr-1" />
-							Back
-						</button>
+				{/* Navigation Buttons */}
+				<div className="flex justify-between">
+					<Button
+						onClick={handleBack}
+						disabled={step === 1}
+						variant="secondary"
+						className={step === 1 ? "invisible" : ""}
+					>
+						<ChevronLeft className="w-5 h-5" />
+						Back
+					</Button>
 
-						{step < 3 ? (
-							<button
-								onClick={handleNext}
-								className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors"
-							>
-								Next
-								<ChevronRight className="w-5 h-5 ml-1" />
-							</button>
-						) : (
-							<button
-								onClick={handleSubmit}
-								disabled={isSubmitting}
-								className="flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-							>
-								{isSubmitting ? "Saving..." : "Complete Setup"}
-								<ChevronRight className="w-5 h-5 ml-1" />
-							</button>
-						)}
-					</div>
+					{step < 3 ? (
+						<Button
+							onClick={handleNext}
+							variant="primary"
+						>
+							Next
+							<ChevronRight className="w-5 h-5" />
+						</Button>
+					) : (
+						<Button
+							onClick={handleSubmit}
+							loading={isSubmitting}
+							variant="primary"
+						>
+							Complete Setup
+							<ChevronRight className="w-5 h-5" />
+						</Button>
+					)}
 				</div>
 			</div>
 		</div>
+	</div>
 	);
 }

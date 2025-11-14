@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Clock, Sparkles, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Button } from "~/components/Button";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
@@ -69,9 +70,7 @@ function LibraryPage() {
 					>
 						<div className="flex items-center gap-2">
 							<Clock className="w-5 h-5" />
-							In Progress
-						</div>
-					</button>
+							In Progress</div></button>
 					<button
 						onClick={() => setActiveTab("completed")}
 						className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
@@ -80,14 +79,12 @@ function LibraryPage() {
 								: "bg-white text-slate-700 hover:bg-slate-50"
 						}`}
 					>
-						<div className="flex items-center gap-2">
-							<Sparkles className="w-5 h-5" />
-							Completed
-						</div>
-					</button>
+				<div className="flex items-center gap-2">
+					<Sparkles className="w-5 h-5" />
+					Completed
 				</div>
-
-				{/* Loading State */}
+			</button>
+		</div>				{/* Loading State */}
 				{isLoading && <LoadingSpinner />}
 
 				{/* Error State */}
@@ -160,23 +157,9 @@ function LibraryPage() {
 												? "Continue Reading"
 												: "Read Again"}
 										</Link>
-										<button
-											onClick={() =>
-												handleDeleteClick(
-													story.id,
-													story.story_title || story.template.title,
-												)
-											}
-											disabled={deletingId === story.id}
-											className="px-4 py-2 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-											title="Delete story"
-										>
-											{deletingId === story.id ? (
-												<div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-											) : (
-												<Trash2 className="w-5 h-5" />
-											)}
-										</button>
+										<Button onClick={() => handleDeleteClick(story.id, story.story_title || story.template.title)} loading={deletingId === story.id} variant="danger" size="sm" className="bg-red-50 text-red-600 hover:bg-red-100" title="Delete story">
+											<Trash2 className="w-5 h-5" />
+										</Button>
 									</div>
 								</div>
 							</div>

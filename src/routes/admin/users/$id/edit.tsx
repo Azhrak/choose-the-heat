@@ -157,14 +157,7 @@ function EditUserPage() {
 		<AdminLayout currentPath="/admin/users" userRole={currentUser.role}>
 			<div>
 				<div className="mb-6">
-					<button
-						type="button"
-						onClick={() => navigate({ to: "/admin/users" })}
-						className="flex items-center gap-2 text-slate-600 hover:text-slate-900 mb-4"
-					>
-						<ArrowLeft className="w-4 h-4" />
-						Back to Users
-					</button>
+					<Button variant="ghost" onClick={() => navigate({ to: "/admin/users" })} className="mb-4"><ArrowLeft className="w-4 h-4" />Back to Users</Button>
 					<div className="flex items-start justify-between">
 						<div>
 							<h1 className="text-3xl font-bold text-slate-900 mb-2">
@@ -314,14 +307,7 @@ function EditUserPage() {
 									their stories and choices will remain in the database. This
 									action cannot be undone.
 								</p>
-								<button
-									type="button"
-									onClick={() => setShowDeleteDialog(true)}
-									className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-								>
-									<Trash2 className="w-4 h-4" />
-									Delete User
-								</button>
+								<Button type="button" onClick={() => setShowDeleteDialog(true)} variant="danger" size="sm"><Trash2 className="w-4 h-4" />Delete User</Button>
 							</div>
 						</div>
 					)}

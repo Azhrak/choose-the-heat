@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { Button } from "~/components/Button";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
@@ -85,12 +86,7 @@ function BrowsePage() {
 						))}
 					</div>
 					{selectedTropes.length > 0 && (
-						<button
-							onClick={() => setSelectedTropes([])}
-							className="mt-3 text-sm text-romance-600 hover:text-romance-700 font-medium"
-						>
-							Clear filters
-						</button>
+						<Button onClick={() => setSelectedTropes([])} variant="ghost" size="sm" className="mt-3 text-romance-600 hover:text-romance-700">Clear filters</Button>
 					)}
 				</div>
 
