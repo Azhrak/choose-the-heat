@@ -5,6 +5,7 @@ import {
 	ChevronRight,
 	Flame,
 	Home,
+	Info,
 	Sparkles,
 } from "lucide-react";
 import { useState } from "react";
@@ -112,9 +113,20 @@ function ReadingPage() {
 							<ChevronLeft className="w-5 h-5" />
 							Back to Library
 						</Link>
-						<div className="flex items-center gap-2 text-sm text-gray-600">
-							<BookOpen className="w-4 h-4" />
-							Scene {scene.number} of {story.estimatedScenes}
+						<div className="flex items-center gap-4">
+							<div className="flex items-center gap-2 text-sm text-gray-600">
+								<BookOpen className="w-4 h-4" />
+								Scene {scene.number} of {story.estimatedScenes}
+							</div>
+							<Link
+								to="/story/$id/info"
+								params={{ id }}
+								className="flex items-center gap-1 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+								title="View story info"
+							>
+								<Info className="w-4 h-4" />
+								Info
+							</Link>
 						</div>
 					</div>
 

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Trash2 } from "lucide-react";
+import { BookOpen, Info, Trash2 } from "lucide-react";
 import { Button } from "~/components/Button";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 
@@ -62,7 +62,10 @@ export function StoryCard({
 
 				{/* Progress */}
 				<div className="mb-4">
-					<StoryProgressBar currentScene={currentScene} totalScenes={totalScenes} />
+					<StoryProgressBar
+						currentScene={currentScene}
+						totalScenes={totalScenes}
+					/>
 				</div>
 
 				{/* Actions */}
@@ -73,6 +76,14 @@ export function StoryCard({
 						className="flex-1 px-4 py-2 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 transition-colors text-center"
 					>
 						{status === "in-progress" ? "Continue Reading" : "Read Again"}
+					</Link>
+					<Link
+						to="/story/$id/info"
+						params={{ id }}
+						className="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center"
+						title="Story info"
+					>
+						<Info className="w-5 h-5" />
 					</Link>
 					<Button
 						onClick={() => onDelete(id, displayTitle)}

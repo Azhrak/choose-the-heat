@@ -35,6 +35,7 @@ export interface UserStory {
 	user_id: string;
 	template_id: string;
 	story_title: string | null;
+	preferences: unknown; // JSON field containing UserPreferences
 	current_scene: number;
 	status: StoryStatus;
 	created_at: string;

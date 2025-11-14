@@ -28,6 +28,7 @@ import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminTemplatesIndexRouteImport } from './routes/admin/templates/index'
 import { Route as AdminAuditLogsIndexRouteImport } from './routes/admin/audit-logs/index'
 import { Route as StoryIdReadRouteImport } from './routes/story/$id.read'
+import { Route as StoryIdInfoRouteImport } from './routes/story/$id.info'
 import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
 import { Route as ApiStoriesUserRouteImport } from './routes/api/stories/user'
 import { Route as ApiStoriesIdRouteImport } from './routes/api/stories/$id'
@@ -144,6 +145,11 @@ const AdminAuditLogsIndexRoute = AdminAuditLogsIndexRouteImport.update({
 const StoryIdReadRoute = StoryIdReadRouteImport.update({
   id: '/story/$id/read',
   path: '/story/$id/read',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryIdInfoRoute = StoryIdInfoRouteImport.update({
+  id: '/story/$id/info',
+  path: '/story/$id/info',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTemplatesIdRoute = ApiTemplatesIdRouteImport.update({
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
@@ -326,6 +333,7 @@ export interface FileRoutesByTo {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
@@ -370,6 +378,7 @@ export interface FileRoutesById {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs/': typeof AdminAuditLogsIndexRoute
   '/admin/templates/': typeof AdminTemplatesIndexRoute
@@ -415,6 +424,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
     | '/admin/templates'
@@ -458,6 +468,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
     | '/admin/templates'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs/'
     | '/admin/templates/'
@@ -545,6 +557,7 @@ export interface RootRouteChildren {
   ApiStoriesIdRoute: typeof ApiStoriesIdRouteWithChildren
   ApiStoriesUserRoute: typeof ApiStoriesUserRoute
   ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
+  StoryIdInfoRoute: typeof StoryIdInfoRoute
   StoryIdReadRoute: typeof StoryIdReadRoute
   AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
   AdminTemplatesIndexRoute: typeof AdminTemplatesIndexRoute
@@ -694,6 +707,13 @@ declare module '@tanstack/react-router' {
       path: '/story/$id/read'
       fullPath: '/story/$id/read'
       preLoaderRoute: typeof StoryIdReadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/$id/info': {
+      id: '/story/$id/info'
+      path: '/story/$id/info'
+      fullPath: '/story/$id/info'
+      preLoaderRoute: typeof StoryIdInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/templates/$id': {
@@ -903,6 +923,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiStoriesIdRoute: ApiStoriesIdRouteWithChildren,
   ApiStoriesUserRoute: ApiStoriesUserRoute,
   ApiTemplatesIdRoute: ApiTemplatesIdRoute,
+  StoryIdInfoRoute: StoryIdInfoRoute,
   StoryIdReadRoute: StoryIdReadRoute,
   AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,
   AdminTemplatesIndexRoute: AdminTemplatesIndexRoute,
