@@ -30,7 +30,14 @@ export const Route = createRootRoute({
 					"Create your perfect romance novel with AI-powered storytelling",
 			},
 		],
-		links: [{ rel: "stylesheet", href: globalStyles }],
+		links: [
+			{ rel: "stylesheet", href: globalStyles },
+			{
+				rel: "icon",
+				type: "image/png",
+				href: "/spicy-tales-favicon-64x64.png",
+			},
+		],
 	}),
 	component: RootComponent,
 	notFoundComponent: NotFoundComponent,

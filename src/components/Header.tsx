@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Heart, LogOut, Menu, Shield, User, X } from "lucide-react";
+import { LogOut, Menu, Shield, User, X } from "lucide-react";
 import { useState } from "react";
 import { api } from "~/lib/api/client";
 import type { UserRole } from "~/lib/db/types";
@@ -30,7 +30,11 @@ export function Header({ currentPath = "", userRole }: HeaderProps) {
 				<div className="flex items-center justify-between">
 					{/* Logo */}
 					<Link to="/browse" className="flex items-center gap-2">
-						<Heart className="w-8 h-8 text-romance-600" fill="currentColor" />
+						<img
+							src="/spicy-tales-logo-200x200.png"
+							alt="Spicy Tales Logo"
+							className="w-8 h-8"
+						/>
 						<span className="text-xl font-bold text-slate-900">
 							Spicy Tales
 						</span>
