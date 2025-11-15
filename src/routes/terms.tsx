@@ -11,22 +11,24 @@ function TermsOfService() {
 	return (
 		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
 			<div className="container mx-auto px-4 py-12">
-				<div className="max-w-4xl mx-auto">
-					{/* Back Button */}
-					<Link
-						to="/"
-						className="inline-flex items-center gap-2 text-romance-600 hover:text-romance-700 mb-8 font-medium"
-					>
-						<ArrowLeft className="w-4 h-4" />
-						Back to Home
-					</Link>
+				<div className="max-w-4xl mx-auto space-y-8">
+					<div className="space-y-8">
+						{/* Back Button */}
+						<Link
+							to="/"
+							className="inline-flex items-center gap-2 text-romance-600 hover:text-romance-700 font-medium"
+						>
+							<ArrowLeft className="w-4 h-4" />
+							Back to Home
+						</Link>
 
-					{/* Header */}
-					<div className="bg-white rounded-lg shadow-sm p-8 mb-8 space-y-4">
-						<Heading level="h1" size="page">
-							Terms of Service
-						</Heading>
-						<p className="text-slate-600">Last updated: November 15, 2025</p>
+						{/* Header */}
+						<div className="bg-white rounded-lg shadow-sm p-8 space-y-4">
+							<Heading level="h1" size="page">
+								Terms of Service
+							</Heading>
+							<p className="text-slate-600">Last updated: November 15, 2025</p>
+						</div>
 					</div>
 
 					{/* Content */}
