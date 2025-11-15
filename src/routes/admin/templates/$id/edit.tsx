@@ -19,6 +19,7 @@ import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -277,10 +278,8 @@ function EditTemplatePage() {
 						Back to Templates
 					</Button>
 					<div className="flex items-start justify-between">
-						<div>
-							<h1 className="text-3xl font-bold text-slate-900 mb-2">
-								Edit Template
-							</h1>
+						<div className="flex flex-col gap-2">
+							<Heading level="h1">Edit Template</Heading>
 							<p className="text-slate-600">
 								Update template details and manage its status.
 							</p>

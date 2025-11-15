@@ -5,6 +5,7 @@ import { NoPermissions } from "~/components/admin/NoPermissions";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormTextarea } from "~/components/FormTextarea";
+import { Heading } from "~/components/Heading";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
 export const Route = createFileRoute("/admin/templates/bulk-import")({
@@ -203,14 +204,16 @@ function BulkImportPage() {
 	return (
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div className="p-6 max-w-6xl">
-				<h1 className="text-3xl font-bold mb-2">Bulk Import Templates</h1>
-				<p className="text-gray-600 mb-6">
-					Import multiple story templates with choice points using JSON format
-				</p>
+				<div className="flex flex-col gap-2 mb-6">
+					<Heading level="h1">Bulk Import Templates</Heading>
+					<p className="text-gray-600">
+						Import multiple story templates with choice points using JSON format
+					</p>
+				</div>
 
-				<div className="bg-white rounded-lg shadow p-6 mb-6">
-					<div className="flex items-center justify-between mb-4">
-						<h2 className="text-xl font-semibold">JSON Template</h2>
+				<div className="bg-white rounded-lg shadow p-6 mb-6 flex flex-col gap-4">
+					<div className="flex items-center justify-between">
+						<Heading level="h2">JSON Template</Heading>
 						<div className="space-x-2">
 							<Button
 								variant="secondary"
@@ -301,8 +304,8 @@ function BulkImportPage() {
 					</div>
 				</div>
 
-				<div className="bg-white rounded-lg shadow p-6">
-					<h2 className="text-xl font-semibold mb-4">Import Templates</h2>
+				<div className="bg-white rounded-lg shadow p-6 flex flex-col gap-4">
+					<Heading level="h2">Import Templates</Heading>
 
 					<FormTextarea
 						label="Paste JSON Data"

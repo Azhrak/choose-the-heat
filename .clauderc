@@ -18,17 +18,36 @@ All AI agents MUST read and follow the coding practices defined in:
    - ❌ NO duplicate interface definitions - use shared types
    - ❌ NO inline form inputs - use `FormInput` component
    - ❌ NO repeated query patterns - create custom hooks (3+ uses)
+   - ❌ NO margins on reusable components - use parent layout with gap instead
    - ✅ YES to proper error handling on all API calls
    - ✅ YES to JSDoc documentation on hooks and complex functions
    - ✅ YES to extracting reusable code
+   - ✅ YES to using gap/space-y for spacing (parent controls layout)
 
-3. **Pattern Enforcement:**
+3. **Layout and Spacing Principles:**
+   - Components should NEVER set their own margins (mb-, mt-, mx-, my-)
+   - Parent layouts control spacing using `gap`, `space-y`, `space-x`, or specific margins
+   - Exception: Padding (p-, px-, py-) is allowed for components with backgrounds
+   - Use flexbox/grid with gap for consistent spacing:
+
+     ```tsx
+     // ✅ Good - parent controls spacing
+     <div className="flex flex-col gap-4">
+       <Heading level="h1">Title</Heading>
+       <p>Description</p>
+     </div>
+
+     // ❌ Bad - component sets its own margin
+     const Heading = () => <h1 className="mb-4">Title</h1>
+     ```
+
+4. **Pattern Enforcement:**
    - Query/mutation used 3+ times → Extract to custom hook in `src/hooks/`
    - UI pattern used 2+ times → Extract to component in `src/components/`
    - Type used in 2+ files → Add to `src/lib/api/types.ts`
    - Hardcoded values used 2+ times → Extract to `src/lib/constants/`
 
-4. **Import Shared Resources:**
+5. **Import Shared Resources:**
    ```typescript
    // Always prefer shared types
    import type { User, Template, UserStory } from "~/lib/api/types";

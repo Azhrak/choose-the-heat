@@ -6,6 +6,7 @@ import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useCreateTemplateMutation } from "~/hooks/useCreateTemplateMutation";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -142,12 +143,12 @@ function NewTemplatePage() {
 						<ArrowLeft className="w-4 h-4" />
 						Back to Templates
 					</Button>
-					<h1 className="text-3xl font-bold text-slate-900 mb-2">
-						Create New Template
-					</h1>
-					<p className="text-slate-600">
-						Create a new novel template. It will be saved as a draft.
-					</p>
+					<div className="flex flex-col gap-2">
+						<Heading level="h1">Create New Template</Heading>
+						<p className="text-slate-600">
+							Create a new novel template. It will be saved as a draft.
+						</p>
+					</div>
 				</div>
 
 				<div className="max-w-3xl">

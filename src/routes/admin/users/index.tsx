@@ -9,6 +9,7 @@ import {
 	RoleBadge,
 } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import {
 	useAdminUsersPaginatedQuery,
@@ -137,10 +138,8 @@ function UsersListPage() {
 	return (
 		<AdminLayout currentPath="/admin/users" userRole={role}>
 			<div>
-				<div className="mb-6">
-					<h1 className="text-3xl font-bold text-slate-900 mb-2">
-						User Management
-					</h1>
+				<div className="mb-6 flex flex-col gap-2">
+					<Heading level="h1">User Management</Heading>
 					<p className="text-slate-600">
 						Manage user accounts, roles, and permissions. Admin access only.
 					</p>

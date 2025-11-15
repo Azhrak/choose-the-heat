@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -102,8 +103,8 @@ function AuditLogsPage() {
 	return (
 		<AdminLayout currentPath="/admin/audit-logs" userRole={role}>
 			<div>
-				<div className="mb-6">
-					<h1 className="text-3xl font-bold text-slate-900 mb-2">Audit Logs</h1>
+				<div className="mb-6 flex flex-col gap-2">
+					<Heading level="h1">Audit Logs</Heading>
 					<p className="text-slate-600">
 						View all administrative actions and changes. Logs are retained for
 						90 days.

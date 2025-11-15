@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Archive, Eye, FilePlus, FileText, Users } from "lucide-react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useAdminDashboardQuery } from "~/hooks/useAdminDashboardQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -62,17 +63,17 @@ function AdminDashboard() {
 	return (
 		<AdminLayout currentPath="/admin" userRole={role}>
 			<div>
-				<h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h1>
-				<p className="text-slate-600 mb-8">
-					Welcome to the admin panel. Here's an overview of your site.
-				</p>
+				<div className="flex flex-col gap-2 mb-8">
+					<Heading level="h1">Dashboard</Heading>
+					<p className="text-slate-600">
+						Welcome to the admin panel. Here's an overview of your site.
+					</p>
+				</div>
 
 				{/* Template Statistics (visible to editors and admins) */}
 				{dashboardStats.templates && (
-					<div className="mb-8">
-						<h2 className="text-xl font-semibold text-slate-900 mb-4">
-							Template Statistics
-						</h2>
+					<div className="mb-8 flex flex-col gap-4">
+						<Heading level="h2">Template Statistics</Heading>
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 							<StatCard
 								title="Total Templates"
@@ -104,10 +105,8 @@ function AdminDashboard() {
 
 				{/* User Statistics (visible to admins only) */}
 				{dashboardStats.users && (
-					<div>
-						<h2 className="text-xl font-semibold text-slate-900 mb-4">
-							User Statistics
-						</h2>
+					<div className="flex flex-col gap-4">
+						<Heading level="h2">User Statistics</Heading>
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 							<StatCard
 								title="Total Users"
@@ -150,14 +149,18 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
 	return (
-		<div className="bg-white rounded-lg border border-slate-200 p-6">
-			<div className="flex items-center justify-between mb-4">
+		<div className="bg-white rounded-lg border border-slate-200 p-6 flex flex-col gap-4">
+			<div className="flex items-center justify-between">
 				<div className={`p-3 rounded-lg ${color} bg-opacity-10`}>
 					<Icon className={`w-6 h-6 ${color.replace("bg-", "text-")}`} />
 				</div>
 			</div>
-			<h3 className="text-sm font-medium text-slate-600 mb-1">{title}</h3>
-			<p className="text-3xl font-bold text-slate-900">{value}</p>
+			<div className="flex flex-col gap-1">
+				<Heading level="h3" className="text-slate-600">
+					{title}
+				</Heading>
+				<p className="text-3xl font-bold text-slate-900">{value}</p>
+			</div>
 		</div>
 	);
 }

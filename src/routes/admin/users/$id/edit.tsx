@@ -10,6 +10,7 @@ import {
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { useAdminUserQuery } from "~/hooks/useAdminUserQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -174,10 +175,8 @@ function EditUserPage() {
 						Back to Users
 					</Button>
 					<div className="flex items-start justify-between">
-						<div>
-							<h1 className="text-3xl font-bold text-slate-900 mb-2">
-								Edit User
-							</h1>
+						<div className="flex flex-col gap-2">
+							<Heading level="h1">Edit User</Heading>
 							<p className="text-slate-600">
 								Update user details and manage their role.
 							</p>
@@ -315,10 +314,10 @@ function EditUserPage() {
 					</form>{" "}
 					{/* Danger Zone */}
 					{!isEditingSelf && (
-						<div className="mt-8 pt-8 border-t border-red-200">
-							<h2 className="text-xl font-semibold text-red-900 mb-4">
+						<div className="mt-8 pt-8 border-t border-red-200 flex flex-col gap-4">
+							<Heading level="h2" variant="danger">
 								Danger Zone
-							</h2>
+							</Heading>
 							<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 								<p className="text-sm text-red-800 mb-4">
 									Deleting a user is permanent and will remove their account,

@@ -20,6 +20,7 @@ import {
 } from "~/components/admin";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import {
 	useAdminTemplatesPaginatedQuery,
@@ -258,10 +259,8 @@ function TemplatesListPage() {
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div>
 				<div className="flex items-center justify-between mb-6">
-					<div>
-						<h1 className="text-3xl font-bold text-slate-900 mb-2">
-							Template Management
-						</h1>
+					<div className="flex flex-col gap-2">
+						<Heading level="h1">Template Management</Heading>
 						<p className="text-slate-600">
 							Manage novel templates, including drafts and archived content.
 						</p>
