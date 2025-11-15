@@ -154,7 +154,10 @@ function ReadingPage() {
 				<div className="bg-white rounded-xl shadow-lg p-8 mb-6">
 					<div className="prose prose-lg max-w-none">
 						{scene.content.split("\n\n").map((paragraph) => (
-							<p key={paragraph} className="mb-4 text-gray-800 leading-relaxed">
+							<p
+								key={paragraph}
+								className="mb-4 text-gray-800 leading-relaxed font-garamond"
+							>
 								{paragraph}
 							</p>
 						))}

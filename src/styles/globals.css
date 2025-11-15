@@ -1,49 +1,56 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 @source "../../src";
 
 @theme {
-	/* Import slate colors */
-	--color-slate-50: #f8fafc;
-	--color-slate-100: #f1f5f9;
-	--color-slate-200: #e2e8f0;
-	--color-slate-300: #cbd5e1;
-	--color-slate-400: #94a3b8;
-	--color-slate-500: #64748b;
-	--color-slate-600: #475569;
-	--color-slate-700: #334155;
-	--color-slate-800: #1e293b;
-	--color-slate-900: #0f172a;
-	--color-slate-950: #020617;
+  /* Import slate colors */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
 
-	/* Custom romance colors */
-	--color-romance-50: #fdf2f8;
-	--color-romance-100: #fce7f3;
-	--color-romance-200: #fbcfe8;
-	--color-romance-300: #f9a8d4;
-	--color-romance-400: #f472b6;
-	--color-romance-500: #ec4899;
-	--color-romance-600: #db2777;
-	--color-romance-700: #be185d;
-	--color-romance-800: #9d174d;
-	--color-romance-900: #831843;
+  /* Custom romance colors */
+  --color-romance-50: #fdf2f8;
+  --color-romance-100: #fce7f3;
+  --color-romance-200: #fbcfe8;
+  --color-romance-300: #f9a8d4;
+  --color-romance-400: #f472b6;
+  --color-romance-500: #ec4899;
+  --color-romance-600: #db2777;
+  --color-romance-700: #be185d;
+  --color-romance-800: #9d174d;
+  --color-romance-900: #831843;
 }
 
 body {
-	background-color: var(--color-slate-50);
-	color: var(--color-slate-900);
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
 }
 
 .prose-romance {
-	font-size: 1.125rem;
-	line-height: 1.75;
-	color: var(--color-slate-800);
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--color-slate-800);
 }
 
 .prose-romance p {
-	margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .prose-romance p:last-child {
-	margin-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* EB Garamond font for story text */
+.font-garamond {
+  font-family: "EB Garamond", serif;
+  font-size: 1.25rem;
 }
