@@ -267,13 +267,13 @@ ${characterContext}${contextSection}${choiceImpact}${choiceDirective}Write the s
 
 After the narrative, include a metadata section:
 <SCENE_META>
-emotional_beat: [brief description, e.g., "tentative trust building"]
-tension_threads: [unresolved tensions, comma-separated, e.g., "secret identity, past trauma"]
+emotional_beat: [brief description, e.g., tentative trust building]
+tension_threads: [unresolved tensions, comma-separated, e.g., secret identity, past trauma]
 relationship_progress: [numeric -5 to +5, where negative is regression, positive is advancement]
 key_moment: [single defining moment of this scene in 5-8 words]
 key_characters: [comma-separated list of characters who appear in this scene]
 pov_character: [name of the POV character for this scene]
-setting_location: [where this scene takes place, e.g., "coffee shop", "protagonist's apartment"]
+setting_location: [where this scene takes place, e.g., coffee shop, protagonist's apartment]
 </SCENE_META>`;
 }
 
