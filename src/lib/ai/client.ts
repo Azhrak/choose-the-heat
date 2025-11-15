@@ -7,7 +7,7 @@ import { generateText } from "ai";
 /**
  * Supported AI providers
  */
-export type AIProvider = "openai" | "google" | "anthropic" | "mistral" | "grok";
+export type AIProvider = "openai" | "google" | "anthropic" | "mistral" | "xai";
 
 /**
  * AI provider configuration
@@ -31,7 +31,7 @@ function getAIConfig(): AIConfig {
 		google: process.env.GOOGLE_MODEL || "gemini-2.5-flash-lite",
 		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
 		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
-		grok: process.env.GROK_MODEL || "grok-4-fast-reasoning",
+		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
 	};
 
 	return {
@@ -90,16 +90,16 @@ function getAIModel(modelOverride?: string) {
 			return mistral(modelName);
 		}
 
-		case "grok": {
-			if (!process.env.GROK_API_KEY) {
-				throw new Error("GROK_API_KEY environment variable is not set");
+		case "xai": {
+			if (!process.env.XAI_API_KEY) {
+				throw new Error("XAI_API_KEY environment variable is not set");
 			}
-			// Grok uses OpenAI-compatible API
-			const grok = createOpenAI({
-				apiKey: process.env.GROK_API_KEY,
+			// xAI uses OpenAI-compatible API
+			const xai = createOpenAI({
+				apiKey: process.env.XAI_API_KEY,
 				baseURL: "https://api.x.ai/v1",
 			});
-			return grok(modelName);
+			return xai(modelName);
 		}
 
 		default:
@@ -125,14 +125,14 @@ export function getCurrentProvider(): AIProvider {
  * Generate text completion using Vercel AI SDK
  *
  * The AI SDK provides:
- * - Multi-provider support (OpenAI, Google, Anthropic, Mistral, Grok)
+ * - Multi-provider support (OpenAI, Google, Anthropic, Mistral, xAI)
  * - Better streaming support
  * - Unified interface across providers
  * - Built-in error handling
  * - Token usage tracking
  *
  * Configure provider via AI_PROVIDER env var (default: openai)
- * Configure model via provider-specific env var (e.g., OPENAI_MODEL, GROK_MODEL)
+ * Configure model via provider-specific env var (e.g., OPENAI_MODEL, XAI_MODEL)
  */
 export async function generateCompletion(
 	systemPrompt: string,
