@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Footer } from "~/components/Footer";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import {
 	DangerZone,
@@ -146,7 +148,7 @@ function ProfilePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="/profile" userRole={profile?.role} />
 
 			<PageContainer maxWidth="md">
@@ -200,6 +202,7 @@ function ProfilePage() {
 				isDeleting={deleteAccount.isPending}
 				error={deleteError}
 			/>
-		</div>
+			<Footer />
+		</PageBackground>
 	);
 }

@@ -7,6 +7,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { GoogleAuthButton } from "~/components/GoogleAuthButton";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { ApiError, api } from "~/lib/api/client";
 
@@ -65,7 +66,7 @@ function LoginPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center px-4">
+		<PageBackground className="flex items-center justify-center px-4">
 			<div className="max-w-md w-full space-y-8">
 				{/* Logo */}
 				<div className="text-center space-y-4">
@@ -135,6 +136,6 @@ function LoginPage() {
 					</Link>
 				</p>
 			</div>
-		</div>
+		</PageBackground>
 	);
 }

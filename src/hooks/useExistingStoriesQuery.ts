@@ -15,8 +15,7 @@ export const existingStoriesQueryKey = ["existing-stories"] as const;
 export function useExistingStoriesQuery(enabled = true) {
 	return useQuery({
 		queryKey: existingStoriesQueryKey,
-		queryFn: () =>
-			api.get<{ stories: ExistingStory[] }>("/api/stories/user"),
+		queryFn: () => api.get<{ stories: ExistingStory[] }>("/api/stories/user"),
 		enabled,
 	});
 }

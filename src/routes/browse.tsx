@@ -10,6 +10,7 @@ import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
@@ -39,7 +40,7 @@ function BrowsePage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="/browse" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="full">
@@ -147,6 +148,6 @@ function BrowsePage() {
 				</div>
 			</PageContainer>
 			<Footer />
-		</div>
+		</PageBackground>
 	);
 }

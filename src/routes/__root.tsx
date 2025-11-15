@@ -10,6 +10,7 @@ import {
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import globalStyles from "~/styles/globals.css?url";
 
 export const Route = createRootRoute({
@@ -80,7 +81,7 @@ function NotFoundComponent() {
 				<HeadContent />
 			</head>
 			<body>
-				<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center p-4">
+				<PageBackground className="flex items-center justify-center p-4">
 					<div className="text-center space-y-6">
 						<Heart className="w-24 h-24 text-romance-400 mx-auto" />
 						<div className="space-y-4">
@@ -98,7 +99,7 @@ function NotFoundComponent() {
 							</Link>
 						</div>
 					</div>
-				</div>
+				</PageBackground>
 				<Scripts />
 			</body>
 		</html>

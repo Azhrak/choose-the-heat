@@ -13,6 +13,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -41,7 +42,7 @@ function StoryInfoPage() {
 
 	if (error || !data?.story) {
 		return (
-			<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+			<PageBackground>
 				<Header currentPath="/library" userRole={profileData?.role} />
 				<PageContainer maxWidth="2xl">
 					<ErrorMessage
@@ -49,7 +50,7 @@ function StoryInfoPage() {
 						variant="centered"
 					/>
 				</PageContainer>
-			</div>
+			</PageBackground>
 		);
 	}
 
@@ -67,7 +68,7 @@ function StoryInfoPage() {
 		: SCENE_LENGTH_LABELS.medium;
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl">
@@ -271,6 +272,6 @@ function StoryInfoPage() {
 					)}
 				</div>
 			</PageContainer>
-		</div>
+		</PageBackground>
 	);
 }

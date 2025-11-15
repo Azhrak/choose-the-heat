@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Footer } from "~/components/Footer";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import {
 	GenresSection,
 	PacingSection,
@@ -130,7 +132,7 @@ function PreferencesPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<div className="container mx-auto px-4 py-8">
 				<div className="max-w-4xl mx-auto">
 					{/* Header */}
@@ -226,6 +228,7 @@ function PreferencesPage() {
 					</div>
 				</div>
 			</div>
-		</div>
+			<Footer />
+		</PageBackground>
 	);
 }

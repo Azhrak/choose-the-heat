@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import { RadioButton } from "~/components/RadioButton";
 import { ApiError, api } from "~/lib/api/client";
 import {
@@ -117,7 +118,7 @@ function OnboardingPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<div className="container mx-auto px-4 py-12">
 				<div className="max-w-3xl mx-auto">
 					<div className="space-y-8">
@@ -373,6 +374,6 @@ function OnboardingPage() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</PageBackground>
 	);
 }

@@ -5,6 +5,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplateQuery } from "~/hooks/useTemplateQuery";
@@ -27,7 +28,7 @@ function TemplateDetailPage() {
 	const template = data?.template;
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="xl">
@@ -188,6 +189,6 @@ function TemplateDetailPage() {
 					)}
 				</div>
 			</PageContainer>
-		</div>
+		</PageBackground>
 	);
 }

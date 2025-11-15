@@ -8,6 +8,7 @@ import { FormInput } from "~/components/FormInput";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { RadioButtonGroup } from "~/components/RadioButtonGroup";
 import { SpiceLevelSelector } from "~/components/SpiceLevelSelector";
@@ -141,7 +142,7 @@ function StoryCreatePage() {
 	const isLoading = isLoadingTemplate || isLoadingPrefs;
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="md">
@@ -293,6 +294,6 @@ function StoryCreatePage() {
 					)}
 				</div>
 			</PageContainer>
-		</div>
+		</PageBackground>
 	);
 }

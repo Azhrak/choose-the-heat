@@ -7,6 +7,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { GoogleAuthButton } from "~/components/GoogleAuthButton";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { ApiError, api } from "~/lib/api/client";
 
@@ -86,7 +87,7 @@ function SignupPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center px-4 py-8">
+		<PageBackground className="flex items-center justify-center px-4 py-8">
 			<div className="max-w-md w-full">
 				<div className="space-y-8">
 					{/* Logo */}
@@ -172,6 +173,6 @@ function SignupPage() {
 					</p>
 				</div>
 			</div>
-		</div>
+		</PageBackground>
 	);
 }

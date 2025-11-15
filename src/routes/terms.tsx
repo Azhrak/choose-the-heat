@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Footer } from "~/components/Footer";
 import { Heading } from "~/components/Heading";
+import { PageBackground } from "~/components/PageBackground";
 
 export const Route = createFileRoute("/terms")({
 	component: TermsOfService,
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/terms")({
 
 function TermsOfService() {
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<div className="container mx-auto px-4 py-12">
 				<div className="max-w-4xl mx-auto space-y-8">
 					<div className="space-y-8">
@@ -303,6 +304,6 @@ function TermsOfService() {
 				</div>
 			</div>
 			<Footer />
-		</div>
+		</PageBackground>
 	);
 }

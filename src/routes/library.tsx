@@ -3,9 +3,11 @@ import { BookOpen, Clock, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { Footer } from "~/components/Footer";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryCard } from "~/components/StoryCard";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -52,7 +54,7 @@ function LibraryPage() {
 	const stories = data?.stories || [];
 
 	return (
-		<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100">
+		<PageBackground>
 			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl">
@@ -133,6 +135,7 @@ function LibraryPage() {
 					)}
 				</div>
 			</PageContainer>
-		</div>
+			<Footer />
+		</PageBackground>
 	);
 }

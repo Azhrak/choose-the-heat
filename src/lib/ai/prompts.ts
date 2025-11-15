@@ -233,7 +233,8 @@ export function buildScenePrompt(params: {
 	let contextSection = "";
 	if (previousScenes.length > 0) {
 		contextSection += "PREVIOUS SCENE CONTENT (for continuity):\n";
-		contextSection += "Use these scenes to maintain consistency in character behavior, setting details, tone, and ongoing plot threads.\n\n";
+		contextSection +=
+			"Use these scenes to maintain consistency in character behavior, setting details, tone, and ongoing plot threads.\n\n";
 		previousScenes.forEach((scene, idx) => {
 			const num = sceneNumber - previousScenes.length + idx;
 			contextSection += `=== Scene ${num} ===\n${scene}\n\n`;
