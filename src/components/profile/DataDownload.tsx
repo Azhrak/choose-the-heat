@@ -37,7 +37,6 @@ export function DataDownload() {
 					</p>
 
 					<div className="text-sm text-slate-600 bg-slate-50 p-4 rounded-lg">
-						t{" "}
 						<div className="space-y-2">
 							<p className="font-semibold">What's included:</p>
 							<ul className="list-disc list-inside space-y-1">
@@ -46,7 +45,6 @@ export function DataDownload() {
 								<li>Templates you've used</li>
 								<li>Choices you've made in your stories</li>
 							</ul>
-							t{" "}
 						</div>
 						<p className="mt-3 font-semibold">What's NOT included:</p>
 						<ul className="list-disc list-inside space-y-1">
