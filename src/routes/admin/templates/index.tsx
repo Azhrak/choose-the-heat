@@ -395,14 +395,16 @@ function TemplatesListPage() {
 						columns={[
 							{
 								header: (
-									<button
+									<Button
 										type="button"
+										variant="ghost"
+										size="sm"
 										onClick={() => handleSort("title")}
-										className="flex items-center gap-1 hover:text-slate-900 cursor-pointer"
+										className="p-0 h-auto font-normal hover:text-slate-900"
 									>
 										Title
 										<ArrowUpDown className="w-3 h-3" />
-									</button>
+									</Button>
 								),
 								accessor: (t) => t.title,
 								className: "font-medium text-slate-900",
@@ -410,14 +412,16 @@ function TemplatesListPage() {
 							},
 							{
 								header: (
-									<button
+									<Button
 										type="button"
+										variant="ghost"
+										size="sm"
 										onClick={() => handleSort("status")}
-										className="flex items-center gap-1 hover:text-slate-900 cursor-pointer"
+										className="p-0 h-auto font-normal hover:text-slate-900"
 									>
 										Status
 										<ArrowUpDown className="w-3 h-3" />
-									</button>
+									</Button>
 								),
 								accessor: (t) => <StatusBadge status={t.status} />,
 								key: "status",
@@ -430,14 +434,16 @@ function TemplatesListPage() {
 							},
 							{
 								header: (
-									<button
+									<Button
 										type="button"
+										variant="ghost"
+										size="sm"
 										onClick={() => handleSort("scenes")}
-										className="flex items-center gap-1 hover:text-slate-900 cursor-pointer"
+										className="p-0 h-auto font-normal hover:text-slate-900"
 									>
 										Scenes
 										<ArrowUpDown className="w-3 h-3" />
-									</button>
+									</Button>
 								),
 								accessor: (t) => t.estimated_scenes.toString(),
 								className: "text-slate-600 text-center",
@@ -445,14 +451,16 @@ function TemplatesListPage() {
 							},
 							{
 								header: (
-									<button
+									<Button
 										type="button"
+										variant="ghost"
+										size="sm"
 										onClick={() => handleSort("created")}
-										className="flex items-center gap-1 hover:text-slate-900 cursor-pointer"
+										className="p-0 h-auto font-normal hover:text-slate-900"
 									>
 										Created
 										<ArrowUpDown className="w-3 h-3" />
-									</button>
+									</Button>
 								),
 								accessor: (t) => new Date(t.created_at).toLocaleDateString(),
 								className: "text-slate-600 text-sm",
@@ -460,14 +468,16 @@ function TemplatesListPage() {
 							},
 							{
 								header: (
-									<button
+									<Button
 										type="button"
+										variant="ghost"
+										size="sm"
 										onClick={() => handleSort("updated")}
-										className="flex items-center gap-1 hover:text-slate-900 cursor-pointer"
+										className="p-0 h-auto font-normal hover:text-slate-900"
 									>
 										Updated
 										<ArrowUpDown className="w-3 h-3" />
-									</button>
+									</Button>
 								),
 								accessor: (t) => new Date(t.updated_at).toLocaleDateString(),
 								className: "text-slate-600 text-sm",

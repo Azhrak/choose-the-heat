@@ -1,3 +1,5 @@
+import { Button } from "~/components/Button";
+
 interface FilterOption<T = string> {
 	value: T;
 	label: string;
@@ -20,15 +22,15 @@ interface FilterBarProps<T = string> {
 	onChange: (value: T) => void;
 }
 
-const colorClasses = {
-	purple: "bg-purple-600",
-	slate: "bg-slate-600",
-	blue: "bg-blue-600",
-	"purple-dark": "bg-purple-700",
-	green: "bg-green-600",
-	yellow: "bg-yellow-600",
-	gray: "bg-gray-600",
-	romance: "bg-romance-600",
+const activeColorClasses = {
+	purple: "!bg-purple-600 hover:!bg-purple-700 !text-white",
+	slate: "!bg-slate-600 hover:!bg-slate-700 !text-white",
+	blue: "!bg-blue-600 hover:!bg-blue-700 !text-white",
+	"purple-dark": "!bg-purple-700 hover:!bg-purple-800 !text-white",
+	green: "!bg-green-600 hover:!bg-green-700 !text-white",
+	yellow: "!bg-yellow-600 hover:!bg-yellow-700 !text-white",
+	gray: "!bg-gray-600 hover:!bg-gray-700 !text-white",
+	romance: "!bg-romance-600 hover:!bg-romance-700 !text-white",
 };
 
 export function FilterBar<T extends string = string>({
@@ -43,18 +45,20 @@ export function FilterBar<T extends string = string>({
 				<span className="text-sm font-medium text-slate-700">{label}</span>
 				<div className="flex gap-2">
 					{filters.map((filter) => (
-						<button
+						<Button
 							key={filter.value as string}
 							type="button"
+							variant="secondary"
+							size="sm"
 							onClick={() => onChange(filter.value)}
-							className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
+							className={
 								activeFilter === filter.value
-									? `${colorClasses[filter.activeColor]} text-white`
-									: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-							}`}
+									? activeColorClasses[filter.activeColor]
+									: ""
+							}
 						>
 							{filter.label} ({filter.count})
-						</button>
+						</Button>
 					))}
 				</div>
 			</div>
