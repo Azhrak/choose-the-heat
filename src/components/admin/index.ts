@@ -3,6 +3,8 @@ export { AdminNav } from "./AdminNav";
 export { ChoicePointForm } from "./ChoicePointForm";
 export { ConfirmDialog } from "./ConfirmDialog";
 export { DataTable } from "./DataTable";
+export { FilterBar } from "./FilterBar";
 export { NoPermissions } from "./NoPermissions";
+export { PaginationControls } from "./PaginationControls";
 export { RoleBadge } from "./RoleBadge";
 export { StatusBadge } from "./StatusBadge";

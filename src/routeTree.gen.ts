@@ -47,6 +47,7 @@ import { Route as ApiAdminTemplatesIndexRouteImport } from './routes/api/admin/t
 import { Route as ApiStoriesIdSceneRouteImport } from './routes/api/stories/$id.scene'
 import { Route as ApiStoriesIdChooseRouteImport } from './routes/api/stories/$id.choose'
 import { Route as ApiAuthCallbackGoogleRouteImport } from './routes/api/auth/callback.google'
+import { Route as ApiAdminUsersStatsRouteImport } from './routes/api/admin/users/stats'
 import { Route as ApiAdminUsersIdRouteImport } from './routes/api/admin/users/$id'
 import { Route as ApiAdminTemplatesStatsRouteImport } from './routes/api/admin/templates/stats'
 import { Route as ApiAdminTemplatesBulkUpdateRouteImport } from './routes/api/admin/templates/bulk-update'
@@ -249,6 +250,11 @@ const ApiAuthCallbackGoogleRoute = ApiAuthCallbackGoogleRouteImport.update({
   path: '/api/auth/callback/google',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminUsersStatsRoute = ApiAdminUsersStatsRouteImport.update({
+  id: '/api/admin/users/stats',
+  path: '/api/admin/users/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminUsersIdRoute = ApiAdminUsersIdRouteImport.update({
   id: '/api/admin/users/$id',
   path: '/api/admin/users/$id',
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
+  '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
@@ -397,6 +404,7 @@ export interface FileRoutesByTo {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
+  '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
@@ -448,6 +456,7 @@ export interface FileRoutesById {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
+  '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
@@ -500,6 +509,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/stats'
     | '/api/admin/users/$id'
+    | '/api/admin/users/stats'
     | '/api/auth/callback/google'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
@@ -550,6 +560,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/stats'
     | '/api/admin/users/$id'
+    | '/api/admin/users/stats'
     | '/api/auth/callback/google'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
@@ -600,6 +611,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/stats'
     | '/api/admin/users/$id'
+    | '/api/admin/users/stats'
     | '/api/auth/callback/google'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
@@ -651,6 +663,7 @@ export interface RootRouteChildren {
   ApiAdminTemplatesBulkUpdateRoute: typeof ApiAdminTemplatesBulkUpdateRoute
   ApiAdminTemplatesStatsRoute: typeof ApiAdminTemplatesStatsRoute
   ApiAdminUsersIdRoute: typeof ApiAdminUsersIdRoute
+  ApiAdminUsersStatsRoute: typeof ApiAdminUsersStatsRoute
   ApiAuthCallbackGoogleRoute: typeof ApiAuthCallbackGoogleRoute
   ApiAdminTemplatesIndexRoute: typeof ApiAdminTemplatesIndexRoute
   ApiAdminUsersIndexRoute: typeof ApiAdminUsersIndexRoute
@@ -924,6 +937,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthCallbackGoogleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/users/stats': {
+      id: '/api/admin/users/stats'
+      path: '/api/admin/users/stats'
+      fullPath: '/api/admin/users/stats'
+      preLoaderRoute: typeof ApiAdminUsersStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/users/$id': {
       id: '/api/admin/users/$id'
       path: '/api/admin/users/$id'
@@ -1066,6 +1086,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminTemplatesBulkUpdateRoute: ApiAdminTemplatesBulkUpdateRoute,
   ApiAdminTemplatesStatsRoute: ApiAdminTemplatesStatsRoute,
   ApiAdminUsersIdRoute: ApiAdminUsersIdRoute,
+  ApiAdminUsersStatsRoute: ApiAdminUsersStatsRoute,
   ApiAuthCallbackGoogleRoute: ApiAuthCallbackGoogleRoute,
   ApiAdminTemplatesIndexRoute: ApiAdminTemplatesIndexRoute,
   ApiAdminUsersIndexRoute: ApiAdminUsersIndexRoute,

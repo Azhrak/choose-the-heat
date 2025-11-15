@@ -411,3 +411,16 @@ export async function getUserCountByRole() {
 		{} as Record<UserRole, number>,
 	);
 }
+
+/**
+ * Get verified user count
+ */
+export async function getUserVerifiedCount() {
+	const result = await db
+		.selectFrom("users")
+		.select(({ fn }) => [fn.count<number>("id").as("count")])
+		.where("email_verified", "=", true)
+		.executeTakeFirst();
+
+	return Number(result?.count || 0);
+}

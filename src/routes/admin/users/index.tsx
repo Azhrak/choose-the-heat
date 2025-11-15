@@ -1,39 +1,70 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Edit2, Shield, Users as UsersIcon } from "lucide-react";
-import { useState } from "react";
 import {
 	AdminLayout,
 	DataTable,
+	FilterBar,
 	NoPermissions,
+	PaginationControls,
 	RoleBadge,
 } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useAdminUsersQuery } from "~/hooks/useAdminUsersQuery";
+import {
+	useAdminUsersPaginatedQuery,
+	useAdminUsersStatsQuery,
+} from "~/hooks/useAdminUsersQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { UserRole } from "~/lib/db/types";
 
+// Search params schema
+type UsersSearch = {
+	page?: number;
+	role?: UserRole | "all";
+};
+
 export const Route = createFileRoute("/admin/users/")({
 	component: UsersListPage,
+	validateSearch: (search: Record<string, unknown>): UsersSearch => {
+		return {
+			page: Number(search.page) || 1,
+			role: (search.role as UserRole | "all") || "all",
+		};
+	},
 });
 
 type RoleFilter = "all" | UserRole;
 
 function UsersListPage() {
 	const navigate = useNavigate();
-	const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
+	const search = Route.useSearch();
+
+	// Get state from URL params
+	const currentPage = search.page || 1;
+	const roleFilter = search.role || "all";
+	const itemsPerPage = 10;
 
 	// Fetch current user to get role
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
 
-	// Fetch all users
+	// Fetch user statistics
+	const { data: statsData, isLoading: statsLoading } = useAdminUsersStatsQuery(
+		!!userData && userData.role === "admin",
+	);
+
+	// Fetch paginated users
 	const {
 		data: usersData,
 		isLoading: usersLoading,
 		error,
-	} = useAdminUsersQuery(!!userData && userData.role === "admin");
+	} = useAdminUsersPaginatedQuery({
+		page: currentPage,
+		limit: itemsPerPage,
+		role: roleFilter,
+		enabled: !!userData && userData.role === "admin",
+	});
 
-	if (userLoading || usersLoading) {
+	if (userLoading || usersLoading || statsLoading) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
 				<LoadingSpinner />
@@ -66,25 +97,42 @@ function UsersListPage() {
 		);
 	}
 
-	if (!usersData?.users) {
+	if (!usersData?.users || !usersData?.pagination || !statsData) {
 		return null;
 	}
 
 	const { role } = userData;
-	const users = usersData.users;
+	const { users, pagination } = usersData;
 
-	// Filter users by role
-	const filteredUsers =
-		roleFilter === "all" ? users : users.filter((u) => u.role === roleFilter);
-
-	// Calculate statistics (using all users, not filtered)
-	const stats = {
-		total: users.length,
-		user: users.filter((u) => u.role === "user").length,
-		editor: users.filter((u) => u.role === "editor").length,
-		admin: users.filter((u) => u.role === "admin").length,
-		verified: users.filter((u) => u.email_verified).length,
+	// Handle role filter change
+	const handleRoleFilterChange = (filter: RoleFilter) => {
+		navigate({
+			to: "/admin/users",
+			search: {
+				...search,
+				role: filter,
+				page: 1,
+			},
+		});
 	};
+
+	// Handle page change
+	const handlePageChange = (page: number) => {
+		navigate({
+			to: "/admin/users",
+			search: {
+				...search,
+				page,
+			},
+		});
+	};
+
+	// Pagination metadata from server
+	const totalItems = pagination.total;
+	const totalPages = pagination.totalPages;
+
+	// Stats from server (accurate counts for all roles)
+	const stats = statsData;
 
 	return (
 		<AdminLayout currentPath="/admin/users" userRole={role}>
@@ -133,64 +181,42 @@ function UsersListPage() {
 				</div>
 
 				{/* Role Filter */}
-				<div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
-					<div className="flex items-center gap-3">
-						<span className="text-sm font-medium text-slate-700">
-							Filter by Role:
-						</span>
-						<div className="flex gap-2">
-							<button
-								type="button"
-								onClick={() => setRoleFilter("all")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									roleFilter === "all"
-										? "bg-purple-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								All ({stats.total})
-							</button>
-							<button
-								type="button"
-								onClick={() => setRoleFilter("user")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									roleFilter === "user"
-										? "bg-slate-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Users ({stats.user})
-							</button>
-							<button
-								type="button"
-								onClick={() => setRoleFilter("editor")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									roleFilter === "editor"
-										? "bg-blue-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Editors ({stats.editor})
-							</button>
-							<button
-								type="button"
-								onClick={() => setRoleFilter("admin")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									roleFilter === "admin"
-										? "bg-purple-700 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Admins ({stats.admin})
-							</button>
-						</div>
-					</div>
-				</div>
+				<FilterBar
+					label="Filter by Role:"
+					filters={[
+						{
+							value: "all",
+							label: "All",
+							count: stats.total,
+							activeColor: "purple",
+						},
+						{
+							value: "user",
+							label: "Users",
+							count: stats.user,
+							activeColor: "slate",
+						},
+						{
+							value: "editor",
+							label: "Editors",
+							count: stats.editor,
+							activeColor: "blue",
+						},
+						{
+							value: "admin",
+							label: "Admins",
+							count: stats.admin,
+							activeColor: "purple-dark",
+						},
+					]}
+					activeFilter={roleFilter}
+					onChange={handleRoleFilterChange}
+				/>
 
 				{/* Users Table */}
 				<div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
 					<DataTable
-						data={filteredUsers}
+						data={users}
 						columns={[
 							{
 								header: "Name",
@@ -237,6 +263,16 @@ function UsersListPage() {
 						emptyMessage="No users found."
 					/>
 				</div>
+
+				{/* Pagination Controls */}
+				<PaginationControls
+					currentPage={currentPage}
+					totalPages={totalPages}
+					totalItems={totalItems}
+					itemsPerPage={itemsPerPage}
+					onPageChange={handlePageChange}
+					itemLabel="user"
+				/>
 			</div>
 		</AdminLayout>
 	);

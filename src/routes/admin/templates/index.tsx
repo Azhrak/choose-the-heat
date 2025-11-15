@@ -2,8 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	Archive,
 	ArrowUpDown,
-	ChevronLeft,
-	ChevronRight,
 	Eye,
 	EyeOff,
 	FileText,
@@ -13,7 +11,13 @@ import {
 	X,
 } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout, DataTable, StatusBadge } from "~/components/admin";
+import {
+	AdminLayout,
+	DataTable,
+	FilterBar,
+	PaginationControls,
+	StatusBadge,
+} from "~/components/admin";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
@@ -172,8 +176,6 @@ function TemplatesListPage() {
 	// Pagination metadata from server
 	const totalItems = pagination.total;
 	const totalPages = pagination.totalPages;
-	const startIndex = (pagination.page - 1) * pagination.limit;
-	const endIndex = Math.min(startIndex + pagination.limit, totalItems);
 
 	// Stats from server (accurate counts for all statuses)
 	const stats = statsData;
@@ -313,59 +315,37 @@ function TemplatesListPage() {
 				</div>
 
 				{/* Status Filter */}
-				<div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
-					<div className="flex items-center gap-3">
-						<span className="text-sm font-medium text-slate-700">
-							Filter by Status:
-						</span>
-						<div className="flex gap-2">
-							<button
-								type="button"
-								onClick={() => handleFilterChange("all")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									statusFilter === "all"
-										? "bg-romance-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								All ({stats.total})
-							</button>
-							<button
-								type="button"
-								onClick={() => handleFilterChange("published")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									statusFilter === "published"
-										? "bg-green-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Published ({stats.published})
-							</button>
-							<button
-								type="button"
-								onClick={() => handleFilterChange("draft")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									statusFilter === "draft"
-										? "bg-yellow-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Drafts ({stats.draft})
-							</button>
-							<button
-								type="button"
-								onClick={() => handleFilterChange("archived")}
-								className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-									statusFilter === "archived"
-										? "bg-gray-600 text-white"
-										: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-								}`}
-							>
-								Archived ({stats.archived})
-							</button>
-						</div>
-					</div>
-				</div>
+				<FilterBar
+					label="Filter by Status:"
+					filters={[
+						{
+							value: "all",
+							label: "All",
+							count: stats.total,
+							activeColor: "romance",
+						},
+						{
+							value: "published",
+							label: "Published",
+							count: stats.published,
+							activeColor: "green",
+						},
+						{
+							value: "draft",
+							label: "Drafts",
+							count: stats.draft,
+							activeColor: "yellow",
+						},
+						{
+							value: "archived",
+							label: "Archived",
+							count: stats.archived,
+							activeColor: "gray",
+						},
+					]}
+					activeFilter={statusFilter}
+					onChange={handleFilterChange}
+				/>
 
 				{/* Bulk Actions Toolbar */}
 				{selectedIds.size > 0 && (
@@ -534,84 +514,14 @@ function TemplatesListPage() {
 				</div>
 
 				{/* Pagination Controls */}
-				{totalPages > 1 && (
-					<div className="mt-4 flex items-center justify-between">
-						<div className="text-sm text-slate-600">
-							Showing {startIndex + 1}-{Math.min(endIndex, totalItems)} of{" "}
-							{totalItems} templates
-						</div>
-						<div className="flex items-center gap-2">
-							<Button
-								type="button"
-								variant="secondary"
-								size="sm"
-								onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-								disabled={currentPage === 1}
-							>
-								<ChevronLeft className="w-4 h-4" />
-								Previous
-							</Button>
-
-							<div className="flex gap-1">
-								{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-									(page) => {
-										// Show first page, last page, current page, and pages around current
-										const showPage =
-											page === 1 ||
-											page === totalPages ||
-											Math.abs(page - currentPage) <= 1;
-
-										if (!showPage) {
-											// Show ellipsis for gaps
-											if (
-												page === currentPage - 2 ||
-												page === currentPage + 2
-											) {
-												return (
-													<span
-														key={page}
-														className="px-3 py-1.5 text-slate-500"
-													>
-														...
-													</span>
-												);
-											}
-											return null;
-										}
-
-										return (
-											<button
-												key={page}
-												type="button"
-												onClick={() => handlePageChange(page)}
-												className={`px-3 py-1.5 text-sm rounded-md font-medium transition-colors ${
-													currentPage === page
-														? "bg-romance-600 text-white"
-														: "bg-slate-100 text-slate-700 hover:bg-slate-200"
-												}`}
-											>
-												{page}
-											</button>
-										);
-									},
-								)}
-							</div>
-
-							<Button
-								type="button"
-								variant="secondary"
-								size="sm"
-								onClick={() =>
-									handlePageChange(Math.min(totalPages, currentPage + 1))
-								}
-								disabled={currentPage === totalPages}
-							>
-								Next
-								<ChevronRight className="w-4 h-4" />
-							</Button>
-						</div>
-					</div>
-				)}
+				<PaginationControls
+					currentPage={currentPage}
+					totalPages={totalPages}
+					totalItems={totalItems}
+					itemsPerPage={itemsPerPage}
+					onPageChange={handlePageChange}
+					itemLabel="template"
+				/>
 			</div>
 		</AdminLayout>
 	);

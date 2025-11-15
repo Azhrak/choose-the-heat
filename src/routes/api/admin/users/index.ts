@@ -16,11 +16,25 @@ export const Route = createFileRoute("/api/admin/users/")({
 					const url = new URL(request.url);
 					const roleParam = url.searchParams.get("role") as UserRole | null;
 					const searchParam = url.searchParams.get("search");
+					const pageParam = url.searchParams.get("page");
 					const limitParam = url.searchParams.get("limit");
-					const offsetParam = url.searchParams.get("offset");
 
-					const limit = limitParam ? Number.parseInt(limitParam, 10) : 50;
-					const offset = offsetParam ? Number.parseInt(offsetParam, 10) : 0;
+					// Support both page-based and offset-based pagination
+					const page = pageParam ? Number.parseInt(pageParam, 10) : 1;
+					const limit = limitParam ? Number.parseInt(limitParam, 10) : 10;
+					const offset = (page - 1) * limit;
+
+					// Validate pagination params
+					if (Number.isNaN(page) || page < 1) {
+						return json({ error: "Invalid page parameter" }, { status: 400 });
+					}
+
+					if (Number.isNaN(limit) || limit < 1 || limit > 100) {
+						return json(
+							{ error: "Invalid limit parameter (must be 1-100)" },
+							{ status: 400 },
+						);
+					}
 
 					const filters = {
 						role: roleParam || undefined,
@@ -37,10 +51,10 @@ export const Route = createFileRoute("/api/admin/users/")({
 					return json({
 						users,
 						pagination: {
-							total: totalCount,
+							page,
 							limit,
-							offset,
-							hasMore: offset + limit < totalCount,
+							total: totalCount,
+							totalPages: Math.ceil(totalCount / limit),
 						},
 					});
 				} catch (error) {
