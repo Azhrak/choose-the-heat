@@ -58,22 +58,42 @@ export async function createUserStory(
 
 	// Auto-generate title if not provided
 	if (!storyTitle) {
-		// Count existing stories from this template by this user
-		const existingCount = await db
+		// Get all existing stories from this template by this user
+		const existingStories = await db
 			.selectFrom("user_stories")
 			.where("user_id", "=", userId)
 			.where("template_id", "=", templateId)
-			.select((eb) => eb.fn.count<number>("id").as("count"))
-			.executeTakeFirst();
+			.select("story_title")
+			.execute();
 
-		const count = existingCount?.count || 0;
-
-		if (count === 0) {
+		if (existingStories.length === 0) {
 			// First story: use template title as-is
 			storyTitle = template.title;
 		} else {
-			// Subsequent stories: add counter
-			storyTitle = `${template.title} #${count + 1}`;
+			// Find the highest number in existing titles
+			let maxNumber = 0;
+			const numberPattern = new RegExp(
+				`^${template.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} #(\\d+)$`,
+			);
+
+			for (const story of existingStories) {
+				if (!story.story_title) continue;
+
+				// Check if this is the base title without a number
+				if (story.story_title === template.title) {
+					maxNumber = Math.max(maxNumber, 1);
+				} else {
+					// Try to extract number from title
+					const match = story.story_title.match(numberPattern);
+					if (match?.[1]) {
+						maxNumber = Math.max(maxNumber, Number.parseInt(match[1], 10));
+					}
+				}
+			}
+
+			// Generate next number
+			const nextNumber = maxNumber + 1;
+			storyTitle = `${template.title} #${nextNumber}`;
 		}
 	}
 
