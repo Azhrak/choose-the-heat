@@ -67,7 +67,7 @@ export async function getStoryScenes(storyId: string) {
 
 /**
  * Get the last N scenes for context
- * Returns summaries and metadata for efficient context passing
+ * Returns full scene content and metadata for context passing
  */
 export async function getRecentScenes(storyId: string, count: number) {
 	const scenes = await db
@@ -79,11 +79,11 @@ export async function getRecentScenes(storyId: string, count: number) {
 		.execute();
 
 	// Reverse to get chronological order
-	// Prefer summary over content for context
+	// Return full content for better AI consistency
 	return scenes.reverse().map((scene) => ({
 		scene_number: scene.scene_number,
-		// Use summary if available, otherwise fall back to content
-		content: scene.summary || scene.content,
+		// Use full content for better context and consistency
+		content: scene.content,
 		metadata: scene.metadata as SceneMetadata | null,
 	}));
 }
