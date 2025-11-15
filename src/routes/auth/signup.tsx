@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Heart, Home, LogOut } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useState } from "react";
+import { AlreadyLoggedInNotice } from "~/components/AlreadyLoggedInNotice";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
@@ -101,33 +102,14 @@ function SignupPage() {
 								Start your personalized romance journey
 							</p>
 						</div>
-					</div>{" "}
+					</div>
 					{/* Already Logged In Notice */}
 					{currentUser && (
-						<div className="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-3">
-							<p className="text-sm text-blue-900">
-								You are already logged in as{" "}
-								<strong>{currentUser.name || currentUser.email}</strong>
-							</p>
-							<div className="flex gap-2">
-								<Link
-									to="/browse"
-									className="flex-1 px-3 py-2 text-sm bg-white border border-blue-300 text-blue-700 rounded-md hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
-								>
-									<Home className="w-4 h-4" />
-									Go Home
-								</Link>
-								<button
-									type="button"
-									onClick={handleLogout}
-									disabled={logoutLoading}
-									className="flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-								>
-									<LogOut className="w-4 h-4" />
-									{logoutLoading ? "Logging out..." : "Logout"}
-								</button>
-							</div>
-						</div>
+						<AlreadyLoggedInNotice
+							userName={currentUser.name || currentUser.email}
+							logoutLoading={logoutLoading}
+							onLogout={handleLogout}
+						/>
 					)}
 					{/* Error Message */}
 					{error && <ErrorMessage message={error} />}
