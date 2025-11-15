@@ -1,0 +1,2441 @@
+[
+  {
+    "title": "The Duke's Defiant Bride",
+    "description": "Forced into marriage to save her family's estate, a headstrong woman clashes with a brooding duke hiding a scandalous past.",
+    "base_tropes": ["historical", "forced-marriage", "enemies-to-lovers"],
+    "estimated_scenes": 14,
+    "cover_gradient": "from-red-600 to-rose-700",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "At your first meeting, the Duke coldly outlines the terms of your arrangement. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Match his coldness with your own demands",
+            "tone": "defiant",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Accept gracefully while hiding your true feelings",
+            "tone": "diplomatic",
+            "impact": "reserved"
+          },
+          {
+            "id": "option-3",
+            "text": "Question why he agreed to this marriage",
+            "tone": "curious",
+            "impact": "bold"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "You discover him in a compromising position with his former mistress. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront them both publicly",
+            "tone": "angry",
+            "impact": "dramatic"
+          },
+          {
+            "id": "option-2",
+            "text": "Leave quietly and pretend you saw nothing",
+            "tone": "hurt",
+            "impact": "withdrawn"
+          },
+          {
+            "id": "option-3",
+            "text": "Interrupt calmly and assert your position as his wife",
+            "tone": "assertive",
+            "impact": "powerful"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "He finally explains his scandalous past and why he's been so distant. How do you react?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Offer comfort and understanding",
+            "tone": "compassionate",
+            "impact": "supportive"
+          },
+          {
+            "id": "option-2",
+            "text": "Tell him his past doesn't excuse his coldness",
+            "tone": "firm",
+            "impact": "honest"
+          },
+          {
+            "id": "option-3",
+            "text": "Share your own painful secrets in return",
+            "tone": "vulnerable",
+            "impact": "intimate"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "A rival threatens to expose his past unless you leave him. What's your choice?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stand by him no matter the scandal",
+            "tone": "loyal",
+            "impact": "brave"
+          },
+          {
+            "id": "option-2",
+            "text": "Devise a plan to outmaneuver the rival",
+            "tone": "clever",
+            "impact": "strategic"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him what he wants you to do",
+            "tone": "considerate",
+            "impact": "supportive"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Snowed In with the Enemy",
+    "description": "A blizzard traps rival architects in a remote mountain cabin. Survival requires cooperation, but proximity ignites something more dangerous.",
+    "base_tropes": ["forced-proximity", "enemies-to-lovers", "one-bed"],
+    "estimated_scenes": 11,
+    "cover_gradient": "from-cyan-400 to-blue-500",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "The power goes out and there's only one fireplace. He suggests sharing body heat. Your response?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse and insist you'll be fine alone",
+            "tone": "stubborn",
+            "impact": "independent"
+          },
+          {
+            "id": "option-2",
+            "text": "Agree reluctantly for survival's sake",
+            "tone": "practical",
+            "impact": "resigned"
+          },
+          {
+            "id": "option-3",
+            "text": "Make a joke to ease the tension",
+            "tone": "playful",
+            "impact": "flirtatious"
+          }
+        ]
+      },
+      {
+        "scene_number": 4,
+        "prompt_text": "You find his old sketches—they're beautiful and vulnerable. Do you mention them?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront him about hiding his talent",
+            "tone": "challenging",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Compliment them sincerely",
+            "tone": "genuine",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Say nothing and respect his privacy",
+            "tone": "respectful",
+            "impact": "reserved"
+          }
+        ]
+      },
+      {
+        "scene_number": 7,
+        "prompt_text": "Trapped for days now, he admits he sabotaged your last project out of jealousy. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Lash out at his betrayal",
+            "tone": "angry",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask him to explain why",
+            "tone": "calm",
+            "impact": "understanding"
+          },
+          {
+            "id": "option-3",
+            "text": "Admit you've been equally obsessed with him",
+            "tone": "honest",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "The rescue team is coming tomorrow. He asks you to give this—whatever this is—a real chance. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him you want to try",
+            "tone": "hopeful",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Say you need time to think once you're back to reality",
+            "tone": "uncertain",
+            "impact": "cautious"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him instead of answering",
+            "tone": "passionate",
+            "impact": "bold"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Rockstar's Muse",
+    "description": "Hired to ghost-write a rockstar's memoir, she uncovers the vulnerable man behind the legend. Their creative partnership becomes an addiction neither can quit.",
+    "base_tropes": ["celebrity-romance", "forbidden-love", "grumpy-sunshine"],
+    "estimated_scenes": 13,
+    "cover_gradient": "from-fuchsia-500 to-pink-600",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "He's drunk and rambling about his regrets. Do you record it for the book?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Record it—this is exactly what the book needs",
+            "tone": "professional",
+            "impact": "opportunistic"
+          },
+          {
+            "id": "option-2",
+            "text": "Turn off the recorder and just listen",
+            "tone": "compassionate",
+            "impact": "supportive"
+          },
+          {
+            "id": "option-3",
+            "text": "Help him to bed and leave",
+            "tone": "distant",
+            "impact": "boundaried"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "He writes a song about you and performs it at soundcheck. The band notices. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront him privately about crossing lines",
+            "tone": "concerned",
+            "impact": "professional"
+          },
+          {
+            "id": "option-2",
+            "text": "Pretend you didn't realize it was about you",
+            "tone": "evasive",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him it's beautiful",
+            "tone": "honest",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "His ex (also famous) shows up and makes it clear she wants him back. How do you handle it?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Step back—you're just the ghostwriter",
+            "tone": "resigned",
+            "impact": "withdrawn"
+          },
+          {
+            "id": "option-2",
+            "text": "Make your claim on him subtly but clearly",
+            "tone": "confident",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Let him make his own choice",
+            "tone": "trusting",
+            "impact": "secure"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "The publisher wants you to expose his darkest secrets for sales. He says it's your decision. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse and risk your career",
+            "tone": "protective",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Include them but frame them with care and context",
+            "tone": "balanced",
+            "impact": "diplomatic"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him what he truly wants",
+            "tone": "collaborative",
+            "impact": "respectful"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Vampire's Kiss at Midnight",
+    "description": "A vampire hunter falls for her target when she discovers he's protecting humans from a greater evil. Loyalty and desire collide.",
+    "base_tropes": ["paranormal", "enemies-to-lovers", "forbidden-love"],
+    "estimated_scenes": 15,
+    "cover_gradient": "from-red-700 to-black",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "You have him at stake-point, but he's not fighting back. He asks you to listen first. Do you?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Strike now before he can manipulate you",
+            "tone": "ruthless",
+            "impact": "aggressive"
+          },
+          {
+            "id": "option-2",
+            "text": "Give him sixty seconds to talk",
+            "tone": "cautious",
+            "impact": "fair"
+          },
+          {
+            "id": "option-3",
+            "text": "Lower your weapon slightly",
+            "tone": "curious",
+            "impact": "open"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "He proves another vampire is killing humans, not him. Your order won't believe you. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Go rogue and help him hunt the real killer",
+            "tone": "rebellious",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Try to convince your order with evidence",
+            "tone": "diplomatic",
+            "impact": "loyal"
+          },
+          {
+            "id": "option-3",
+            "text": "Pretend to kill him and let him escape",
+            "tone": "deceptive",
+            "impact": "protective"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "You're injured badly. He offers his blood to heal you—but you'll be bound to him. Do you drink?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse—you'd rather die human",
+            "tone": "proud",
+            "impact": "stubborn"
+          },
+          {
+            "id": "option-2",
+            "text": "Accept—you trust him",
+            "tone": "trusting",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask exactly what 'bound' means first",
+            "tone": "practical",
+            "impact": "cautious"
+          }
+        ]
+      },
+      {
+        "scene_number": 13,
+        "prompt_text": "Your order gives you an ultimatum: kill him or be exiled as a traitor. He says he'll understand either choice. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Choose him and accept exile",
+            "tone": "devoted",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Fight your order to change their minds",
+            "tone": "defiant",
+            "impact": "rebellious"
+          },
+          {
+            "id": "option-3",
+            "text": "Fake his death and disappear together",
+            "tone": "clever",
+            "impact": "strategic"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Professor's Temptation",
+    "description": "Years after a forbidden kiss ended her college career, she returns as a visiting professor—only to find him still teaching there, still off-limits.",
+    "base_tropes": ["second-chance", "forbidden-love", "age-gap"],
+    "estimated_scenes": 12,
+    "cover_gradient": "from-slate-600 to-gray-800",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "You see him at the faculty meeting. He looks shocked. Do you acknowledge the past?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Act like you've never met before",
+            "tone": "evasive",
+            "impact": "avoidant"
+          },
+          {
+            "id": "option-2",
+            "text": "Greet him coolly and professionally",
+            "tone": "controlled",
+            "impact": "distant"
+          },
+          {
+            "id": "option-3",
+            "text": "Request a private conversation after",
+            "tone": "direct",
+            "impact": "confrontational"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "He admits he got you expelled to protect you from the scandal. How do you react?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Explode at him for making that choice for you",
+            "tone": "furious",
+            "impact": "angry"
+          },
+          {
+            "id": "option-2",
+            "text": "Thank him for trying to protect you",
+            "tone": "understanding",
+            "impact": "forgiving"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him how much it hurt you",
+            "tone": "pained",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "You're both chaperoning a conference. He knocks on your hotel room door late at night. Do you let him in?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Open the door and let him in",
+            "tone": "willing",
+            "impact": "risky"
+          },
+          {
+            "id": "option-2",
+            "text": "Talk through the door but don't open it",
+            "tone": "conflicted",
+            "impact": "cautious"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him to leave before someone sees",
+            "tone": "practical",
+            "impact": "distant"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "The dean suspects your past relationship. One of you should leave to avoid scandal. What do you decide?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Offer to resign—you won't let him lose everything again",
+            "tone": "selfless",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Fight together to stay—times have changed",
+            "tone": "defiant",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Suggest he decides what matters more",
+            "tone": "testing",
+            "impact": "vulnerable"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Mafia Prince's Obsession",
+    "description": "Witnessing a crime puts her in the crosshairs of a mafia heir. His solution? Marriage for protection. But his obsession runs deeper than duty.",
+    "base_tropes": ["mafia-romance", "forced-proximity", "possessive-hero"],
+    "estimated_scenes": 17,
+    "cover_gradient": "from-zinc-700 to-neutral-900",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "He says you'll marry him or die. There's a third option: witness protection. Which do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Agree to marry him—at least you'll stay close to your life",
+            "tone": "pragmatic",
+            "impact": "resigned"
+          },
+          {
+            "id": "option-2",
+            "text": "Demand to know why he's really doing this",
+            "tone": "suspicious",
+            "impact": "challenging"
+          },
+          {
+            "id": "option-3",
+            "text": "Choose witness protection",
+            "tone": "defiant",
+            "impact": "independent"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "You try to escape. He finds you within hours. He's furious but also... hurt. How do you explain?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Apologize but admit you were terrified",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-2",
+            "text": "Don't apologize—you won't be a prisoner",
+            "tone": "fierce",
+            "impact": "defiant"
+          },
+          {
+            "id": "option-3",
+            "text": "Stay silent and let him speak first",
+            "tone": "guarded",
+            "impact": "defensive"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "His rival kidnaps you to draw him out. He comes alone, willing to trade himself for you. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Scream at him not to do it",
+            "tone": "desperate",
+            "impact": "emotional"
+          },
+          {
+            "id": "option-2",
+            "text": "Create a distraction so he can attack",
+            "tone": "brave",
+            "impact": "strategic"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell the rival you'll testify against him instead",
+            "tone": "clever",
+            "impact": "sacrificial"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "He confesses he's been obsessed with you for months before the incident. He orchestrated everything. Your reaction?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Feel betrayed and demand he let you go",
+            "tone": "angry",
+            "impact": "hurt"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit you've developed feelings despite everything",
+            "tone": "conflicted",
+            "impact": "honest"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him what he wants from you now",
+            "tone": "wary",
+            "impact": "cautious"
+          }
+        ]
+      },
+      {
+        "scene_number": 15,
+        "prompt_text": "The FBI offers you a deal: testify against him and go free. He tells you to take it. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse to testify—you've chosen your side",
+            "tone": "loyal",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Take the deal—you want a normal life",
+            "tone": "practical",
+            "impact": "self-preserving"
+          },
+          {
+            "id": "option-3",
+            "text": "Negotiate for both of you to disappear together",
+            "tone": "hopeful",
+            "impact": "romantic"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Cowboy's Second Chance",
+    "description": "Inheriting half a ranch means confronting the cowboy who broke her heart. Working together reignites old flames and uncovers buried secrets.",
+    "base_tropes": ["second-chance", "cowboy-romance", "forced-proximity"],
+    "estimated_scenes": 11,
+    "cover_gradient": "from-yellow-600 to-amber-700",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "He says you should sell your half to him and leave. Do you?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse—this ranch is yours too",
+            "tone": "stubborn",
+            "impact": "defiant"
+          },
+          {
+            "id": "option-2",
+            "text": "Consider it if the price is right",
+            "tone": "practical",
+            "impact": "detached"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask why he's so desperate for you to leave",
+            "tone": "curious",
+            "impact": "probing"
+          }
+        ]
+      },
+      {
+        "scene_number": 4,
+        "prompt_text": "A storm forces you to share his cabin for the night. The tension is unbearable. How do you handle it?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Address the elephant in the room",
+            "tone": "direct",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Keep conversation surface-level and polite",
+            "tone": "avoidant",
+            "impact": "distant"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him about his life since you left",
+            "tone": "gentle",
+            "impact": "opening"
+          }
+        ]
+      },
+      {
+        "scene_number": 7,
+        "prompt_text": "You discover he never actually broke up with you—your father paid him to leave. How do you confront him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Explode at him for taking money over love",
+            "tone": "betrayed",
+            "impact": "angry"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask him to explain his side before judging",
+            "tone": "measured",
+            "impact": "fair"
+          },
+          {
+            "id": "option-3",
+            "text": "Break down—you've wasted so many years",
+            "tone": "devastated",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "He admits he used the money to save the ranch from foreclosure—for both your families. Does this change things?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Forgive him and admit you would've understood",
+            "tone": "understanding",
+            "impact": "reconciling"
+          },
+          {
+            "id": "option-2",
+            "text": "Tell him he still should've trusted you",
+            "tone": "hurt",
+            "impact": "conflicted"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him instead of answering",
+            "tone": "passionate",
+            "impact": "bold"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Dragon's Claimed Mate",
+    "description": "A dragon shifter recognizes his fated mate in the archaeologist excavating his ancestral lands. She doesn't believe in myths—until he proves them real.",
+    "base_tropes": ["paranormal", "fated-mates", "alpha-hero"],
+    "estimated_scenes": 14,
+    "cover_gradient": "from-orange-600 to-red-700",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "He shifts into dragon form in front of you. Your scientific mind says it's impossible. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Run—science can wait, survival is first",
+            "tone": "terrified",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Stand your ground and demand explanations",
+            "tone": "brave",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Approach cautiously to examine him closer",
+            "tone": "curious",
+            "impact": "scientific"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "He says you're his fated mate and must stay with him. You have a career, a life. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse to let ancient magic dictate your life",
+            "tone": "independent",
+            "impact": "defiant"
+          },
+          {
+            "id": "option-2",
+            "text": "Negotiate terms—you'll stay but on your conditions",
+            "tone": "assertive",
+            "impact": "diplomatic"
+          },
+          {
+            "id": "option-3",
+            "text": "Admit you feel the connection too",
+            "tone": "honest",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "Dragon hunters attack. He's injured protecting you. He needs you to accept the mate bond to heal him. Do you?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Accept the bond without hesitation",
+            "tone": "decisive",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask what accepting truly means for your future",
+            "tone": "cautious",
+            "impact": "practical"
+          },
+          {
+            "id": "option-3",
+            "text": "Look for a medical solution first",
+            "tone": "resistant",
+            "impact": "avoidant"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "The mate bond means you'll live for centuries while everyone you know ages and dies. He offers to break it. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Keep the bond—you choose him",
+            "tone": "devoted",
+            "impact": "romantic"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask for time to say goodbye to your old life first",
+            "tone": "conflicted",
+            "impact": "bittersweet"
+          },
+          {
+            "id": "option-3",
+            "text": "Break the bond—you can't handle immortality",
+            "tone": "afraid",
+            "impact": "self-preserving"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Bodyguard's Promise",
+    "description": "An ex-military bodyguard is hired to protect a witness. Close quarters and constant danger forge a bond that threatens his professional code.",
+    "base_tropes": ["bodyguard-romance", "forced-proximity", "protector-hero"],
+    "estimated_scenes": 13,
+    "cover_gradient": "from-stone-600 to-zinc-800",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "You catch him watching you sleep. He says he's just doing his job. Do you believe him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Call him out on crossing boundaries",
+            "tone": "uncomfortable",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit it makes you feel safe",
+            "tone": "trusting",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Tease him about it to lighten the mood",
+            "tone": "playful",
+            "impact": "flirtatious"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "An assassin gets too close. He takes a bullet meant for you. As he bleeds, what do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Apply pressure and call for help",
+            "tone": "focused",
+            "impact": "practical"
+          },
+          {
+            "id": "option-2",
+            "text": "Panic and beg him not to die",
+            "tone": "desperate",
+            "impact": "emotional"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him he's not allowed to leave you",
+            "tone": "commanding",
+            "impact": "revealing"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "In a safe house with nothing but time, he confesses he's breaking his number one rule with you. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him you're breaking all your rules too",
+            "tone": "honest",
+            "impact": "mutual"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask him to wait until after the danger passes",
+            "tone": "cautious",
+            "impact": "responsible"
+          },
+          {
+            "id": "option-3",
+            "text": "Close the distance between you",
+            "tone": "bold",
+            "impact": "passionate"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "The threat is over. He's resigning from your detail. He says it's the only way you can be together. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Ask him to stay—you still need him",
+            "tone": "vulnerable",
+            "impact": "dependent"
+          },
+          {
+            "id": "option-2",
+            "text": "Support his decision and plan your first real date",
+            "tone": "hopeful",
+            "impact": "forward-looking"
+          },
+          {
+            "id": "option-3",
+            "text": "Suggest you both need time to figure out what's real",
+            "tone": "realistic",
+            "impact": "cautious"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Royal Masquerade",
+    "description": "A commoner is hired to impersonate a runaway princess. The prince tasked with coaching her sees through the disguise—and falls anyway.",
+    "base_tropes": ["royal-romance", "fake-identity", "forbidden-love"],
+    "estimated_scenes": 15,
+    "cover_gradient": "from-purple-500 to-pink-600",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "The prince discovers you're not the real princess within hours. He could expose you. What's your move?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Beg him to keep your secret",
+            "tone": "desperate",
+            "impact": "submissive"
+          },
+          {
+            "id": "option-2",
+            "text": "Offer to tell him why you're really doing this",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Threaten to expose whatever he's hiding too",
+            "tone": "defiant",
+            "impact": "bold"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "He agrees to help you maintain the ruse, but you must follow his every instruction. Do you trust him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Agree but set your own boundaries",
+            "tone": "assertive",
+            "impact": "independent"
+          },
+          {
+            "id": "option-2",
+            "text": "Accept completely—he knows this world",
+            "tone": "trusting",
+            "impact": "dependent"
+          },
+          {
+            "id": "option-3",
+            "text": "Negotiate a partnership instead",
+            "tone": "diplomatic",
+            "impact": "equal"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "At a royal ball, he kisses you in front of everyone to sell the charade. But it feels too real. What do you do after?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront him about crossing the line",
+            "tone": "confused",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Pretend it meant nothing",
+            "tone": "guarded",
+            "impact": "avoidant"
+          },
+          {
+            "id": "option-3",
+            "text": "Admit you didn't want it to end",
+            "tone": "brave",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "The real princess returns. He must choose between duty and you. He asks what you want him to do. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him to choose duty—you always knew this would end",
+            "tone": "resigned",
+            "impact": "selfless"
+          },
+          {
+            "id": "option-2",
+            "text": "Confess your love and ask him to choose you",
+            "tone": "passionate",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Leave before he can decide—spare you both the pain",
+            "tone": "protective",
+            "impact": "avoidant"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Hacker's Heart",
+    "description": "A cybersecurity expert must work with the notorious hacker who once exposed her company's secrets. Digital warfare becomes a different kind of heat.",
+    "base_tropes": ["enemies-to-lovers", "forced-proximity", "techie-romance"],
+    "estimated_scenes": 12,
+    "cover_gradient": "from-green-500 to-emerald-700",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "He's been hired by your company to fix the mess he created. He smirks when he sees you. Your response?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse to work with him",
+            "tone": "hostile",
+            "impact": "defiant"
+          },
+          {
+            "id": "option-2",
+            "text": "Challenge him to prove he's actually reformed",
+            "tone": "skeptical",
+            "impact": "testing"
+          },
+          {
+            "id": "option-3",
+            "text": "Stay professional and ignore the past",
+            "tone": "controlled",
+            "impact": "distant"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "Working late, he shows you a backdoor someone else created. He could've exploited it but told you instead. What does this mean?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Thank him but remain wary of his motives",
+            "tone": "cautious",
+            "impact": "guarded"
+          },
+          {
+            "id": "option-2",
+            "text": "Acknowledge that maybe you misjudged him",
+            "tone": "softening",
+            "impact": "opening"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him why he's really helping",
+            "tone": "direct",
+            "impact": "probing"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "A rival hacker threatens to expose your personal data unless you sabotage the project. He offers to counter-hack them illegally. Do you let him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Accept his help—desperate times call for desperate measures",
+            "tone": "pragmatic",
+            "impact": "compromising"
+          },
+          {
+            "id": "option-2",
+            "text": "Refuse—you won't break the law",
+            "tone": "principled",
+            "impact": "moral"
+          },
+          {
+            "id": "option-3",
+            "text": "Work together to find a legal solution",
+            "tone": "collaborative",
+            "impact": "trusting"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "He admits he targeted your company originally because he was obsessed with your work. How do you process this?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Call him out for his twisted way of showing interest",
+            "tone": "angry",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit you've been equally obsessed with catching him",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him to shut him up",
+            "tone": "impulsive",
+            "impact": "passionate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Fae Court Intrigue",
+    "description": "Trapped in the Fae realm to repay a debt, she catches the eye of the ruthless Fae prince. His games are deadly, but the prize is her heart.",
+    "base_tropes": ["paranormal", "enemies-to-lovers", "captive-romance"],
+    "estimated_scenes": 16,
+    "cover_gradient": "from-teal-500 to-cyan-700",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "The Fae prince offers you a deal: win his game and go free, lose and stay forever. Do you play?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Accept—you'll find a way to win",
+            "tone": "confident",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Refuse and search for another way out",
+            "tone": "cautious",
+            "impact": "independent"
+          },
+          {
+            "id": "option-3",
+            "text": "Negotiate different terms first",
+            "tone": "clever",
+            "impact": "strategic"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "He's teaching you Fae politics through dangerous lessons. You're injured in one. He heals you personally, intimately. How do you react?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Push him away—you don't trust his kindness",
+            "tone": "defensive",
+            "impact": "resistant"
+          },
+          {
+            "id": "option-2",
+            "text": "Let him finish but keep your guard up",
+            "tone": "wary",
+            "impact": "cautious"
+          },
+          {
+            "id": "option-3",
+            "text": "Thank him and ask why he cares",
+            "tone": "curious",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "You discover he's being forced to marry another Fae for political alliance. He seems... upset. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Ignore it—his problems aren't yours",
+            "tone": "distant",
+            "impact": "self-protective"
+          },
+          {
+            "id": "option-2",
+            "text": "Offer comfort despite your complicated relationship",
+            "tone": "compassionate",
+            "impact": "caring"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask if there's a way to break the arrangement",
+            "tone": "hopeful",
+            "impact": "invested"
+          }
+        ]
+      },
+      {
+        "scene_number": 13,
+        "prompt_text": "He can send you home, but it means he'll be trapped in his political marriage forever. He tells you to choose for both of you. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Go home—you've sacrificed enough",
+            "tone": "self-preserving",
+            "impact": "practical"
+          },
+          {
+            "id": "option-2",
+            "text": "Stay and help him find a way out together",
+            "tone": "loyal",
+            "impact": "committed"
+          },
+          {
+            "id": "option-3",
+            "text": "Refuse to let him make you choose",
+            "tone": "defiant",
+            "impact": "equal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Surgeon's Touch",
+    "description": "A surgeon with a cold reputation meets his match in the trauma nurse who challenges him at every turn. Operating room tension spills over after hours.",
+    "base_tropes": ["medical-romance", "enemies-to-lovers", "workplace-romance"],
+    "estimated_scenes": 11,
+    "cover_gradient": "from-sky-500 to-blue-600",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "He publicly criticizes your technique in front of the team. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Defend yourself and challenge his approach",
+            "tone": "combative",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Stay professional but request private feedback in the future",
+            "tone": "assertive",
+            "impact": "boundaried"
+          },
+          {
+            "id": "option-3",
+            "text": "Thank him coolly and move on",
+            "tone": "controlled",
+            "impact": "dismissive"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "During a complicated surgery, you make a call that saves the patient but contradicts his orders. He confronts you after. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stand by your decision—the patient lived",
+            "tone": "unapologetic",
+            "impact": "defiant"
+          },
+          {
+            "id": "option-2",
+            "text": "Explain your medical reasoning professionally",
+            "tone": "rational",
+            "impact": "diplomatic"
+          },
+          {
+            "id": "option-3",
+            "text": "Admit you were scared of losing them",
+            "tone": "emotional",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 7,
+        "prompt_text": "You find him breaking down after losing a patient. He's vulnerable for the first time. Do you approach?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Give him privacy—he wouldn't want you to see this",
+            "tone": "respectful",
+            "impact": "distant"
+          },
+          {
+            "id": "option-2",
+            "text": "Sit with him silently in support",
+            "tone": "compassionate",
+            "impact": "comforting"
+          },
+          {
+            "id": "option-3",
+            "text": "Share your own story of loss",
+            "tone": "connecting",
+            "impact": "intimate"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "He admits his coldness is armor, and you're the only one who's ever gotten through it. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him you've been fighting the same pull",
+            "tone": "honest",
+            "impact": "mutual"
+          },
+          {
+            "id": "option-2",
+            "text": "Warn him about workplace relationships",
+            "tone": "practical",
+            "impact": "cautious"
+          },
+          {
+            "id": "option-3",
+            "text": "Close the distance and kiss him",
+            "tone": "bold",
+            "impact": "passionate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Stranded with the SEAL",
+    "description": "A plane crash strands a journalist with a Navy SEAL on a deserted island. Survival skills keep them alive, but attraction makes things complicated.",
+    "base_tropes": ["forced-proximity", "survival-romance", "military-hero"],
+    "estimated_scenes": 10,
+    "cover_gradient": "from-lime-500 to-green-600",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "He takes charge of survival immediately. You're capable too. Do you follow his lead or assert yourself?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Let him lead—he has the training",
+            "tone": "trusting",
+            "impact": "cooperative"
+          },
+          {
+            "id": "option-2",
+            "text": "Suggest working as equals",
+            "tone": "diplomatic",
+            "impact": "balanced"
+          },
+          {
+            "id": "option-3",
+            "text": "Prove you can handle yourself",
+            "tone": "competitive",
+            "impact": "independent"
+          }
+        ]
+      },
+      {
+        "scene_number": 4,
+        "prompt_text": "Building shelter requires sleeping close for warmth. The attraction is undeniable. How do you handle it?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Address it directly to clear the air",
+            "tone": "honest",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Ignore it and focus on survival",
+            "tone": "practical",
+            "impact": "avoidant"
+          },
+          {
+            "id": "option-3",
+            "text": "Make a joke to ease the tension",
+            "tone": "playful",
+            "impact": "flirtatious"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "You're injured and he has to carry you back to camp. He's tender in a way that surprises you. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Thank him for taking care of you",
+            "tone": "grateful",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-2",
+            "text": "Insist you can walk on your own",
+            "tone": "stubborn",
+            "impact": "independent"
+          },
+          {
+            "id": "option-3",
+            "text": "Admit you feel safe with him",
+            "tone": "soft",
+            "impact": "intimate"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "A rescue boat appears on the horizon. He asks if you want what's happening between you to end with the rescue. What's your answer?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him you want to see where this goes",
+            "tone": "hopeful",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Suggest it was just survival situation intensity",
+            "tone": "realistic",
+            "impact": "self-protective"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him as your answer",
+            "tone": "passionate",
+            "impact": "bold"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Sheikh's Forbidden Bride",
+    "description": "Hired as a diplomatic translator, she's unprepared for the sheikh's proposal of a political marriage. Duty wars with desire in the desert palace.",
+    "base_tropes": ["sheikh-romance", "arranged-marriage", "forbidden-love"],
+    "estimated_scenes": 14,
+    "cover_gradient": "from-amber-500 to-yellow-600",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "The sheikh proposes a marriage of convenience to strengthen diplomatic ties. What's your response?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse—you won't be a political pawn",
+            "tone": "defiant",
+            "impact": "independent"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask what you would gain from this arrangement",
+            "tone": "pragmatic",
+            "impact": "negotiating"
+          },
+          {
+            "id": "option-3",
+            "text": "Request time to consider",
+            "tone": "cautious",
+            "impact": "thoughtful"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "Palace tradition requires you to wear traditional garments and observe strict customs. Do you comply?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Embrace the traditions with respect",
+            "tone": "adaptable",
+            "impact": "diplomatic"
+          },
+          {
+            "id": "option-2",
+            "text": "Negotiate a blend of both cultures",
+            "tone": "assertive",
+            "impact": "balanced"
+          },
+          {
+            "id": "option-3",
+            "text": "Resist—you won't lose your identity",
+            "tone": "stubborn",
+            "impact": "defiant"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "His advisors demand he take a second wife for an heir. He refuses and risks political upheaval. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stand by his decision",
+            "tone": "loyal",
+            "impact": "supportive"
+          },
+          {
+            "id": "option-2",
+            "text": "Offer to step aside for his kingdom's sake",
+            "tone": "selfless",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-3",
+            "text": "Find a political solution together",
+            "tone": "strategic",
+            "impact": "partnership"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "He confesses the marriage was never just political for him. He chose you. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Admit you've fallen for him too",
+            "tone": "emotional",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-2",
+            "text": "Question if you can trust his words",
+            "tone": "wary",
+            "impact": "guarded"
+          },
+          {
+            "id": "option-3",
+            "text": "Show him through actions instead of words",
+            "tone": "passionate",
+            "impact": "physical"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Witch's Redemption",
+    "description": "A witch cursed to feel no emotion meets the demon hunter sworn to destroy her kind. His touch awakens feelings she thought lost forever.",
+    "base_tropes": ["paranormal", "enemies-to-lovers", "redemption-arc"],
+    "estimated_scenes": 15,
+    "cover_gradient": "from-violet-600 to-purple-800",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "The demon hunter has you cornered, but hesitates when he sees you're cursed, not evil. Do you try to escape or explain?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Use his hesitation to escape",
+            "tone": "survival-focused",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Explain your curse and ask for mercy",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Attack first—you can't trust a hunter",
+            "tone": "aggressive",
+            "impact": "hostile"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "When he touches you, you feel something—a flicker of emotion you haven't felt in years. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Pull away—feeling is dangerous",
+            "tone": "frightened",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask him to touch you again",
+            "tone": "desperate",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Stay silent and process what just happened",
+            "tone": "cautious",
+            "impact": "reserved"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "He discovers breaking your curse requires him to sacrifice his hunter abilities. He'd become ordinary. What do you tell him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Refuse to let him sacrifice himself for you",
+            "tone": "selfless",
+            "impact": "protective"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit you want to feel again—with him",
+            "tone": "honest",
+            "impact": "selfish"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him the choice must be entirely his",
+            "tone": "fair",
+            "impact": "respectful"
+          }
+        ]
+      },
+      {
+        "scene_number": 13,
+        "prompt_text": "The curse is breaking, and you're overwhelmed with centuries of suppressed emotions. He's there to anchor you. Do you let him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Cling to him like he's your only lifeline",
+            "tone": "dependent",
+            "impact": "trusting"
+          },
+          {
+            "id": "option-2",
+            "text": "Try to handle it alone—you've always been alone",
+            "tone": "independent",
+            "impact": "stubborn"
+          },
+          {
+            "id": "option-3",
+            "text": "Let him guide you through it slowly",
+            "tone": "accepting",
+            "impact": "vulnerable"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Best Friend's Brother",
+    "description": "Moving home after a bad breakup, she's crashing with her best friend—whose infuriatingly attractive brother just moved in too. Some rules are meant to be broken.",
+    "base_tropes": ["forbidden-love", "brother's-best-friend", "roommate-romance"],
+    "estimated_scenes": 12,
+    "cover_gradient": "from-rose-400 to-red-500",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "You catch him checking you out. Your best friend made you both promise to stay away from each other. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Call him out on it",
+            "tone": "confrontational",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Ignore it and avoid him",
+            "tone": "cautious",
+            "impact": "distant"
+          },
+          {
+            "id": "option-3",
+            "text": "Check him out right back",
+            "tone": "playful",
+            "impact": "flirtatious"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "Late night in the kitchen, he admits he's had a thing for you for years. Your best friend is asleep upstairs. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Shut it down—you can't betray your friend",
+            "tone": "loyal",
+            "impact": "resistant"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit the feeling is mutual but this can't happen",
+            "tone": "conflicted",
+            "impact": "honest"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him and deal with consequences later",
+            "tone": "impulsive",
+            "impact": "reckless"
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "prompt_text": "Your best friend catches you two in a compromising position. She's furious and feels betrayed. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Apologize profusely and beg for forgiveness",
+            "tone": "regretful",
+            "impact": "submissive"
+          },
+          {
+            "id": "option-2",
+            "text": "Explain that you have real feelings for him",
+            "tone": "defensive",
+            "impact": "honest"
+          },
+          {
+            "id": "option-3",
+            "text": "Give her space and time to process",
+            "tone": "respectful",
+            "impact": "patient"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "He says he'll back off if it means saving your friendship with his sister. But you have to decide. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Choose your friendship—it's lasted longer",
+            "tone": "practical",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Fight for both—you won't give up either",
+            "tone": "determined",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him you can't make this decision alone",
+            "tone": "overwhelmed",
+            "impact": "vulnerable"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Undercover Desire",
+    "description": "Two undercover agents from rival agencies must pose as a married couple. The fake marriage feels too real, and their mission isn't the only thing at risk.",
+    "base_tropes": ["fake-relationship", "spy-romance", "forced-proximity"],
+    "estimated_scenes": 14,
+    "cover_gradient": "from-gray-700 to-slate-900",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "Your agencies are rivals, but you must share a bed to maintain cover. How do you establish boundaries?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Build a pillow wall down the middle",
+            "tone": "defensive",
+            "impact": "guarded"
+          },
+          {
+            "id": "option-2",
+            "text": "Agree you're both professionals—no rules needed",
+            "tone": "confident",
+            "impact": "trusting"
+          },
+          {
+            "id": "option-3",
+            "text": "Joke about it to cut the tension",
+            "tone": "playful",
+            "impact": "flirtatious"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "At a target's party, you must dance intimately to maintain cover. He whispers that this is just the mission. Do you believe him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Agree and keep it professional",
+            "tone": "controlled",
+            "impact": "distant"
+          },
+          {
+            "id": "option-2",
+            "text": "Whisper back that you're not so sure",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Pull him closer without answering",
+            "tone": "bold",
+            "impact": "provocative"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "You discover he's been ordered to eliminate you after the mission. He hasn't done it. You could report him or confront him. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront him directly about the order",
+            "tone": "brave",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-2",
+            "text": "Say nothing and watch your back",
+            "tone": "cautious",
+            "impact": "suspicious"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him if what you have is real",
+            "tone": "vulnerable",
+            "impact": "trusting"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "The mission is complete. Your agencies want you separated and debriefed. He asks you to run away with him instead. What's your answer?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Run with him—burn it all down for him",
+            "tone": "passionate",
+            "impact": "reckless"
+          },
+          {
+            "id": "option-2",
+            "text": "Suggest finding a legal way to stay together",
+            "tone": "practical",
+            "impact": "hopeful"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him you need time to think",
+            "tone": "uncertain",
+            "impact": "conflicted"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The CEO's Secret Arrangement",
+    "description": "A powerful CEO needs a fake fiancée to secure a business deal. What starts as a contractual arrangement becomes something neither expected.",
+    "base_tropes": ["fake-dating", "ceo-romance", "enemies-to-lovers"],
+    "estimated_scenes": 12,
+    "cover_gradient": "from-rose-500 to-pink-600",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "How do you respond to their unexpected proposal?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Challenge them directly with skepticism",
+            "tone": "confrontational",
+            "impact": "bold"
+          },
+          {
+            "id": "option-2",
+            "text": "Express cautious interest",
+            "tone": "diplomatic",
+            "impact": "reserved"
+          },
+          {
+            "id": "option-3",
+            "text": "Share your vulnerable side",
+            "tone": "emotional",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "At a high-stakes business dinner, his rival implies you're just a gold digger. He's about to lose his temper. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Handle it yourself with cutting wit",
+            "tone": "confident",
+            "impact": "impressive"
+          },
+          {
+            "id": "option-2",
+            "text": "Let him defend you",
+            "tone": "trusting",
+            "impact": "dependent"
+          },
+          {
+            "id": "option-3",
+            "text": "Defuse with grace and change the subject",
+            "tone": "diplomatic",
+            "impact": "strategic"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "The deal is done. He offers to extend the contract—or end it. You've caught real feelings. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "End it before you get hurt more",
+            "tone": "self-protective",
+            "impact": "withdrawn"
+          },
+          {
+            "id": "option-2",
+            "text": "Confess your real feelings",
+            "tone": "brave",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask what he really wants",
+            "tone": "cautious",
+            "impact": "probing"
+          }
+        ]
+      },
+      {
+        "scene_number": 11,
+        "prompt_text": "His family's company is in crisis. Staying with him means facing public scrutiny and scandal. Do you stay?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stand by him publicly and proudly",
+            "tone": "loyal",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Suggest a strategic retreat to protect you both",
+            "tone": "practical",
+            "impact": "cautious"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him you'll support whatever he decides",
+            "tone": "supportive",
+            "impact": "flexible"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Moonlit Destiny",
+    "description": "A human librarian discovers her new neighbor is a werewolf alpha. As supernatural threats emerge, they must navigate their forbidden attraction.",
+    "base_tropes": ["paranormal", "fated-mates", "forbidden-love"],
+    "estimated_scenes": 14,
+    "cover_gradient": "from-purple-600 to-indigo-700",
+    "choice_points": [
+      {
+        "scene_number": 3,
+        "prompt_text": "You witness him shift under the full moon. He knows you saw. Do you run or stay?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Run home and lock your doors",
+            "tone": "terrified",
+            "impact": "defensive"
+          },
+          {
+            "id": "option-2",
+            "text": "Stay frozen but maintain eye contact",
+            "tone": "brave",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Approach him slowly",
+            "tone": "curious",
+            "impact": "trusting"
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "prompt_text": "His pack demands he choose a wolf mate, not a human. He refuses. Do you step aside for his sake?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Offer to leave—you won't divide his pack",
+            "tone": "selfless",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Fight for your place beside him",
+            "tone": "defiant",
+            "impact": "bold"
+          },
+          {
+            "id": "option-3",
+            "text": "Ask him what he truly wants",
+            "tone": "uncertain",
+            "impact": "vulnerable"
+          }
+        ]
+      },
+      {
+        "scene_number": 10,
+        "prompt_text": "A rival pack attacks, and you're targeted as his weakness. He wants you to hide, but you've found information that could help. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Hide like he asked—trust his protection",
+            "tone": "obedient",
+            "impact": "safe"
+          },
+          {
+            "id": "option-2",
+            "text": "Share the information and insist on helping",
+            "tone": "brave",
+            "impact": "partnership"
+          },
+          {
+            "id": "option-3",
+            "text": "Go to the rival pack yourself to negotiate",
+            "tone": "reckless",
+            "impact": "dangerous"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "To truly bond with him means accepting the mate mark—you'll be connected to wolf magic forever. Do you accept?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Accept without hesitation",
+            "tone": "certain",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask more about what you're giving up",
+            "tone": "cautious",
+            "impact": "thoughtful"
+          },
+          {
+            "id": "option-3",
+            "text": "Request time to say goodbye to your human life",
+            "tone": "bittersweet",
+            "impact": "realistic"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Second Chance Summer",
+    "description": "Returning to her hometown after a decade, she encounters the one who got away. Can they overcome their past and find love again?",
+    "base_tropes": ["second-chance", "small-town", "childhood-friends"],
+    "estimated_scenes": 10,
+    "cover_gradient": "from-amber-400 to-orange-500",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "You run into him at the local diner. He looks shocked to see you. Do you approach or leave?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Leave before it gets awkward",
+            "tone": "avoidant",
+            "impact": "distant"
+          },
+          {
+            "id": "option-2",
+            "text": "Walk over and say hello casually",
+            "tone": "brave",
+            "impact": "opening"
+          },
+          {
+            "id": "option-3",
+            "text": "Wait to see if he approaches you first",
+            "tone": "cautious",
+            "impact": "passive"
+          }
+        ]
+      },
+      {
+        "scene_number": 4,
+        "prompt_text": "He admits he never stopped thinking about you. But you left for good reasons. How do you respond?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Remind him why you had to leave",
+            "tone": "defensive",
+            "impact": "distant"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit you thought about him too",
+            "tone": "honest",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him too much has changed",
+            "tone": "realistic",
+            "impact": "guarded"
+          }
+        ]
+      },
+      {
+        "scene_number": 7,
+        "prompt_text": "The town's summer festival brings back memories of your last night together. He asks if you remember. What do you say?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Pretend you don't remember clearly",
+            "tone": "protective",
+            "impact": "dishonest"
+          },
+          {
+            "id": "option-2",
+            "text": "Admit you remember every detail",
+            "tone": "emotional",
+            "impact": "vulnerable"
+          },
+          {
+            "id": "option-3",
+            "text": "Say you remember but it was a long time ago",
+            "tone": "careful",
+            "impact": "reserved"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "Your big-city job wants you back early. He asks you to stay. You have to choose between your career and a second chance. What do you do?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stay—some chances only come once",
+            "tone": "romantic",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Go back but promise to make long-distance work",
+            "tone": "practical",
+            "impact": "compromising"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him you need more time to decide",
+            "tone": "uncertain",
+            "impact": "conflicted"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "The Highlander's Vow",
+    "description": "Transported to 18th century Scotland, a modern woman must navigate Highland politics and an arranged marriage to a fierce warrior.",
+    "base_tropes": ["time-travel", "historical", "forced-proximity"],
+    "estimated_scenes": 15,
+    "cover_gradient": "from-emerald-600 to-teal-700",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "You've just arrived in the past. The Highland warrior claims you as his betrothed. Do you go along with it or fight?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Agree for now until you figure out how to get home",
+            "tone": "strategic",
+            "impact": "compliant"
+          },
+          {
+            "id": "option-2",
+            "text": "Insist this is a mistake and demand answers",
+            "tone": "defiant",
+            "impact": "confrontational"
+          },
+          {
+            "id": "option-3",
+            "text": "Play along but start planning your escape",
+            "tone": "deceptive",
+            "impact": "calculating"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "You accidentally reveal modern knowledge that could change history. He demands to know who you really are. Do you tell the truth?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him everything about time travel",
+            "tone": "honest",
+            "impact": "risky"
+          },
+          {
+            "id": "option-2",
+            "text": "Make up a believable lie",
+            "tone": "protective",
+            "impact": "deceptive"
+          },
+          {
+            "id": "option-3",
+            "text": "Tell him only part of the truth",
+            "tone": "cautious",
+            "impact": "measured"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "A rival clan attacks during your wedding. He gives you a sword and asks if you can fight. Can you trust him enough to stand beside him?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Take the sword and fight beside him",
+            "tone": "brave",
+            "impact": "partnership"
+          },
+          {
+            "id": "option-2",
+            "text": "Use the chaos to try to escape",
+            "tone": "opportunistic",
+            "impact": "selfish"
+          },
+          {
+            "id": "option-3",
+            "text": "Hide like he expects you to",
+            "tone": "traditional",
+            "impact": "obedient"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "You've found a way home, but you've fallen for him. He asks you to stay. What do you choose?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Stay in the past with him",
+            "tone": "romantic",
+            "impact": "sacrificial"
+          },
+          {
+            "id": "option-2",
+            "text": "Ask him to come to the future with you",
+            "tone": "hopeful",
+            "impact": "unrealistic"
+          },
+          {
+            "id": "option-3",
+            "text": "Leave—you can't abandon your whole life",
+            "tone": "practical",
+            "impact": "heartbreaking"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Captive Heart",
+    "description": "Kidnapped by a notorious pirate, a noblewoman must navigate treacherous waters—both literal and emotional—as she falls for her captor.",
+    "base_tropes": ["pirate-romance", "enemies-to-lovers", "captivity"],
+    "estimated_scenes": 13,
+    "cover_gradient": "from-yellow-600 to-orange-700",
+    "choice_points": [
+      {
+        "scene_number": 2,
+        "prompt_text": "You're brought aboard the pirate ship. Do you resist or try to understand your captor?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Resist fiercely—never show weakness",
+            "tone": "defiant",
+            "impact": "strong-willed"
+          },
+          {
+            "id": "option-2",
+            "text": "Observe quietly to learn more about him",
+            "tone": "curious",
+            "impact": "strategic"
+          },
+          {
+            "id": "option-3",
+            "text": "Attempt to negotiate your release",
+            "tone": "diplomatic",
+            "impact": "pragmatic"
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "prompt_text": "He shows unexpected kindness, sharing stories of his past. Do you open up to him or keep your guard up?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Open up about your own life",
+            "tone": "vulnerable",
+            "impact": "trusting"
+          },
+          {
+            "id": "option-2",
+            "text": "Keep your guard up—he's still a captor",
+            "tone": "cautious",
+            "impact": "reserved"
+          },
+          {
+            "id": "option-3",
+            "text": "Change the subject back to him",
+            "tone": "curious",
+            "impact": "engaging"
+          }
+        ]
+      },
+      {
+        "scene_number": 9,
+        "prompt_text": "A storm hits, and you're thrown together in a small cabin. The tension is palpable. Do you confront your feelings or suppress them?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Confront your feelings head-on",
+            "tone": "bold",
+            "impact": "passionate"
+          },
+          {
+            "id": "option-2",
+            "text": "Suppress them and focus on survival",
+            "tone": "practical",
+            "impact": "disciplined"
+          },
+          {
+            "id": "option-3",
+            "text": "Deflect with humor to ease the tension",
+            "tone": "playful",
+            "impact": "lighthearted"
+          }
+        ]
+      },
+      {
+        "scene_number": 12,
+        "prompt_text": "The navy is closing in to rescue you. He asks if you want what's happening between you to end with the rescue. What's your answer?",
+        "options": [
+          {
+            "id": "option-1",
+            "text": "Tell him you want to see where this goes",
+            "tone": "hopeful",
+            "impact": "committed"
+          },
+          {
+            "id": "option-2",
+            "text": "Suggest it was just survival situation intensity",
+            "tone": "realistic",
+            "impact": "self-protective"
+          },
+          {
+            "id": "option-3",
+            "text": "Kiss him as your answer",
+            "tone": "passionate",
+            "impact": "bold"
+          }
+        ]
+      }
+    ]
+  }
+]
