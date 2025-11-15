@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
+import { Heading } from "~/components/Heading";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { ApiError, api } from "~/lib/api/client";
 
@@ -90,7 +91,9 @@ function SignupPage() {
 					<div className="flex justify-center mb-4">
 						<Heart className="w-12 h-12 text-romance-600" fill="currentColor" />
 					</div>
-					<h1 className="text-3xl font-bold text-slate-900">Create Account</h1>
+					<Heading level="h1" className="mb-2">
+						Create Account
+					</Heading>
 					<p className="text-slate-600 mt-2">
 						Start your personalized romance journey
 					</p>

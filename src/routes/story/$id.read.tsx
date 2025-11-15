@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
+import { Heading } from "~/components/Heading";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
 import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
 import { api } from "~/lib/api/client";
@@ -76,9 +77,9 @@ function ReadingPage() {
 			<div className="min-h-screen bg-linear-to-br from-rose-50 via-purple-50 to-pink-50 flex items-center justify-center">
 				<div className="max-w-md mx-auto text-center p-8">
 					<div className="text-red-500 text-6xl mb-4">⚠️</div>
-					<h1 className="text-2xl font-bold text-gray-800 mb-2">
+					<Heading level="h1" size="section" className="text-gray-800 mb-2">
 						Oops! Something went wrong
-					</h1>
+					</Heading>
 					<p className="text-gray-600 mb-6">
 						{error instanceof Error ? error.message : "Failed to load scene"}
 					</p>
@@ -129,12 +130,10 @@ function ReadingPage() {
 							</Link>
 						</div>
 					</div>
-
 					{/* Title */}
-					<h1 className="text-2xl font-bold text-gray-800 mb-3">
+					<Heading level="h1" size="section" className="text-gray-800 mb-3">
 						{story.title}
-					</h1>
-
+					</Heading>{" "}
 					{/* Progress Bar */}
 					<div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
 						<div
@@ -182,9 +181,9 @@ function ReadingPage() {
 					<div className="bg-white rounded-xl shadow-lg p-8 mb-6">
 						<div className="flex items-center gap-2 mb-4">
 							<Flame className="w-5 h-5 text-rose-500" />
-							<h2 className="text-xl font-bold text-gray-800">
+							<Heading level="h2" size="subsection" className="text-gray-800">
 								What happens next?
-							</h2>
+							</Heading>
 						</div>
 						<p className="text-gray-600 mb-6">{choicePoint.promptText}</p>
 
@@ -257,7 +256,9 @@ function ReadingPage() {
 				{isLastScene && (
 					<div className="bg-linear-to-br from-purple-100 to-rose-100 rounded-xl shadow-lg p-8 text-center">
 						<Sparkles className="w-16 h-16 text-rose-500 mx-auto mb-4" />
-						<h2 className="text-2xl font-bold text-gray-800 mb-2">The End</h2>
+						<Heading level="h2" size="section" className="text-gray-800 mb-2">
+							The End
+						</Heading>
 						<p className="text-gray-600 mb-6">
 							You've completed this story! Thank you for reading.
 						</p>

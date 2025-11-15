@@ -3,6 +3,7 @@ import { ArrowLeft, BookOpen, Heart, Sparkles } from "lucide-react";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -73,18 +74,22 @@ function TemplateDetailPage() {
 							</div>
 
 							<div className="p-8">
-								<h1 className="text-4xl font-bold text-slate-900 mb-4">
+								<Heading level="h1" size="page" className="mb-4">
 									{template.title}
-								</h1>
+								</Heading>
 								<p className="text-lg text-slate-700 mb-6 leading-relaxed">
 									{template.description}
 								</p>
 
 								{/* Tropes */}
 								<div className="mb-6">
-									<h3 className="text-sm font-semibold text-slate-700 mb-3">
+									<Heading
+										level="h3"
+										size="label"
+										className="text-slate-700 mb-3"
+									>
 										Tropes:
-									</h3>
+									</Heading>
 									<div className="flex flex-wrap gap-2">
 										{template.base_tropes.map((trope) => (
 											<span
@@ -128,9 +133,9 @@ function TemplateDetailPage() {
 
 						{/* Choice Points Preview */}
 						<div className="bg-white rounded-2xl shadow-xl p-8">
-							<h2 className="text-2xl font-bold text-slate-900 mb-6">
+							<Heading level="h2" size="section" className="mb-6">
 								Key Decision Points
-							</h2>
+							</Heading>
 							<p className="text-slate-600 mb-6">
 								Throughout your story, you'll make choices that shape the
 								narrative. Here's a preview of some key moments:
@@ -149,9 +154,9 @@ function TemplateDetailPage() {
 												</span>
 											</div>
 											<div className="flex-1">
-												<h3 className="text-lg font-semibold text-slate-900 mb-3">
+												<Heading level="h3" size="subsection" className="mb-3">
 													{choice.prompt_text}
-												</h3>
+												</Heading>
 												<div className="space-y-2">
 													{choice.options.map((option) => (
 														<div

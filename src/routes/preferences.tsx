@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FullPageLoader } from "~/components/FullPageLoader";
+import { Heading } from "~/components/Heading";
 import {
 	GenresSection,
 	PacingSection,
@@ -144,9 +145,9 @@ function PreferencesPage() {
 						<div className="flex items-center gap-4">
 							<Settings className="w-10 h-10 text-romance-500" />
 							<div>
-								<h1 className="text-3xl font-bold text-slate-900">
+								<Heading level="h1" className="mb-1">
 									Novel Generation Preferences
-								</h1>
+								</Heading>
 								<p className="text-slate-600">
 									Customize how AI generates stories for you
 								</p>

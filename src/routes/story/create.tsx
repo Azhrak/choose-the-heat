@@ -6,6 +6,7 @@ import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
 import { RadioButtonGroup } from "~/components/RadioButtonGroup";
@@ -139,9 +140,9 @@ function StoryCreatePage() {
 					<div className="bg-white rounded-2xl shadow-xl p-8">
 						<div className="text-center mb-8">
 							<BookOpen className="w-16 h-16 text-romance-500 mx-auto mb-4" />
-							<h1 className="text-3xl font-bold text-slate-900 mb-4">
+							<Heading level="h1" className="mb-4">
 								Start Your Story
-							</h1>
+							</Heading>
 							<p className="text-lg text-slate-600 mb-2">
 								<span className="font-semibold">{template.title}</span>
 							</p>
@@ -153,9 +154,9 @@ function StoryCreatePage() {
 						{/* Preference Customization */}
 						<div className="space-y-6 mb-8">
 							<div className="border-t border-slate-200 pt-6">
-								<h2 className="text-xl font-bold text-slate-900 mb-2">
+								<Heading level="h2" size="subsection" className="mb-2">
 									Customize This Story
-								</h2>
+								</Heading>
 								<p className="text-slate-600 text-sm mb-6">
 									Adjust these settings for this story only, or keep your
 									defaults.

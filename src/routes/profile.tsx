@@ -3,6 +3,7 @@ import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { PageContainer } from "~/components/PageContainer";
 import {
 	DangerZone,
@@ -151,9 +152,9 @@ function ProfilePage() {
 			<PageContainer maxWidth="md">
 				<div className="flex items-center gap-3 mb-8">
 					<User className="w-8 h-8 text-romance-600" />
-					<h1 className="text-4xl font-bold text-slate-900">
+					<Heading level="h1" size="page">
 						Profile Settings
-					</h1>
+					</Heading>
 				</div>
 
 				<ProfileInformation

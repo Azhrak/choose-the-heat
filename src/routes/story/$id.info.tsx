@@ -12,6 +12,7 @@ import {
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -90,9 +91,9 @@ function StoryInfoPage() {
 
 					{/* Title & Metadata */}
 					<div className="p-8">
-						<h1 className="text-4xl font-bold text-slate-900 mb-2">
+						<Heading level="h1" size="page" className="mb-2">
 							{story.story_title || story.template.title}
-						</h1>
+						</Heading>
 						<p className="text-slate-600 mb-4">{story.template.description}</p>
 
 						<div className="flex items-center gap-6 text-sm text-slate-500 mb-6">
@@ -144,9 +145,9 @@ function StoryInfoPage() {
 				{/* Story Preferences */}
 				{preferences && (
 					<div className="bg-white rounded-2xl shadow-lg p-8">
-						<h2 className="text-2xl font-bold text-slate-900 mb-6">
+						<Heading level="h2" size="section" className="mb-6">
 							Story Settings
-						</h2>
+						</Heading>
 
 						<div className="space-y-6">
 							{/* Spice Level */}
@@ -154,9 +155,9 @@ function StoryInfoPage() {
 								<div>
 									<div className="flex items-center gap-2 mb-2">
 										<Flame className="w-5 h-5 text-romance-600" />
-										<h3 className="text-lg font-semibold text-slate-900">
+										<Heading level="h3" size="subsection">
 											Spice Level
-										</h3>
+										</Heading>
 									</div>
 									<div className="pl-7">
 										<div className="flex items-center gap-2 mb-1">
@@ -179,9 +180,9 @@ function StoryInfoPage() {
 								<div>
 									<div className="flex items-center gap-2 mb-2">
 										<Timer className="w-5 h-5 text-romance-600" />
-										<h3 className="text-lg font-semibold text-slate-900">
+										<Heading level="h3" size="subsection">
 											Pacing
-										</h3>
+										</Heading>
 									</div>
 									<div className="pl-7">
 										<p className="font-medium text-slate-700 mb-1">
@@ -198,9 +199,9 @@ function StoryInfoPage() {
 							<div>
 								<div className="flex items-center gap-2 mb-2">
 									<FileText className="w-5 h-5 text-romance-600" />
-									<h3 className="text-lg font-semibold text-slate-900">
+									<Heading level="h3" size="subsection">
 										Scene Length
-									</h3>
+									</Heading>
 								</div>
 								<div className="pl-7">
 									<p className="font-medium text-slate-700 mb-1">
@@ -217,9 +218,9 @@ function StoryInfoPage() {
 								<div>
 									<div className="flex items-center gap-2 mb-2">
 										<BookOpen className="w-5 h-5 text-romance-600" />
-										<h3 className="text-lg font-semibold text-slate-900">
+										<Heading level="h3" size="subsection">
 											Genres
-										</h3>
+										</Heading>
 									</div>
 									<div className="pl-7">
 										<div className="flex flex-wrap gap-2">
@@ -241,9 +242,9 @@ function StoryInfoPage() {
 								<div>
 									<div className="flex items-center gap-2 mb-2">
 										<Heart className="w-5 h-5 text-romance-600" />
-										<h3 className="text-lg font-semibold text-slate-900">
+										<Heading level="h3" size="subsection">
 											Tropes
-										</h3>
+										</Heading>
 									</div>
 									<div className="pl-7">
 										<div className="flex flex-wrap gap-2">

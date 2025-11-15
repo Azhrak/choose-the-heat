@@ -4,6 +4,7 @@ import { useState } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryCard } from "~/components/StoryCard";
@@ -55,7 +56,9 @@ function LibraryPage() {
 			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl">
-				<h1 className="text-4xl font-bold text-slate-900 mb-8">My Library</h1>
+				<Heading level="h1" size="page" className="mb-8">
+					My Library
+				</Heading>
 				{/* Tabs */}
 				<div className="flex gap-4 mb-8">
 					<button

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Heart, Sparkles } from "lucide-react";
+import { Heading } from "~/components/Heading";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -21,9 +22,9 @@ function Home() {
 								className="w-30 h-30"
 							/>
 						</div>
-						<h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+						<Heading level="h1" size="hero" className="mb-6">
 							Your Story, Your Way
-						</h1>
+						</Heading>
 						<p className="text-xl text-slate-600 mb-8">
 							Experience AI-powered romance novels that adapt to your choices.
 							Every decision shapes your perfect love story.
@@ -50,9 +51,9 @@ function Home() {
 							<div className="flex justify-center mb-4">
 								<BookOpen className="w-12 h-12 text-romance-500" />
 							</div>
-							<h3 className="text-xl font-semibold mb-2">
+							<Heading level="h3" size="subsection" className="mb-2">
 								Interactive Stories
-							</h3>
+							</Heading>
 							<p className="text-slate-600">
 								Make choices that shape the narrative and influence your
 								characters' journey
@@ -63,7 +64,9 @@ function Home() {
 							<div className="flex justify-center mb-4">
 								<Sparkles className="w-12 h-12 text-romance-500" />
 							</div>
-							<h3 className="text-xl font-semibold mb-2">AI-Powered</h3>
+							<Heading level="h3" size="subsection" className="mb-2">
+								AI-Powered
+							</Heading>
 							<p className="text-slate-600">
 								Every scene is uniquely generated based on your preferences and
 								decisions
@@ -74,7 +77,9 @@ function Home() {
 							<div className="flex justify-center mb-4">
 								<Heart className="w-12 h-12 text-romance-500" />
 							</div>
-							<h3 className="text-xl font-semibold mb-2">Your Preferences</h3>
+							<Heading level="h3" size="subsection" className="mb-2">
+								Your Preferences
+							</Heading>
 							<p className="text-slate-600">
 								Choose your favorite tropes, spice level, and pacing for a
 								personalized experience

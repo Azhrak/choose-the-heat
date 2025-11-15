@@ -7,6 +7,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Footer } from "~/components/Footer";
 import { FormInput } from "~/components/FormInput";
 import { Header } from "~/components/Header";
+import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
 import { PageContainer } from "~/components/PageContainer";
@@ -44,9 +45,9 @@ function BrowsePage() {
 			<PageContainer maxWidth="full">
 				{/* Welcome Section */}
 				<div className="text-center mb-8">
-					<h1 className="text-4xl font-bold text-slate-900 mb-4">
+					<Heading level="h1" size="page" className="mb-4">
 						Choose Your Romance Adventure
-					</h1>
+					</Heading>
 					<p className="text-lg text-slate-600">
 						Select a story template and start your personalized journey
 					</p>
@@ -68,9 +69,9 @@ function BrowsePage() {
 				</div>{" "}
 				{/* Trope Filters */}
 				<div className="mb-8">
-					<h2 className="text-sm font-semibold text-slate-700 mb-3">
+					<Heading level="h2" size="label" className="text-slate-700 mb-3">
 						Filter by Tropes:
-					</h2>
+					</Heading>
 					<div className="flex flex-wrap gap-2">
 						{TROPES.map((trope) => (
 							<button

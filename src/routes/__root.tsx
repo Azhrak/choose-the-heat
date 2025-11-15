@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { Heading } from "~/components/Heading";
 import globalStyles from "~/styles/globals.css?url";
 
 export const Route = createRootRoute({
@@ -82,9 +83,9 @@ function NotFoundComponent() {
 				<div className="min-h-screen bg-linear-to-br from-romance-50 via-white to-romance-100 flex items-center justify-center p-4">
 					<div className="text-center">
 						<Heart className="w-24 h-24 text-romance-400 mx-auto mb-6" />
-						<h1 className="text-4xl font-bold text-slate-900 mb-4">
+						<Heading level="h1" size="page" className="mb-4">
 							Page Not Found
-						</h1>
+						</Heading>
 						<p className="text-lg text-slate-600 mb-8">
 							This story page doesn't exist yet.
 						</p>

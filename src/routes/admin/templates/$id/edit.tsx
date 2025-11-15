@@ -403,9 +403,9 @@ function EditTemplatePage() {
 					{/* Choice Points Management */}
 					<div className="mt-8 pt-8 border-t border-slate-200">
 						<div className="mb-6">
-							<h2 className="text-xl font-semibold text-slate-900 mb-2">
+							<Heading level="h2" size="subsection" className="mb-2">
 								Choice Points
-							</h2>
+							</Heading>
 							<p className="text-slate-600">
 								Manage choice points that appear throughout the story. Changes
 								are saved separately from template details.
@@ -433,9 +433,9 @@ function EditTemplatePage() {
 
 					{/* Status Management */}
 					<div className="mt-8 pt-8 border-t border-slate-200">
-						<h2 className="text-xl font-semibold text-slate-900 mb-4">
+						<Heading level="h2" size="subsection" className="mb-4">
 							Status Management
-						</h2>
+						</Heading>
 						<div className="flex flex-wrap gap-3">
 							{template.status !== "draft" && (
 								<button
@@ -483,9 +483,14 @@ function EditTemplatePage() {
 					{/* Danger Zone (Admin Only) */}
 					{role === "admin" && (
 						<div className="mt-8 pt-8 border-t border-red-200">
-							<h2 className="text-xl font-semibold text-red-900 mb-4">
+							<Heading
+								level="h2"
+								size="subsection"
+								variant="danger"
+								className="mb-4"
+							>
 								Danger Zone
-							</h2>
+							</Heading>
 							<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 								<p className="text-sm text-red-800 mb-4">
 									Deleting a template is permanent and will remove all

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/Button";
+import { Heading } from "~/components/Heading";
 import { RadioButton } from "~/components/RadioButton";
 import { ApiError, api } from "~/lib/api/client";
 import {
@@ -125,14 +126,13 @@ function OnboardingPage() {
 							className="w-16 h-16 text-romance-500 mx-auto mb-4"
 							fill="currentColor"
 						/>
-						<h1 className="text-4xl font-bold text-slate-900 mb-2">
+						<Heading level="h1" size="page" className="mb-2">
 							Let's Personalize Your Experience
-						</h1>
+						</Heading>
 						<p className="text-slate-600">
 							Tell us what you love, and we'll craft stories just for you
 						</p>
-					</div>
-
+					</div>{" "}
 					{/* Progress Stepper */}
 					<div className="flex items-center justify-center mb-12">
 						{[1, 2, 3].map((s) => (
@@ -158,23 +158,21 @@ function OnboardingPage() {
 							</div>
 						))}
 					</div>
-
 					{/* Error Message */}
 					{error && (
 						<div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
 							{error}
 						</div>
 					)}
-
 					{/* Step Content */}
 					<div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
 						{step === 1 && (
 							<div>
 								<div className="flex items-center mb-6">
 									<BookOpen className="w-6 h-6 text-romance-500 mr-2" />
-									<h2 className="text-2xl font-bold text-slate-900">
+									<Heading level="h2" size="section">
 										Choose Your Genres
-									</h2>
+									</Heading>
 								</div>
 								<p className="text-slate-600 mb-6">
 									Select all that interest you
@@ -202,9 +200,9 @@ function OnboardingPage() {
 							<div>
 								<div className="flex items-center mb-6">
 									<Heart className="w-6 h-6 text-romance-500 mr-2" />
-									<h2 className="text-2xl font-bold text-slate-900">
+									<Heading level="h2" size="section">
 										Pick Your Tropes
-									</h2>
+									</Heading>
 								</div>
 								<p className="text-slate-600 mb-6">
 									What romance tropes make your heart race?
@@ -232,16 +230,15 @@ function OnboardingPage() {
 							<div>
 								<div className="flex items-center mb-6">
 									<Flame className="w-6 h-6 text-romance-500 mr-2" />
-									<h2 className="text-2xl font-bold text-slate-900">
+									<Heading level="h2" size="section">
 										Set Your Preferences
-									</h2>
-								</div>
-
+									</Heading>
+								</div>{" "}
 								{/* Spice Level */}
 								<div className="mb-8">
-									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+									<Heading level="h3" size="subsection" className="mb-4">
 										Spice Level
-									</h3>
+									</Heading>
 									<div className="space-y-3">
 										{([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
 											<button
@@ -290,12 +287,11 @@ function OnboardingPage() {
 										))}
 									</div>
 								</div>
-
 								{/* Pacing */}
 								<div>
-									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+									<Heading level="h3" size="subsection" className="mb-4">
 										Relationship Pacing
-									</h3>
+									</Heading>
 									<div className="space-y-3">
 										{PACING_OPTIONS.map((pacing) => (
 											<RadioButton
@@ -313,12 +309,11 @@ function OnboardingPage() {
 										))}
 									</div>
 								</div>
-
 								{/* Scene Length */}
 								<div>
-									<h3 className="text-lg font-semibold text-slate-900 mb-4">
+									<Heading level="h3" size="subsection" className="mb-4">
 										Scene Length
-									</h3>
+									</Heading>
 									<div className="space-y-3">
 										{SCENE_LENGTH_OPTIONS.map((length) => (
 											<RadioButton
@@ -342,7 +337,6 @@ function OnboardingPage() {
 							</div>
 						)}
 					</div>
-
 					{/* Navigation Buttons */}
 					<div className="flex justify-between">
 						<Button

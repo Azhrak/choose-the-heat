@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { Footer } from "~/components/Footer";
+import { Heading } from "~/components/Heading";
 
 export const Route = createFileRoute("/privacy")({
 	component: PrivacyPolicy,
@@ -22,18 +23,18 @@ function PrivacyPolicy() {
 
 					{/* Header */}
 					<div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-						<h1 className="text-4xl font-bold text-slate-900 mb-4">
+						<Heading level="h1" size="page" className="mb-4">
 							Privacy Policy
-						</h1>
+						</Heading>
 						<p className="text-slate-600">Last updated: November 15, 2025</p>
 					</div>
 
 					{/* Content */}
 					<div className="bg-white rounded-lg shadow-sm p-8 space-y-8">
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								1. Information We Collect
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We collect information that you provide directly to us when you
 								create an account, use our services, or communicate with us.
@@ -53,9 +54,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								2. How We Use Your Information
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We use the information we collect to:
 							</p>
@@ -71,9 +72,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								3. AI-Generated Content
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								Choose the Heat uses artificial intelligence to generate
 								personalized romance novels. The content generated is based on:
@@ -91,9 +92,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								4. Data Storage and Security
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We take reasonable measures to protect your information from
 								unauthorized access, use, or disclosure. Your data is stored
@@ -103,9 +104,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								5. Data Sharing
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We do not sell your personal information. We may share your
 								information only in the following circumstances:
@@ -120,9 +121,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								6. Your Rights and Choices
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">You have the right to:</p>
 							<ul className="list-disc list-inside text-slate-700 space-y-2 ml-4">
 								<li>Access, update, or delete your account information</li>
@@ -134,9 +135,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								7. Cookies and Tracking
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We use cookies and similar tracking technologies to maintain
 								your session, remember your preferences, and analyze how you use
@@ -146,9 +147,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								8. Children's Privacy
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								Our service is intended for users 18 years of age and older. We
 								do not knowingly collect information from children under 18. If
@@ -158,9 +159,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								9. Changes to This Policy
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								We may update this Privacy Policy from time to time. We will
 								notify you of any material changes by posting the new policy on
@@ -169,9 +170,9 @@ function PrivacyPolicy() {
 						</section>
 
 						<section>
-							<h2 className="text-2xl font-semibold text-slate-900 mb-4">
+							<Heading level="h2" size="section" className="mb-4">
 								10. Contact Us
-							</h2>
+							</Heading>
 							<p className="text-slate-700 mb-4">
 								If you have questions or concerns about this Privacy Policy or
 								our data practices, please contact us at:
