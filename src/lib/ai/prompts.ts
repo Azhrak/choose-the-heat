@@ -354,6 +354,23 @@ export interface ParsedScene {
 }
 
 /**
+ * Strip surrounding quotes from a string value
+ */
+function stripQuotes(value: string): string {
+	const trimmed = value.trim();
+	// Remove surrounding quotes (single or double)
+	if (
+		(trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+		(trimmed.startsWith("'") && trimmed.endsWith("'")) ||
+		(trimmed.startsWith("“") && trimmed.endsWith("”")) ||
+		(trimmed.startsWith("‘") && trimmed.endsWith("’"))
+	) {
+		return trimmed.slice(1, -1);
+	}
+	return trimmed;
+}
+
+/**
  * Parse SCENE_META block from generated content
  */
 export function parseSceneMeta(rawContent: string): ParsedScene {
@@ -372,12 +389,12 @@ export function parseSceneMeta(rawContent: string): ParsedScene {
 
 		const emotionalBeatMatch = metaBlock.match(/emotional_beat:\s*(.+)/i);
 		if (emotionalBeatMatch) {
-			metadata.emotional_beat = emotionalBeatMatch[1].trim();
+			metadata.emotional_beat = stripQuotes(emotionalBeatMatch[1]);
 		}
 
 		const tensionMatch = metaBlock.match(/tension_threads:\s*(.+)/i);
 		if (tensionMatch) {
-			metadata.tension_threads = tensionMatch[1].trim();
+			metadata.tension_threads = stripQuotes(tensionMatch[1]);
 		}
 
 		const progressMatch = metaBlock.match(
@@ -389,22 +406,22 @@ export function parseSceneMeta(rawContent: string): ParsedScene {
 
 		const keyMomentMatch = metaBlock.match(/key_moment:\s*(.+)/i);
 		if (keyMomentMatch) {
-			metadata.key_moment = keyMomentMatch[1].trim();
+			metadata.key_moment = stripQuotes(keyMomentMatch[1]);
 		}
 
 		const keyCharactersMatch = metaBlock.match(/key_characters:\s*(.+)/i);
 		if (keyCharactersMatch) {
-			metadata.key_characters = keyCharactersMatch[1].trim();
+			metadata.key_characters = stripQuotes(keyCharactersMatch[1]);
 		}
 
 		const povCharacterMatch = metaBlock.match(/pov_character:\s*(.+)/i);
 		if (povCharacterMatch) {
-			metadata.pov_character = povCharacterMatch[1].trim();
+			metadata.pov_character = stripQuotes(povCharacterMatch[1]);
 		}
 
 		const settingLocationMatch = metaBlock.match(/setting_location:\s*(.+)/i);
 		if (settingLocationMatch) {
-			metadata.setting_location = settingLocationMatch[1].trim();
+			metadata.setting_location = stripQuotes(settingLocationMatch[1]);
 		}
 	}
 
