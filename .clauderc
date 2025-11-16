@@ -3,6 +3,7 @@
 ## Required Reading
 
 All AI agents MUST read and follow the coding practices defined in:
+
 - [CODING_PRACTICES.md](./CODING_PRACTICES.md)
 
 ## Key Principles
@@ -48,10 +49,8 @@ All AI agents MUST read and follow the coding practices defined in:
    - Hardcoded values used 2+ times → Extract to `src/lib/constants/`
 
 5. **Import Shared Resources:**
-   ```typescript
-   // Always prefer shared types
-   import type { User, Template, UserStory } from "~/lib/api/types";
 
+   ```typescript
    // Always use existing hooks
    import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
@@ -59,6 +58,221 @@ All AI agents MUST read and follow the coding practices defined in:
    import { FormInput } from "~/components/FormInput";
    import { FullPageLoader } from "~/components/FullPageLoader";
    ```
+
+# TypeScript & React Best Practices
+
+## Core Principle: Local Types
+Define types where they're used, not in global type files. Each component should only know about its own data structure.
+
+## Props: No Destructuring Rule
+Always use `props` object. Only destructure functions when required for dependency array stability.
+```typescript
+// ❌ Never destructure props
+function UserCard({ name, email, onUpdate }: Props) { }
+
+// ✅ Always use props object
+function UserCard(props: Props) {
+  return <div>{props.name}</div>;
+}
+
+// ✅ Exception: Functions in dependency arrays
+function UserCard(props: Props) {
+  const { onUpdate } = props; // Stable reference needed
+  useEffect(() => {
+    onUpdate(props.data);
+  }, [onUpdate, props.data]);
+}
+```
+
+**Why?** Clearer data flow, easier refactoring, better DevTools, no naming conflicts.
+
+## Avoid Shared Types
+
+Don't create central type definition files. Define types locally where they're used.
+```typescript
+// ❌ Shared types in central file
+// types/user.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+}
+
+// components/UserCard.tsx
+import { User } from '@/types/user';
+function UserCard(props: { user: User }) { } // Knows too much
+
+// ✅ Local types - component defines what it needs
+function UserCard(props: { name: string }) {
+  return <div>{props.name}</div>;
+}
+
+// ✅ OK: Share via API layer return types
+export async function getUser(id: string) {
+  return { id: "...", name: "...", email: "..." };
+}
+type User = Awaited<ReturnType<typeof getUser>>;
+```
+
+**Why avoid shared types?** Tight coupling, unnecessary dependencies, harder refactoring, components know more than they need.
+
+## Avoid Barrel Files (index.ts)
+
+Don't use index.ts files to re-export multiple modules. Import directly from source files.
+```typescript
+// ❌ Barrel file pattern
+// components/index.ts
+export { Button } from './Button';
+export { Card } from './Card';
+export { Modal } from './Modal';
+
+// app.tsx
+import { Button, Card } from '@/components'; // Imports entire barrel
+
+// ✅ Direct imports
+// app.tsx
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
+```
+
+**Why avoid barrels?**
+- **Bundle size**: Imports entire barrel file, not tree-shakeable
+- **Slow builds**: Bundler must parse all re-exports
+- **Circular dependencies**: Easy to create import cycles
+- **Poor IDE performance**: Editor loads more files than needed
+- **Unclear dependencies**: Can't see where things actually come from
+
+**Exception**: Barrel files are OK for small, tightly-coupled modules that are always used together (e.g., a UI component with its types and hooks in one folder).
+
+## Type Definition Patterns
+```typescript
+// Small components - inline types
+function Button(props: { label: string; onClick: () => void }) {
+  return <button onClick={props.onClick}>{props.label}</button>;
+}
+
+// Complex components - adjacent type
+type UserProfileProps = {
+  userId: string;
+  onUpdate?: (data: { name: string; bio: string }) => void;
+};
+
+function UserProfile(props: UserProfileProps) {
+  return <div>{props.userId}</div>;
+}
+
+// Share types via return types, not separate files
+function getUser(id: string) {
+  return { id, name: "...", email: "..." };
+}
+type User = Awaited<ReturnType<typeof getUser>>;
+```
+
+## Type Inference Over Explicit
+```typescript
+// ❌ Redundant
+const items: string[] = ["a", "b", "c"];
+
+// ✅ Inferred
+const items = ["a", "b", "c"];
+
+// ✅ Explicit only when needed
+const config = { timeout: 5000 } as const;
+```
+
+## Avoid Type Bloat
+```typescript
+// ❌ Over-typed - passing entire nested object
+type Props = {
+  data: { user: { profile: { name: string } } };
+};
+
+// ✅ Extract what you need at boundary
+type Props = { userName: string };
+<UserCard userName={data.user.profile.name} />
+```
+
+## Zod for Runtime + Types
+```typescript
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+const user = UserSchema.parse(apiResponse);
+```
+
+## Discriminated Unions for States
+```typescript
+type State = 
+  | { status: 'loading' }
+  | { status: 'success'; data: string[] }
+  | { status: 'error'; error: Error };
+
+function render(props: { state: State }) {
+  switch (props.state.status) {
+    case 'loading': return <Spinner />;
+    case 'success': return <List items={props.state.data} />;
+    case 'error': return <Error message={props.state.error.message} />;
+  }
+}
+```
+
+## Generic Components - Use Sparingly
+```typescript
+// ✅ Good: Reusable data structures
+function List<T>(props: {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}) {
+  return props.items.map(props.renderItem);
+}
+
+// ❌ Avoid: Over-engineering one-off components
+```
+
+## API Layer Pattern
+```typescript
+// api/users.ts
+export async function fetchUser(id: string) {
+  const res = await fetch(`/api/users/${id}`);
+  return res.json() as Promise<{ id: string; name: string }>;
+}
+
+// Component infers from API
+function UserDisplay(props: { userId: string }) {
+  const { data } = useQuery({
+    queryKey: ['user', props.userId],
+    queryFn: () => fetchUser(props.userId),
+  });
+  return <div>{data?.name}</div>;
+}
+```
+
+## Additional Rules
+
+- Use `unknown` over `any` - forces type checking
+- Prefer `interface` for objects, `type` for unions/intersections
+- Enable `strict: true` in tsconfig.json
+- Use `satisfies` for autocomplete without widening types
+- Avoid `as` casts - sign of poor type design
+- Co-locate types with implementation
+- Import directly from source files, not index.ts barrels
+
+## Red Flags to Avoid
+
+- Destructuring props at function signature
+- Shared `types/` folders with 50+ type files
+- Barrel files (index.ts re-exports)
+- Components importing types from 3+ levels deep
+- Using `any` as escape hatch
+- Complex utility type gymnastics
+- Premature type abstraction
 
 ## Checklist for Every Change
 

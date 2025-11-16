@@ -99,100 +99,78 @@ Every custom hook must have:
 - Parameter descriptions (if applicable)
 - Return type inference or explicit type
 
-### Existing Custom Hooks
-
-Always check `src/hooks/` before creating duplicate query/mutation logic. Current hooks include:
-
-- `useCurrentUserQuery` - Fetch current user profile (18+ uses)
-- `useUserStoriesQuery` - Fetch user stories by status
-- `useTemplatesQuery` - Fetch templates with filters
-- `useUserPreferencesQuery` - Fetch user preferences
-- `useDeleteStoryMutation` - Delete story with auto-invalidation
-
 ---
 
 ## Type Safety
 
-### Shared Type Definitions
+### Core Principle: Local Types First
 
-All shared types must be defined in `src/lib/api/types.ts`
-
-#### DO
+**Define types where they're used, not in global type files.** Each component should only know about its own data structure.
 
 ```typescript
-// In src/lib/api/types.ts
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-  // ... other fields
+// ✅ Good - Local types
+function UserCard(props: { name: string; email: string }) {
+  return <div>{props.name}</div>;
 }
 
-// In component file
+// ❌ Bad - Importing unnecessary global types
 import type { User } from "~/lib/api/types";
+function UserCard(props: { user: User }) { } // Knows too much
 ```
 
-#### DON'T
+### Props Pattern: No Destructuring
+
+**Always use `props` object. Never destructure at function signature.**
 
 ```typescript
-// DON'T define interfaces inline in components
-interface User {
-  id: string;
-  email: string;
-  // ...
+// ❌ Never destructure props
+function UserCard({ name, email, onUpdate }: Props) { }
+
+// ✅ Always use props object
+function UserCard(props: Props) {
+  return <div>{props.name}</div>;
+}
+
+// ✅ Exception: Functions in dependency arrays (for stable references)
+function UserCard(props: Props) {
+  const { onUpdate } = props; // Stable reference needed
+  useEffect(() => {
+    onUpdate(props.data);
+  }, [onUpdate, props.data]);
 }
 ```
 
-### Type Re-exports
+**Why?** Clearer data flow, easier refactoring, better DevTools, no naming conflicts.
 
-Types that originate from `~/lib/db/types` should be re-exported from `~/lib/api/types` for consistency:
+### Avoid Barrel Files (index.ts)
 
-```typescript
-// In src/lib/api/types.ts
-import type { UserRole, TemplateStatus } from "~/lib/db/types";
-
-// Re-export for consistency
-export type { UserRole, TemplateStatus };
-```
-
-### Avoid `any` Types
-
-Always define proper types instead of using `any`.
-
-#### DO
+**Don't use index.ts files to re-export multiple modules.** Import directly from source files.
 
 ```typescript
-const stats: {
-  total: number;
-  active: number;
-} = {
-  total: 0,
-  active: 0,
-};
+// ❌ Barrel file pattern
+// components/index.ts
+export { Button } from './Button';
+export { Card } from './Card';
+
+// app.tsx
+import { Button, Card } from '@/components'; // Imports entire barrel
+
+// ✅ Direct imports
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
 ```
 
-#### DON'T
+**Why avoid barrels?**
+- Bundle size: Imports entire barrel file, not tree-shakeable
+- Slow builds: Bundler must parse all re-exports
+- Circular dependencies: Easy to create import cycles
+- Poor IDE performance: Editor loads more files than needed
 
-```typescript
-const stats: any = {};
-```
+**Exception:** Barrel files are OK for small, tightly-coupled modules (e.g., `choice-points/index.ts`).
 
-### API Response Types
+### When to Use Shared Types
 
-Always type API responses properly:
-
-```typescript
-// Define response interface
-interface TemplatesResponse {
-  templates: Template[];
-}
-
-// Use in query
-return response.json() as Promise<TemplatesResponse>;
-```
-
-### Shared Type Catalog
+**Limited to API boundaries and database types only.**
 
 Current shared types in `src/lib/api/types.ts`:
 
@@ -204,6 +182,143 @@ Current shared types in `src/lib/api/types.ts`:
 - `DashboardStats` - Admin dashboard statistics
 - `StoryStatus` - "in-progress" | "completed"
 - `TemplateStatus` - "draft" | "published" | "archived"
+
+**Type Re-exports** (for consistency):
+
+```typescript
+// In src/lib/api/types.ts
+import type { UserRole, TemplateStatus } from "~/lib/db/types";
+export type { UserRole, TemplateStatus };
+```
+
+### Type Definition Patterns
+
+```typescript
+// Small components - inline types
+function Button(props: { label: string; onClick: () => void }) {
+  return <button onClick={props.onClick}>{props.label}</button>;
+}
+
+// Complex components - adjacent type
+type UserProfileProps = {
+  userId: string;
+  onUpdate?: (data: { name: string; bio: string }) => void;
+};
+
+function UserProfile(props: UserProfileProps) {
+  return <div>{props.userId}</div>;
+}
+
+// Share types via return types, not separate files
+function getUser(id: string) {
+  return { id, name: "...", email: "..." };
+}
+type User = Awaited<ReturnType<typeof getUser>>;
+```
+
+### Type Inference Over Explicit
+
+```typescript
+// ❌ Redundant
+const items: string[] = ["a", "b", "c"];
+
+// ✅ Inferred
+const items = ["a", "b", "c"];
+
+// ✅ Explicit only when needed
+const config = { timeout: 5000 } as const;
+```
+
+### Avoid `any` Types
+
+Always define proper types. Use `unknown` if you need to force type checking.
+
+```typescript
+// ❌ Never use any
+const stats: any = {};
+
+// ✅ Define proper types
+const stats: {
+  total: number;
+  active: number;
+} = {
+  total: 0,
+  active: 0,
+};
+
+// ✅ Use unknown for truly unknown data
+const data: unknown = await response.json();
+if (typeof data === 'object' && data !== null) {
+  // Type guard narrows unknown
+}
+```
+
+### Avoid Type Bloat
+
+```typescript
+// ❌ Over-typed - passing entire nested object
+type Props = {
+  data: { user: { profile: { name: string } } };
+};
+
+// ✅ Extract what you need at boundary
+type Props = { userName: string };
+<UserCard userName={data.user.profile.name} />
+```
+
+### Discriminated Unions for States
+
+```typescript
+type State = 
+  | { status: 'loading' }
+  | { status: 'success'; data: string[] }
+  | { status: 'error'; error: Error };
+
+function render(props: { state: State }) {
+  switch (props.state.status) {
+    case 'loading': return <Spinner />;
+    case 'success': return <List items={props.state.data} />;
+    case 'error': return <Error message={props.state.error.message} />;
+  }
+}
+```
+
+### Zod for Runtime Validation + Types
+
+```typescript
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+const user = UserSchema.parse(apiResponse);
+```
+
+### Generic Components - Use Sparingly
+
+```typescript
+// ✅ Good: Reusable data structures
+function List<T>(props: {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}) {
+  return props.items.map(props.renderItem);
+}
+
+// ❌ Avoid: Over-engineering one-off components
+```
+
+### Additional Type Safety Rules
+
+- Prefer `interface` for objects, `type` for unions/intersections
+- Use `satisfies` for autocomplete without widening types
+- Avoid `as` casts - sign of poor type design
+- Co-locate types with implementation
+- Import directly from source files, not index.ts barrels (except small coupled modules)
+- Enable `strict: true` in tsconfig.json
 
 ---
 
@@ -226,23 +341,25 @@ Extract components when:
 ### Component Structure
 
 ```typescript
-interface ComponentProps {
+type ComponentProps = {
   // Props with clear names and types
   value: string;
   onChange: (value: string) => void;
   optional?: boolean;
-}
+};
 
 /**
  * Brief description of component purpose
  * Additional usage notes if needed
  */
-export function ComponentName({ value, onChange, optional = true }: ComponentProps) {
+export function ComponentName(props: ComponentProps) {
   return (
-    // JSX
+    <div>{props.value}</div>
   );
 }
 ```
+
+**Note:** Always use `props` object, never destructure at function signature.
 
 ### Existing Reusable Components
 
@@ -262,6 +379,23 @@ Before creating new components, check if these exist:
 **Admin:**
 
 - `StatCard` - Admin dashboard statistics card
+
+### Component Spacing and Layout
+
+**Components should NEVER set their own margins.** Parent layouts control spacing.
+
+```typescript
+// ✅ Good - parent controls spacing with gap
+<div className="flex flex-col gap-4">
+  <Heading level="h1">Title</Heading>
+  <p>Description</p>
+</div>
+
+// ❌ Bad - component sets its own margin
+const Heading = (props: Props) => <h1 className="mb-4">{props.children}</h1>;
+```
+
+**Exception:** Padding (p-, px-, py-) is allowed for components with backgrounds.
 
 ### Using FormInput Component
 
@@ -452,7 +586,6 @@ import { localHelper } from "./utils";
 1. **3+ uses = extract it**
    - Queries/mutations → custom hooks
    - UI patterns → components
-   - Types → shared types file
    - Values → constants file
 
 2. **2 uses = consider extraction**
@@ -460,10 +593,13 @@ import { localHelper } from "./utils";
 
 ### Type Safety First
 
-1. Never use `any` - always define proper types
-2. Use shared types from `~/lib/api/types`
-3. Type all API responses
-4. Type all component props
+1. **Local types first** - define types where they're used
+2. Never use `any` - use `unknown` if needed
+3. **Use props object** - never destructure at function signature
+4. Avoid barrel files (index.ts) except for small coupled modules
+5. Share types only at API boundaries (`~/lib/api/types`)
+6. Type all API responses
+7. Extract what components need at boundaries (avoid type bloat)
 
 ### Component Reuse
 
@@ -471,6 +607,8 @@ import { localHelper } from "./utils";
 2. Use `FormInput` for all form fields
 3. Use `FullPageLoader` for loading states
 4. Extract repeated JSX into components
+5. Never add margins to reusable components - use parent gap/spacing
+6. Always use `props` object, never destructure at signature
 
 ### Query Patterns
 
@@ -512,16 +650,40 @@ When working on this codebase, AI agents should:
    - Consolidate duplicate type definitions
 
 4. **Code quality checks:**
-   - No `any` types
-   - No duplicate interfaces
+   - No `any` types (use `unknown` instead)
+   - No destructuring props at function signature (use `props` object)
+   - No barrel files (except small coupled modules)
+   - No component margins (use parent gap/spacing)
+   - No duplicate interfaces (define locally)
    - No inline form inputs (use `FormInput`)
    - No repeated query/mutation patterns (use custom hooks)
    - Proper error handling on all API calls
 
 ---
 
+## Red Flags to Avoid
+
+- ❌ Destructuring props at function signature
+- ❌ Shared `types/` folders with many type files
+- ❌ Barrel files (index.ts re-exports) except small coupled modules
+- ❌ Components importing types from 3+ levels deep
+- ❌ Using `any` as escape hatch
+- ❌ Components setting their own margins (mb-, mt-, mx-, my-)
+- ❌ Complex utility type gymnastics
+- ❌ Premature type abstraction
+- ❌ Over-typed props (passing entire nested objects)
+
+---
+
 ## Version History
 
+- **v1.1** - Added TypeScript best practices (November 2025)
+  - Props pattern: No destructuring rule
+  - Local types first principle
+  - Avoid barrel files guidance
+  - Component spacing rules (no margins)
+  - Type inference and discriminated unions
+  
 - **v1.0** - Initial documentation after major refactoring (2025)
   - Added custom hooks pattern
   - Established shared types system
