@@ -124,6 +124,7 @@ export interface UserStories {
 	branched_from_story_id: string | null;
 	created_at: Generated<Timestamp>;
 	current_scene: Generated<number>;
+	favorited_at: Timestamp | null;
 	id: Generated<string>;
 	preferences: Json;
 	status: Generated<string>;

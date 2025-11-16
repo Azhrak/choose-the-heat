@@ -27,6 +27,7 @@ import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
 import { useStoryQuery } from "~/hooks/useStoryQuery";
+import { useToggleFavoriteMutation } from "~/hooks/useToggleFavoriteMutation";
 import { useUpdateStoryTitleMutation } from "~/hooks/useUpdateStoryTitleMutation";
 import type { UserPreferences } from "~/lib/types/preferences";
 import {
@@ -48,6 +49,7 @@ function StoryInfoPage() {
 	const { data, isLoading, error } = useStoryQuery(id);
 	const updateTitleMutation = useUpdateStoryTitleMutation();
 	const deleteStoryMutation = useDeleteStoryMutation();
+	const toggleFavoriteMutation = useToggleFavoriteMutation();
 
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 	const [editedTitle, setEditedTitle] = useState("");
@@ -100,12 +102,20 @@ function StoryInfoPage() {
 		try {
 			await deleteStoryMutation.mutateAsync(id);
 			// Navigate back to library after successful deletion
-			navigate({ to: "/library", search: { tab: "in-progress" } });
+			navigate({
+				to: "/library",
+				search: { tab: "in-progress", favorites: false },
+			});
 		} catch (error) {
 			// Error is handled by the mutation
 			console.error("Failed to delete story:", error);
 			setShowDeleteDialog(false);
 		}
+	};
+
+	const handleToggleFavorite = () => {
+		const isFavorite = !story.favorited_at;
+		toggleFavoriteMutation.mutate({ storyId: id, isFavorite });
 	};
 
 	if (isLoading) {
@@ -148,7 +158,7 @@ function StoryInfoPage() {
 					{/* Back Navigation */}
 					<Link
 						to="/library"
-						search={{ tab: "in-progress" }}
+						search={{ tab: "in-progress", favorites: false }}
 						className="inline-flex items-center gap-2 text-romance-600 hover:text-romance-700 font-medium transition-colors"
 					>
 						<ArrowLeft className="w-5 h-5" />
@@ -159,9 +169,29 @@ function StoryInfoPage() {
 					<div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 						{/* Cover */}
 						<div
-							className={`h-64 bg-linear-to-br ${story.template.cover_gradient} flex items-center justify-center`}
+							className={`h-64 bg-linear-to-br ${story.template.cover_gradient} flex items-center justify-center relative`}
 						>
 							<BookOpen className="w-24 h-24 text-white opacity-50" />
+							{/* Favorite button */}
+							<button
+								type="button"
+								onClick={handleToggleFavorite}
+								disabled={toggleFavoriteMutation.isPending}
+								className="absolute top-6 right-6 p-3 bg-white/90 hover:bg-white rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+								title={
+									story.favorited_at
+										? "Remove from favorites"
+										: "Add to favorites"
+								}
+							>
+								<Heart
+									className={`w-6 h-6 transition-colors ${
+										story.favorited_at
+											? "fill-red-500 text-red-500"
+											: "text-slate-600 hover:text-red-500"
+									}`}
+								/>
+							</button>
 						</div>
 
 						{/* Title & Metadata */}

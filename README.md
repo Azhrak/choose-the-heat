@@ -10,6 +10,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - 📚 AI-generated romance novels with choice-based branching
 - 🌳 Story branching system (explore alternative storylines)
 - ✏️ Edit story titles anytime
+- ❤️ Mark stories as favorites and filter by favorites
 - 🎨 Custom preferences (genres, tropes, spice level, pacing, scene length)
 - ⚙️ Preferences management page
 - 💾 Progress tracking with scene caching

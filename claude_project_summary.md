@@ -73,6 +73,10 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - Progress tracking (current scene, completion %)
 - Choice history per story
 - Re-read with same choices (from cache)
+- **Favorites**: Mark stories as favorites with heart icon
+  - Toggle on story cards and info pages
+  - Filter library to show favorites only
+  - Works with both in-progress and completed tabs
 
 ## Database Schema
 
@@ -110,6 +114,8 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - Story instances per user
 - Snapshot of preferences at creation
 - Current scene tracker, status (in-progress/completed)
+- `favorited_at` (timestamp): When story was marked as favorite (null if not favorited)
+- `branched_from_story_id`, `branched_at_scene`: Story branching support
 
 **choices**
 

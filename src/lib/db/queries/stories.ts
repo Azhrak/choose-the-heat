@@ -121,7 +121,11 @@ export async function createUserStory(
 /**
  * Get user's stories with template info
  */
-export async function getUserStories(userId: string, status?: StoryStatus) {
+export async function getUserStories(
+	userId: string,
+	status?: StoryStatus,
+	favoritesOnly?: boolean,
+) {
 	let query = db
 		.selectFrom("user_stories as us")
 		.selectAll("us")
@@ -145,7 +149,11 @@ export async function getUserStories(userId: string, status?: StoryStatus) {
 		query = query.where("us.status", "=", status);
 	}
 
-	return query.orderBy("us.updated_at", "desc").execute();
+	if (favoritesOnly) {
+		query = query.where("us.favorited_at", "is not", null);
+	}
+
+	return query.orderBy("us.created_at", "desc").execute();
 }
 
 /**
@@ -479,4 +487,37 @@ export async function branchStory(
 	await recordChoice(newStoryId, choicePointId, newChoice);
 
 	return newStoryId;
+}
+
+/**
+ * Toggle favorite status of a story
+ */
+export async function toggleStoryFavorite(
+	storyId: string,
+	userId: string,
+	isFavorite: boolean,
+) {
+	// Verify ownership
+	const story = await db
+		.selectFrom("user_stories")
+		.select(["id", "user_id"])
+		.where("id", "=", storyId)
+		.where("user_id", "=", userId)
+		.executeTakeFirst();
+
+	if (!story) {
+		throw new Error("Story not found or access denied");
+	}
+
+	// Update favorite status
+	return db
+		.updateTable("user_stories")
+		.set({
+			favorited_at: isFavorite ? new Date() : null,
+			updated_at: new Date(),
+		})
+		.where("id", "=", storyId)
+		.where("user_id", "=", userId)
+		.returning(["id", "favorited_at"])
+		.executeTakeFirstOrThrow();
 }

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, GitBranch, Info, Trash2 } from "lucide-react";
+import { BookOpen, GitBranch, Heart, Info, Trash2 } from "lucide-react";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
@@ -16,11 +16,14 @@ interface StoryCardProps {
 	currentScene: number;
 	totalScenes: number;
 	status: "in-progress" | "completed";
+	isFavorite: boolean;
 	branchedFromStoryId?: string | null;
 	branchedAtScene?: number | null;
 	parentStoryTitle?: string | null;
 	onDelete: (id: string, title: string) => void;
+	onToggleFavorite: (id: string, isFavorite: boolean) => void;
 	isDeleting: boolean;
+	isTogglingFavorite: boolean;
 }
 
 export function StoryCard({
@@ -34,11 +37,14 @@ export function StoryCard({
 	currentScene,
 	totalScenes,
 	status,
+	isFavorite,
 	branchedFromStoryId,
 	branchedAtScene,
 	parentStoryTitle,
 	onDelete,
+	onToggleFavorite,
 	isDeleting,
+	isTogglingFavorite,
 }: StoryCardProps) {
 	const displayTitle = storyTitle || templateTitle;
 	const isBranch = !!branchedFromStoryId;
@@ -48,9 +54,29 @@ export function StoryCard({
 			{/* Cover */}
 			<Link to="/story/$id/read" params={{ id }} search={{ scene: undefined }}>
 				<div
-					className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity`}
+					className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
 				>
 					<BookOpen className="w-16 h-16 text-white opacity-50" />
+					{/* Favorite button overlay */}
+					<button
+						type="button"
+						onClick={(e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							onToggleFavorite(id, !isFavorite);
+						}}
+						disabled={isTogglingFavorite}
+						className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+						title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+					>
+						<Heart
+							className={`w-5 h-5 transition-colors ${
+								isFavorite
+									? "fill-red-500 text-red-500"
+									: "text-slate-600 hover:text-red-500"
+							}`}
+						/>
+					</button>
 				</div>
 			</Link>
 

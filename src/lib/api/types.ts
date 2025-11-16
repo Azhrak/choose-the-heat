@@ -55,6 +55,7 @@ export interface UserStory {
 	preferences: unknown; // JSON field containing UserPreferences
 	current_scene: number;
 	status: StoryStatus;
+	favorited_at: string | null;
 	branched_from_story_id?: string | null;
 	branched_at_scene?: number | null;
 	created_at: string;

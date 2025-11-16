@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BookOpen, Clock, Sparkles } from "lucide-react";
+import { BookOpen, Clock, Heart, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
@@ -12,12 +12,14 @@ import { PageContainer } from "~/components/PageContainer";
 import { StoryCard } from "~/components/StoryCard";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
+import { useToggleFavoriteMutation } from "~/hooks/useToggleFavoriteMutation";
 import { useUserStoriesQuery } from "~/hooks/useUserStoriesQuery";
 
 export const Route = createFileRoute("/library")({
 	validateSearch: (search: Record<string, unknown>) => {
 		return {
 			tab: (search.tab as string) === "completed" ? "completed" : "in-progress",
+			favorites: !!(search.favorites === "true" || search.favorites === true),
 		};
 	},
 	component: LibraryPage,
@@ -25,17 +27,22 @@ export const Route = createFileRoute("/library")({
 
 function LibraryPage() {
 	const navigate = useNavigate({ from: "/library" });
-	const { tab: activeTab } = Route.useSearch();
+	const { tab: activeTab, favorites: showFavorites } = Route.useSearch();
 	const [deletingId, setDeletingId] = useState<string | null>(null);
+	const [togglingFavoriteId, setTogglingFavoriteId] = useState<string | null>(
+		null,
+	);
 
 	// Fetch current user profile
 	const { data: profileData } = useCurrentUserQuery();
 
 	const { data, isLoading, error } = useUserStoriesQuery(
 		activeTab as "in-progress" | "completed",
+		showFavorites,
 	);
 
 	const deleteStory = useDeleteStoryMutation();
+	const toggleFavorite = useToggleFavoriteMutation();
 
 	const handleDeleteClick = (storyId: string, storyTitle: string) => {
 		if (
@@ -57,6 +64,23 @@ function LibraryPage() {
 		}
 	};
 
+	const handleToggleFavorite = (storyId: string, isFavorite: boolean) => {
+		setTogglingFavoriteId(storyId);
+		toggleFavorite.mutate(
+			{ storyId, isFavorite },
+			{
+				onSuccess: () => {
+					setTogglingFavoriteId(null);
+				},
+				onError: (error) => {
+					console.error("Failed to toggle favorite:", error);
+					setTogglingFavoriteId(null);
+					alert("Failed to update favorite status. Please try again.");
+				},
+			},
+		);
+	};
+
 	const stories = data?.stories || [];
 
 	return (
@@ -68,37 +92,69 @@ function LibraryPage() {
 					<Heading level="h1" size="page">
 						My Library
 					</Heading>
-					{/* Tabs */}
-					<div className="flex gap-4">
-						<button
-							type="button"
-							onClick={() => navigate({ search: { tab: "in-progress" } })}
-							className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-								activeTab === "in-progress"
-									? "bg-romance-600 text-white"
-									: "bg-white text-slate-700 hover:bg-slate-50"
-							}`}
-						>
-							<div className="flex items-center gap-2">
-								<Clock className="w-5 h-5" />
-								In Progress
-							</div>
-						</button>
-						<button
-							type="button"
-							onClick={() => navigate({ search: { tab: "completed" } })}
-							className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-								activeTab === "completed"
-									? "bg-romance-600 text-white"
-									: "bg-white text-slate-700 hover:bg-slate-50"
-							}`}
-						>
-							<div className="flex items-center gap-2">
-								<Sparkles className="w-5 h-5" />
-								Completed
-							</div>
-						</button>
-					</div>{" "}
+
+					{/* Tabs and Favorites Filter */}
+					<div className="space-y-4">
+						{/* Status Tabs */}
+						<div className="flex gap-4">
+							<button
+								type="button"
+								onClick={() =>
+									navigate({
+										search: { tab: "in-progress", favorites: showFavorites },
+									})
+								}
+								className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+									activeTab === "in-progress"
+										? "bg-romance-600 text-white"
+										: "bg-white text-slate-700 hover:bg-slate-50"
+								}`}
+							>
+								<div className="flex items-center gap-2">
+									<Clock className="w-5 h-5" />
+									In Progress
+								</div>
+							</button>
+							<button
+								type="button"
+								onClick={() =>
+									navigate({
+										search: { tab: "completed", favorites: showFavorites },
+									})
+								}
+								className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+									activeTab === "completed"
+										? "bg-romance-600 text-white"
+										: "bg-white text-slate-700 hover:bg-slate-50"
+								}`}
+							>
+								<div className="flex items-center gap-2">
+									<Sparkles className="w-5 h-5" />
+									Completed
+								</div>
+							</button>
+						</div>
+
+						{/* Favorites Filter */}
+						<label className="flex items-center gap-3 cursor-pointer w-fit">
+							<input
+								type="checkbox"
+								checked={showFavorites}
+								onChange={() =>
+									navigate({
+										search: { tab: activeTab, favorites: !showFavorites },
+									})
+								}
+								className="w-5 h-5 rounded border-slate-300 text-red-600 focus:ring-red-500 focus:ring-offset-0 cursor-pointer"
+							/>
+							<span className="flex items-center gap-2 text-slate-700 font-medium">
+								<Heart
+									className={`w-4 h-4 ${showFavorites ? "fill-red-600 text-red-600" : "text-slate-400"}`}
+								/>
+								Show favorites only
+							</span>
+						</label>
+					</div>
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}
 					{/* Error State */}
@@ -110,12 +166,22 @@ function LibraryPage() {
 						<EmptyState
 							icon={BookOpen}
 							title={
-								activeTab === "in-progress"
-									? "No Stories in Progress"
-									: "No Completed Stories"
+								showFavorites
+									? `No Favorite ${activeTab === "in-progress" ? "In Progress" : "Completed"} Stories`
+									: activeTab === "in-progress"
+										? "No Stories in Progress"
+										: "No Completed Stories"
 							}
-							description="Start your first romance adventure from the Browse page"
-							action={{ label: "Browse Stories", href: "/browse" }}
+							description={
+								showFavorites
+									? "Mark stories as favorites by clicking the heart icon"
+									: "Start your first romance adventure from the Browse page"
+							}
+							action={
+								showFavorites
+									? undefined
+									: { label: "Browse Stories", href: "/browse" }
+							}
 						/>
 					)}
 					{/* Stories Grid */}
@@ -134,11 +200,14 @@ function LibraryPage() {
 									currentScene={story.current_scene}
 									totalScenes={story.template.estimated_scenes}
 									status={activeTab as "in-progress" | "completed"}
+									isFavorite={!!story.favorited_at}
 									branchedFromStoryId={story.branched_from_story_id}
 									branchedAtScene={story.branched_at_scene}
 									parentStoryTitle={story.parentStory?.story_title}
 									onDelete={handleDeleteClick}
+									onToggleFavorite={handleToggleFavorite}
 									isDeleting={deletingId === story.id}
+									isTogglingFavorite={togglingFavoriteId === story.id}
 								/>
 							))}
 						</div>

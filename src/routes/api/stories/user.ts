@@ -15,12 +15,21 @@ export const Route = createFileRoute("/api/stories/user")({
 
 					const url = new URL(request.url);
 					const status = url.searchParams.get("status");
+					const favoritesOnly = url.searchParams.get("favorites") === "true";
 
 					let stories: Awaited<ReturnType<typeof getUserStories>>;
 					if (status === "in-progress" || status === "completed") {
-						stories = await getUserStories(session.userId, status);
+						stories = await getUserStories(
+							session.userId,
+							status,
+							favoritesOnly,
+						);
 					} else {
-						stories = await getUserStories(session.userId);
+						stories = await getUserStories(
+							session.userId,
+							undefined,
+							favoritesOnly,
+						);
 					}
 
 					return json({ stories });
