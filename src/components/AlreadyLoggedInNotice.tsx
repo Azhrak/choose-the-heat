@@ -29,7 +29,7 @@ export function AlreadyLoggedInNotice({
 					type="button"
 					onClick={onLogout}
 					disabled={logoutLoading}
-					className="flex-1 px-3 py-2 text-sm bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+					className="flex-1 px-3 py-2 text-sm bg-blue-600 dark:bg-blue-700 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
 				>
 					<LogOut className="w-4 h-4" />
 					{logoutLoading ? "Logging out..." : "Logout"}
