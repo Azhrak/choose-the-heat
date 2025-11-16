@@ -8,7 +8,7 @@ import {
 	Info,
 	Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Heading } from "~/components/Heading";
@@ -30,6 +30,7 @@ function ReadingPage() {
 	const { scene: sceneFromUrl } = Route.useSearch();
 	const navigate = useNavigate({ from: Route.fullPath });
 	const [selectedOption, setSelectedOption] = useState<number | null>(null);
+	const lastUpdatedSceneRef = useRef<number>(0);
 
 	// Use scene from URL, fallback to null (which uses current_scene from API)
 	const currentSceneNumber = sceneFromUrl ?? null;
@@ -40,6 +41,18 @@ function ReadingPage() {
 	// Mutations
 	const choiceMutation = useMakeChoiceMutation(id);
 	const progressMutation = useUpdateProgressMutation(id);
+
+	// Update progress when viewing a scene beyond current progress
+	useEffect(() => {
+		if (
+			data &&
+			data.scene.number > data.story.currentScene &&
+			data.scene.number !== lastUpdatedSceneRef.current
+		) {
+			lastUpdatedSceneRef.current = data.scene.number;
+			progressMutation.mutate({ currentScene: data.scene.number });
+		}
+	}, [data, progressMutation]);
 
 	const handleChoiceSuccess = (result: {
 		completed: boolean;
