@@ -4,14 +4,18 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	Flame,
+	GitBranch,
 	Home,
 	Info,
 	Sparkles,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { BranchConfirmationDialog } from "~/components/BranchConfirmationDialog";
 import { Button } from "~/components/Button";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Heading } from "~/components/Heading";
+import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
+import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
 import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
 import { useUpdateProgressMutation } from "~/hooks/useUpdateProgressMutation";
@@ -30,6 +34,8 @@ function ReadingPage() {
 	const { scene: sceneFromUrl } = Route.useSearch();
 	const navigate = useNavigate({ from: Route.fullPath });
 	const [selectedOption, setSelectedOption] = useState<number | null>(null);
+	const [showBranchDialog, setShowBranchDialog] = useState(false);
+	const [branchChoice, setBranchChoice] = useState<number | null>(null);
 	const lastUpdatedSceneRef = useRef<number>(0);
 
 	// Use scene from URL, fallback to null (which uses current_scene from API)
@@ -41,6 +47,20 @@ function ReadingPage() {
 	// Mutations
 	const choiceMutation = useMakeChoiceMutation(id);
 	const progressMutation = useUpdateProgressMutation(id);
+	const branchMutation = useBranchStoryMutation(id);
+
+	// Check for existing branch when dialog is shown
+	const { data: existingBranchData, isLoading: isCheckingExistingBranch } =
+		useCheckExistingBranch(
+			id,
+			data?.scene.number ?? 0,
+			data?.choicePoint?.id ?? "",
+			branchChoice ?? 0,
+			showBranchDialog &&
+				branchChoice !== null &&
+				!!data?.scene.number &&
+				!!data?.choicePoint?.id,
+		);
 
 	// Update progress when viewing a scene beyond current progress
 	useEffect(() => {
@@ -82,6 +102,64 @@ function ReadingPage() {
 				onSuccess: handleChoiceSuccess,
 			},
 		);
+	};
+
+	const handleBranchChoice = (optionIndex: number) => {
+		if (!data?.choicePoint) return;
+		setBranchChoice(optionIndex);
+		setShowBranchDialog(true);
+	};
+
+	const handleConfirmBranch = () => {
+		if (branchChoice === null || !data?.choicePoint) return;
+
+		// If an existing branch exists, navigate to it instead
+		if (existingBranchData?.exists && existingBranchData.branch) {
+			// Close dialog and reset state before navigating
+			setShowBranchDialog(false);
+			setBranchChoice(null);
+			navigate({
+				to: "/story/$id/read",
+				params: { id: existingBranchData.branch.id },
+				search: { scene: scene.number + 1 },
+			});
+			return;
+		}
+
+		// Otherwise create a new branch
+		branchMutation.mutate(
+			{
+				sceneNumber: scene.number,
+				choicePointId: data.choicePoint.id,
+				newChoice: branchChoice,
+			},
+			{
+				onSuccess: (result) => {
+					// Close dialog and reset state before navigating
+					setShowBranchDialog(false);
+					setBranchChoice(null);
+					// Navigate to the new branched story
+					navigate({
+						to: "/story/$id/read",
+						params: { id: result.storyId },
+						search: { scene: scene.number + 1 },
+					});
+				},
+			},
+		);
+	};
+
+	const handleNavigateToExistingBranch = () => {
+		if (existingBranchData?.branch) {
+			// Close dialog and reset state before navigating
+			setShowBranchDialog(false);
+			setBranchChoice(null);
+			navigate({
+				to: "/story/$id/read",
+				params: { id: existingBranchData.branch.id },
+				search: { scene: scene.number + 1 },
+			});
+		}
 	};
 
 	const handleNavigateScene = (sceneNum: number) => {
@@ -253,6 +331,20 @@ function ReadingPage() {
 													</span>
 												</div>
 											</div>
+											{/* Branch button for other choices */}
+											{previousChoice !== index && (
+												<div className="mt-3 pt-3 border-t border-gray-200">
+													<button
+														type="button"
+														onClick={() => handleBranchChoice(index)}
+														disabled={branchMutation.isPending}
+														className="flex items-center gap-2 text-sm text-purple-600 hover:text-purple-700 font-medium transition-colors disabled:opacity-50"
+													>
+														<GitBranch className="w-4 h-4" />
+														<span>Try this choice instead</span>
+													</button>
+												</div>
+											)}
 										</div>
 									))}
 								</div>
@@ -418,6 +510,26 @@ function ReadingPage() {
 					</Button>
 				</div>
 			</main>
+
+			{/* Branch Confirmation Dialog */}
+			{data && branchChoice !== null && (
+				<BranchConfirmationDialog
+					isOpen={showBranchDialog}
+					onClose={() => {
+						setShowBranchDialog(false);
+						setBranchChoice(null);
+					}}
+					onConfirm={handleConfirmBranch}
+					onNavigateToExisting={handleNavigateToExistingBranch}
+					storyTitle={story.title}
+					sceneNumber={scene.number}
+					originalChoice={choicePoint?.options[previousChoice ?? 0]?.text ?? ""}
+					newChoice={choicePoint?.options[branchChoice]?.text ?? ""}
+					existingBranch={existingBranchData?.branch}
+					isCheckingExisting={isCheckingExistingBranch}
+					isLoading={branchMutation.isPending}
+				/>
+			)}
 		</div>
 	);
 }

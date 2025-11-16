@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Info, Trash2 } from "lucide-react";
+import { BookOpen, GitBranch, Info, Trash2 } from "lucide-react";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
@@ -16,6 +16,9 @@ interface StoryCardProps {
 	currentScene: number;
 	totalScenes: number;
 	status: "in-progress" | "completed";
+	branchedFromStoryId?: string | null;
+	branchedAtScene?: number | null;
+	parentStoryTitle?: string | null;
 	onDelete: (id: string, title: string) => void;
 	isDeleting: boolean;
 }
@@ -31,15 +34,19 @@ export function StoryCard({
 	currentScene,
 	totalScenes,
 	status,
+	branchedFromStoryId,
+	branchedAtScene,
+	parentStoryTitle,
 	onDelete,
 	isDeleting,
 }: StoryCardProps) {
 	const displayTitle = storyTitle || templateTitle;
+	const isBranch = !!branchedFromStoryId;
 
 	return (
 		<div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow h-full flex flex-col">
 			{/* Cover */}
-			<Link to="/story/$id/read" params={{ id }}>
+			<Link to="/story/$id/read" params={{ id }} search={{ scene: undefined }}>
 				<div
 					className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity`}
 				>
@@ -62,6 +69,33 @@ export function StoryCard({
 						})}
 					</p>
 				</div>
+
+				{/* Branch indicator */}
+				{isBranch && (
+					<div className="flex items-center gap-2 p-2 bg-purple-50 border border-purple-200 rounded-lg">
+						<GitBranch className="w-4 h-4 text-purple-600 shrink-0" />
+						<div className="flex-1 min-w-0">
+							<p className="text-xs text-purple-900 font-medium">
+								Branched Story
+							</p>
+							<p className="text-xs text-purple-700 truncate">
+								From{" "}
+								{branchedFromStoryId && (
+									<Link
+										to="/story/$id/read"
+										params={{ id: branchedFromStoryId }}
+										search={{ scene: branchedAtScene ?? undefined }}
+										className="hover:underline font-medium"
+									>
+										{parentStoryTitle || "Original Story"}
+									</Link>
+								)}{" "}
+								(Scene {branchedAtScene})
+							</p>
+						</div>
+					</div>
+				)}
+
 				<p className="text-sm text-slate-600 line-clamp-2">
 					{templateDescription}
 				</p>
@@ -95,6 +129,7 @@ export function StoryCard({
 					<Link
 						to="/story/$id/read"
 						params={{ id }}
+						search={{ scene: undefined }}
 						className="flex-1 px-4 py-2 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 transition-colors text-center"
 					>
 						{status === "in-progress" ? "Continue Reading" : "Read Again"}

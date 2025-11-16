@@ -55,9 +55,15 @@ export interface UserStory {
 	preferences: unknown; // JSON field containing UserPreferences
 	current_scene: number;
 	status: StoryStatus;
+	branched_from_story_id?: string | null;
+	branched_at_scene?: number | null;
 	created_at: string;
 	updated_at: string;
 	template: Template;
+	parentStory?: {
+		id: string;
+		story_title: string | null;
+	};
 }
 
 // Scene types

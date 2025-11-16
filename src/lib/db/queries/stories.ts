@@ -132,6 +132,12 @@ export async function getUserStories(userId: string, status?: StoryStatus) {
 					.selectAll()
 					.whereRef("id", "=", "us.template_id"),
 			).as("template"),
+			jsonObjectFrom(
+				eb
+					.selectFrom("user_stories as parent")
+					.select(["parent.id", "parent.story_title"])
+					.whereRef("parent.id", "=", "us.branched_from_story_id"),
+			).as("parentStory"),
 		])
 		.where("us.user_id", "=", userId);
 
@@ -274,4 +280,179 @@ export async function deleteUserStory(storyId: string, userId: string) {
 		.executeTakeFirst();
 
 	return result.numDeletedRows > 0n;
+}
+
+/**
+ * Check if a branch already exists from a specific scene with a specific choice
+ */
+export async function findExistingBranch(
+	parentStoryId: string,
+	userId: string,
+	branchAtScene: number,
+	choicePointId: string,
+	choiceOption: number,
+) {
+	// Find branches from this parent story at this scene
+	const existingBranches = await db
+		.selectFrom("user_stories as us")
+		.select(["us.id", "us.story_title"])
+		.where("us.user_id", "=", userId)
+		.where("us.branched_from_story_id", "=", parentStoryId)
+		.where("us.branched_at_scene", "=", branchAtScene)
+		.execute();
+
+	if (existingBranches.length === 0) {
+		return null;
+	}
+
+	// Check each branch to see if it has the same choice at the branch point
+	for (const branch of existingBranches) {
+		const choice = await db
+			.selectFrom("choices")
+			.select("selected_option")
+			.where("story_id", "=", branch.id)
+			.where("choice_point_id", "=", choicePointId)
+			.executeTakeFirst();
+
+		if (choice && choice.selected_option === choiceOption) {
+			return {
+				id: branch.id,
+				story_title: branch.story_title,
+			};
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Branch a story from a specific scene with a different choice
+ * Creates a new story that copies all scenes and choices up to the branch point,
+ * then records a different choice and continues from there
+ */
+export async function branchStory(
+	parentStoryId: string,
+	userId: string,
+	branchAtScene: number,
+	choicePointId: string,
+	newChoice: number,
+): Promise<string> {
+	// Get the parent story
+	const parentStory = await getStoryById(parentStoryId);
+
+	if (!parentStory) {
+		throw new Error("Parent story not found");
+	}
+
+	if (parentStory.user_id !== userId) {
+		throw new Error("Unauthorized to branch this story");
+	}
+
+	if (!parentStory.template) {
+		throw new Error("Parent story template not found");
+	}
+
+	// Verify the choice point exists and is at the branch scene
+	const choicePoint = await db
+		.selectFrom("choice_points")
+		.selectAll()
+		.where("id", "=", choicePointId)
+		.where("template_id", "=", parentStory.template_id)
+		.where("scene_number", "=", branchAtScene)
+		.executeTakeFirst();
+
+	if (!choicePoint) {
+		throw new Error("Choice point not found at specified scene");
+	}
+
+	// Verify the new choice is valid
+	const options = choicePoint.options as Array<{ text: string }>;
+	if (newChoice < 0 || newChoice >= options.length) {
+		throw new Error("Invalid choice option");
+	}
+
+	// Get the previous choice at this scene (if any)
+	const previousChoice = await db
+		.selectFrom("choices")
+		.select("selected_option")
+		.where("story_id", "=", parentStoryId)
+		.where("choice_point_id", "=", choicePointId)
+		.executeTakeFirst();
+
+	// Verify the new choice is different from the previous choice
+	if (previousChoice && previousChoice.selected_option === newChoice) {
+		throw new Error("New choice must be different from the original choice");
+	}
+
+	// Generate a title for the branched story
+	const branchTitle = `${parentStory.story_title || parentStory.template.title} (Branch)`;
+
+	// Create the new branched story
+	const newStory = await db
+		.insertInto("user_stories")
+		.values({
+			user_id: userId,
+			template_id: parentStory.template_id,
+			story_title: branchTitle,
+			preferences: parentStory.preferences,
+			current_scene: branchAtScene + 1, // Start at the scene after the branch
+			status: "in-progress",
+			branched_from_story_id: parentStoryId,
+			branched_at_scene: branchAtScene,
+		})
+		.returning("id")
+		.executeTakeFirstOrThrow();
+
+	const newStoryId = newStory.id;
+
+	// Copy all scenes up to and including the branch scene
+	const scenesToCopy = await db
+		.selectFrom("scenes")
+		.selectAll()
+		.where("story_id", "=", parentStoryId)
+		.where("scene_number", "<=", branchAtScene)
+		.execute();
+
+	if (scenesToCopy.length > 0) {
+		await db
+			.insertInto("scenes")
+			.values(
+				scenesToCopy.map((scene) => ({
+					story_id: newStoryId,
+					scene_number: scene.scene_number,
+					content: scene.content,
+					word_count: scene.word_count,
+					metadata: scene.metadata,
+					summary: scene.summary,
+				})),
+			)
+			.execute();
+	}
+
+	// Copy all choices up to (but not including) the branch scene
+	const choicesToCopy = await db
+		.selectFrom("choices as c")
+		.innerJoin("choice_points as cp", "c.choice_point_id", "cp.id")
+		.select(["c.choice_point_id", "c.selected_option"])
+		.where("c.story_id", "=", parentStoryId)
+		.where("cp.scene_number", "<", branchAtScene)
+		.execute();
+
+	if (choicesToCopy.length > 0) {
+		await db
+			.insertInto("choices")
+			.values(
+				choicesToCopy.map((choice) => ({
+					story_id: newStoryId,
+					choice_point_id: choice.choice_point_id,
+					selected_option: choice.selected_option,
+				})),
+			)
+			.execute();
+	}
+
+	// Record the new choice at the branch point
+	await recordChoice(newStoryId, choicePointId, newChoice);
+
+	return newStoryId;
 }

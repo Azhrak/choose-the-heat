@@ -134,6 +134,9 @@ function LibraryPage() {
 									currentScene={story.current_scene}
 									totalScenes={story.template.estimated_scenes}
 									status={activeTab as "in-progress" | "completed"}
+									branchedFromStoryId={story.branched_from_story_id}
+									branchedAtScene={story.branched_at_scene}
+									parentStoryTitle={story.parentStory?.story_title}
 									onDelete={handleDeleteClick}
 									isDeleting={deletingId === story.id}
 								/>

@@ -48,6 +48,7 @@ import { Route as ApiAdminUsersIndexRouteImport } from './routes/api/admin/users
 import { Route as ApiAdminTemplatesIndexRouteImport } from './routes/api/admin/templates/index'
 import { Route as ApiStoriesIdSceneRouteImport } from './routes/api/stories/$id.scene'
 import { Route as ApiStoriesIdChooseRouteImport } from './routes/api/stories/$id.choose'
+import { Route as ApiStoriesIdBranchRouteImport } from './routes/api/stories/$id.branch'
 import { Route as ApiAuthCallbackGoogleRouteImport } from './routes/api/auth/callback.google'
 import { Route as ApiAdminUsersStatsRouteImport } from './routes/api/admin/users/stats'
 import { Route as ApiAdminUsersIdRouteImport } from './routes/api/admin/users/$id'
@@ -257,6 +258,11 @@ const ApiStoriesIdChooseRoute = ApiStoriesIdChooseRouteImport.update({
   path: '/choose',
   getParentRoute: () => ApiStoriesIdRoute,
 } as any)
+const ApiStoriesIdBranchRoute = ApiStoriesIdBranchRouteImport.update({
+  id: '/branch',
+  path: '/branch',
+  getParentRoute: () => ApiStoriesIdRoute,
+} as any)
 const ApiAuthCallbackGoogleRoute = ApiAuthCallbackGoogleRouteImport.update({
   id: '/api/auth/callback/google',
   path: '/api/auth/callback/google',
@@ -369,6 +375,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
@@ -422,6 +429,7 @@ export interface FileRoutesByTo {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
@@ -476,6 +484,7 @@ export interface FileRoutesById {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRoute
   '/api/admin/templates/': typeof ApiAdminTemplatesIndexRoute
@@ -531,6 +540,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
     | '/api/admin/templates'
@@ -584,6 +594,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
     | '/api/admin/templates'
@@ -637,6 +648,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/scene'
     | '/api/admin/templates/'
@@ -970,6 +982,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiStoriesIdChooseRouteImport
       parentRoute: typeof ApiStoriesIdRoute
     }
+    '/api/stories/$id/branch': {
+      id: '/api/stories/$id/branch'
+      path: '/branch'
+      fullPath: '/api/stories/$id/branch'
+      preLoaderRoute: typeof ApiStoriesIdBranchRouteImport
+      parentRoute: typeof ApiStoriesIdRoute
+    }
     '/api/auth/callback/google': {
       id: '/api/auth/callback/google'
       path: '/api/auth/callback/google'
@@ -1058,11 +1077,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface ApiStoriesIdRouteChildren {
+  ApiStoriesIdBranchRoute: typeof ApiStoriesIdBranchRoute
   ApiStoriesIdChooseRoute: typeof ApiStoriesIdChooseRoute
   ApiStoriesIdSceneRoute: typeof ApiStoriesIdSceneRoute
 }
 
 const ApiStoriesIdRouteChildren: ApiStoriesIdRouteChildren = {
+  ApiStoriesIdBranchRoute: ApiStoriesIdBranchRoute,
   ApiStoriesIdChooseRoute: ApiStoriesIdChooseRoute,
   ApiStoriesIdSceneRoute: ApiStoriesIdSceneRoute,
 }
