@@ -261,7 +261,7 @@ function ReadingPage() {
 			{/* Main Content */}
 			<main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
 				{/* Scene Content */}
-				<div className="bg-white rounded-xl shadow-lg p-8">
+				<div className="bg-white rounded-xl shadow-lg p-4 sm:p-8">
 					<div className="prose prose-lg max-w-none space-y-4">
 						{scene.content.split("\n\n").map((paragraph) => (
 							<p
@@ -289,7 +289,7 @@ function ReadingPage() {
 				</div>
 				{/* Choice Point */}
 				{choicePoint && !isLastScene && (
-					<div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
+					<div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 space-y-6">
 						<div className="space-y-4">
 							<div className="flex items-center gap-2">
 								<Flame className="w-5 h-5 text-rose-500" />

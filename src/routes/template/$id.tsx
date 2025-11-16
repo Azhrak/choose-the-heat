@@ -123,7 +123,7 @@ function TemplateDetailPage() {
 							</div>
 
 							{/* Choice Points Preview */}
-							<div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+							<div className="bg-white rounded-2xl shadow-xl p-4 sm:p-8 space-y-6">
 								<div className="space-y-2">
 									<Heading level="h2" size="section">
 										Key Decision Points
@@ -133,19 +133,19 @@ function TemplateDetailPage() {
 										narrative. Here's a preview of some key moments:
 									</p>
 								</div>{" "}
-								<div className="space-y-6">
+								<div className="space-y-4 sm:space-y-6">
 									{template.choicePoints.map((choice) => (
 										<div
 											key={choice.id}
-											className="border border-slate-200 rounded-lg p-6 hover:border-romance-300 transition-colors"
+											className="border border-slate-200 rounded-lg p-3 sm:p-6 hover:border-romance-300 transition-colors"
 										>
-											<div className="flex items-start gap-4">
-												<div className="shrink-0 w-10 h-10 bg-romance-100 rounded-full flex items-center justify-center">
-													<span className="text-romance-700 font-bold">
+											<div className="flex items-start gap-2 sm:gap-4">
+												<div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-romance-100 rounded-full flex items-center justify-center">
+													<span className="text-sm sm:text-base text-romance-700 font-bold">
 														{choice.scene_number}
 													</span>
 												</div>
-												<div className="flex-1 space-y-3">
+												<div className="flex-1 min-w-0 space-y-3">
 													<Heading level="h3" size="subsection">
 														{choice.prompt_text}
 													</Heading>
@@ -153,13 +153,15 @@ function TemplateDetailPage() {
 														{choice.options.map((option) => (
 															<div
 																key={option.id}
-																className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg"
+																className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-slate-50 rounded-lg"
 															>
-																<div className="w-2 h-2 bg-romance-500 rounded-full"></div>
-																<span className="text-slate-700">
-																	{option.text}
-																</span>
-																<span className="ml-auto text-xs text-slate-500 bg-white px-2 py-1 rounded">
+																<div className="flex items-center gap-2 flex-1 min-w-0">
+																	<div className="w-2 h-2 shrink-0 bg-romance-500 rounded-full"></div>
+																	<span className="text-sm sm:text-base text-slate-700 wrap-break-word">
+																		{option.text}
+																	</span>
+																</div>
+																<span className="text-xs text-slate-500 bg-white px-2 py-1 rounded self-start sm:self-auto sm:ml-auto shrink-0">
 																	{option.tone}
 																</span>
 															</div>

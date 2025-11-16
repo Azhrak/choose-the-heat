@@ -101,7 +101,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 						</div>
 					</div>
 
-					<div className="grid grid-cols-3 gap-4">
+					<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 						<div className="space-y-1">
 							<h3 className="font-semibold text-slate-700">Spice Level</h3>
 							<p className="text-slate-600">
