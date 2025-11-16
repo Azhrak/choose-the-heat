@@ -15,7 +15,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
 	return (
 		<button
 			onClick={toggleTheme}
-			className={`p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-romance-50 dark:hover:bg-slate-800 transition-colors ${className}`}
+			className={`p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-romance-50 dark:hover:bg-slate-800 transition-colors cursor-pointer ${className}`}
 			type="button"
 			aria-label="Toggle theme"
 		>
