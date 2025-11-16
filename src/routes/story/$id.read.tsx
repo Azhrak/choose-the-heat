@@ -17,16 +17,22 @@ import { useStorySceneQuery } from "~/hooks/useStorySceneQuery";
 import { useUpdateProgressMutation } from "~/hooks/useUpdateProgressMutation";
 
 export const Route = createFileRoute("/story/$id/read")({
+	validateSearch: (search: Record<string, unknown>) => {
+		return {
+			scene: search.scene ? Number(search.scene) : undefined,
+		};
+	},
 	component: ReadingPage,
 });
 
 function ReadingPage() {
 	const { id } = Route.useParams();
-	const navigate = useNavigate();
+	const { scene: sceneFromUrl } = Route.useSearch();
+	const navigate = useNavigate({ from: Route.fullPath });
 	const [selectedOption, setSelectedOption] = useState<number | null>(null);
-	const [currentSceneNumber, setCurrentSceneNumber] = useState<number | null>(
-		null,
-	);
+
+	// Use scene from URL, fallback to null (which uses current_scene from API)
+	const currentSceneNumber = sceneFromUrl ?? null;
 
 	// Fetch scene data
 	const { data, isLoading, error } = useStorySceneQuery(id, currentSceneNumber);
@@ -46,7 +52,7 @@ function ReadingPage() {
 			navigate({ to: "/library", search: { tab: "completed" } });
 		} else if (result.nextScene !== undefined) {
 			// Move to next scene and refetch
-			setCurrentSceneNumber(result.nextScene);
+			navigate({ search: { scene: result.nextScene }, replace: false });
 		}
 	};
 
@@ -57,6 +63,7 @@ function ReadingPage() {
 			{
 				choicePointId: data.choicePoint.id,
 				selectedOption,
+				currentScene: scene.number,
 			},
 			{
 				onSuccess: handleChoiceSuccess,
@@ -65,7 +72,7 @@ function ReadingPage() {
 	};
 
 	const handleNavigateScene = (sceneNum: number) => {
-		setCurrentSceneNumber(sceneNum);
+		navigate({ search: { scene: sceneNum }, replace: false });
 		setSelectedOption(null);
 	};
 
@@ -241,7 +248,7 @@ function ReadingPage() {
 									type="button"
 									onClick={() => {
 										const nextScene = scene.number + 1;
-										setCurrentSceneNumber(nextScene);
+										navigate({ search: { scene: nextScene }, replace: false });
 									}}
 									variant="primary"
 									className="w-full bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
@@ -302,7 +309,7 @@ function ReadingPage() {
 							onClick={() => {
 								const nextScene = scene.number + 1;
 								// Just navigate to next scene, don't mark as complete
-								setCurrentSceneNumber(nextScene);
+								navigate({ search: { scene: nextScene }, replace: false });
 							}}
 							variant="primary"
 							className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
@@ -381,14 +388,14 @@ function ReadingPage() {
 						type="button"
 						onClick={() => handleNavigateScene(scene.number + 1)}
 						disabled={
-							scene.number + 1 > story.currentScene ||
-							scene.number >= story.estimatedScenes
+							scene.number >= story.estimatedScenes ||
+							(choicePoint !== null && !hasAlreadyMadeChoice)
 						}
 						variant="ghost"
 						size="sm"
 						className="text-gray-600 hover:text-rose-600"
 						title={
-							scene.number + 1 > story.currentScene
+							choicePoint !== null && !hasAlreadyMadeChoice
 								? "Make a choice to unlock the next scene"
 								: ""
 						}

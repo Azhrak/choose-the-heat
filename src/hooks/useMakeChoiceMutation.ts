@@ -6,6 +6,7 @@ import { userStoriesQueryKey } from "./useUserStoriesQuery";
 interface ChoiceData {
 	choicePointId: string;
 	selectedOption: number;
+	currentScene: number;
 }
 
 interface ChoiceResult {

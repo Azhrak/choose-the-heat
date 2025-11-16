@@ -11,6 +11,7 @@ import {
 const choiceSchema = z.object({
 	choicePointId: z.string().uuid(),
 	selectedOption: z.number().int().min(0).max(2), // 0-2 for 3 options
+	currentScene: z.number().int().positive(), // The scene number where the choice is being made
 });
 
 export const Route = createFileRoute("/api/stories/$id/choose")({
@@ -40,7 +41,8 @@ export const Route = createFileRoute("/api/stories/$id/choose")({
 						);
 					}
 
-					const { choicePointId, selectedOption } = parseResult.data;
+					const { choicePointId, selectedOption, currentScene } =
+						parseResult.data;
 
 					// Get the story and verify ownership
 					const story = await getStoryById(storyId);
@@ -60,11 +62,13 @@ export const Route = createFileRoute("/api/stories/$id/choose")({
 					// Record the choice
 					await recordChoice(storyId, choicePointId, selectedOption);
 
-					// Calculate next scene
-					const nextScene = story.current_scene + 1;
+					// Calculate next scene based on the current scene where the choice was made
+					const nextScene = currentScene + 1;
 
-					// Update story progress (but never mark as complete automatically)
-					await updateStoryProgress(storyId, nextScene, "in-progress");
+					// Update story progress only if moving forward past current progress
+					if (nextScene > story.current_scene) {
+						await updateStoryProgress(storyId, nextScene, "in-progress");
+					}
 
 					return json({
 						success: true,
