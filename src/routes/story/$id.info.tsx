@@ -3,13 +3,19 @@ import {
 	ArrowLeft,
 	BookOpen,
 	Calendar,
+	Check,
 	FileText,
 	Flame,
 	Heart,
+	Pencil,
 	Sparkles,
 	Timer,
+	X,
 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { FormInput } from "~/components/FormInput";
 import { FullPageLoader } from "~/components/FullPageLoader";
 import { Header } from "~/components/Header";
 import { Heading } from "~/components/Heading";
@@ -18,6 +24,7 @@ import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useStoryQuery } from "~/hooks/useStoryQuery";
+import { useUpdateStoryTitleMutation } from "~/hooks/useUpdateStoryTitleMutation";
 import type { UserPreferences } from "~/lib/types/preferences";
 import {
 	GENRE_LABELS,
@@ -35,6 +42,53 @@ function StoryInfoPage() {
 	const { id } = Route.useParams();
 	const { data: profileData } = useCurrentUserQuery();
 	const { data, isLoading, error } = useStoryQuery(id);
+	const updateTitleMutation = useUpdateStoryTitleMutation();
+
+	const [isEditingTitle, setIsEditingTitle] = useState(false);
+	const [editedTitle, setEditedTitle] = useState("");
+	const [titleError, setTitleError] = useState("");
+
+	const handleStartEdit = () => {
+		if (data?.story) {
+			setEditedTitle(data.story.story_title || data.story.template.title);
+			setIsEditingTitle(true);
+			setTitleError("");
+		}
+	};
+
+	const handleCancelEdit = () => {
+		setIsEditingTitle(false);
+		setEditedTitle("");
+		setTitleError("");
+	};
+
+	const handleSaveTitle = async () => {
+		const trimmedTitle = editedTitle.trim();
+
+		if (!trimmedTitle) {
+			setTitleError("Title cannot be empty");
+			return;
+		}
+
+		if (trimmedTitle.length > 255) {
+			setTitleError("Title must be 255 characters or less");
+			return;
+		}
+
+		try {
+			await updateTitleMutation.mutateAsync({
+				storyId: id,
+				storyTitle: trimmedTitle,
+			});
+			setIsEditingTitle(false);
+			setEditedTitle("");
+			setTitleError("");
+		} catch (error) {
+			setTitleError(
+				error instanceof Error ? error.message : "Failed to update title",
+			);
+		}
+	};
 
 	if (isLoading) {
 		return <FullPageLoader />;
@@ -76,6 +130,7 @@ function StoryInfoPage() {
 					{/* Back Navigation */}
 					<Link
 						to="/library"
+						search={{ tab: "in-progress" }}
 						className="inline-flex items-center gap-2 text-romance-600 hover:text-romance-700 font-medium transition-colors"
 					>
 						<ArrowLeft className="w-5 h-5" />
@@ -94,9 +149,58 @@ function StoryInfoPage() {
 						{/* Title & Metadata */}
 						<div className="p-8 space-y-4">
 							<div className="space-y-2">
-								<Heading level="h1" size="page">
-									{story.story_title || story.template.title}
-								</Heading>
+								{!isEditingTitle ? (
+									<div className="flex items-start gap-3">
+										<div className="flex-1">
+											<Heading level="h1" size="page">
+												{story.story_title || story.template.title}
+											</Heading>
+										</div>
+										<Button
+											variant="ghost"
+											size="sm"
+											onClick={handleStartEdit}
+											className="text-slate-600 hover:text-slate-900"
+											title="Edit title"
+										>
+											<Pencil className="w-5 h-5" />
+										</Button>
+									</div>
+								) : (
+									<div className="space-y-2">
+										<FormInput
+											label="Story Title"
+											type="text"
+											value={editedTitle}
+											onChange={(e) => setEditedTitle(e.target.value)}
+											placeholder="Story title"
+											maxLength={255}
+											autoFocus
+											error={titleError}
+										/>
+										<div className="flex gap-2">
+											<Button
+												onClick={handleSaveTitle}
+												loading={updateTitleMutation.isPending}
+												size="sm"
+												className="flex items-center gap-2"
+											>
+												<Check className="w-4 h-4" />
+												Save
+											</Button>
+											<Button
+												variant="secondary"
+												size="sm"
+												onClick={handleCancelEdit}
+												disabled={updateTitleMutation.isPending}
+												className="flex items-center gap-2"
+											>
+												<X className="w-4 h-4" />
+												Cancel
+											</Button>
+										</div>
+									</div>
+								)}
 								<p className="text-slate-600">{story.template.description}</p>
 							</div>
 
@@ -139,6 +243,7 @@ function StoryInfoPage() {
 							<Link
 								to="/story/$id/read"
 								params={{ id: story.id }}
+								search={{ scene: undefined }}
 								className="inline-flex items-center justify-center px-6 py-3 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 transition-colors"
 							>
 								{story.status === "completed"

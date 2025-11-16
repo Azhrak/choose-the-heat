@@ -1,7 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
+import { z } from "zod";
 import { getSessionFromRequest } from "~/lib/auth/session";
-import { deleteUserStory, getStoryById } from "~/lib/db/queries/stories";
+import {
+	deleteUserStory,
+	getStoryById,
+	updateStoryTitle,
+} from "~/lib/db/queries/stories";
+
+const updateStorySchema = z.object({
+	storyTitle: z.string().min(1).max(255),
+});
 
 export const Route = createFileRoute("/api/stories/$id")({
 	server: {
@@ -33,6 +42,46 @@ export const Route = createFileRoute("/api/stories/$id")({
 					return json(
 						{
 							error: "Failed to fetch story",
+							details: error instanceof Error ? error.message : "Unknown error",
+						},
+						{ status: 500 },
+					);
+				}
+			},
+			PATCH: async ({ request, params }) => {
+				try {
+					// Validate session
+					const session = await getSessionFromRequest(request);
+					if (!session) {
+						return json({ error: "Unauthorized" }, { status: 401 });
+					}
+
+					const storyId = params.id;
+					const body = await request.json();
+					const result = updateStorySchema.safeParse(body);
+
+					if (!result.success) {
+						return json(
+							{ error: "Invalid request data", details: result.error.issues },
+							{ status: 400 },
+						);
+					}
+
+					const { storyTitle } = result.data;
+
+					// Update the story title (ownership verification is done in the query)
+					const updatedStory = await updateStoryTitle(
+						storyId,
+						session.userId,
+						storyTitle,
+					);
+
+					return json({ story: updatedStory });
+				} catch (error) {
+					console.error("Error updating story:", error);
+					return json(
+						{
+							error: "Failed to update story",
 							details: error instanceof Error ? error.message : "Unknown error",
 						},
 						{ status: 500 },

@@ -256,6 +256,30 @@ export async function getStoryById(storyId: string) {
 }
 
 /**
+ * Update a story's title
+ */
+export async function updateStoryTitle(
+	storyId: string,
+	userId: string,
+	newTitle: string,
+) {
+	// Verify ownership and update
+	const result = await db
+		.updateTable("user_stories")
+		.set({ story_title: newTitle })
+		.where("id", "=", storyId)
+		.where("user_id", "=", userId)
+		.returning(["id", "story_title"])
+		.executeTakeFirst();
+
+	if (!result) {
+		throw new Error("Story not found or access denied");
+	}
+
+	return result;
+}
+
+/**
  * Delete a user story and all associated data
  * This will cascade delete: scenes, choices, and any other related data
  */
