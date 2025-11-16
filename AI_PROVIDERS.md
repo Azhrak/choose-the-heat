@@ -37,12 +37,14 @@ Each provider requires its own API key. See detailed setup below.
 **Best for:** High-quality creative writing with consistent results
 
 **Get API Key:**
-1. Visit https://platform.openai.com/api-keys
+
+1. Visit <https://platform.openai.com/api-keys>
 2. Sign up or log in
 3. Create new API key
 4. Copy the key (starts with `sk-`)
 
 **Configuration:**
+
 ```env
 AI_PROVIDER=openai
 OPENAI_API_KEY=sk-your-api-key-here
@@ -50,6 +52,7 @@ OPENAI_MODEL=gpt-4-turbo
 ```
 
 **Recommended Models:**
+
 - `gpt-4-turbo` - Best quality, higher cost ($0.01/1K input, $0.03/1K output)
 - `gpt-4` - Excellent quality, very high cost
 - `gpt-3.5-turbo` - Good quality, lower cost ($0.0005/1K input, $0.0015/1K output)
@@ -63,12 +66,14 @@ OPENAI_MODEL=gpt-4-turbo
 **Best for:** Cost-effective solution with generous free tier
 
 **Get API Key:**
-1. Visit https://aistudio.google.com/app/apikey
+
+1. Visit <https://aistudio.google.com/app/apikey>
 2. Sign in with Google account
 3. Create API key
 4. Copy the key
 
 **Configuration:**
+
 ```env
 AI_PROVIDER=google
 GOOGLE_GENERATIVE_AI_API_KEY=your-google-api-key-here
@@ -76,11 +81,13 @@ GOOGLE_MODEL=gemini-1.5-pro
 ```
 
 **Recommended Models:**
+
 - `gemini-1.5-pro` - Best quality, 2M context window ($0.00125/1K input, $0.005/1K output)
 - `gemini-1.5-flash` - Faster, lower cost ($0.000075/1K input, $0.0003/1K output)
 - `gemini-pro` - Legacy model, good quality
 
 **Pricing:**
+
 - Free tier: 15 requests per minute, 1500 requests per day
 - Paid: ~$0.001-0.01 per scene
 
@@ -93,13 +100,15 @@ GOOGLE_MODEL=gemini-1.5-pro
 **Best for:** Creative, nuanced writing with strong reasoning
 
 **Get API Key:**
-1. Visit https://console.anthropic.com/
+
+1. Visit <https://console.anthropic.com/>
 2. Sign up for account
 3. Go to API Keys section
 4. Create new key
 5. Copy the key (starts with `sk-ant-`)
 
 **Configuration:**
+
 ```env
 AI_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-ant-your-api-key-here
@@ -107,6 +116,7 @@ ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
 ```
 
 **Recommended Models:**
+
 - `claude-3-5-sonnet-20241022` - Latest, best quality ($3/1M input, $15/1M output)
 - `claude-3-opus-20240229` - Most capable, highest cost ($15/1M input, $75/1M output)
 - `claude-3-haiku-20240307` - Fastest, lower cost ($0.25/1M input, $1.25/1M output)
@@ -120,13 +130,15 @@ ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
 **Best for:** European data compliance, multilingual support
 
 **Get API Key:**
-1. Visit https://console.mistral.ai/
+
+1. Visit <https://console.mistral.ai/>
 2. Create account
 3. Navigate to API Keys
 4. Generate new key
 5. Copy the key
 
 **Configuration:**
+
 ```env
 AI_PROVIDER=mistral
 MISTRAL_API_KEY=your-mistral-api-key-here
@@ -134,6 +146,7 @@ MISTRAL_MODEL=mistral-large-latest
 ```
 
 **Recommended Models:**
+
 - `mistral-large-latest` - Best quality ($4/1M input, $12/1M output)
 - `mistral-medium-latest` - Balanced performance
 - `mistral-small-latest` - Cost-effective ($1/1M input, $3/1M output)
@@ -147,13 +160,15 @@ MISTRAL_MODEL=mistral-large-latest
 **Best for:** Fast reasoning and real-time information access
 
 **Get API Key:**
-1. Visit https://console.x.ai/
+
+1. Visit <https://console.x.ai/>
 2. Sign up or log in with your X/Twitter account
 3. Navigate to API Keys section
 4. Create new API key
 5. Copy the key
 
 **Configuration:**
+
 ```env
 AI_PROVIDER=xAI
 XAI_API_KEY=your-xai-api-key-here
@@ -161,9 +176,10 @@ XAI_MODEL=grok-4-fast
 ```
 
 **Recommended Models:**
+
 - `grok-4-fast` - Latest model with strong reasoning capabilities
 
-**Pricing:** Check https://x.ai/api for current pricing
+**Pricing:** Check <https://x.ai/api> for current pricing
 
 **Note:** xAI uses an OpenAI-compatible API, so integration is seamless.
 
@@ -222,6 +238,7 @@ pnpm dev
 ### In Production
 
 Set environment variables in your deployment platform:
+
 - Vercel: Project Settings → Environment Variables
 - Docker: Update `.env` or docker-compose environment
 - Railway/Render: Dashboard → Environment Variables
@@ -229,6 +246,7 @@ Set environment variables in your deployment platform:
 ### Dynamic Switching (Future)
 
 You could enhance the app to let users choose their provider per story by:
+
 1. Adding provider preference to user settings
 2. Passing provider to `generateCompletion()` function
 3. Storing provider choice in `user_stories` table
@@ -240,6 +258,7 @@ You could enhance the app to let users choose their provider per story by:
 ### "API key not found" Error
 
 Make sure:
+
 1. Environment variable name matches exactly (case-sensitive)
 2. API key is valid and not expired
 3. `.env` file is in project root
@@ -248,6 +267,7 @@ Make sure:
 ### "Rate limit exceeded" Error
 
 Solutions:
+
 1. **OpenAI:** Upgrade your account tier
 2. **Google:** Wait for rate limit reset or upgrade to paid
 3. **Anthropic:** Check your usage limits in console
@@ -256,6 +276,7 @@ Solutions:
 ### "Model not found" Error
 
 Make sure:
+
 1. Model name is spelled correctly
 2. Model is available for your API key tier
 3. Model hasn't been deprecated (check provider docs)
@@ -263,6 +284,7 @@ Make sure:
 ### Poor Quality Output
 
 Try:
+
 1. Switching to a higher-quality model (e.g., GPT-4 Turbo, Claude 3.5 Sonnet)
 2. Adjusting temperature (lower = more consistent, higher = more creative)
 3. Improving your prompts in `app/lib/ai/prompts.ts`
@@ -283,6 +305,7 @@ The app already caches scenes in the database. This prevents regenerating the sa
 ### 3. Use Gemini Free Tier
 
 For development and testing, use Gemini 1.5 Flash with the free tier:
+
 ```env
 AI_PROVIDER=google
 GOOGLE_MODEL=gemini-1.5-flash
@@ -291,6 +314,7 @@ GOOGLE_MODEL=gemini-1.5-flash
 ### 4. Reduce Max Tokens
 
 Lower `maxTokens` in scene generation (currently 2000):
+
 ```typescript
 // In app/lib/ai/generate.ts
 maxTokens: 1500  // ~1125 words instead of 1500
@@ -299,6 +323,7 @@ maxTokens: 1500  // ~1125 words instead of 1500
 ### 5. Monitor Usage
 
 Set up usage alerts in your AI provider's dashboard:
+
 - OpenAI: Usage → Usage Limits
 - Anthropic: Settings → Usage
 - Google: Quotas & System Limits
@@ -310,12 +335,14 @@ Set up usage alerts in your AI provider's dashboard:
 ### 1. Development vs Production
 
 **Development:**
+
 ```env
 AI_PROVIDER=google
 GOOGLE_MODEL=gemini-1.5-flash  # Free, fast
 ```
 
 **Production:**
+
 ```env
 AI_PROVIDER=openai
 OPENAI_MODEL=gpt-4-turbo  # High quality
@@ -324,6 +351,7 @@ OPENAI_MODEL=gpt-4-turbo  # High quality
 ### 2. Multiple API Keys
 
 For high-volume apps, rotate between multiple API keys:
+
 ```typescript
 // In app/lib/ai/client.ts, modify to support key rotation
 const keys = [key1, key2, key3]
@@ -333,6 +361,7 @@ const currentKey = keys[requestCount % keys.length]
 ### 3. Fallback Providers
 
 Implement fallback logic:
+
 ```typescript
 try {
   // Try primary provider
@@ -365,12 +394,12 @@ try {
 
 ## Additional Resources
 
-- **Vercel AI SDK Docs:** https://sdk.vercel.ai/docs
-- **OpenAI Docs:** https://platform.openai.com/docs
-- **Google AI Docs:** https://ai.google.dev/docs
-- **Anthropic Docs:** https://docs.anthropic.com/
-- **Mistral Docs:** https://docs.mistral.ai/
-- **xAI Docs:** https://docs.x.ai/
+- **Vercel AI SDK Docs:** <https://sdk.vercel.ai/docs>
+- **OpenAI Docs:** <https://platform.openai.com/docs>
+- **Google AI Docs:** <https://ai.google.dev/docs>
+- **Anthropic Docs:** <https://docs.anthropic.com/>
+- **Mistral Docs:** <https://docs.mistral.ai/>
+- **xAI Docs:** <https://docs.x.ai/>
 
 ---
 

@@ -11,6 +11,7 @@ Choose the Heat uses [Kysely](https://kysely.dev/) for type-safe database querie
 Migrations are located in: [src/lib/db/migrations/](../src/lib/db/migrations/)
 
 Current migrations:
+
 - `001_initial.ts` - Initial schema (users, stories, scenes, templates, sessions)
 - `002_add_story_title.ts` - Add title field to stories
 - `003_add_scene_metadata.ts` - Add metadata to scenes
@@ -45,16 +46,19 @@ This is the safest and most straightforward approach.
 ### Step 2: Set Environment Variable Temporarily
 
 **On Linux/Mac/WSL:**
+
 ```bash
 export DATABASE_URL="postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
 ```
 
 **On Windows PowerShell:**
+
 ```powershell
 $env:DATABASE_URL = "postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
 ```
 
 **On Windows CMD:**
+
 ```cmd
 set DATABASE_URL=postgresql://user:pass@ep-xxx.region.aws.neon.tech/neondb?sslmode=require
 ```
@@ -66,6 +70,7 @@ pnpm db:migrate
 ```
 
 You should see:
+
 ```
 ✅ Migration "001_initial" was executed successfully
 ✅ Migration "002_add_story_title" was executed successfully
@@ -90,16 +95,19 @@ psql "$DATABASE_URL" -c "\dt"
 Clear the environment variable:
 
 **Linux/Mac/WSL:**
+
 ```bash
 unset DATABASE_URL
 ```
 
 **Windows PowerShell:**
+
 ```powershell
 Remove-Item Env:\DATABASE_URL
 ```
 
 **Windows CMD:**
+
 ```cmd
 set DATABASE_URL=
 ```
@@ -143,11 +151,13 @@ Vercel will automatically use `vercel-build` if it exists.
 ### When to Use
 
 ✅ Good for:
+
 - Initial deployment
 - Development/staging environments
 - Solo projects with no traffic during deploys
 
 ❌ Avoid for:
+
 - Production apps with users
 - Apps with multiple concurrent deployments
 - Migrations that take >30 seconds
@@ -163,6 +173,7 @@ For production apps, run migrations separately from deployments.
 Create a dedicated Vercel project for migrations:
 
 1. Create `migrate-production.sh`:
+
    ```bash
    #!/bin/bash
    export DATABASE_URL=$PRODUCTION_DATABASE_URL
@@ -170,11 +181,13 @@ Create a dedicated Vercel project for migrations:
    ```
 
 2. Make it executable:
+
    ```bash
    chmod +x migrate-production.sh
    ```
 
 3. Run before deployment:
+
    ```bash
    ./migrate-production.sh
    vercel --prod
@@ -294,6 +307,7 @@ git push
 ```
 
 If using Option 1 (recommended), manually run migration after push:
+
 ```bash
 export DATABASE_URL="..."
 pnpm db:migrate
@@ -308,6 +322,7 @@ pnpm db:migrate
 **Cause**: Cannot connect to Neon database
 
 **Solutions**:
+
 1. Verify `DATABASE_URL` is correct
 2. Check you're using the **pooled connection** string
 3. Verify Neon database is not suspended (it auto-wakes, but takes ~1-2 seconds)
@@ -325,6 +340,7 @@ psql "$DATABASE_URL" -c "SELECT version();"
 **Solution**: This is actually normal! Kysely tracks which migrations have run in the `kysely_migration` table. It will skip migrations that are already applied.
 
 To see migration status:
+
 ```bash
 psql "$DATABASE_URL" -c "SELECT * FROM kysely_migration;"
 ```
@@ -334,6 +350,7 @@ psql "$DATABASE_URL" -c "SELECT * FROM kysely_migration;"
 **Cause**: Dependencies not installed
 
 **Solution**:
+
 ```bash
 pnpm install
 ```
@@ -343,6 +360,7 @@ pnpm install
 **Cause**: Node.js version is too old
 
 **Solution**: Upgrade to Node.js 22+:
+
 ```bash
 node --version  # Should be >= 22.0.0
 
@@ -360,6 +378,7 @@ nvm use 22
 1. Check error message for specific cause
 2. Fix the migration file
 3. Manually rollback if needed:
+
    ```sql
    -- Connect to database
    psql "$DATABASE_URL"
@@ -373,6 +392,7 @@ nvm use 22
    -- Manually undo any partial changes
    -- (depends on what the migration was doing)
    ```
+
 4. Run migration again after fix
 
 ---
@@ -409,6 +429,7 @@ pnpm db:codegen
 This updates [src/lib/db/types.ts](../src/lib/db/types.ts) with the current schema, giving you type-safe queries.
 
 **When to run**:
+
 - After creating/running new migrations
 - After manually altering the database schema
 - When types seem out of sync with database
@@ -508,6 +529,7 @@ CREATE TABLE kysely_migration (
 ## Questions?
 
 For issues or questions:
+
 - Check [GitHub Issues](../../issues)
 - Review [Deployment Guide](../DEPLOYMENT.md)
 - Check Kysely docs for migration syntax

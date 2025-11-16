@@ -1,6 +1,7 @@
 # Docker Setup for Choose the Heat
 
 This guide will help you run the entire Choose the Heat application stack using Docker, including:
+
 - 🚀 Node.js 24 Application (TanStack Start)
 - 🐘 PostgreSQL 14 Database
 - 🔴 Redis 7 Cache
@@ -27,12 +28,14 @@ cp .env.example .env
 Edit `.env` and configure for Docker:
 
 1. **Comment out DATABASE_URL and REDIS_URL** (Docker Compose sets these automatically):
+
    ```env
    # DATABASE_URL=postgresql://...  ← Comment this out
    # REDIS_URL=redis://...           ← Comment this out
    ```
 
 2. **Set required values**:
+
    ```env
    # REQUIRED - Get from https://platform.openai.com/api-keys
    OPENAI_API_KEY=sk-your-actual-openai-api-key
@@ -49,6 +52,7 @@ Edit `.env` and configure for Docker:
    ```
 
 **Generate a secure session secret:**
+
 ```bash
 # Linux/Mac/WSL
 openssl rand -base64 32
@@ -66,6 +70,7 @@ docker-compose up --build
 ```
 
 This will:
+
 - ✅ Build the application Docker image
 - ✅ Start PostgreSQL database
 - ✅ Start Redis cache
@@ -74,7 +79,7 @@ This will:
 
 ### 3. Access the Application
 
-- **Application**: http://localhost:3000
+- **Application**: <http://localhost:3000>
 - **PostgreSQL**: localhost:5432 (user: postgres, password: postgres)
 - **Redis**: localhost:6379
 
@@ -98,16 +103,19 @@ After seeding completes, you can set `SEED_DATABASE=false` again.
 ## Docker Commands
 
 ### Start Services (Detached)
+
 ```bash
 docker-compose up -d
 ```
 
 ### Stop Services
+
 ```bash
 docker-compose down
 ```
 
 ### View Logs
+
 ```bash
 # All services
 docker-compose logs -f
@@ -119,16 +127,19 @@ docker-compose logs -f redis
 ```
 
 ### Restart a Service
+
 ```bash
 docker-compose restart app
 ```
 
 ### Rebuild After Code Changes
+
 ```bash
 docker-compose up --build app
 ```
 
 ### Stop and Remove Everything (including volumes)
+
 ```bash
 docker-compose down -v
 ```
@@ -149,21 +160,25 @@ docker-compose up --build app
 ### Database Operations
 
 **Run migrations manually:**
+
 ```bash
 docker-compose exec app node --loader tsx ./app/lib/db/migrate.ts
 ```
 
 **Seed database manually:**
+
 ```bash
 docker-compose exec app node --loader tsx ./app/lib/db/seed.ts
 ```
 
 **Connect to PostgreSQL:**
+
 ```bash
 docker-compose exec postgres psql -U postgres -d romance_novels
 ```
 
 **Connect to Redis:**
+
 ```bash
 docker-compose exec redis redis-cli
 ```
@@ -171,6 +186,7 @@ docker-compose exec redis redis-cli
 ### Viewing Database
 
 You can use a database client to connect:
+
 - **Host**: localhost
 - **Port**: 5432
 - **User**: postgres
@@ -178,6 +194,7 @@ You can use a database client to connect:
 - **Database**: romance_novels
 
 Recommended tools:
+
 - pgAdmin
 - DBeaver
 - TablePlus
@@ -244,11 +261,13 @@ secrets:
 ### Application Won't Start
 
 **Check logs:**
+
 ```bash
 docker-compose logs app
 ```
 
 **Common issues:**
+
 - Database not ready → Wait a few seconds, it should auto-retry
 - Missing environment variables → Check your `.env` file
 - Port already in use → Change ports in `docker-compose.yml`
@@ -256,11 +275,13 @@ docker-compose logs app
 ### Database Connection Failed
 
 **Verify PostgreSQL is running:**
+
 ```bash
 docker-compose ps postgres
 ```
 
 **Check health:**
+
 ```bash
 docker-compose exec postgres pg_isready -U postgres
 ```
@@ -268,11 +289,13 @@ docker-compose exec postgres pg_isready -U postgres
 ### Redis Connection Failed
 
 **Verify Redis is running:**
+
 ```bash
 docker-compose ps redis
 ```
 
 **Test connection:**
+
 ```bash
 docker-compose exec redis redis-cli ping
 # Should return: PONG
@@ -294,6 +317,7 @@ docker-compose up --build
 ### Can't Connect to Database from Host
 
 If you're trying to connect from your local machine (outside Docker), ensure:
+
 - Ports are exposed in `docker-compose.yml` (they are by default)
 - Use `localhost:5432` (not the container name)
 - Firewall isn't blocking the connection
@@ -307,6 +331,7 @@ The Dockerfile uses a multi-stage build for optimization:
 3. **runner stage**: Minimal production image with only what's needed
 
 This results in:
+
 - ✅ Smaller final image size
 - ✅ Faster deployment
 - ✅ Better security (fewer packages)
@@ -316,6 +341,7 @@ This results in:
 Both PostgreSQL and Redis have health checks configured. The app won't start until both are healthy.
 
 **Check health status:**
+
 ```bash
 docker-compose ps
 ```
@@ -325,20 +351,24 @@ Look for `healthy` in the status column.
 ## Volume Management
 
 Data is persisted in Docker volumes:
+
 - `postgres_data`: Database files
 - `redis_data`: Redis persistence
 
 **View volumes:**
+
 ```bash
 docker volume ls | grep choose-the-heat
 ```
 
 **Backup database:**
+
 ```bash
 docker-compose exec postgres pg_dump -U postgres romance_novels > backup.sql
 ```
 
 **Restore database:**
+
 ```bash
 docker-compose exec -T postgres psql -U postgres romance_novels < backup.sql
 ```
@@ -365,7 +395,7 @@ volumes:
 
 Once your Docker environment is running:
 
-1. ✅ Visit http://localhost:3000
+1. ✅ Visit <http://localhost:3000>
 2. ✅ Create an account (email/password works without Google OAuth)
 3. ✅ Complete onboarding (when implemented)
 4. ✅ Start reading AI-generated romance novels!
@@ -373,6 +403,7 @@ Once your Docker environment is running:
 ## Support
 
 For issues with Docker setup, check:
+
 - Docker logs: `docker-compose logs`
 - Container status: `docker-compose ps`
 - Resource usage: `docker stats`

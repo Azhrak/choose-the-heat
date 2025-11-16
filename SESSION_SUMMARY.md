@@ -33,12 +33,14 @@
 ### Key Accomplishments
 
 **Authentication & Security**
+
 - ✅ Email/password signup + Google OAuth
 - ✅ Secure sessions (httpOnly, 30-day expiry)
 - ✅ Argon2 password hashing
 - ✅ Password strength validation
 
 **AI & Content Generation**
+
 - ✅ Vercel AI SDK with 4 providers (OpenAI, Gemini, Claude, Mistral)
 - ✅ Dynamic prompts with spice level & pacing
 - ✅ Scene metadata capture (emotional_beat, tension_threads, relationship_progress, key_moment)
@@ -46,6 +48,7 @@
 - ✅ Scene length control (short/medium/long)
 
 **User Experience**
+
 - ✅ 3-step onboarding (genres, tropes, spice/pacing/scene-length)
 - ✅ Browse with search & trope filtering
 - ✅ Story library with progress tracking
@@ -54,6 +57,7 @@
 - ✅ Account deletion with confirmation
 
 **Database & Infrastructure**
+
 - ✅ PostgreSQL with Kysely (type-safe)
 - ✅ 5 migrations (schema, story_title, metadata, roles, audit_logs)
 - ✅ 10 tables (users, stories, scenes, admin_audit_logs, etc.)
@@ -61,6 +65,7 @@
 - ✅ Docker with auto-migrations
 
 **Admin Dashboard (Backend)**
+
 - ✅ Role-based access control (user, editor, admin)
 - ✅ Template management API (CRUD with status workflow)
 - ✅ User management API (admin only)
@@ -81,6 +86,7 @@
 **Container**: Docker + Docker Compose
 
 **Database Schema**:
+
 - users (with role), oauth_accounts, password_accounts, sessions
 - novel_templates (with status), choice_points
 - user_stories, choices
@@ -92,12 +98,14 @@
 ## 📋 Working Features
 
 ### Authentication
+
 - ✅ Email/password signup & login
 - ✅ Google OAuth flow
 - ✅ Session management
 - ✅ Secure password hashing
 
 ### Content
+
 - ✅ Browse templates with search & filters
 - ✅ Template detail pages
 - ✅ Story creation with preferences
@@ -109,6 +117,7 @@
 - ✅ Progress tracking
 
 ### User Management
+
 - ✅ Profile editing (name, email)
 - ✅ Password change with verification
 - ✅ Account deletion with confirmation
@@ -116,6 +125,7 @@
 - ✅ Scene length control per story
 
 ### AI Features
+
 - ✅ Multi-provider support
 - ✅ Enhanced safety guardrails
 - ✅ Metadata capture & storage
@@ -124,6 +134,7 @@
 - ✅ 97% token reduction for context
 
 ### Admin Features (Backend Complete)
+
 - ✅ Role-based access control (user/editor/admin)
 - ✅ Template CRUD operations (editor/admin)
 - ✅ Template status management (draft/published/archived)
@@ -138,6 +149,7 @@
 ## 🚀 Quick Start
 
 ### Docker (Recommended)
+
 ```bash
 cp .env.example .env
 # Edit .env with API keys (comment out DATABASE_URL/REDIS_URL)
@@ -146,6 +158,7 @@ docker-compose up --build
 ```
 
 ### Local Development
+
 ```bash
 cp .env.example .env
 # Edit .env with API keys
@@ -156,6 +169,7 @@ pnpm dev
 ```
 
 ### Required Environment Variables
+
 ```bash
 DATABASE_URL=postgresql://user:password@localhost:5432/romance_novels
 APP_URL=http://localhost:3000
@@ -212,12 +226,14 @@ src/
 ## 🐛 Recent Bug Fixes (Phase 14)
 
 **Scene Length Fixes**:
+
 - Fixed scene length parameter being stripped by Zod validation
 - Added logging for debugging (preferences, word count, prompts)
 - Strengthened AI word count compliance with emphasized requirements
 - Enhanced validation against user preferences
 
 **Story Management**:
+
 - Implemented story deletion with ownership verification
 - Added confirmation dialog UI
 - Proper cascade deletion of related data
@@ -227,6 +243,7 @@ src/
 ## 🚧 Next Steps (Phase 15: Polish & Testing)
 
 ### High Priority
+
 1. **Error Boundaries** - Better error recovery
 2. **Loading Skeletons** - Improved perceived performance
 3. **Mobile Optimization** - Test & fix responsive issues
@@ -234,6 +251,7 @@ src/
 5. **Testing** - Unit, integration, E2E tests
 
 ### Phase 16: Admin Dashboard Frontend (Next)
+
 - Admin UI components (Layout, Navigation, Tables, Forms)
 - Admin dashboard page with statistics
 - Template management pages (list, create, edit)
@@ -242,6 +260,7 @@ src/
 - Header navigation update
 
 ### Future Phases (17+)
+
 - Story export (PDF/EPUB)
 - Statistics dashboard with relationship arcs
 - Story branching visualization
@@ -325,12 +344,14 @@ docker-compose down -v         # Reset database (WARNING: deletes data)
 When you return:
 
 1. **Verify setup**:
+
    ```bash
    node --version  # Should be 24+
    pnpm --version  # Should be 9+
    ```
 
 2. **Start development**:
+
    ```bash
    # Option A: Docker (recommended)
    docker-compose up --build
@@ -356,6 +377,7 @@ When you return:
 ## 💡 Implementation Notes
 
 ### Scene Generation Flow
+
 1. User navigates to story reading page
 2. System checks scene cache
 3. If cached → return from DB
@@ -364,17 +386,20 @@ When you return:
 6. Display to user
 
 ### Word Count Strategy
+
 - Short: 500-700 words (0.65x multiplier)
 - Medium: 800-1100 words (1.0x, default)
 - Long: 1100-1500 words (1.4x multiplier)
 - Phase-aware adjustments (opening = lower, climax = higher)
 
 ### Token Efficiency
+
 - Previous: ~2000 tokens for context (2 full scenes)
 - Now: ~60 tokens for context (2 scene summaries)
 - **97% reduction achieved via metadata system**
 
 ### Metadata Fields
+
 - `emotional_beat` - Scene's emotional state
 - `tension_threads` - Unresolved plot threads
 - `relationship_progress` - Relationship change (-5 to +5)
@@ -402,11 +427,11 @@ When you return:
 
 ## 🔗 Useful Links
 
-- **GitHub**: https://github.com/Azhrak/choose-the-heat
-- **TanStack Docs**: https://tanstack.com/start/latest
-- **Vercel AI SDK**: https://sdk.vercel.ai/docs
-- **Kysely Docs**: https://kysely.dev/docs/intro
-- **Tailwind CSS**: https://tailwindcss.com/docs
+- **GitHub**: <https://github.com/Azhrak/choose-the-heat>
+- **TanStack Docs**: <https://tanstack.com/start/latest>
+- **Vercel AI SDK**: <https://sdk.vercel.ai/docs>
+- **Kysely Docs**: <https://kysely.dev/docs/intro>
+- **Tailwind CSS**: <https://tailwindcss.com/docs>
 
 ---
 

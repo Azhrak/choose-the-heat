@@ -9,15 +9,19 @@ This document tracks where all the reusable components created during the refact
 ## Custom Hooks Usage
 
 ### useStoryQuery
+
 **Location:** `src/hooks/useStoryQuery.ts`
 **Used in 1 file:**
+
 - ✅ src/routes/story/$id.info.tsx
 
 **Purpose:** Fetches a single story with all details including preferences, template info, and progress.
 
 ### useCurrentUserQuery
+
 **Location:** `src/hooks/useCurrentUserQuery.ts`
 **Used in 12 files:**
+
 - ✅ src/routes/library.tsx
 - ✅ src/routes/browse.tsx
 - ✅ src/routes/story/create.tsx
@@ -32,25 +36,33 @@ This document tracks where all the reusable components created during the refact
 - ✅ src/routes/admin/audit-logs/index.tsx
 
 ### useUserStoriesQuery
+
 **Location:** `src/hooks/useUserStoriesQuery.ts`
 **Used in 2 files:**
+
 - ✅ src/routes/library.tsx
 - ✅ src/routes/story/create.tsx (for checking existing stories)
 
 ### useTemplatesQuery
+
 **Location:** `src/hooks/useTemplatesQuery.ts`
 **Used in 1 file:**
+
 - ✅ src/routes/browse.tsx
 
 ### useUserPreferencesQuery
+
 **Location:** `src/hooks/useUserPreferencesQuery.ts`
 **Used in 2 files:**
+
 - ✅ src/routes/story/create.tsx
 - ⏳ src/routes/preferences.tsx (TODO: Should be migrated to use this hook)
 
 ### useDeleteStoryMutation
+
 **Location:** `src/hooks/useDeleteStoryMutation.ts`
 **Used in 1 file:**
+
 - ✅ src/routes/library.tsx
 
 ---
@@ -58,11 +70,14 @@ This document tracks where all the reusable components created during the refact
 ## Component Usage
 
 ### StoryCard
+
 **Location:** `src/components/StoryCard.tsx`
 **Used in 1 file:**
+
 - ✅ src/routes/library.tsx - Displays user stories with progress tracking
 
 **Usage Example:**
+
 ```typescript
 <StoryCard
   id={story.id}
@@ -80,6 +95,7 @@ This document tracks where all the reusable components created during the refact
 ```
 
 **Features:**
+
 - Clickable cover image that navigates to reading page
 - Info button to view story settings
 - Progress bar integration
@@ -87,31 +103,38 @@ This document tracks where all the reusable components created during the refact
 - Responsive design
 
 **Benefits:**
+
 - Reduced 65 lines of duplicate code from library page
 - Reusable across all story list views
 - Consistent styling with NovelCard
 - Centralized story card logic
 
 ### FullPageLoader
+
 **Location:** `src/components/FullPageLoader.tsx`
 **Used in 4 files:**
+
 - ✅ src/routes/profile.tsx - Default message
 - ✅ src/routes/preferences.tsx - Custom message: "Loading your preferences..."
 - ✅ src/routes/story/$id.read.tsx - Custom message: "Loading your story..."
 - ✅ src/routes/story/$id.info.tsx - Default message
 
 **Benefits:**
+
 - Consistent loading UX across all full-page loaders
 - Reduced 21 lines of duplicate code
 - Centralized styling (romance gradient background)
 
 ### StoryProgressBar
+
 **Location:** `src/components/StoryProgressBar.tsx`
 **Used in 2 files:**
+
 - ✅ src/routes/library.tsx - Shows progress for each story in the library grid (via StoryCard)
 - ✅ src/routes/story/$id.info.tsx - Shows reading progress on story info page
 
 **Usage Example:**
+
 ```typescript
 <StoryProgressBar
   currentScene={story.current_scene}
@@ -120,14 +143,18 @@ This document tracks where all the reusable components created during the refact
 ```
 
 **Potential additional usage:**
+
 - ⏳ src/routes/story/$id.read.tsx (currently has inline progress, could use this component)
 
 ### SpiceLevelSelector
+
 **Location:** `src/components/SpiceLevelSelector.tsx`
 **Used in 1 file:**
+
 - ✅ src/routes/story/create.tsx - Spice level selection during story creation
 
 **Usage Example:**
+
 ```typescript
 <SpiceLevelSelector
   value={spiceLevel}
@@ -136,16 +163,20 @@ This document tracks where all the reusable components created during the refact
 ```
 
 **Potential additional usage:**
+
 - ⏳ src/routes/preferences.tsx (has inline spice selector, could use this component)
 
 ### RadioButtonGroup
+
 **Location:** `src/components/RadioButtonGroup.tsx`
 **Used in 1 file (2 instances):**
+
 - ✅ src/routes/story/create.tsx:
   - Pacing selection (2 columns)
   - Scene Length selection (3 columns)
 
 **Usage Example:**
+
 ```typescript
 <RadioButtonGroup
   label="Pacing"
@@ -161,13 +192,16 @@ This document tracks where all the reusable components created during the refact
 ```
 
 **Potential additional usage:**
+
 - ⏳ src/routes/preferences.tsx (has inline pacing and scene length selectors)
 
 ### StatCard (Admin)
+
 **Location:** `src/components/admin/StatCard.tsx`
 **Currently not used** ⚠️
 
 **Potential usage:**
+
 - ⏳ src/routes/admin/index.tsx (has inline StatCard component)
 - ⏳ src/routes/admin/users/index.tsx (has inline StatBox component)
 - ⏳ src/routes/admin/templates/index.tsx (has inline StatBox component)
@@ -181,6 +215,7 @@ This document tracks where all the reusable components created during the refact
 ### From src/lib/api/types.ts
 
 **Template** - Used in:
+
 - ✅ src/hooks/useTemplatesQuery.ts
 - ✅ src/hooks/useUserStoriesQuery.ts
 - ✅ src/routes/story/create.tsx
@@ -188,19 +223,23 @@ This document tracks where all the reusable components created during the refact
 - ✅ src/routes/admin/templates/$id/edit.tsx
 
 **User** - Used in:
+
 - ✅ src/routes/admin/users/index.tsx
 - ✅ src/routes/admin/users/$id/edit.tsx
 
 **UserStory** - Used in:
+
 - ✅ src/hooks/useUserStoriesQuery.ts
 - ✅ src/hooks/useStoryQuery.ts
 - ✅ src/components/StoryCard.tsx (via props)
 
 **StoryStatus** - Used in:
+
 - ✅ src/hooks/useUserStoriesQuery.ts
 - ✅ src/components/StoryCard.tsx
 
 **TemplateStatus** - Used in:
+
 - ✅ src/routes/admin/templates/index.tsx
 - ✅ src/routes/admin/templates/$id/edit.tsx
 
@@ -213,6 +252,7 @@ This document tracks where all the reusable components created during the refact
 **GRADIENT_OPTIONS** - Currently not used ⚠️
 
 **Potential usage:**
+
 - ⏳ src/routes/admin/templates/$id/edit.tsx (has inline gradientOptions array)
 - ⏳ src/routes/admin/templates/new.tsx (might have inline gradients)
 
@@ -223,12 +263,14 @@ This document tracks where all the reusable components created during the refact
 ## Summary Statistics
 
 ### Custom Hooks
+
 - **Created:** 6 hooks
 - **In Use:** 6 hooks (100%)
 - **Total usages:** 20+ locations
 - **New in Phase 15.5:** useStoryQuery
 
 ### Components
+
 - **Created:** 6 components
 - **In Use:** 5 components (83%)
 - **Not Yet Used:** 1 component (StatCard)
@@ -236,11 +278,13 @@ This document tracks where all the reusable components created during the refact
 - **New in Phase 15.5:** StoryCard
 
 ### Shared Types
+
 - **Created:** 10+ type definitions
 - **In Use:** All actively used across 25+ files
 - **Enhanced in Phase 15.5:** UserStory interface (added preferences field)
 
 ### Constants
+
 - **Created:** 1 constants file
 - **In Use:** 0 (0%)
 - **Action needed:** Migrate gradient options to use GRADIENT_OPTIONS
@@ -250,31 +294,36 @@ This document tracks where all the reusable components created during the refact
 ## Recommendations
 
 ### High Priority (Components not yet utilized)
+
 1. **Replace inline StatCard components** in admin pages with the reusable `src/components/admin/StatCard.tsx`
 2. **Use GRADIENT_OPTIONS** from constants in template edit forms
 
 ### Medium Priority (Extend component usage)
+
 3. **Use StoryProgressBar** in `src/routes/story/$id.read.tsx` for consistency
-4. **Migrate preferences.tsx** to use:
+2. **Migrate preferences.tsx** to use:
    - `SpiceLevelSelector`
    - `RadioButtonGroup` for pacing and scene length
    - `useUserPreferencesQuery` hook
 
 ### Low Priority (Additional refactoring)
+
 5. Consider creating a `TemplateCard` component (used in browse and library)
-6. Consider creating a `TropeFilter` component (used in browse)
+2. Consider creating a `TropeFilter` component (used in browse)
 
 ---
 
 ## Migration Checklist
 
 When adding new code, always check:
+
 - [ ] Is there a custom hook for this query/mutation in `src/hooks/`?
 - [ ] Is there a reusable component for this UI pattern in `src/components/`?
 - [ ] Are types defined in `src/lib/api/types.ts`?
 - [ ] Are constants defined in `src/lib/constants/`?
 
 Before creating new code, always run:
+
 ```bash
 # Check for existing hooks
 ls src/hooks/

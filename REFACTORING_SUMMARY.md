@@ -85,55 +85,64 @@ This refactoring focused on four main areas:
 - **Impact:** Fetch user profile data
 - **Exports:** `profileQueryKey`#### Mutation Hooks (9 total)
 
-1. **[useDeleteStoryMutation.ts](src/hooks/useDeleteStoryMutation.ts)**
-   - **Impact:** Handles story deletion
-   - **Exports:** `deleteStoryMutationKey`
+15. **[useDeleteStoryMutation.ts](src/hooks/useDeleteStoryMutation.ts)**
 
-2. **[useUpdateUserMutation.ts](src/hooks/useUpdateUserMutation.ts)**
-   - **Impact:** Update user information
-   - **Exports:** `updateUserMutationKey(userId)`
+- **Impact:** Handles story deletion
+- **Exports:** `deleteStoryMutationKey`
 
-3. **[useDeleteUserMutation.ts](src/hooks/useDeleteUserMutation.ts)**
-   - **Impact:** Delete a user
-   - **Exports:** `deleteUserMutationKey(userId)`
+16. **[useUpdateUserMutation.ts](src/hooks/useUpdateUserMutation.ts)**
 
-4. **[useCreateTemplateMutation.ts](src/hooks/useCreateTemplateMutation.ts)**
-   - **Impact:** Create new template
-   - **Exports:** `createTemplateMutationKey`
+- **Impact:** Update user information
+- **Exports:** `updateUserMutationKey(userId)`
 
-5. **[useUpdateTemplateMutation.ts](src/hooks/useUpdateTemplateMutation.ts)**
-   - **Impact:** Update template information
-   - **Exports:** `updateTemplateMutationKey(templateId)`
+17. **[useDeleteUserMutation.ts](src/hooks/useDeleteUserMutation.ts)**
 
-6. **[useUpdateTemplateStatusMutation.ts](src/hooks/useUpdateTemplateStatusMutation.ts)**
-   - **Impact:** Update template status (draft/published/archived)
-   - **Exports:** `updateTemplateStatusMutationKey(templateId)`
+- **Impact:** Delete a user
+- **Exports:** `deleteUserMutationKey(userId)`
 
-7. **[useDeleteTemplateMutation.ts](src/hooks/useDeleteTemplateMutation.ts)**
-   - **Impact:** Delete a template
-   - **Exports:** `deleteTemplateMutationKey(templateId)`
+18. **[useCreateTemplateMutation.ts](src/hooks/useCreateTemplateMutation.ts)**
 
-8. **[useCreateStoryMutation.ts](src/hooks/useCreateStoryMutation.ts)**
-   - **Impact:** Create new story
-   - **Exports:** `createStoryMutationKey`
+- **Impact:** Create new template
+- **Exports:** `createTemplateMutationKey`
 
-9. **[useMakeChoiceMutation.ts](src/hooks/useMakeChoiceMutation.ts)**
-   - **Impact:** Record user's story choice
-   - **Exports:** `makeChoiceMutationKey(storyId)`
+19. **[useUpdateTemplateMutation.ts](src/hooks/useUpdateTemplateMutation.ts)**
 
-10. **[useUpdatePreferencesMutation.ts](src/hooks/useUpdatePreferencesMutation.ts)**
+- **Impact:** Update template information
+- **Exports:** `updateTemplateMutationKey(templateId)`
+
+20. **[useUpdateTemplateStatusMutation.ts](src/hooks/useUpdateTemplateStatusMutation.ts)**
+
+- **Impact:** Update template status (draft/published/archived)
+- **Exports:** `updateTemplateStatusMutationKey(templateId)`
+
+21. **[useDeleteTemplateMutation.ts](src/hooks/useDeleteTemplateMutation.ts)**
+
+- **Impact:** Delete a template
+- **Exports:** `deleteTemplateMutationKey(templateId)`
+
+22. **[useCreateStoryMutation.ts](src/hooks/useCreateStoryMutation.ts)**
+
+- **Impact:** Create new story
+- **Exports:** `createStoryMutationKey`
+
+23. **[useMakeChoiceMutation.ts](src/hooks/useMakeChoiceMutation.ts)**
+
+- **Impact:** Record user's story choice
+- **Exports:** `makeChoiceMutationKey(storyId)`
+
+24. **[useUpdatePreferencesMutation.ts](src/hooks/useUpdatePreferencesMutation.ts)**
     - **Impact:** Update user preferences (genres, tropes, spice level, etc.)
     - **Exports:** `updatePreferencesMutationKey`
 
-11. **[useUpdateProfileMutation.ts](src/hooks/useUpdateProfileMutation.ts)**
+25. **[useUpdateProfileMutation.ts](src/hooks/useUpdateProfileMutation.ts)**
     - **Impact:** Update user profile (name, email)
     - **Exports:** `updateProfileMutationKey`
 
-12. **[useChangePasswordMutation.ts](src/hooks/useChangePasswordMutation.ts)**
+26. **[useChangePasswordMutation.ts](src/hooks/useChangePasswordMutation.ts)**
     - **Impact:** Change user password
     - **Exports:** `changePasswordMutationKey`
 
-13. **[useDeleteAccountMutation.ts](src/hooks/useDeleteAccountMutation.ts)**
+27. **[useDeleteAccountMutation.ts](src/hooks/useDeleteAccountMutation.ts)**
     - **Impact:** Delete user account
     - **Exports:** `deleteAccountMutationKey`
 

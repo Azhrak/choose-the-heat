@@ -19,6 +19,7 @@ TanStack Start uses **Nitro** to build for different deployment platforms:
 - ✅ **Node.js 22**: Uses the latest Node.js runtime on Vercel
 
 Configuration files already set up:
+
 - [vercel.json](vercel.json) - Ensures devDependencies are installed
 - [vite.config.ts](vite.config.ts) - Includes Nitro Vite plugin for Vercel deployment
 - [package.json](package.json) - Includes `nitro` package
@@ -50,14 +51,17 @@ Configuration files already set up:
 1. In your Neon project dashboard, find the **Connection Details** section
 2. **IMPORTANT**: Toggle to **Pooled connection** (required for serverless)
 3. Copy the connection string - it looks like:
+
    ```
    postgresql://username:password@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require
    ```
+
 4. Save this for later - you'll add it to Vercel as `DATABASE_URL`
 
 ### Step 3: Configure Database Settings (Optional)
 
 For production, you may want to:
+
 1. Go to **Settings** → **General**
 2. Enable **Auto-suspend**: Database sleeps after 5 minutes of inactivity (saves compute hours)
 3. Set **Compute size**: Keep at minimum (0.25 CU) for free tier
@@ -111,24 +115,28 @@ Click **Environment Variables** and add all of the following:
 ##### AI Provider (Choose ONE)
 
 **For OpenAI:**
+
 ```
 OPENAI_API_KEY=sk-...your-key
 OPENAI_MODEL=gpt-4-turbo
 ```
 
 **For Anthropic Claude:**
+
 ```
 ANTHROPIC_API_KEY=sk-ant-...your-key
 ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
 ```
 
 **For Google Gemini:**
+
 ```
 GOOGLE_GENERATIVE_AI_API_KEY=...your-key
 GOOGLE_MODEL=gemini-1.5-pro
 ```
 
 **For Mistral:**
+
 ```
 MISTRAL_API_KEY=...your-key
 MISTRAL_MODEL=mistral-large-latest
@@ -137,6 +145,7 @@ MISTRAL_MODEL=mistral-large-latest
 ##### Optional: Google OAuth
 
 Only add if you want Google social login:
+
 ```
 GOOGLE_CLIENT_ID=...apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=...your-secret
@@ -145,11 +154,13 @@ GOOGLE_CLIENT_SECRET=...your-secret
 ##### Generating SESSION_SECRET
 
 **On Linux/Mac/WSL:**
+
 ```bash
 openssl rand -base64 32
 ```
 
 **On Windows PowerShell:**
+
 ```powershell
 [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 ```
@@ -231,17 +242,23 @@ Your database needs the schema created before the app will work.
 
 1. Copy your Neon `DATABASE_URL` from Vercel
 2. In your local project, create a temporary `.env` file:
+
    ```bash
    DATABASE_URL=postgresql://...your-neon-pooled-connection
    ```
+
 3. Run migrations:
+
    ```bash
    pnpm db:migrate
    ```
+
 4. (Optional) Seed templates:
+
    ```bash
    pnpm db:seed
    ```
+
 5. Delete the temporary `.env` file
 
 ### Option 2: Run Migrations via Vercel Functions
@@ -249,9 +266,11 @@ Your database needs the schema created before the app will work.
 If you prefer to run migrations on Vercel:
 
 1. Add this to `package.json` scripts:
+
    ```json
    "vercel-build": "pnpm db:migrate && vite build"
    ```
+
 2. Redeploy on Vercel
 
 > **Note**: This runs migrations on every deploy. For production, consider a dedicated migration service.
@@ -267,9 +286,11 @@ If you added `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`:
 1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
 2. Select your OAuth 2.0 Client ID
 3. Add **Authorized redirect URIs**:
+
    ```
    https://your-app.vercel.app/api/auth/callback/google
    ```
+
    Replace `your-app.vercel.app` with your actual Vercel URL
 4. Click **Save**
 
@@ -299,6 +320,7 @@ If you added `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`:
 #### Issue: "Database connection failed"
 
 **Solution**:
+
 - Verify `DATABASE_URL` is the **pooled connection** string from Neon
 - Check Neon compute hasn't auto-suspended (should wake up automatically)
 - Verify migrations ran successfully
@@ -306,12 +328,14 @@ If you added `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`:
 #### Issue: "Session secret not configured"
 
 **Solution**:
+
 - Verify `SESSION_SECRET` is set in Vercel environment variables
 - Redeploy after adding environment variables
 
 #### Issue: "Story generation fails"
 
 **Solution**:
+
 - Verify AI provider API key is correct
 - Check `AI_PROVIDER` matches your configured provider
 - Check Vercel function logs for specific error
@@ -319,6 +343,7 @@ If you added `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`:
 #### Issue: "OAuth redirect mismatch"
 
 **Solution**:
+
 - Verify redirect URI in Google Console matches exactly: `https://your-domain.vercel.app/api/auth/callback/google`
 - No trailing slash
 - Must use HTTPS
@@ -326,6 +351,7 @@ If you added `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`:
 #### Issue: "Cold starts / slow first load"
 
 **Expected behavior**:
+
 - First request after inactivity may take 2-3 seconds
 - Neon database wakes from suspend (~1-2 seconds)
 - Vercel function cold start (~500ms)
@@ -352,6 +378,7 @@ To use your own domain instead of `*.vercel.app`:
 
 1. Go to Google Cloud Console
 2. Add new redirect URI with custom domain:
+
    ```
    https://choosetheheat.com/api/auth/callback/google
    ```
@@ -381,10 +408,12 @@ To use your own domain instead of `*.vercel.app`:
 ### Monitoring Usage
 
 **Vercel**:
+
 - Dashboard → Analytics → Usage
 - Get alerts when approaching limits
 
 **Neon**:
+
 - Dashboard → Billing → Usage
 - Shows storage and compute hours used
 
@@ -395,12 +424,14 @@ To use your own domain instead of `*.vercel.app`:
 When you're ready for more capacity:
 
 ### Vercel Pro ($20/month)
+
 - Removes "Hobby" restriction (commercial use allowed)
 - 1TB bandwidth
 - 1,000,000 function invocations
 - Better performance
 
 ### Neon Launch ($19/month)
+
 - 10GB storage
 - 300 compute hours
 - Better performance
@@ -415,12 +446,14 @@ When you're ready for more capacity:
 ### View Logs
 
 **Vercel Function Logs**:
+
 1. Go to your project → **Deployments**
 2. Click on a deployment
 3. Click **Functions** tab
 4. View real-time logs
 
 **Neon Query Logs**:
+
 1. Go to Neon dashboard → **Monitoring**
 2. View query performance and errors
 
@@ -475,6 +508,7 @@ To protect your staging deployment from public access, you can enable HTTP Basic
 ### Sharing Access with Testers
 
 Send testers:
+
 1. **URL**: `https://choose-the-heat.vercel.app`
 2. **Username**: `tester` (or any username)
 3. **Password**: The value you set for `SITE_PASSWORD`
@@ -482,6 +516,7 @@ Send testers:
 ### Disabling Password Protection
 
 To remove password protection:
+
 1. Go to Vercel → Settings → Environment Variables
 2. Delete the `SITE_PASSWORD` variable
 3. Redeploy

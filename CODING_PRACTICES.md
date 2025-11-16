@@ -32,6 +32,7 @@ All custom hooks should be placed in `src/hooks/`
 ### Structure
 
 **Query Hook Example:**
+
 ```typescript
 import { useQuery } from "@tanstack/react-query";
 import type { SomeType } from "~/lib/api/types";
@@ -59,6 +60,7 @@ export function useSomeQuery(param: string) {
 ```
 
 **Mutation Hook Example:**
+
 ```typescript
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -92,6 +94,7 @@ export function useSomeMutation() {
 ### Required Documentation
 
 Every custom hook must have:
+
 - JSDoc comment describing its purpose
 - Parameter descriptions (if applicable)
 - Return type inference or explicit type
@@ -114,7 +117,8 @@ Always check `src/hooks/` before creating duplicate query/mutation logic. Curren
 
 All shared types must be defined in `src/lib/api/types.ts`
 
-#### DO:
+#### DO
+
 ```typescript
 // In src/lib/api/types.ts
 export interface User {
@@ -129,7 +133,8 @@ export interface User {
 import type { User } from "~/lib/api/types";
 ```
 
-#### DON'T:
+#### DON'T
+
 ```typescript
 // DON'T define interfaces inline in components
 interface User {
@@ -155,7 +160,8 @@ export type { UserRole, TemplateStatus };
 
 Always define proper types instead of using `any`.
 
-#### DO:
+#### DO
+
 ```typescript
 const stats: {
   total: number;
@@ -166,7 +172,8 @@ const stats: {
 };
 ```
 
-#### DON'T:
+#### DON'T
+
 ```typescript
 const stats: any = {};
 ```
@@ -205,6 +212,7 @@ Current shared types in `src/lib/api/types.ts`:
 ### Reusable Components
 
 Extract components when:
+
 1. The same UI pattern appears **2 or more times**
 2. A complex block would benefit from a descriptive name
 3. The component could be useful across multiple pages
@@ -241,6 +249,7 @@ export function ComponentName({ value, onChange, optional = true }: ComponentPro
 Before creating new components, check if these exist:
 
 **General:**
+
 - `FullPageLoader` - Full-page loading state with message
 - `StoryProgressBar` - Progress visualization for stories
 - `SpiceLevelSelector` - Spice level selection (1-5 flames)
@@ -251,13 +260,15 @@ Before creating new components, check if these exist:
 - `EmptyState` - Empty state with icon and action
 
 **Admin:**
+
 - `StatCard` - Admin dashboard statistics card
 
 ### Using FormInput Component
 
 **Always use the existing `FormInput` component** for form fields instead of inline input elements:
 
-#### DO:
+#### DO
+
 ```typescript
 import { FormInput } from "~/components/FormInput";
 
@@ -271,7 +282,8 @@ import { FormInput } from "~/components/FormInput";
 />
 ```
 
-#### DON'T:
+#### DON'T
+
 ```typescript
 <div>
   <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
@@ -404,6 +416,7 @@ Organize imports in this order:
 6. Relative imports
 
 Example:
+
 ```typescript
 // 1. External libraries
 import { useQuery } from "@tanstack/react-query";

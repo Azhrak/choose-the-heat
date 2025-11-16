@@ -8,13 +8,16 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 
 - 🔐 Authentication (Google OAuth + Email/Password)
 - 📚 AI-generated romance novels with choice-based branching
+- 🌳 Story branching system (explore alternative storylines)
+- ✏️ Edit story titles anytime
 - 🎨 Custom preferences (genres, tropes, spice level, pacing, scene length)
 - ⚙️ Preferences management page
 - 💾 Progress tracking with scene caching
 - 👤 User profiles & account management
 - 📊 Smart metadata (emotional tracking, tension threads)
 - 🛡️ Enhanced safety guardrails
-- 👑 Admin dashboard with role-based access control (Backend complete)
+- 👑 Admin dashboard with role-based access control
+- 🤖 Automated CI/CD with database migrations
 
 ## Documentation
 
@@ -24,6 +27,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - [DOCKER.md](DOCKER.md) - Docker setup guide
 - [AI_PROVIDERS.md](AI_PROVIDERS.md) - AI configuration
 - [SCENE_METADATA.md](SCENE_METADATA.md) - Metadata system
+- [docs/CI_MIGRATIONS.md](docs/CI_MIGRATIONS.md) - CI/CD & migrations guide
 
 ## Tech Stack
 
@@ -45,6 +49,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 See [AI_PROVIDERS.md](AI_PROVIDERS.md) for detailed configuration.
 
 **OR use Docker** (recommended - includes PostgreSQL & Redis):
+
 - Docker Desktop or Engine
 - Docker Compose
 
@@ -155,12 +160,14 @@ src/
 ## Deployment
 
 ### Vercel
+
 1. Push to GitHub
 2. Import to Vercel
 3. Add environment variables
 4. Deploy
 
 ### Docker
+
 ```bash
 docker build -t choose-the-heat .
 docker run -p 3000:3000 --env-file .env choose-the-heat
@@ -169,6 +176,7 @@ docker run -p 3000:3000 --env-file .env choose-the-heat
 ## Development Notes
 
 ### Database Changes
+
 ```bash
 # 1. Create migration in src/lib/db/migrations/
 # 2. Run migration
@@ -178,7 +186,9 @@ pnpm db:codegen
 ```
 
 ### Add Novel Templates
+
 Edit `src/lib/db/seed.ts` then run:
+
 ```bash
 pnpm db:seed
 ```
@@ -201,6 +211,7 @@ pnpm db:seed
 ## Next Steps
 
 See [PROGRESS.md](PROGRESS.md) for:
+
 - Phase 15: Polish & UX improvements
 - Phase 16: Advanced features (exports, dashboards, branching visualization)
 - Full technical debt & roadmap

@@ -7,6 +7,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: TanStack Start (React-based full-stack framework)
 - **Routing**: TanStack Router (file-based, type-safe)
 - **State Management**: TanStack Query (server state)
@@ -14,6 +15,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - **Icons**: Lucide React
 
 ### Backend
+
 - **Runtime**: Node.js with Vinxi
 - **Database**: PostgreSQL with Kysely (type-safe SQL query builder)
 - **Auth**: Arctic (OAuth), custom session management
@@ -21,6 +23,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - **Caching**: Redis (optional, for scene caching)
 
 ### Development
+
 - **Language**: TypeScript (strict mode)
 - **Package Manager**: pnpm
 - **Testing**: Vitest
@@ -29,12 +32,14 @@ A full-stack TypeScript application that generates personalized, interactive rom
 ## Core Features
 
 ### 1. Authentication
+
 - **Primary**: Google OAuth (Arctic)
 - **Fallback**: Email/password with Argon2 hashing
 - Session-based auth with httpOnly cookies
 - Email verification for password accounts
 
 ### 2. User Onboarding
+
 - Multi-step preference collection:
   - Genres (contemporary, fantasy, paranormal, historical, sci-fi)
   - Tropes (enemies-to-lovers, fake dating, second chance, etc.)
@@ -43,6 +48,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - Saved to `users.default_preferences` (JSONB)
 
 ### 3. Novel Selection & Configuration
+
 - Browse pre-built novel templates
 - Each template has:
   - Title, description, base tropes
@@ -51,6 +57,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - Users can use default preferences or customize per-story
 
 ### 4. Interactive Reading Experience
+
 - Scene-by-scene narrative display
 - AI-generated content based on:
   - User preferences
@@ -61,6 +68,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 - Scenes cached in DB for re-reading
 
 ### 5. Story Management
+
 - Library view (in-progress vs completed)
 - Progress tracking (current scene, completion %)
 - Choice history per story
@@ -71,36 +79,45 @@ A full-stack TypeScript application that generates personalized, interactive rom
 ### Core Tables
 
 **users**
+
 - Authentication & profile data
 - `default_preferences` (JSONB): genre, tropes, spice level, pacing
 
 **oauth_accounts**
+
 - Google OAuth tokens and provider data
 
 **password_accounts**
+
 - Argon2 hashed passwords for email users
 
 **sessions**
+
 - Session IDs with expiry (30 days)
 
 **novel_templates**
+
 - Pre-written story outlines
 - Base tropes, estimated length, cover gradient
 
 **choice_points**
+
 - Predefined decision points in templates
 - Scene number, prompt text, 3 options (JSONB)
 
 **user_stories**
+
 - Story instances per user
 - Snapshot of preferences at creation
 - Current scene tracker, status (in-progress/completed)
 
 **choices**
+
 - User decisions at choice points
 - Links story → choice_point → selected_option
 
 **scenes**
+
 - Cached AI-generated content
 - Unique per (story_id, scene_number)
 - Word count for analytics
@@ -108,6 +125,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 ## AI Generation Strategy
 
 ### Hybrid Approach
+
 1. **Pre-written scaffolding**: Novel templates define structure, key plot points, choice points
 2. **AI fills prose**: OpenAI generates ~800-1200 word scenes based on:
    - Template narrative arc
@@ -116,6 +134,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
    - Character continuity
 
 ### Prompt Structure
+
 ```typescript
 {
   system: "You are a romance novelist specializing in [genres]...",
@@ -132,6 +151,7 @@ A full-stack TypeScript application that generates personalized, interactive rom
 ```
 
 ### Caching Strategy
+
 - First generation: API call + DB insert
 - Subsequent reads: Serve from `scenes` table
 - Optional: Redis for hot reads
@@ -196,6 +216,7 @@ app/
 ## Key Type Patterns
 
 ### Preferences Type
+
 ```typescript
 interface TropePreferences {
   genres: string[]              // ["contemporary", "fantasy"]
@@ -208,6 +229,7 @@ interface TropePreferences {
 ```
 
 ### Choice Option Type
+
 ```typescript
 interface ChoiceOption {
   id: string
@@ -218,6 +240,7 @@ interface ChoiceOption {
 ```
 
 ### Story Context for AI
+
 ```typescript
 interface GenerateSceneContext {
   template: NovelTemplate       // Title, base tropes, structure
@@ -231,6 +254,7 @@ interface GenerateSceneContext {
 ## Development Workflow
 
 ### Initial Setup
+
 ```bash
 pnpm install
 pnpm db:migrate      # Run SQL migrations
@@ -239,6 +263,7 @@ pnpm db:seed         # Seed novel templates + choice points
 ```
 
 ### Development
+
 ```bash
 pnpm dev             # Start on localhost:3000
 # TanStack Router devtools at bottom-right
@@ -246,6 +271,7 @@ pnpm dev             # Start on localhost:3000
 ```
 
 ### After Schema Changes
+
 ```bash
 # 1. Create new migration file: app/lib/db/migrations/00X_description.sql
 # 2. Run migration: pnpm db:migrate
@@ -275,6 +301,7 @@ SESSION_SECRET=xxx
 ## API Patterns
 
 ### Protected Routes
+
 ```typescript
 export const Route = createAPIFileRoute('/api/generate-scene')({
   POST: async ({ request }) => {
@@ -288,6 +315,7 @@ export const Route = createAPIFileRoute('/api/generate-scene')({
 ```
 
 ### Type-Safe Queries (Kysely)
+
 ```typescript
 // With relations using jsonArrayFrom/jsonObjectFrom
 const story = await db
@@ -313,23 +341,27 @@ const story = await db
 ## Future Feature Considerations
 
 ### Tier 1 (MVP+)
+
 - Character name customization
 - Save points / "what if" branching
 - Reading preferences (font size, theme)
 - Highlights & notes
 
 ### Tier 2 (Growth)
+
 - Social features (share endings, discussion threads)
 - "% of readers chose this" stats
 - Friend recommendations
 - Reading stats dashboard
 
 ### Tier 3 (Monetization)
+
 - Premium tier (longer stories, exclusive templates)
 - Creator studio (user-submitted templates)
 - Series/sequels with character continuity
 
 ### Tier 4 (Advanced AI)
+
 - Dynamic plot adaptation based on choice patterns
 - "Rewrite this scene" user override
 - Character chat between chapters
@@ -352,16 +384,19 @@ const story = await db
 ## Deployment Notes
 
 ### Vercel (Recommended)
+
 - `app.config.ts`: Set `server.preset = 'vercel'`
 - Environment variables in Vercel dashboard
 - Database: Neon or Supabase (Postgres)
 
 ### Docker
+
 - Multi-stage build for production
 - Health check on `/api/health`
 - Use connection pooling for Postgres
 
 ### Database Hosting
+
 - **Neon**: Serverless Postgres, generous free tier
 - **Supabase**: Postgres + real-time (future feature)
 - **Railway**: Simple Postgres + Redis hosting

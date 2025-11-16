@@ -1,0 +1,78 @@
+// Markdownlint configuration for Choose the Heat project
+{
+  // Glob patterns for markdown files to lint
+  "globs": [
+    "**/*.md"
+  ],
+
+  // Glob patterns to ignore
+  "ignores": [
+    "node_modules",
+    ".output",
+    "dist",
+    "build"
+  ],
+
+  // Markdownlint rules configuration
+  "config": {
+    // Default: all rules enabled
+    "default": true,
+
+    // MD013 - Line length
+    // Disabled for docs with code blocks and long URLs
+    "MD013": false,
+
+    // MD033 - Inline HTML
+    // Allowed for GitHub badges and special formatting
+    "MD033": {
+      "allowed_elements": [
+        "details",
+        "summary",
+        "br",
+        "img",
+        "a",
+        "kbd"
+      ]
+    },
+
+    // MD024 - Multiple headings with the same content
+    // Allow duplicate headings in different sections
+    "MD024": {
+      "siblings_only": true
+    },
+
+    // MD025 - Multiple top-level headings
+    // Allow multiple H1s in documentation files
+    "MD025": false,
+
+    // MD041 - First line in file should be a top level heading
+    // Allow frontmatter or other content before H1
+    "MD041": false,
+
+    // MD046 - Code block style
+    // Prefer fenced code blocks for consistency
+    "MD046": {
+      "style": "fenced"
+    },
+
+    // MD040 - Fenced code language
+    // Allow code blocks without language specification
+    "MD040": false,
+
+    // MD036 - Emphasis used instead of a heading
+    // Allow emphasis as heading (common in documentation)
+    "MD036": false,
+
+    // MD029 - Ordered list item prefix
+    // Don't enforce ordered list numbering style
+    "MD029": false,
+
+    // MD060 - Table column style
+    // Allow flexible table column spacing
+    "MD060": false,
+
+    // MD026 - Trailing punctuation in heading
+    // Allow trailing punctuation in headings (e.g., "DO:", "DON'T:")
+    "MD026": false
+  }
+}

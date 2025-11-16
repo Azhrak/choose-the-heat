@@ -1,7 +1,7 @@
 # Choose the Heat - Project Progress
 
 **Project**: Choose the Heat - AI-Enhanced Romance Novel App
-**Last Updated**: 2025-11-14 | **Status**: MVP 100% Complete + Admin Bulk Operations! 🎉
+**Last Updated**: 2025-11-16 | **Status**: MVP Complete + Story Branching & Title Editing! 🎉
 📄 **Details**: See [SESSION_SUMMARY.md](SESSION_SUMMARY.md) for comprehensive recap
 
 ---
@@ -464,17 +464,20 @@ docker-compose up --build
 **Backend Features:**
 
 **Authorization System:**
+
 - ✅ Role-based middleware (`requireAdmin`, `requireEditorOrAdmin`, `requireAuth`)
 - ✅ User role management (user → editor → admin)
 - ✅ Proper 401/403 error responses
 
 **Audit Logging:**
+
 - ✅ Automatic logging of all admin/editor actions
 - ✅ Change tracking for templates and users
 - ✅ 3-month retention policy with cleanup job
 - ✅ Filterable audit log retrieval
 
 **Template Management (Editor/Admin):**
+
 - ✅ Create templates with draft/published/archived status
 - ✅ Update all template fields
 - ✅ Archive templates (keeps existing stories intact)
@@ -482,6 +485,7 @@ docker-compose up --build
 - ✅ View all templates including drafts/archived
 
 **User Management (Admin Only):**
+
 - ✅ List all users with pagination and search
 - ✅ Update user email, name, and role
 - ✅ Delete users (with cascade)
@@ -489,20 +493,24 @@ docker-compose up --build
 - ✅ User count by role statistics
 
 **Dashboard:**
+
 - ✅ Role-specific statistics
 - ✅ Template counts by status (editors + admins)
 - ✅ User counts by role (admins only)
 
 **Admin Seed:**
+
 - ✅ First admin user created from environment variables
 - ✅ Credentials: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME
 
 **Public API Protection:**
+
 - ✅ Browse page only shows published templates
 - ✅ Archived templates hidden but user stories preserved
 - ✅ Draft templates only visible to editors/admins
 
 **Scripts:**
+
 - ✅ `pnpm cleanup:audit-logs [days]` - Delete old audit logs (default 90 days)
 
 **Role Permissions:**
@@ -525,6 +533,7 @@ docker-compose up --build
 **API Endpoints:**
 
 **Templates:**
+
 - `GET /api/admin/templates` - List all templates (with status filter)
 - `POST /api/admin/templates` - Create new template
 - `GET /api/admin/templates/:id` - Get single template
@@ -533,20 +542,24 @@ docker-compose up --build
 - `DELETE /api/admin/templates/:id` - Delete template (admin only)
 
 **Users:**
+
 - `GET /api/admin/users` - List users (pagination + filters)
 - `GET /api/admin/users/:id` - Get user details
 - `PATCH /api/admin/users/:id` - Update user (email, name, role)
 - `DELETE /api/admin/users/:id` - Delete user
 
 **Dashboard:**
+
 - `GET /api/admin/dashboard` - Get role-based statistics
 
 **Audit Logs:**
+
 - `GET /api/admin/audit-logs` - Get audit logs (filters + pagination)
 
 **Status:** Backend 100% complete. Frontend UI pending.
 
 **Next Steps:**
+
 - Admin UI components (Layout, Navigation, Tables, Forms)
 - Admin dashboard page
 - Template management pages
@@ -617,9 +630,225 @@ docker-compose up --build
 - Improved component reusability and maintainability
 - Consistent UX patterns across template and story cards
 
+### Phase 15.6: Story Branching System (100% Complete)
+
+**Files Created:**
+
+- [src/routes/api/stories/$id.branch.ts](src/routes/api/stories/$id.branch.ts) - Story branching API endpoint
+- [src/components/BranchConfirmationDialog.tsx](src/components/BranchConfirmationDialog.tsx) - Branch confirmation dialog component
+- [src/hooks/useBranchStoryMutation.ts](src/hooks/useBranchStoryMutation.ts) - Branch story mutation hook
+
+**Files Enhanced:**
+
+- [src/lib/db/queries/stories.ts](src/lib/db/queries/stories.ts) - Added `findExistingBranch()` and `branchStory()` functions
+- [src/routes/story/$id.read.tsx](src/routes/story/$id.read.tsx) - Integrated branching UI with previous choice display
+- [src/routes/api/stories/$id.scene.ts](src/routes/api/stories/$id.scene.ts) - Enhanced to include previous choice information
+- [src/routes/api/stories/$id.choose.ts](src/routes/api/stories/$id.choose.ts) - Updated to include currentScene in response
+- [src/components/StoryCard.tsx](src/components/StoryCard.tsx) - Added branched story indicator with parent story link
+
+**Story Branching Features:**
+
+- ✅ Create alternative story branches from any choice point
+- ✅ Duplicate detection (prevents creating identical branches)
+- ✅ Visual indicators showing:
+  - Previous choice made at current scene
+  - Branch creation option when previous choice exists
+  - Parent story information for branched stories
+- ✅ Branch confirmation dialog with:
+  - Parent story title display
+  - Branch point scene number
+  - Previous and new choice comparison
+  - Warning about existing identical branch (if found)
+- ✅ Automatic data inheritance:
+  - Copies all scenes up to branch point
+  - Copies all choices before branch point
+  - Records new choice at branch point
+  - Inherits template and preferences from parent
+- ✅ Smart title generation (e.g., "Original Title (Branch)")
+- ✅ Branched story tracking in library with parent story display
+
+**Database Operations:**
+
+- ✅ `findExistingBranch()` - Detects duplicate branches to prevent redundant stories
+- ✅ `branchStory()` - Transactional branching with full data copy
+- ✅ Proper foreign key relationships (branched_from_story_id, branched_at_scene)
+- ✅ Validates choice differences and scene boundaries
+- ✅ Ownership verification throughout
+
+**API Endpoints:**
+
+- ✅ `POST /api/stories/:id/branch` - Creates new branched story
+  - Validates choice point and new choice option
+  - Checks for existing identical branches
+  - Returns branch ID or existing branch information
+- ✅ Enhanced scene endpoint to include previous choice context
+- ✅ Enhanced choice endpoint to include current scene in response
+
+**UI/UX Features:**
+
+- ✅ Previous choice display with distinctive styling
+- ✅ "Try Different Choice" button appears when viewing scenes with previous choices
+- ✅ Beautiful confirmation dialog with clear before/after comparison
+- ✅ Branched story badge in library (GitBranch icon)
+- ✅ Parent story link for easy navigation
+- ✅ Loading states during branch creation
+- ✅ Error handling and user feedback
+- ✅ Responsive design across devices
+
+**User Flow:**
+
+1. User reads story and makes choices
+2. Later, user revisits a scene with a choice
+3. Previous choice is displayed with context
+4. "Try Different Choice" button appears
+5. User clicks and selects alternative choice
+6. Confirmation dialog shows:
+   - Story details
+   - Branch point
+   - Choice comparison
+   - Warning if identical branch exists
+7. If confirmed, new branched story is created
+8. User is navigated to the new branch to continue reading
+9. Library shows both original and branched stories
+10. Branched stories display parent story information
+
+**Benefits:**
+
+- Explore alternative storylines without losing original progress
+- See "what if" scenarios for different choices
+- Efficient data reuse (shared scenes/choices up to branch point)
+- Clear parent-child relationship tracking
+- Prevents duplicate branches automatically
+
+### Phase 15.7: CI/CD & Database Migrations Automation (100% Complete)
+
+**Files Created:**
+
+- [.github/workflows/database-migrations.yml](.github/workflows/database-migrations.yml) - GitHub Actions workflow for automated migrations
+- [docs/CI_MIGRATIONS.md](docs/CI_MIGRATIONS.md) - Comprehensive CI/migrations documentation
+
+**GitHub Actions Features:**
+
+- ✅ Automated migration file validation on PRs
+- ✅ Migration file naming convention checking (###_description.ts)
+- ✅ TypeScript compilation checks for migration files
+- ✅ Automatic migration execution on push to main branch
+- ✅ Production database integration via GitHub Secrets
+- ✅ Workflow status reporting and failure notifications
+
+**Workflow Jobs:**
+
+1. **Check Migration Files** (runs on PRs and push to main):
+   - Detects added/modified migration files
+   - Validates file naming conventions
+   - Compiles TypeScript to catch syntax errors
+   - Provides early feedback before merge
+
+2. **Run Database Migrations** (runs on push to main only):
+   - Installs dependencies
+   - Executes `pnpm db:migrate`
+   - Applies pending migrations to production database
+   - Fails workflow if migrations encounter errors
+
+**Security & Best Practices:**
+
+- ✅ DATABASE_URL stored as GitHub Secret
+- ✅ Migrations validated before execution
+- ✅ Testing encouraged locally before push
+- ✅ Clear separation between validation (PR) and execution (main)
+- ✅ Comprehensive documentation with troubleshooting guide
+
+**Documentation:**
+
+- ✅ Setup requirements and prerequisites
+- ✅ Migration naming conventions and best practices
+- ✅ Step-by-step workflow trigger explanation
+- ✅ Troubleshooting common issues
+- ✅ Manual migration procedures
+- ✅ Rollback strategies (revert, manual, hotfix)
+- ✅ Security notes and monitoring guidelines
+
+**Benefits:**
+
+- Automated database schema updates on deployment
+- Early detection of migration issues via PR checks
+- Consistent migration process across environments
+- Reduced manual intervention and human error
+- Complete audit trail of all schema changes
+
+### Phase 15.8: Story Title Editing (100% Complete)
+
+**Files Created:**
+
+- [src/hooks/useUpdateStoryTitleMutation.ts](src/hooks/useUpdateStoryTitleMutation.ts) - Story title update mutation hook
+
+**Files Enhanced:**
+
+- [src/lib/db/queries/stories.ts](src/lib/db/queries/stories.ts) - Added `updateStoryTitle()` function
+- [src/routes/api/stories/$id.ts](src/routes/api/stories/$id.ts) - Added PATCH handler for title updates
+- [src/routes/story/$id.info.tsx](src/routes/story/$id.info.tsx) - Added inline title editing UI
+
+**Story Title Editing Features:**
+
+- ✅ Edit story title directly from story info page
+- ✅ Inline editing with pencil icon button
+- ✅ Form input with current title pre-filled
+- ✅ Client-side validation:
+  - Non-empty title requirement
+  - Maximum 255 characters
+  - Real-time error display
+- ✅ Save/Cancel controls with proper states
+- ✅ Loading state during save operation
+- ✅ Automatic query invalidation on success
+
+**Database Operations:**
+
+- ✅ `updateStoryTitle()` - Updates story title with ownership verification
+- ✅ Returns updated story data
+- ✅ Throws error if story not found or access denied
+
+**API Endpoint:**
+
+- ✅ `PATCH /api/stories/:id` - Updates story title
+  - Validates session and ownership
+  - Zod schema validation (1-255 characters)
+  - Returns updated story object
+  - Error handling with detailed messages
+
+**UI/UX Features:**
+
+- ✅ Edit button (pencil icon) next to story title
+- ✅ Inline form with labeled input field
+- ✅ Save button with checkmark icon
+- ✅ Cancel button with X icon
+- ✅ Loading spinner during save
+- ✅ Error message display below input
+- ✅ Auto-focus on edit mode
+- ✅ Disabled state prevents duplicate saves
+- ✅ Smooth transitions between view and edit modes
+
+**User Flow:**
+
+1. User navigates to story info page
+2. Clicks pencil icon next to story title
+3. Input field appears with current title
+4. User modifies title
+5. Clicks "Save" button
+6. Title is validated and updated
+7. UI returns to view mode showing new title
+8. Changes reflected immediately in library
+
+**Benefits:**
+
+- Users can personalize story titles anytime
+- Fix typos or update titles as story progresses
+- No need to recreate stories for title changes
+- Ownership verification ensures security
+- Immediate feedback with loading/error states
+
 ---
 
-## � Quick Start
+## 🏁 Quick Start
 
 ```bash
 pnpm install              # Install dependencies
@@ -658,6 +887,7 @@ pnpm build && pnpm start # Production
 **Choice Points Management Features:**
 
 **Create & Edit Choice Points:**
+
 - ✅ Dynamic choice point form component with add/remove functionality
 - ✅ Maximum enforcement: up to (scenes - 1) choice points
 - ✅ Scene number selection with duplicate prevention
@@ -667,6 +897,7 @@ pnpm build && pnpm start # Production
 - ✅ Separate save button for choice points vs template details
 
 **Database Operations:**
+
 - ✅ Transaction-based updates for atomicity
 - ✅ `createTemplateWithChoicePoints()` for new templates
 - ✅ `updateChoicePoints()` with delete-and-replace strategy
@@ -674,11 +905,13 @@ pnpm build && pnpm start # Production
 - ✅ Proper JSON serialization/parsing of options
 
 **API Endpoints:**
+
 - ✅ `POST /api/admin/templates` - Accepts optional choicePoints array
 - ✅ `GET /api/admin/templates/:id` - Returns template with parsed choice points
 - ✅ `PUT /api/admin/templates/:id/choice-points` - Update all choice points
 
 **UI/UX Features:**
+
 - ✅ Intuitive nested forms with collapsible sections
 - ✅ Visual feedback for add/remove operations
 - ✅ Loading states during save operations
@@ -687,18 +920,21 @@ pnpm build && pnpm start # Production
 - ✅ Scene-based organization (choice after Scene X)
 
 **Type Safety:**
+
 - ✅ Full TypeScript support throughout stack
 - ✅ Shared types between components and API
 - ✅ Zod validation schemas for runtime safety
 - ✅ Type-safe mutation hooks with React Query
 
 **Architecture Decisions:**
+
 - ✅ Choice points saved separately from template metadata
 - ✅ Delete-and-replace strategy for updates (simpler than differential sync)
 - ✅ Transaction-based operations prevent partial updates
 - ✅ Client-side validation mirrors server validation
 
 **Validation Rules:**
+
 - ✅ Minimum 2 options, maximum 4 options per choice point
 - ✅ All fields required (prompt text, option text/tone/impact)
 - ✅ Scene numbers must be unique within template
@@ -724,6 +960,7 @@ pnpm build && pnpm start # Production
 **Bulk Operations Features:**
 
 **Bulk Delete Templates (Admin Only):**
+
 - ✅ Bulk delete button in template list bulk actions toolbar
 - ✅ Role-based visibility (only shown to admin users)
 - ✅ Confirmation dialog before deletion
@@ -735,11 +972,13 @@ pnpm build && pnpm start # Production
 - ✅ Success/error feedback in UI
 
 **Bulk Status Update (Editor/Admin):**
+
 - ✅ Bulk publish, draft, and archive buttons
 - ✅ Status update for multiple templates at once
 - ✅ Shared loading state with bulk delete
 
 **Bulk Actions UI:**
+
 - ✅ Selection toolbar appears when templates selected
 - ✅ Selected count display
 - ✅ Clear selection button
@@ -748,6 +987,7 @@ pnpm build && pnpm start # Production
 - ✅ Loading states and error handling
 
 **Completed Admin Features:**
+
 - ✅ Template creation with choice points
 - ✅ Template editing with choice points
 - ✅ Choice point CRUD operations
@@ -758,6 +998,7 @@ pnpm build && pnpm start # Production
 - ✅ Transaction-based database updates
 
 **Pending Admin Features:**
+
 - ⏳ Admin UI components (full Layout, Navigation, Tables)
 - ⏳ Admin dashboard page with statistics
 - ⏳ User management pages (list, edit)

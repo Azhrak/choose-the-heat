@@ -61,15 +61,18 @@ User → Editor → Admin
 ### Role Descriptions
 
 **User (Default)**
+
 - Can browse published templates and create stories
 - No administrative access
 
 **Editor**
+
 - Can manage novel templates (CRUD operations)
 - Can see template statistics
 - Cannot manage users or view audit logs
 
 **Admin**
+
 - Full access to all features
 - Can manage users and assign roles
 - Can view audit logs
@@ -89,7 +92,7 @@ ADMIN_PASSWORD=your-secure-password
 ADMIN_NAME=Admin User
 ```
 
-2. **Run the seed script**:
+1. **Run the seed script**:
 
 ```bash
 pnpm db:seed
@@ -149,6 +152,7 @@ Draft → Published → Archived
 #### Archiving a Template
 
 When you archive a template:
+
 - ✅ Template is hidden from public browse page
 - ✅ Existing user stories continue to work
 - ✅ Users can still read their in-progress stories
@@ -178,12 +182,14 @@ When you archive a template:
 **Endpoint:** `GET /api/admin/users`
 
 **Query Parameters:**
+
 - `role` - Filter by role (user, editor, admin)
 - `search` - Search by email or name
 - `limit` - Results per page (default: 50)
 - `offset` - Pagination offset (default: 0)
 
 **Example:**
+
 ```
 GET /api/admin/users?role=editor&limit=20&offset=0
 ```
@@ -201,6 +207,7 @@ GET /api/admin/users?role=editor&limit=20&offset=0
 ```
 
 **Validations:**
+
 - Email must be unique
 - Role must be: user, editor, or admin
 
@@ -209,6 +216,7 @@ GET /api/admin/users?role=editor&limit=20&offset=0
 **Endpoint:** `DELETE /api/admin/users/{id}`
 
 **⚠️ Warning:**
+
 - This action is permanent
 - All user data is deleted (stories, scenes, choices)
 - Admins cannot delete their own account
@@ -220,6 +228,7 @@ GET /api/admin/users?role=editor&limit=20&offset=0
 **Endpoint:** `GET /api/admin/dashboard`
 
 **Response for Editors:**
+
 ```json
 {
   "stats": {
@@ -234,6 +243,7 @@ GET /api/admin/users?role=editor&limit=20&offset=0
 ```
 
 **Response for Admins:**
+
 ```json
 {
   "stats": {
@@ -262,6 +272,7 @@ All admin and editor actions are automatically logged to the `admin_audit_logs` 
 #### Logged Actions
 
 **Templates:**
+
 - `create_template` - Template created
 - `update_template` - Template fields updated
 - `published_template` - Template published
@@ -270,6 +281,7 @@ All admin and editor actions are automatically logged to the `admin_audit_logs` 
 - `delete_template` - Template deleted
 
 **Users:**
+
 - `update_user` - User details updated
 - `update_user_role` - User role changed
 - `delete_user` - User deleted
@@ -279,6 +291,7 @@ All admin and editor actions are automatically logged to the `admin_audit_logs` 
 **Endpoint:** `GET /api/admin/audit-logs`
 
 **Query Parameters:**
+
 - `entityType` - Filter by entity type (template, user)
 - `entityId` - Filter by specific entity ID
 - `userId` - Filter by user who performed action
@@ -287,11 +300,13 @@ All admin and editor actions are automatically logged to the `admin_audit_logs` 
 - `offset` - Pagination offset (default: 0)
 
 **Example:**
+
 ```
 GET /api/admin/audit-logs?entityType=template&limit=100
 ```
 
 **Response:**
+
 ```json
 {
   "logs": [
@@ -332,10 +347,12 @@ All admin endpoints are prefixed with `/api/admin/`
 ### Authentication
 
 All endpoints require:
+
 1. Valid session cookie (`session_id`)
 2. User must have appropriate role (editor or admin)
 
 **Responses:**
+
 - `401 Unauthorized` - No valid session
 - `403 Forbidden` - Insufficient permissions
 
@@ -449,14 +466,17 @@ pnpm db:codegen
 ### Preventing Security Issues
 
 **Self-Deletion Protection:**
+
 - Admins cannot delete their own account
 - Prevents accidental lockout
 
 **Email Uniqueness:**
+
 - Email addresses must be unique
 - Prevents duplicate accounts
 
 **Cascade Deletion:**
+
 - Deleting a user removes all their data
 - Templates with user stories cannot be deleted
 
@@ -467,6 +487,7 @@ pnpm db:codegen
 ### Cannot Access Admin Panel
 
 1. Check user role in database:
+
    ```sql
    SELECT id, email, role FROM users WHERE email = 'your-email@example.com';
    ```
@@ -478,6 +499,7 @@ pnpm db:codegen
 ### Admin User Not Created During Seed
 
 1. Verify environment variables are set:
+
    ```bash
    echo $ADMIN_EMAIL
    echo $ADMIN_PASSWORD
@@ -486,6 +508,7 @@ pnpm db:codegen
 2. Check seed script output for errors
 
 3. Manually create admin user:
+
    ```sql
    UPDATE users SET role = 'admin' WHERE email = 'your-email@example.com';
    ```
@@ -494,6 +517,7 @@ pnpm db:codegen
 
 1. Run cleanup script more frequently
 2. Reduce retention period:
+
    ```bash
    pnpm cleanup:audit-logs 30  # 30 days instead of 90
    ```
