@@ -24,7 +24,8 @@ interface FilterBarProps<T = string> {
 
 const activeColorClasses = {
 	purple: "!bg-purple-600 hover:!bg-purple-700 !text-white",
-	slate: "!bg-slate-600 hover:!bg-slate-700 !text-white",
+	slate:
+		"!bg-slate-600 hover:!bg-slate-700 !text-white dark:!bg-slate-500 dark:hover:!bg-slate-600",
 	blue: "!bg-blue-600 hover:!bg-blue-700 !text-white",
 	"purple-dark": "!bg-purple-700 hover:!bg-purple-800 !text-white",
 	green: "!bg-green-600 hover:!bg-green-700 !text-white",

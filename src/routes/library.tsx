@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Clock, Heart, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { Checkbox } from "~/components/Checkbox";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Footer } from "~/components/Footer";
@@ -141,24 +142,22 @@ function LibraryPage() {
 						</div>
 
 						{/* Favorites Filter */}
-						<label className="flex items-center gap-3 cursor-pointer w-fit">
-							<input
-								type="checkbox"
-								checked={showFavorites}
-								onChange={() =>
-									navigate({
-										search: { tab: activeTab, favorites: !showFavorites },
-									})
-								}
-								className="w-5 h-5 rounded border-slate-300 text-red-600 focus:ring-red-500 focus:ring-offset-0 cursor-pointer"
-							/>
-							<span className="flex items-center gap-2 text-slate-700 dark:text-gray-300 font-medium">
-								<Heart
-									className={`w-4 h-4 ${showFavorites ? "fill-red-600 text-red-600" : "text-slate-400 dark:text-gray-500"}`}
-								/>
-								Show favorites only
-							</span>
-						</label>
+						<Checkbox
+							checked={showFavorites}
+							onChange={() =>
+								navigate({
+									search: { tab: activeTab, favorites: !showFavorites },
+								})
+							}
+							label={
+								<span className="flex items-center gap-2">
+									<Heart
+										className={`w-4 h-4 ${showFavorites ? "fill-red-600 text-red-600" : "text-slate-400 dark:text-gray-500"}`}
+									/>
+									Show favorites only
+								</span>
+							}
+						/>
 					</div>
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}

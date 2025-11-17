@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Checkbox } from "~/components/Checkbox";
 import { cn } from "~/lib/utils";
 
 interface Column<T> {
@@ -84,16 +85,10 @@ export function DataTable<T extends { id: string }>({
 						<tr className="border-b border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900">
 							{selectable && (
 								<th className="px-6 py-3 w-12">
-									<input
-										type="checkbox"
+									<Checkbox
 										checked={isAllSelected}
-										ref={(input) => {
-											if (input) {
-												input.indeterminate = isSomeSelected;
-											}
-										}}
+										indeterminate={isSomeSelected}
 										onChange={(e) => handleSelectAll(e.target.checked)}
-										className="w-4 h-4 text-romance-600 border-slate-300 rounded focus:ring-romance-500"
 									/>
 								</th>
 							)}
@@ -101,7 +96,7 @@ export function DataTable<T extends { id: string }>({
 								<th
 									key={column.key ?? `column-${index}`}
 									className={cn(
-										"px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider",
+										"px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-gray-400 uppercase tracking-wider",
 										column.className,
 									)}
 								>
@@ -132,13 +127,11 @@ export function DataTable<T extends { id: string }>({
 											}
 										}}
 									>
-										<input
-											type="checkbox"
+										<Checkbox
 											checked={selectedIds.has(row.id)}
 											onChange={(e) => {
 												handleSelectRow(row.id, e.target.checked);
 											}}
-											className="w-4 h-4 text-romance-600 border-slate-300 rounded focus:ring-romance-500"
 										/>
 									</td>
 								)}

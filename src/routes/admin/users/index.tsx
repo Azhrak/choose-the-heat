@@ -221,7 +221,7 @@ function UsersListPage() {
 							{
 								header: "Name",
 								accessor: (u) => u.name,
-								className: "font-medium text-slate-900",
+								className: "font-medium text-slate-900 dark:text-gray-100",
 								key: "name",
 							},
 							{
