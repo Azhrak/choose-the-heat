@@ -60,6 +60,18 @@ export const Route = createFileRoute("/api/admin/templates/$id/choice-points")({
 						);
 					}
 
+					// Validate that each choice point's scene_number is within valid range
+					for (const cp of validatedData.choicePoints) {
+						if (cp.scene_number >= template.estimated_scenes) {
+							return json(
+								{
+									error: `Invalid scene number ${cp.scene_number}. Scene number must be less than ${template.estimated_scenes} (total scenes)`,
+								},
+								{ status: 400 },
+							);
+						}
+					}
+
 					// Update choice points
 					await updateChoicePoints(
 						templateId,

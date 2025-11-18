@@ -64,7 +64,21 @@ function EditTemplatePage() {
 		});
 		// Initialize choice points if they exist
 		if (templateData.template.choicePoints) {
-			setChoicePoints(templateData.template.choicePoints);
+			// Sanitize scene numbers that exceed the valid range
+			const maxSceneNumber = templateData.template.estimated_scenes - 1;
+			const sanitizedChoicePoints = templateData.template.choicePoints.map(
+				(cp) => {
+					// If scene_number is invalid (>= estimated_scenes), clamp it to maxSceneNumber
+					if (cp.scene_number >= templateData.template.estimated_scenes) {
+						return {
+							...cp,
+							scene_number: Math.min(cp.scene_number, maxSceneNumber),
+						};
+					}
+					return cp;
+				},
+			);
+			setChoicePoints(sanitizedChoicePoints);
 		}
 	}
 
@@ -86,7 +100,10 @@ function EditTemplatePage() {
 		setFormError(null);
 
 		// Validate choice points
-		const validationResult = validateChoicePoints(choicePoints);
+		const validationResult = validateChoicePoints(
+			choicePoints,
+			formData?.estimated_scenes,
+		);
 		if (!validationResult.valid) {
 			setFormError(validationResult.error || "Invalid choice points");
 			return;

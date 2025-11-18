@@ -31,7 +31,9 @@ export function RadioButtonGroup<T extends string>({
 
 	return (
 		<div className="space-y-3">
-			<div className="block text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</div>
+			<div className="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+				{label}
+			</div>
 			<div className={`grid ${gridClass} gap-3`}>
 				{options.map((option) => (
 					<button
@@ -45,8 +47,12 @@ export function RadioButtonGroup<T extends string>({
 						}`}
 					>
 						<div className="space-y-1">
-							<div className="font-semibold text-slate-900 dark:text-slate-100">{option.label}</div>
-							<div className="text-sm text-slate-600 dark:text-slate-400">{option.description}</div>
+							<div className="font-semibold text-slate-900 dark:text-slate-100">
+								{option.label}
+							</div>
+							<div className="text-sm text-slate-600 dark:text-slate-400">
+								{option.description}
+							</div>
 						</div>
 					</button>
 				))}

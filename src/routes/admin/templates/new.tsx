@@ -84,7 +84,10 @@ function NewTemplatePage() {
 		}
 
 		// Validate choice points
-		const choicePointsValidation = validateChoicePoints(formData.choicePoints);
+		const choicePointsValidation = validateChoicePoints(
+			formData.choicePoints,
+			formData.estimated_scenes,
+		);
 		if (!choicePointsValidation.valid) {
 			setFormError(choicePointsValidation.error || "Invalid choice points");
 			return;

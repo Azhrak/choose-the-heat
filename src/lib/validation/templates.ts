@@ -104,6 +104,7 @@ export function validateChoicePoint(cp: ChoicePoint): ValidationResult {
  */
 export function validateChoicePoints(
 	choicePoints: ChoicePoint[],
+	maxScenes?: number,
 ): ValidationResult {
 	if (choicePoints.length === 0) {
 		return { valid: true };
@@ -113,6 +114,14 @@ export function validateChoicePoints(
 		const result = validateChoicePoint(cp);
 		if (!result.valid) {
 			return result;
+		}
+
+		// Validate scene_number is within valid range if maxScenes is provided
+		if (maxScenes !== undefined && cp.scene_number >= maxScenes) {
+			return {
+				valid: false,
+				error: `Scene number ${cp.scene_number} exceeds maximum scenes (${maxScenes}). Choice points must occur before the final scene.`,
+			};
 		}
 	}
 
