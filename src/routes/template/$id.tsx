@@ -7,6 +7,7 @@ import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
+import { ControlledAccordion } from "~/components/ui/Accordion";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplateQuery } from "~/hooks/useTemplateQuery";
 import { TROPE_LABELS } from "~/lib/types/preferences";
@@ -136,20 +137,30 @@ function TemplateDetailPage() {
 										Throughout your story, you'll make choices that shape the
 										narrative. Here's a preview of some key moments:
 									</p>
-								</div>{" "}
-								<div className="space-y-4 sm:space-y-6">
-									{template.choicePoints.map((choice) => (
-										<div
-											key={choice.id}
-											className="border border-slate-200 dark:border-gray-700 rounded-lg p-3 sm:p-6 hover:border-romance-300 dark:hover:border-romance-600 transition-colors"
-										>
-											<div className="flex items-start gap-2 sm:gap-4">
-												<div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full flex items-center justify-center">
-													<span className="text-sm sm:text-base text-romance-700 dark:text-pink-200 font-bold">
-														{choice.scene_number}
+								</div>
+
+								<ControlledAccordion
+									items={template.choicePoints
+										.filter(
+											(choice) =>
+												choice.scene_number < template.estimated_scenes,
+										)
+										.map((choice) => ({
+											id: choice.id,
+											title: (
+												<div className="flex items-center gap-2 sm:gap-3">
+													<div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full flex items-center justify-center">
+														<span className="text-sm sm:text-base text-romance-700 dark:text-pink-200 font-bold">
+															{choice.scene_number}
+														</span>
+													</div>
+													<span className="text-base sm:text-lg font-medium text-slate-700 dark:text-gray-300">
+														Decision at Scene {choice.scene_number}
 													</span>
 												</div>
-												<div className="flex-1 min-w-0 space-y-3">
+											),
+											content: (
+												<div className="space-y-4">
 													<Heading level="h3" size="subsection">
 														{choice.prompt_text}
 													</Heading>
@@ -172,10 +183,12 @@ function TemplateDetailPage() {
 														))}
 													</div>
 												</div>
-											</div>
-										</div>
-									))}
-								</div>
+											),
+										}))}
+									allowMultiple={true}
+									showToggleAll={true}
+								/>
+
 								{/* Bottom CTA */}
 								<div className="mt-8 text-center">
 									<Link
