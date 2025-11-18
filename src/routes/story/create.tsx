@@ -127,7 +127,7 @@ function StoryCreatePage() {
 	const handleCreateStory = async () => {
 		setIsCreating(true);
 		try {
-			const _result = await createStory.mutateAsync({
+			const result = await createStory.mutateAsync({
 				templateId,
 				storyTitle: storyTitle.trim() || undefined,
 				preferences: {
@@ -142,8 +142,11 @@ function StoryCreatePage() {
 						"female",
 				},
 			});
-			// Navigate to library after successful creation
-			navigate({ to: "/library" });
+			// Navigate to the created story to start reading
+			navigate({
+				to: "/story/$id/read",
+				params: { id: result.story.id },
+			});
 		} catch (error) {
 			console.error("Failed to create story:", error);
 			setIsCreating(false);

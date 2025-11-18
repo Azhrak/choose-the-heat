@@ -1,4 +1,6 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { storySceneQueryKey } from "./useStorySceneQuery";
 
 interface SceneMetadata {
 	scene: {
@@ -29,11 +31,37 @@ interface StreamingSceneState {
 	error: string | null;
 }
 
+interface CachedSceneData {
+	scene: {
+		number: number;
+		content: string;
+		wordCount: number;
+		cached: boolean;
+	};
+	story: {
+		id: string;
+		title: string;
+		currentScene: number;
+		estimatedScenes: number;
+		status: string;
+	};
+	choicePoint: {
+		id: string;
+		promptText: string;
+		options: Array<{
+			text: string;
+			tone: string;
+		}>;
+	} | null;
+	previousChoice: number | null;
+}
+
 export function useStreamingScene(
 	storyId: string,
 	sceneNumber: number | null = null,
 	enabled = true,
 ) {
+	const queryClient = useQueryClient();
 	const [state, setState] = useState<StreamingSceneState>({
 		content: "",
 		metadata: null,
@@ -46,6 +74,31 @@ export function useStreamingScene(
 
 	useEffect(() => {
 		if (!enabled) return;
+
+		// Check if scene is already in query cache
+		const queryKey = storySceneQueryKey(storyId, sceneNumber);
+		const cachedData = queryClient.getQueryData<CachedSceneData>(queryKey);
+
+		if (cachedData) {
+			// Use cached data immediately
+			setState({
+				content: cachedData.scene.content,
+				metadata: {
+					scene: {
+						number: cachedData.scene.number,
+						wordCount: cachedData.scene.wordCount,
+						cached: true,
+					},
+					story: cachedData.story,
+					choicePoint: cachedData.choicePoint,
+					previousChoice: cachedData.previousChoice,
+				},
+				isStreaming: false,
+				isComplete: true,
+				error: null,
+			});
+			return;
+		}
 
 		// Reset state when scene changes
 		setState({
@@ -68,6 +121,9 @@ export function useStreamingScene(
 		const url = `/api/stories/${storyId}/scene/stream?${params.toString()}`;
 
 		// Start streaming
+		let finalMetadata: SceneMetadata | null = null;
+		let finalContent = "";
+
 		fetch(url, { signal: abortController.signal })
 			.then(async (response) => {
 				if (!response.ok) {
@@ -101,11 +157,13 @@ export function useStreamingScene(
 							const data = JSON.parse(line.slice(6));
 
 							if (data.type === "metadata") {
+								finalMetadata = data as SceneMetadata;
 								setState((prev) => ({
 									...prev,
-									metadata: data as SceneMetadata,
+									metadata: finalMetadata,
 								}));
 							} else if (data.type === "content") {
+								finalContent += data.content;
 								setState((prev) => ({
 									...prev,
 									content: prev.content + data.content,
@@ -116,6 +174,22 @@ export function useStreamingScene(
 									isStreaming: false,
 									isComplete: true,
 								}));
+
+								// Cache the complete scene data in React Query
+								if (finalMetadata) {
+									const cacheData: CachedSceneData = {
+										scene: {
+											number: finalMetadata.scene.number,
+											content: finalContent,
+											wordCount: finalMetadata.scene.wordCount,
+											cached: finalMetadata.scene.cached,
+										},
+										story: finalMetadata.story,
+										choicePoint: finalMetadata.choicePoint,
+										previousChoice: finalMetadata.previousChoice,
+									};
+									queryClient.setQueryData(queryKey, cacheData);
+								}
 							} else if (data.type === "error") {
 								setState((prev) => ({
 									...prev,
@@ -146,7 +220,7 @@ export function useStreamingScene(
 		return () => {
 			abortController.abort();
 		};
-	}, [storyId, sceneNumber, enabled]);
+	}, [storyId, sceneNumber, enabled, queryClient]);
 
 	return state;
 }

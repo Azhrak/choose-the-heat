@@ -29,10 +29,10 @@ const levelStyles = {
 
 // Size preset styles (override level defaults when specified)
 const sizeStyles = {
-	hero: "text-5xl md:text-6xl font-bold",
-	page: "text-4xl font-bold",
-	section: "text-2xl font-bold",
-	subsection: "text-xl font-semibold",
+	hero: "text-4xl md:text-5xl lg:text-6xl font-bold",
+	page: "text-2xl md:text-3xl lg:text-4xl font-bold",
+	section: "text-xl md:text-2xl font-bold",
+	subsection: "text-lg md:text-xl font-semibold",
 	label: "text-sm font-semibold",
 };
 

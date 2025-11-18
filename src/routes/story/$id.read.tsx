@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { BranchConfirmationDialog } from "~/components/BranchConfirmationDialog";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
+import { SceneNavigation } from "~/components/SceneNavigation";
 import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
 import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
@@ -21,7 +22,7 @@ import { useStreamingScene } from "~/hooks/useStreamingScene";
 import { useUpdateProgressMutation } from "~/hooks/useUpdateProgressMutation";
 
 export const Route = createFileRoute("/story/$id/read")({
-	validateSearch: (search: Record<string, unknown>) => {
+	validateSearch: (search: Record<string, unknown>): { scene?: number } => {
 		return {
 			scene: search.scene ? Number(search.scene) : undefined,
 		};
@@ -36,13 +37,16 @@ function ReadingPage() {
 	const [selectedOption, setSelectedOption] = useState<number | null>(null);
 	const [showBranchDialog, setShowBranchDialog] = useState(false);
 	const [branchChoice, setBranchChoice] = useState<number | null>(null);
+	const [showHeader, setShowHeader] = useState(true);
 	const lastUpdatedSceneRef = useRef<number>(0);
+	const lastScrollY = useRef(0);
 
 	// Use scene from URL, fallback to null (which uses current_scene from API)
 	const currentSceneNumber = sceneFromUrl ?? null;
 
 	// Use streaming hook for scene data
-	const streamingState = useStreamingScene(id, currentSceneNumber);
+	// Only enable when we have a valid story ID
+	const streamingState = useStreamingScene(id, currentSceneNumber, !!id);
 
 	// Mutations
 	const choiceMutation = useMakeChoiceMutation(id);
@@ -79,6 +83,28 @@ function ReadingPage() {
 			progressMutation.mutate({ currentScene: sceneMetadata.scene.number });
 		}
 	}, [sceneMetadata, progressMutation]);
+
+	// Handle scroll to hide/show header
+	useEffect(() => {
+		const handleScroll = () => {
+			const currentScrollY = window.scrollY;
+			const scrollThreshold = 10; // Minimum scroll distance to trigger hide/show
+
+			// Show header when scrolling up or near the top
+			if (currentScrollY < lastScrollY.current || currentScrollY < 100) {
+				setShowHeader(true);
+			}
+			// Hide header when scrolling down
+			else if (currentScrollY > lastScrollY.current && currentScrollY > scrollThreshold) {
+				setShowHeader(false);
+			}
+
+			lastScrollY.current = currentScrollY;
+		};
+
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
 
 	const handleChoiceSuccess = (result: {
 		completed: boolean;
@@ -222,7 +248,9 @@ function ReadingPage() {
 	return (
 		<div className="min-h-screen bg-linear-to-br from-rose-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
 			{/* Header */}
-			<header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10">
+			<header className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10 transition-transform duration-300 ${
+				showHeader ? "translate-y-0" : "-translate-y-full"
+			}`}>
 				<div className="max-w-4xl mx-auto px-4 py-4 space-y-3">
 					<div className="flex items-center justify-between">
 						<Link
@@ -274,8 +302,19 @@ function ReadingPage() {
 				</div>
 			</header>
 
+			{/* Scene Navigation */}
+			<div className="max-w-2xl mx-auto px-4 pt-2 pb-2">
+				<SceneNavigation
+					currentScene={scene.number}
+					totalScenes={story.estimatedScenes}
+					hasChoicePoint={choicePoint !== null}
+					hasAlreadyMadeChoice={hasAlreadyMadeChoice}
+					onNavigateScene={handleNavigateScene}
+				/>
+			</div>
+
 			{/* Main Content */}
-			<main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+			<main className="max-w-2xl mx-auto px-4 pb-8 space-y-6">
 				{/* Scene Content */}
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8">
 					{/* Show streaming indicator while generating */}
@@ -525,38 +564,14 @@ function ReadingPage() {
 					</div>
 				)}
 				{/* Navigation */}
-				<div className="flex items-center justify-between mt-6">
-					<Button
-						type="button"
-						onClick={() => handleNavigateScene(scene.number - 1)}
-						disabled={scene.number === 1}
-						variant="ghost"
-						size="sm"
-						className="text-gray-600 dark:text-gray-300 hover:text-rose-600 dark:hover:text-rose-400"
-					>
-						<ChevronLeft className="w-5 h-5" />
-						Previous Scene
-					</Button>
-
-					<Button
-						type="button"
-						onClick={() => handleNavigateScene(scene.number + 1)}
-						disabled={
-							scene.number >= story.estimatedScenes ||
-							(choicePoint !== null && !hasAlreadyMadeChoice)
-						}
-						variant="ghost"
-						size="sm"
-						className="text-gray-600 dark:text-gray-300 hover:text-rose-600 dark:hover:text-rose-400"
-						title={
-							choicePoint !== null && !hasAlreadyMadeChoice
-								? "Make a choice to unlock the next scene"
-								: ""
-						}
-					>
-						Next Scene
-						<ChevronRight className="w-5 h-5" />
-					</Button>
+				<div className="mt-6">
+					<SceneNavigation
+						currentScene={scene.number}
+						totalScenes={story.estimatedScenes}
+						hasChoicePoint={choicePoint !== null}
+						hasAlreadyMadeChoice={hasAlreadyMadeChoice}
+						onNavigateScene={handleNavigateScene}
+					/>
 				</div>
 			</main>
 
