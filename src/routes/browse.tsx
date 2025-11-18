@@ -14,7 +14,8 @@ import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
-import { TROPE_LABELS, TROPES, type Trope } from "~/lib/types/preferences";
+import { useTropesQuery } from "~/hooks/useTropesQuery";
+import type { Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
 	component: BrowsePage,
@@ -26,6 +27,9 @@ function BrowsePage() {
 
 	// Fetch current user profile
 	const { data: profileData } = useCurrentUserQuery();
+
+	// Fetch tropes
+	const { data: tropesData, isLoading: tropesLoading } = useTropesQuery();
 
 	// Fetch templates
 	const { data, isLoading, error } = useTemplatesQuery({
@@ -77,22 +81,30 @@ function BrowsePage() {
 						>
 							Filter by Tropes:
 						</Heading>
-						<div className="flex flex-wrap gap-2">
-							{TROPES.map((trope) => (
-								<button
-									type="button"
-									key={trope}
-									onClick={() => toggleTrope(trope)}
-									className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-										selectedTropes.includes(trope)
-											? "bg-romance-600 text-white"
-											: "bg-white dark:bg-gray-700 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-600"
-									}`}
-								>
-									{TROPE_LABELS[trope]}
-								</button>
-							))}
-						</div>
+						{tropesLoading ? (
+							<div className="flex gap-2">
+								<div className="h-10 w-24 bg-slate-200 rounded animate-pulse" />
+								<div className="h-10 w-32 bg-slate-200 rounded animate-pulse" />
+								<div className="h-10 w-20 bg-slate-200 rounded animate-pulse" />
+							</div>
+						) : (
+							<div className="flex flex-wrap gap-2">
+								{tropesData?.tropes.map((trope) => (
+									<button
+										type="button"
+										key={trope.key}
+										onClick={() => toggleTrope(trope.key)}
+										className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+											selectedTropes.includes(trope.key)
+												? "bg-romance-600 text-white"
+												: "bg-white dark:bg-gray-700 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-600"
+										}`}
+									>
+										{trope.label}
+									</button>
+								))}
+							</div>
+						)}
 						{selectedTropes.length > 0 && (
 							<Button
 								onClick={() => setSelectedTropes([])}

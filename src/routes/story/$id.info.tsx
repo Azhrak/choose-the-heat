@@ -28,6 +28,7 @@ import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
 import { useStoryQuery } from "~/hooks/useStoryQuery";
 import { useToggleFavoriteMutation } from "~/hooks/useToggleFavoriteMutation";
+import { useTropeMap } from "~/hooks/useTropesQuery";
 import { useUpdateStoryTitleMutation } from "~/hooks/useUpdateStoryTitleMutation";
 import type { UserPreferences } from "~/lib/types/preferences";
 import {
@@ -35,7 +36,6 @@ import {
 	PACING_LABELS,
 	SCENE_LENGTH_LABELS,
 	SPICE_LABELS,
-	TROPE_LABELS,
 } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/story/$id/info")({
@@ -50,6 +50,7 @@ function StoryInfoPage() {
 	const updateTitleMutation = useUpdateStoryTitleMutation();
 	const deleteStoryMutation = useDeleteStoryMutation();
 	const toggleFavoriteMutation = useToggleFavoriteMutation();
+	const tropeMap = useTropeMap();
 
 	const [isEditingTitle, setIsEditingTitle] = useState(false);
 	const [editedTitle, setEditedTitle] = useState("");
@@ -425,7 +426,7 @@ function StoryInfoPage() {
 														key={trope}
 														className="px-3 py-1 bg-pink-50 dark:bg-pink-500/20 border border-pink-200 dark:border-pink-500/30 rounded-full text-sm text-pink-700 dark:text-pink-200 font-medium"
 													>
-														{TROPE_LABELS[trope]}
+														{tropeMap[trope] || trope}
 													</span>
 												))}
 											</div>

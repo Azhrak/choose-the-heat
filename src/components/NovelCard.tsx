@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Sparkles } from "lucide-react";
-import { TROPE_LABELS } from "~/lib/types/preferences";
+import { useTropeMap } from "~/hooks/useTropesQuery";
 
 interface NovelCardProps {
 	id: string;
@@ -19,6 +19,8 @@ export function NovelCard({
 	estimatedScenes,
 	coverGradient,
 }: NovelCardProps) {
+	const tropeMap = useTropeMap();
+
 	return (
 		<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg dark:shadow-black/20 overflow-hidden hover:shadow-xl dark:hover:shadow-black/30 transition-shadow duration-300 h-full flex flex-col">
 			{/* Gradient Cover */}
@@ -52,7 +54,7 @@ export function NovelCard({
 							key={trope}
 							className="px-3 py-1 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-sm text-romance-700 dark:text-pink-200 font-medium"
 						>
-							{TROPE_LABELS[trope as keyof typeof TROPE_LABELS] || trope}
+							{tropeMap[trope] || trope}
 						</span>
 					))}
 				</div>

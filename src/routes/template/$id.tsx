@@ -10,7 +10,7 @@ import { PageContainer } from "~/components/PageContainer";
 import { ControlledAccordion } from "~/components/ui/Accordion";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplateQuery } from "~/hooks/useTemplateQuery";
-import { TROPE_LABELS } from "~/lib/types/preferences";
+import { useTropeMap } from "~/hooks/useTropesQuery";
 
 export const Route = createFileRoute("/template/$id")({
 	component: TemplateDetailPage,
@@ -27,6 +27,7 @@ function TemplateDetailPage() {
 	const { data, isLoading, error } = useTemplateQuery(id);
 
 	const template = data?.template;
+	const tropeMap = useTropeMap();
 
 	return (
 		<PageBackground>
@@ -94,8 +95,7 @@ function TemplateDetailPage() {
 													key={trope}
 													className="px-4 py-2 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-romance-700 dark:text-pink-200 font-medium"
 												>
-													{TROPE_LABELS[trope as keyof typeof TROPE_LABELS] ||
-														trope}
+													{tropeMap[trope] || trope}
 												</span>
 											))}
 										</div>

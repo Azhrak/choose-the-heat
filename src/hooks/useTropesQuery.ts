@@ -33,6 +33,17 @@ export function useTropesQuery() {
 	});
 }
 
+export function useTropeMap() {
+	const { data } = useTropesQuery();
+	const map: Record<string, string> = {};
+	if (data?.tropes) {
+		for (const trope of data.tropes) {
+			map[trope.key] = trope.label;
+		}
+	}
+	return map;
+}
+
 /**
  * Hook to fetch tropes with usage statistics (admin only)
  */

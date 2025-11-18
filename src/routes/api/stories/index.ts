@@ -3,13 +3,13 @@ import { json } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSessionFromRequest } from "~/lib/auth/session";
 import { createUserStory } from "~/lib/db/queries/stories";
+import { validateTropeKeys } from "~/lib/db/queries/tropes";
 import {
 	GENRES,
 	PACING_OPTIONS,
 	POV_CHARACTER_GENDER_OPTIONS,
 	SCENE_LENGTH_OPTIONS,
 	type SpiceLevel,
-	TROPES,
 } from "~/lib/types/preferences";
 
 const createStorySchema = z.object({
@@ -18,7 +18,7 @@ const createStorySchema = z.object({
 	preferences: z
 		.object({
 			genres: z.array(z.enum(GENRES)),
-			tropes: z.array(z.enum(TROPES)),
+			tropes: z.array(z.string()),
 			spiceLevel: z.number().int().min(1).max(5) as z.ZodType<SpiceLevel>,
 			pacing: z.enum(PACING_OPTIONS),
 			sceneLength: z.enum(SCENE_LENGTH_OPTIONS).optional(),
@@ -48,6 +48,19 @@ export const Route = createFileRoute("/api/stories/")({
 					}
 
 					const { templateId, storyTitle, preferences } = result.data;
+
+					// Validate tropes if present
+					if (preferences?.tropes) {
+						const { valid, invalidKeys } = await validateTropeKeys(
+							preferences.tropes,
+						);
+						if (!valid) {
+							return json(
+								{ error: `Invalid tropes: ${invalidKeys.join(", ")}` },
+								{ status: 400 },
+							);
+						}
+					}
 
 					// Create the user story with optional preference overrides and custom title
 					const story = await createUserStory(

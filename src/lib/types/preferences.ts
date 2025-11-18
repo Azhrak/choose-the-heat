@@ -11,17 +11,7 @@ export const GENRES = [
 	"small-town",
 ] as const;
 
-export const TROPES = [
-	"enemies-to-lovers",
-	"fake-dating",
-	"second-chance",
-	"forced-proximity",
-	"childhood-friends",
-	"ceo-romance",
-	"forbidden-love",
-	"fated-mates",
-	"time-travel",
-] as const;
+// TROPES constant removed in favor of DB fetching
 
 export const PACING_OPTIONS = ["slow-burn", "fast-paced"] as const;
 
@@ -39,7 +29,7 @@ export const POV_CHARACTER_GENDER_OPTIONS = [
 ] as const;
 
 export type Genre = (typeof GENRES)[number];
-export type Trope = (typeof TROPES)[number];
+export type Trope = string;
 export type PacingOption = (typeof PACING_OPTIONS)[number];
 export type SceneLengthOption = (typeof SCENE_LENGTH_OPTIONS)[number];
 export type PovCharacterGender = (typeof POV_CHARACTER_GENDER_OPTIONS)[number];
@@ -63,17 +53,7 @@ export const GENRE_LABELS: Record<Genre, string> = {
 	"small-town": "Small Town",
 };
 
-export const TROPE_LABELS: Record<Trope, string> = {
-	"enemies-to-lovers": "Enemies to Lovers",
-	"fake-dating": "Fake Dating",
-	"second-chance": "Second Chance",
-	"forced-proximity": "Forced Proximity",
-	"childhood-friends": "Childhood Friends",
-	"ceo-romance": "CEO Romance",
-	"forbidden-love": "Forbidden Love",
-	"fated-mates": "Fated Mates",
-	"time-travel": "Time Travel",
-};
+// TROPE_LABELS constant removed in favor of DB fetching
 
 export const SPICE_LABELS: Record<
 	SpiceLevel,

@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { getSessionFromRequest } from "~/lib/auth/session";
 import { db } from "~/lib/db";
+import { validateTropeKeys } from "~/lib/db/queries/tropes";
 import {
 	GENRES,
 	PACING_OPTIONS,
 	POV_CHARACTER_GENDER_OPTIONS,
-	TROPES,
 	type UserPreferences,
 } from "~/lib/types/preferences";
 
@@ -54,9 +54,13 @@ export const Route = createFileRoute("/api/preferences")({
 					}
 
 					// Validate tropes are valid
-					const invalidTropes = tropes.filter((t) => !TROPES.includes(t));
-					if (invalidTropes.length > 0) {
-						return json({ error: "Invalid trope selection" }, { status: 400 });
+					const { valid: tropesValid, invalidKeys } =
+						await validateTropeKeys(tropes);
+					if (!tropesValid) {
+						return json(
+							{ error: `Invalid trope selection: ${invalidKeys.join(", ")}` },
+							{ status: 400 },
+						);
 					}
 
 					// Validate spice level

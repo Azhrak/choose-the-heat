@@ -3,7 +3,7 @@ import { BookOpen, GitBranch, Heart, Info, Trash2 } from "lucide-react";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
-import { TROPE_LABELS } from "~/lib/types/preferences";
+import { useTropeMap } from "~/hooks/useTropesQuery";
 
 interface StoryCardProps {
 	id: string;
@@ -46,6 +46,7 @@ export function StoryCard({
 	isDeleting,
 	isTogglingFavorite,
 }: StoryCardProps) {
+	const tropeMap = useTropeMap();
 	const displayTitle = storyTitle || templateTitle;
 	const isBranch = !!branchedFromStoryId;
 
@@ -139,7 +140,7 @@ export function StoryCard({
 							key={trope}
 							className="px-2 py-1 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-xs text-romance-700 dark:text-pink-200 font-medium"
 						>
-							{TROPE_LABELS[trope as keyof typeof TROPE_LABELS] || trope}
+							{tropeMap[trope] || trope}
 						</span>
 					))}
 				</div>

@@ -11,6 +11,7 @@ import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { RadioButton } from "~/components/RadioButton";
+import { useTropesQuery } from "~/hooks/useTropesQuery";
 import { ApiError, api } from "~/lib/api/client";
 import {
 	GENRE_LABELS,
@@ -24,8 +25,6 @@ import {
 	type SceneLengthOption,
 	SPICE_LABELS,
 	type SpiceLevel,
-	TROPE_LABELS,
-	TROPES,
 	type Trope,
 	type UserPreferences,
 } from "~/lib/types/preferences";
@@ -46,6 +45,9 @@ function OnboardingPage() {
 	});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+
+	// Fetch tropes
+	const { data: tropesData, isLoading: tropesLoading } = useTropesQuery();
 
 	const handleGenreToggle = (genre: Genre) => {
 		setPreferences((prev) => ({
@@ -211,24 +213,38 @@ function OnboardingPage() {
 									<p className="text-slate-600">
 										What romance tropes make your heart race?
 									</p>
-									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-										{TROPES.map((trope) => (
-											<button
-												type="button"
-												key={trope}
-												onClick={() => handleTropeToggle(trope)}
-												className={`p-4 rounded-lg border-2 transition-all text-left ${
-													preferences.tropes.includes(trope)
-														? "border-romance-500 bg-romance-50 text-romance-700"
-														: "border-slate-200 hover:border-romance-300 text-slate-700"
-												}`}
-											>
-												<div className="font-semibold">
-													{TROPE_LABELS[trope]}
-												</div>
-											</button>
-										))}
-									</div>
+									{tropesLoading ? (
+										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+											{[1, 2, 3, 4].map((i) => (
+												<div
+													key={i}
+													className="h-16 bg-slate-100 rounded-lg animate-pulse"
+												/>
+											))}
+										</div>
+									) : (
+										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+											{tropesData?.tropes.map((trope) => (
+												<button
+													type="button"
+													key={trope.key}
+													onClick={() => handleTropeToggle(trope.key)}
+													className={`p-4 rounded-lg border-2 transition-all text-left ${
+														preferences.tropes.includes(trope.key)
+															? "border-romance-500 bg-romance-50 text-romance-700"
+															: "border-slate-200 hover:border-romance-300 text-slate-700"
+													}`}
+												>
+													<div className="font-semibold">{trope.label}</div>
+													{trope.description && (
+														<div className="text-sm text-slate-500 mt-1">
+															{trope.description}
+														</div>
+													)}
+												</button>
+											))}
+										</div>
+									)}
 								</div>
 							)}
 
