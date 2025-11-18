@@ -17,11 +17,11 @@ export function ErrorMessage({
 	if (variant === "centered") {
 		return (
 			<div
-				className={`bg-red-50 border border-red-200 rounded-lg p-6 text-center ${className}`}
+				className={`bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center ${className}`}
 			>
 				<div className="space-y-3">
-					<AlertTriangle className="w-8 h-8 text-red-500 mx-auto" />
-					<p className="text-red-800 text-lg">{message}</p>
+					<AlertTriangle className="w-8 h-8 text-red-500 dark:text-red-400 mx-auto" />
+					<p className="text-red-800 dark:text-red-200 text-lg">{message}</p>
 					{children}
 				</div>
 			</div>
@@ -30,9 +30,9 @@ export function ErrorMessage({
 
 	return (
 		<div
-			className={`bg-red-50 border border-red-200 rounded-lg p-4 ${className}`}
+			className={`bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 ${className}`}
 		>
-			<p className="text-red-800 text-sm">{message}</p>
+			<p className="text-red-800 dark:text-red-200 text-sm">{message}</p>
 			{children}
 		</div>
 	);
