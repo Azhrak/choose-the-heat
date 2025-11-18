@@ -52,7 +52,11 @@ export function StoryCard({
 	return (
 		<div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg dark:shadow-black/20 overflow-hidden hover:shadow-xl dark:hover:shadow-black/30 transition-shadow h-full flex flex-col">
 			{/* Cover */}
-			<Link to="/story/$id/read" params={{ id }} search={{ scene: currentScene }}>
+			<Link
+				to="/story/$id/read"
+				params={{ id }}
+				search={{ scene: currentScene }}
+			>
 				<div
 					className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
 				>

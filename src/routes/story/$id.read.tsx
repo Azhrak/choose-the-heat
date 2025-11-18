@@ -95,7 +95,10 @@ function ReadingPage() {
 				setShowHeader(true);
 			}
 			// Hide header when scrolling down
-			else if (currentScrollY > lastScrollY.current && currentScrollY > scrollThreshold) {
+			else if (
+				currentScrollY > lastScrollY.current &&
+				currentScrollY > scrollThreshold
+			) {
 				setShowHeader(false);
 			}
 
@@ -248,9 +251,11 @@ function ReadingPage() {
 	return (
 		<div className="min-h-screen bg-linear-to-br from-rose-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
 			{/* Header */}
-			<header className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10 transition-transform duration-300 ${
-				showHeader ? "translate-y-0" : "-translate-y-full"
-			}`}>
+			<header
+				className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10 transition-transform duration-300 ${
+					showHeader ? "translate-y-0" : "-translate-y-full"
+				}`}
+			>
 				<div className="max-w-4xl mx-auto px-4 py-4 space-y-3">
 					<div className="flex items-center justify-between">
 						<Link
