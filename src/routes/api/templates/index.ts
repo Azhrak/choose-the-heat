@@ -15,6 +15,16 @@ export const Route = createFileRoute("/api/templates/")({
 					const url = new URL(request.url);
 					const tropesParam = url.searchParams.get("tropes");
 					const searchParam = url.searchParams.get("search");
+					const pageParam = url.searchParams.get("page");
+					const limitParam = url.searchParams.get("limit");
+
+					// Parse pagination parameters
+					const page = pageParam ? Number.parseInt(pageParam, 10) : 1;
+					const limit = limitParam ? Number.parseInt(limitParam, 10) : 15;
+
+					// Validate pagination parameters
+					const validPage = page > 0 ? page : 1;
+					const validLimit = limit > 0 && limit <= 100 ? limit : 15;
 
 					let templates: Awaited<ReturnType<typeof getPublishedTemplates>>;
 
@@ -55,7 +65,24 @@ export const Route = createFileRoute("/api/templates/")({
 						templates = await getPublishedTemplates();
 					}
 
-					return json({ templates });
+					// Calculate pagination
+					const totalCount = templates.length;
+					const totalPages = Math.ceil(totalCount / validLimit);
+					const startIndex = (validPage - 1) * validLimit;
+					const endIndex = startIndex + validLimit;
+					const paginatedTemplates = templates.slice(startIndex, endIndex);
+
+					return json({
+						templates: paginatedTemplates,
+						pagination: {
+							page: validPage,
+							limit: validLimit,
+							totalCount,
+							totalPages,
+							hasNextPage: validPage < totalPages,
+							hasPreviousPage: validPage > 1,
+						},
+					});
 				} catch (error) {
 					console.error("Error fetching templates:", error);
 					return json({ error: "Failed to fetch templates" }, { status: 500 });

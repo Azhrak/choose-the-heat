@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
-import { useState } from "react";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Footer } from "~/components/Footer";
@@ -11,6 +10,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
+import { Pagination } from "~/components/Pagination";
 import { TropeFilter } from "~/components/TropeFilter";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
@@ -18,20 +18,69 @@ import type { Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
 	component: BrowsePage,
+	validateSearch: (search: Record<string, unknown>) => {
+		return {
+			page: Number(search.page) || 1,
+			search: (search.search as string) || "",
+			tropes: (search.tropes as string) || "",
+		};
+	},
 });
 
 function BrowsePage() {
-	const [selectedTropes, setSelectedTropes] = useState<Trope[]>([]);
-	const [searchQuery, setSearchQuery] = useState("");
+	const navigate = Route.useNavigate();
+	const { page, search: searchQuery, tropes: tropesParam } = Route.useSearch();
+
+	// Parse tropes from URL parameter
+	const selectedTropes: Trope[] = tropesParam
+		? (tropesParam.split(",") as Trope[])
+		: [];
 
 	// Fetch current user profile
 	const { data: profileData } = useCurrentUserQuery();
 
-	// Fetch templates
+	// Fetch templates with pagination
 	const { data, isLoading, error } = useTemplatesQuery({
 		tropes: selectedTropes,
 		search: searchQuery,
+		page,
+		limit: 15,
 	});
+
+	// Handler to update URL search parameters
+	const updateSearchParams = (updates: {
+		page?: number;
+		search?: string;
+		tropes?: string;
+	}) => {
+		navigate({
+			search: (prev) => ({
+				...prev,
+				...updates,
+			}),
+		});
+	};
+
+	// Handler for trope filter changes
+	const handleTropeChange = (tropes: Trope[]) => {
+		updateSearchParams({
+			tropes: tropes.length > 0 ? tropes.join(",") : "",
+			page: 1, // Reset to first page when filters change
+		});
+	};
+
+	// Handler for search query changes
+	const handleSearchChange = (value: string) => {
+		updateSearchParams({
+			search: value,
+			page: 1, // Reset to first page when search changes
+		});
+	};
+
+	// Handler for page changes
+	const handlePageChange = (newPage: number) => {
+		updateSearchParams({ page: newPage });
+	};
 
 	return (
 		<PageBackground>
@@ -57,7 +106,7 @@ function BrowsePage() {
 								type="text"
 								placeholder="Search for novels..."
 								value={searchQuery}
-								onChange={(e) => setSearchQuery(e.target.value)}
+								onChange={(e) => handleSearchChange(e.target.value)}
 								className="pl-12"
 							/>
 						</div>
@@ -65,7 +114,7 @@ function BrowsePage() {
 					{/* Trope Filters */}
 					<TropeFilter
 						selectedTropeKeys={selectedTropes}
-						onChange={setSelectedTropes}
+						onChange={handleTropeChange}
 					/>
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}
@@ -101,13 +150,31 @@ function BrowsePage() {
 								</div>
 							)}
 
-							{/* Stats */}
-							{data.templates.length > 0 && (
-								<div className="text-center">
-									<p className="text-slate-600">
-										Showing {data.templates.length}{" "}
-										{data.templates.length === 1 ? "template" : "templates"}
-									</p>
+							{/* Pagination and Stats */}
+							{data.templates.length > 0 && data.pagination && (
+								<div className="space-y-6">
+									{/* Stats */}
+									<div className="text-center">
+										<p className="text-slate-600">
+											Showing{" "}
+											{(data.pagination.page - 1) * data.pagination.limit + 1}-
+											{Math.min(
+												data.pagination.page * data.pagination.limit,
+												data.pagination.totalCount,
+											)}{" "}
+											of {data.pagination.totalCount}{" "}
+											{data.pagination.totalCount === 1
+												? "template"
+												: "templates"}
+										</p>
+									</div>
+
+									{/* Pagination Controls */}
+									<Pagination
+										currentPage={data.pagination.page}
+										totalPages={data.pagination.totalPages}
+										onPageChange={handlePageChange}
+									/>
 								</div>
 							)}
 						</>
