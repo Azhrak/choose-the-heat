@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { Button } from "~/components/Button";
 import { EmptyState } from "~/components/EmptyState";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Footer } from "~/components/Footer";
@@ -12,9 +11,9 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NovelCard } from "~/components/NovelCard";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
+import { TropeFilter } from "~/components/TropeFilter";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
-import { useTropesQuery } from "~/hooks/useTropesQuery";
 import type { Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
@@ -28,20 +27,11 @@ function BrowsePage() {
 	// Fetch current user profile
 	const { data: profileData } = useCurrentUserQuery();
 
-	// Fetch tropes
-	const { data: tropesData, isLoading: tropesLoading } = useTropesQuery();
-
 	// Fetch templates
 	const { data, isLoading, error } = useTemplatesQuery({
 		tropes: selectedTropes,
 		search: searchQuery,
 	});
-
-	const toggleTrope = (trope: Trope) => {
-		setSelectedTropes((prev) =>
-			prev.includes(trope) ? prev.filter((t) => t !== trope) : [...prev, trope],
-		);
-	};
 
 	return (
 		<PageBackground>
@@ -71,51 +61,12 @@ function BrowsePage() {
 								className="pl-12"
 							/>
 						</div>
-					</div>{" "}
-					{/* Trope Filters */}
-					<div className="space-y-3">
-						<Heading
-							level="h2"
-							size="label"
-							className="text-slate-700 dark:text-gray-300"
-						>
-							Filter by Tropes:
-						</Heading>
-						{tropesLoading ? (
-							<div className="flex gap-2">
-								<div className="h-10 w-24 bg-slate-200 rounded animate-pulse" />
-								<div className="h-10 w-32 bg-slate-200 rounded animate-pulse" />
-								<div className="h-10 w-20 bg-slate-200 rounded animate-pulse" />
-							</div>
-						) : (
-							<div className="flex flex-wrap gap-2">
-								{tropesData?.tropes.map((trope) => (
-									<button
-										type="button"
-										key={trope.key}
-										onClick={() => toggleTrope(trope.key)}
-										className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-											selectedTropes.includes(trope.key)
-												? "bg-romance-600 text-white"
-												: "bg-white dark:bg-gray-700 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-600"
-										}`}
-									>
-										{trope.label}
-									</button>
-								))}
-							</div>
-						)}
-						{selectedTropes.length > 0 && (
-							<Button
-								onClick={() => setSelectedTropes([])}
-								variant="ghost"
-								size="sm"
-								className="text-romance-600 dark:text-romance-400 hover:text-romance-700 dark:hover:text-romance-300"
-							>
-								Clear filters
-							</Button>
-						)}
 					</div>
+					{/* Trope Filters */}
+					<TropeFilter
+						selectedTropeKeys={selectedTropes}
+						onChange={setSelectedTropes}
+					/>
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}
 					{/* Error State */}

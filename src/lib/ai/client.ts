@@ -7,7 +7,13 @@ import { generateText } from "ai";
 /**
  * Supported AI providers
  */
-export type AIProvider = "openai" | "google" | "anthropic" | "mistral" | "xai" | "openrouter";
+export type AIProvider =
+	| "openai"
+	| "google"
+	| "anthropic"
+	| "mistral"
+	| "xai"
+	| "openrouter";
 
 /**
  * AI provider configuration
