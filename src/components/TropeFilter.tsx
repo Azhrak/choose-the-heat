@@ -119,16 +119,13 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 							) : (
 								<div className="p-2">
 									{filteredTropes.map((trope) => (
-										<div
+										<Checkbox
 											key={trope.id}
-											className="p-2 rounded hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors"
-										>
-											<Checkbox
-												checked={selectedTropeKeys.includes(trope.key)}
-												onChange={() => handleToggle(trope.key)}
-												label={trope.label}
-											/>
-										</div>
+											checked={selectedTropeKeys.includes(trope.key)}
+											onChange={() => handleToggle(trope.key)}
+											label={trope.label}
+											className="p-2 rounded hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors w-full"
+										/>
 									))}
 								</div>
 							)}
