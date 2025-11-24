@@ -7,7 +7,7 @@ import { generateText } from "ai";
 /**
  * Supported AI providers
  */
-export type AIProvider = "openai" | "google" | "anthropic" | "mistral" | "xai";
+export type AIProvider = "openai" | "google" | "anthropic" | "mistral" | "xai" | "openrouter";
 
 /**
  * AI provider configuration
@@ -32,6 +32,7 @@ function getAIConfig(): AIConfig {
 		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
 		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
 		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
+		openrouter: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
 	};
 
 	return {
@@ -100,6 +101,18 @@ function getAIModel(modelOverride?: string) {
 				baseURL: "https://api.x.ai/v1",
 			});
 			return xai(modelName);
+		}
+
+		case "openrouter": {
+			if (!process.env.OPENROUTER_API_KEY) {
+				throw new Error("OPENROUTER_API_KEY environment variable is not set");
+			}
+			// OpenRouter uses OpenAI-compatible API
+			const openrouter = createOpenAI({
+				apiKey: process.env.OPENROUTER_API_KEY,
+				baseURL: "https://openrouter.ai/api/v1",
+			});
+			return openrouter(modelName);
 		}
 
 		default:
