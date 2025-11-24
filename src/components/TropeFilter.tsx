@@ -77,7 +77,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 					<span>
 						Filter by Tropes
 						{selectedTropeKeys.length > 0 && (
-							<span className="ml-1.5 px-2 py-0.5 bg-romance-100 dark:bg-romance-900/30 text-romance-700 dark:text-romance-400 rounded-full text-xs font-semibold">
+							<span className="ml-1.5 px-2 py-0.5 bg-romance-100 dark:bg-romance-900/30 text-romance-700 dark:text-romance-700 rounded-full text-xs font-semibold">
 								{selectedTropeKeys.length}
 							</span>
 						)}
@@ -140,7 +140,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 								<button
 									type="button"
 									onClick={handleRemoveAll}
-									className="w-full px-3 py-1.5 text-sm text-romance-600 dark:text-romance-400 hover:text-romance-700 dark:hover:text-romance-300 font-medium transition-colors"
+									className="w-full px-3 py-1.5 text-sm text-romance-600 dark:text-romance-500 hover:text-romance-700 dark:hover:text-romance-300 font-medium transition-colors"
 								>
 									Clear all filters
 								</button>
@@ -158,7 +158,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 							type="button"
 							key={trope.key}
 							onClick={() => handleToggle(trope.key)}
-							className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-romance-100 dark:bg-romance-900/30 text-romance-700 dark:text-romance-400 rounded-full text-sm font-medium hover:bg-romance-200 dark:hover:bg-romance-900/50 transition-colors"
+							className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-romance-100 dark:bg-romance-500/20 dark:border-romance-500/30 border text-romance-700 dark:text-pink-200 rounded-full text-sm font-medium hover:bg-romance-200 dark:hover:bg-romance-900/50 transition-colors"
 						>
 							{trope.label}
 							<X className="w-3.5 h-3.5" />
