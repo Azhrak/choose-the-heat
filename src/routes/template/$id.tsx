@@ -65,7 +65,7 @@ function TemplateDetailPage() {
 							{/* Hero Section */}
 							<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
 								{template.cover_url ? (
-									<div className="h-64 relative overflow-hidden">
+									<div className="h-80 sm:h-160 relative overflow-hidden">
 										<img
 											src={template.cover_url}
 											alt={template.title}
