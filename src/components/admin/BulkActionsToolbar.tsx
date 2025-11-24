@@ -23,10 +23,13 @@ interface BulkActionsToolbarProps {
 }
 
 const accentColorClasses = {
-	romance: "bg-romance-50 border-romance-200",
-	purple: "bg-purple-50 border-purple-200",
-	blue: "bg-blue-50 border-blue-200",
-	green: "bg-green-50 border-green-200",
+	romance:
+		"bg-romance-50 dark:bg-romance-900/20 border-romance-200 dark:border-romance-700",
+	purple:
+		"bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700",
+	blue: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700",
+	green:
+		"bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700",
 };
 
 export function BulkActionsToolbar({
@@ -53,7 +56,7 @@ export function BulkActionsToolbar({
 				className={`${accentColorClasses[accentColor]} border rounded-lg p-4 flex items-center justify-between`}
 			>
 				<div className="flex items-center gap-4">
-					<span className="text-sm font-medium text-slate-900">
+					<span className="text-sm font-medium text-slate-900 dark:text-gray-100">
 						{selectedCount} {itemLabel}
 						{selectedCount !== 1 ? "s" : ""} selected
 					</span>
