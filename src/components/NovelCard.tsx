@@ -9,6 +9,7 @@ interface NovelCardProps {
 	baseTropes: string[];
 	estimatedScenes: number;
 	coverGradient: string;
+	coverUrl?: string | null;
 }
 
 export function NovelCard({
@@ -18,24 +19,35 @@ export function NovelCard({
 	baseTropes,
 	estimatedScenes,
 	coverGradient,
+	coverUrl,
 }: NovelCardProps) {
 	const tropeMap = useTropeMap();
 
 	return (
 		<div className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg dark:shadow-black/20 overflow-hidden hover:shadow-xl dark:hover:shadow-black/30 transition-shadow duration-300 h-full flex flex-col">
-			{/* Gradient Cover */}
+			{/* Cover Image or Gradient */}
 			<Link to="/template/$id" params={{ id }}>
-				<div
-					className={`h-48 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
-				>
-					{/* Dark mode overlay to tone down bright gradients */}
-					<div className="absolute inset-0 bg-black/20 dark:block hidden" />
-					<BookOpen
-						className="w-20 h-20 text-white opacity-80 relative z-10"
-						strokeWidth={1.5}
-					/>
-				</div>
-			</Link>{" "}
+				{coverUrl ? (
+					<div className="h-48 relative cursor-pointer hover:opacity-95 transition-opacity overflow-hidden">
+						<img
+							src={coverUrl}
+							alt={title}
+							className="w-full h-full object-cover object-top"
+						/>
+					</div>
+				) : (
+					<div
+						className={`h-48 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
+					>
+						{/* Dark mode overlay to tone down bright gradients */}
+						<div className="absolute inset-0 bg-black/20 dark:block hidden" />
+						<BookOpen
+							className="w-20 h-20 text-white opacity-80 relative z-10"
+							strokeWidth={1.5}
+						/>
+					</div>
+				)}
+			</Link>
 			{/* Content */}
 			<div className="p-6 space-y-4 flex flex-col flex-1">
 				<div className="space-y-3">

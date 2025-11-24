@@ -18,11 +18,17 @@ import type { Trope } from "~/lib/types/preferences";
 
 export const Route = createFileRoute("/browse")({
 	component: BrowsePage,
-	validateSearch: (search: Record<string, unknown>) => {
+	validateSearch: (
+		search: Record<string, unknown>,
+	): {
+		page?: number;
+		search?: string;
+		tropes?: string;
+	} => {
 		return {
-			page: Number(search.page) || 1,
-			search: (search.search as string) || "",
-			tropes: (search.tropes as string) || "",
+			page: search?.page ? Number(search.page) || 1 : 1,
+			search: typeof search?.search === "string" ? search.search : undefined,
+			tropes: typeof search?.tropes === "string" ? search.tropes : "",
 		};
 	},
 });
@@ -145,6 +151,7 @@ function BrowsePage() {
 											baseTropes={template.base_tropes}
 											estimatedScenes={template.estimated_scenes}
 											coverGradient={template.cover_gradient}
+											coverUrl={template.cover_url}
 										/>
 									))}
 								</div>

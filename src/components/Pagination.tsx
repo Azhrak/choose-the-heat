@@ -68,6 +68,7 @@ export function Pagination({
 		<div className={cn("flex items-center justify-center gap-2", className)}>
 			{/* Previous Button */}
 			<button
+				type="button"
 				onClick={() => onPageChange(currentPage - 1)}
 				disabled={currentPage === 1}
 				className={cn(
@@ -84,9 +85,12 @@ export function Pagination({
 			{/* Page Numbers */}
 			{getPageNumbers().map((page, index) => {
 				if (page === "...") {
+					// Use the previous page number to create a unique key for ellipsis
+					const pages = getPageNumbers();
+					const prevPage = index > 0 ? pages[index - 1] : 0;
 					return (
 						<span
-							key={`ellipsis-${index}`}
+							key={`ellipsis-after-${prevPage}`}
 							className="flex items-center justify-center w-10 h-10 text-slate-500"
 						>
 							...
@@ -99,6 +103,7 @@ export function Pagination({
 
 				return (
 					<button
+						type="button"
 						key={pageNumber}
 						onClick={() => onPageChange(pageNumber)}
 						className={cn(
@@ -117,6 +122,7 @@ export function Pagination({
 
 			{/* Next Button */}
 			<button
+				type="button"
 				onClick={() => onPageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
 				className={cn(

@@ -26,6 +26,7 @@ export interface Template {
 	base_tropes: string[];
 	estimated_scenes: number;
 	cover_gradient: string;
+	cover_url: string | null;
 	status: TemplateStatus;
 	created_at: string;
 	updated_at: string;

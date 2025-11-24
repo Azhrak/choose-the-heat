@@ -61,6 +61,7 @@ export interface NovelTemplates {
 	archived_by: string | null;
 	base_tropes: string[];
 	cover_gradient: string;
+	cover_url: string | null;
 	created_at: Generated<Timestamp>;
 	description: string;
 	estimated_scenes: number;

@@ -64,14 +64,24 @@ function TemplateDetailPage() {
 						<>
 							{/* Hero Section */}
 							<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
-								<div
-									className={`h-64 bg-linear-to-br ${template.cover_gradient} flex items-center justify-center`}
-								>
-									<BookOpen
-										className="w-32 h-32 text-white opacity-80"
-										strokeWidth={1.5}
-									/>
-								</div>
+								{template.cover_url ? (
+									<div className="h-64 relative overflow-hidden">
+										<img
+											src={template.cover_url}
+											alt={template.title}
+											className="w-full h-full object-cover object-top"
+										/>
+									</div>
+								) : (
+									<div
+										className={`h-64 bg-linear-to-br ${template.cover_gradient} flex items-center justify-center`}
+									>
+										<BookOpen
+											className="w-32 h-32 text-white opacity-80"
+											strokeWidth={1.5}
+										/>
+									</div>
+								)}
 
 								<div className="p-8 space-y-4">
 									<Heading level="h1" size="page">
