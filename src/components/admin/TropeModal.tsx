@@ -4,6 +4,8 @@ import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
 import { FormTextarea } from "~/components/FormTextarea";
 import { Alert } from "~/components/ui/Alert";
+import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 import { Text } from "~/components/ui/Text";
 
 interface Trope {
@@ -141,7 +143,7 @@ export function TropeModal({
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-			<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-8">
+			<Card padding="lg" className="max-w-md w-full">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="flex items-center gap-2 text-romance-600 dark:text-romance-400">
 						<Icon className="w-6 h-6" />
@@ -182,7 +184,7 @@ export function TropeModal({
 
 					<Alert message={validationError || error} variant="error" />
 
-					<div className="flex gap-3">
+					<Stack direction="horizontal" gap="sm">
 						<Button
 							type="button"
 							onClick={handleClose}
@@ -200,9 +202,9 @@ export function TropeModal({
 						>
 							{submitText}
 						</Button>
-					</div>
+					</Stack>
 				</form>
-			</div>
+			</Card>
 		</div>
 	);
 }

@@ -260,7 +260,7 @@ function TemplatesListPage() {
 							Manage novel templates, including drafts and archived content.
 						</Text>
 					</div>
-					<div className="flex gap-3">
+					<Stack direction="horizontal" gap="sm">
 						<Button
 							type="button"
 							onClick={() => navigate({ to: "/admin/templates/bulk-import" })}
@@ -277,7 +277,7 @@ function TemplatesListPage() {
 							<Plus className="w-5 h-5" />
 							New Template
 						</Button>
-					</div>
+					</Stack>
 				</div>
 
 				{/* Statistics */}
