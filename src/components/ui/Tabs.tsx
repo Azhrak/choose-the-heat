@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useContext, useState } from "react";
+import { cn } from "~/lib/utils";
 
 interface TabsContextValue {
 	activeTab: string;
@@ -55,7 +56,10 @@ interface TabsListProps {
 export function TabsList({ className = "", children }: TabsListProps) {
 	return (
 		<div
-			className={`flex gap-2 border-b border-slate-200 dark:border-slate-700 ${className}`.trim()}
+			className={cn(
+				"flex gap-2 border-b border-slate-200 dark:border-slate-700",
+				className,
+			)}
 			role="tablist"
 		>
 			{children}
@@ -83,11 +87,13 @@ export function TabsTrigger({
 			role="tab"
 			aria-selected={isActive}
 			onClick={() => setActiveTab(value)}
-			className={`px-6 py-3 font-semibold transition-colors rounded-t-lg border-b-2 ${
+			className={cn(
+				"px-6 py-3 font-semibold transition-colors rounded-t-lg border-b-2",
 				isActive
-					? "border-romance-600 bg-romance-50 dark:bg-romance-900/20 text-romance-600 dark:text-romance-400"
-					: "border-transparent bg-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
-			} ${className}`.trim()}
+					? "border-romance-600 bg-romance-50 dark:bg-romance-900/20 text-romance-600 dark:text-romance-700"
+					: "border-transparent bg-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800",
+				className,
+			)}
 		>
 			{children}
 		</button>

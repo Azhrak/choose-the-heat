@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "~/lib/utils";
 
 interface ContainerProps {
 	size?: "sm" | "md" | "lg" | "xl" | "full";
@@ -26,7 +27,7 @@ export function Container({
 
 	return (
 		<div
-			className={`container mx-auto ${sizeClass} ${paddingClass} ${className}`.trim()}
+			className={cn("container mx-auto", sizeClass, paddingClass, className)}
 		>
 			{children}
 		</div>

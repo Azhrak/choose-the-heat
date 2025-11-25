@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "~/lib/utils";
 
 interface SectionProps {
 	spacing?: "sm" | "md" | "lg";
@@ -35,7 +36,7 @@ export function Section({
 
 	return (
 		<section
-			className={`${spacingClass} ${maxWidthClass} ${centeredClass} ${className}`.trim()}
+			className={cn(spacingClass, maxWidthClass, centeredClass, className)}
 		>
 			{children}
 		</section>

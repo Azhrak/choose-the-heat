@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect } from "react";
+import { cn } from "~/lib/utils";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -59,7 +60,11 @@ export function Modal({
 				aria-label="Close modal"
 			/>
 			<div
-				className={`relative bg-white dark:bg-slate-800 rounded-2xl shadow-xl ${sizeClasses[size]} w-full p-8 ${className}`.trim()}
+				className={cn(
+					"relative bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full p-8",
+					sizeClasses[size],
+					className,
+				)}
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby={title ? "modal-title" : undefined}

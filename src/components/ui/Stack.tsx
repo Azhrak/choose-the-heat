@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "~/lib/utils";
 
 interface StackProps {
 	direction?: "vertical" | "horizontal";
@@ -55,9 +56,7 @@ export function Stack({
 	const flexDirection = isHorizontal ? "flex-row" : "flex-col";
 
 	return (
-		<div
-			className={`flex ${flexDirection} ${gapClass} ${alignClass} ${className}`.trim()}
-		>
+		<div className={cn("flex", flexDirection, gapClass, alignClass, className)}>
 			{children}
 		</div>
 	);

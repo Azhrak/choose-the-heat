@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { cn } from "~/lib/utils";
 
 interface NavLinkProps {
 	to: string;
@@ -11,7 +12,7 @@ interface NavLinkProps {
 
 export function NavLink({
 	to,
-	activeClassName = "text-romance-600 dark:text-romance-300",
+	activeClassName = "text-romance-600 dark:text-romance-700",
 	className = "text-slate-700 dark:text-slate-200 hover:text-romance-600 dark:hover:text-romance-300 font-medium transition-colors",
 	matchSubpaths = false,
 	children,
@@ -24,10 +25,7 @@ export function NavLink({
 		: currentPath === to;
 
 	return (
-		<Link
-			to={to}
-			className={`${className} ${isActive ? activeClassName : ""}`.trim()}
-		>
+		<Link to={to} className={cn(className, isActive && activeClassName)}>
 			{children}
 		</Link>
 	);
