@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
 import { Card } from "~/components/ui/Card";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import type { UserPreferences } from "~/lib/types/preferences";
 
@@ -25,12 +25,9 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 						recommendations
 					</p>
 
-					<Link
-						to="/preferences"
-						className="inline-flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors"
-					>
+					<LinkButton to="/preferences" variant="primary">
 						Set Up Preferences
-					</Link>
+					</LinkButton>
 				</Stack>
 			</Card>
 		);
@@ -150,12 +147,9 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 					</div>
 				</Stack>
 
-				<Link
-					to="/preferences"
-					className="inline-flex items-center px-6 py-3 border-2 border-romance-600 dark:border-romance-500 text-romance-600 dark:text-romance-400 rounded-lg font-semibold hover:bg-romance-50 dark:hover:bg-romance-900/20 transition-colors"
-				>
+				<LinkButton to="/preferences" variant="outline">
 					Update Preferences
-				</Link>
+				</LinkButton>
 			</Stack>
 		</Card>
 	);

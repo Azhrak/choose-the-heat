@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	ArrowLeft,
 	BookOpen,
@@ -24,6 +24,7 @@ import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { Text } from "~/components/ui/Text";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
@@ -159,15 +160,15 @@ function StoryInfoPage() {
 			<PageContainer maxWidth="2xl">
 				<Stack gap="md">
 					{/* Back Navigation */}
-					<Link
+					<LinkButton
 						to="/library"
 						search={{ tab: "in-progress", favorites: false }}
-						className="inline-flex items-center gap-2 text-romance-600 dark:text-romance-400 hover:text-romance-700 dark:hover:text-romance-300 font-medium transition-colors"
+						variant="ghost"
+						className="text-romance-600 dark:text-romance-400 hover:text-romance-700 dark:hover:text-romance-300 font-medium"
 					>
 						<ArrowLeft className="w-5 h-5" />
 						Back to Library
-					</Link>
-
+					</LinkButton>{" "}
 					{/* Story Header */}
 					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
 						{/* Cover */}
@@ -292,16 +293,16 @@ function StoryInfoPage() {
 
 							{/* Action Button */}
 							<div className="flex gap-3 justify-between">
-								<Link
+								<LinkButton
 									to="/story/$id/read"
 									params={{ id: story.id }}
 									search={{ scene: undefined }}
-									className="inline-flex items-center justify-center px-6 py-3 bg-romance-600 dark:bg-romance-700 text-white rounded-lg font-medium hover:bg-romance-700 dark:hover:bg-romance-800 transition-colors"
+									variant="primary"
 								>
 									{story.status === "completed"
 										? "Read Again"
 										: "Continue Reading"}
-								</Link>
+								</LinkButton>
 								<Button
 									variant="danger"
 									onClick={() => setShowDeleteDialog(true)}
@@ -313,7 +314,6 @@ function StoryInfoPage() {
 							</div>
 						</div>
 					</div>
-
 					{/* Story Preferences */}
 					{preferences && (
 						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">

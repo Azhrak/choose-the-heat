@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Card } from "~/components/ui/Card";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { cn } from "~/lib/utils";
 
@@ -34,12 +34,9 @@ export function EmptyState({
 			<Stack gap="md">
 				<p className="text-slate-600 dark:text-slate-300">{description}</p>
 				{action && (
-					<Link
-						to={action.href}
-						className="inline-flex items-center px-6 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors"
-					>
+					<LinkButton to={action.href} variant="primary">
 						{action.label}
-					</Link>
+					</LinkButton>
 				)}
 				{children}
 			</Stack>

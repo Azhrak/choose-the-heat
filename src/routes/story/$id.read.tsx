@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
 	BookOpen,
 	ChevronLeft,
@@ -15,6 +15,7 @@ import { BranchConfirmationDialog } from "~/components/BranchConfirmationDialog"
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { SceneNavigation } from "~/components/SceneNavigation";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
 import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
@@ -224,14 +225,15 @@ function ReadingPage() {
 						</Heading>
 						<p className="text-gray-600 dark:text-gray-300">{error}</p>
 					</Stack>
-					<Link
+					<LinkButton
 						to="/library"
 						search={{ tab: "completed", favorites: false }}
-						className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-gray-700 transition-colors border border-rose-200 dark:border-gray-700"
+						variant="secondary"
+						className="border border-rose-200 dark:border-gray-700 text-rose-600 dark:text-rose-400"
 					>
 						<Home className="w-5 h-5" />
 						Back to Library
-					</Link>
+					</LinkButton>
 				</div>
 			</div>
 		);
@@ -261,28 +263,32 @@ function ReadingPage() {
 			>
 				<div className="max-w-4xl mx-auto px-4 py-4 space-y-3">
 					<div className="flex items-center justify-between">
-						<Link
+						<LinkButton
 							to="/library"
 							search={{ tab: "in-progress", favorites: false }}
-							className="flex items-center gap-2 text-gray-600 hover:text-rose-600 transition-colors"
+							variant="ghost"
+							size="sm"
+							className="text-gray-600 hover:text-rose-600"
 						>
 							<ChevronLeft className="w-5 h-5" />
 							Back to Library
-						</Link>
+						</LinkButton>
 						<div className="flex items-center gap-4">
 							<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
 								<BookOpen className="w-4 h-4" />
 								Scene {scene.number} of {story.estimatedScenes}
 							</div>
-							<Link
+							<LinkButton
 								to="/story/$id/info"
 								params={{ id }}
-								className="flex items-center gap-1 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+								variant="ghost"
+								size="sm"
+								className="text-sm text-gray-600 hover:text-rose-600"
 								title="View story info"
 							>
 								<Info className="w-4 h-4" />
 								Info
-							</Link>
+							</LinkButton>
 						</div>
 					</div>
 					{/* Title */}
@@ -563,14 +569,15 @@ function ReadingPage() {
 										: "Mark as Completed"}
 								</span>
 							</Button>
-							<Link
+							<LinkButton
 								to="/library"
 								search={{ tab: "completed", favorites: false }}
-								className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-700 text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-gray-600 transition-colors border border-rose-200 dark:border-gray-600"
+								variant="secondary"
+								className="border border-rose-200 dark:border-gray-600 text-rose-600 dark:text-rose-400"
 							>
 								<Home className="w-5 h-5" />
 								Back to Library
-							</Link>
+							</LinkButton>
 						</div>
 					</div>
 				)}

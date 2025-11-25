@@ -487,6 +487,60 @@ interface ButtonProps {
 
 ---
 
+### LinkButton
+
+Navigation link styled as a button, combining TanStack Router's Link with Button styling.
+
+**Props:**
+
+```tsx
+interface LinkButtonProps {
+  to: string;
+  search?: Record<string, unknown>;
+  params?: Record<string, string>;
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  children: ReactNode;
+}
+```
+
+**Variants:**
+
+Same as Button component:
+
+- `primary`: Romance background
+- `secondary`: Slate background  
+- `outline`: Border only
+- `danger`: Red background
+- `ghost`: No background
+
+**Usage:**
+
+```tsx
+<LinkButton to="/browse" variant="primary" size="md">
+  Browse Stories
+</LinkButton>
+
+<LinkButton to="/preferences" variant="outline">
+  <Settings className="w-5 h-5" />
+  Update Preferences
+</LinkButton>
+```
+
+**When to use:**
+
+- Navigation that looks like a button (CTAs, primary actions)
+- Consistent with Button component styling
+- Needs TanStack Router features (search, params)
+
+**When not to use:**
+
+- Text links in paragraphs or navigation menus (use regular `<Link>`)
+- Non-navigation actions (use `<Button>` with `onClick`)
+
+---
+
 ### Heading
 
 Semantic headings with consistent sizing.

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, Heart, Sparkles } from "lucide-react";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
@@ -9,6 +9,7 @@ import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { ControlledAccordion } from "~/components/ui/Accordion";
 import { Card } from "~/components/ui/Card";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplateQuery } from "~/hooks/useTemplateQuery";
@@ -42,25 +43,19 @@ function TemplateDetailPage() {
 						<ArrowLeft className="w-5 h-5" />
 						Back to Browse
 					</Button>
-
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}
-
 					{/* Error State */}
 					{error && (
 						<ErrorMessage
 							message={error.message || "Failed to load template"}
 							variant="centered"
 						>
-							<Link
-								to="/browse"
-								className="inline-block px-6 py-2 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 mt-4"
-							>
+							<LinkButton to="/browse" variant="primary">
 								Return to Browse
-							</Link>
+							</LinkButton>
 						</ErrorMessage>
-					)}
-
+					)}{" "}
 					{/* Template Details */}
 					{!isLoading && !error && template && (
 						<>
@@ -128,17 +123,17 @@ function TemplateDetailPage() {
 										</div>
 									</div>
 									{/* CTA Button */}
-									<Link
+									<LinkButton
 										to="/story/create"
 										search={{ templateId: template.id }}
-										className="inline-flex items-center gap-2 px-8 py-4 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors text-lg"
+										variant="primary"
+										size="lg"
 									>
 										<Heart className="w-5 h-5" fill="currentColor" />
 										Start Your Story
-									</Link>
+									</LinkButton>
 								</Stack>
-							</Card>
-
+							</Card>{" "}
 							{/* Choice Points Preview */}
 							<Card className="p-4 sm:p-8">
 								<Stack gap="xs">
@@ -201,14 +196,15 @@ function TemplateDetailPage() {
 								/>
 								{/* Bottom CTA */}
 								<Stack gap="sm" className="mt-8 text-center">
-									<Link
+									<LinkButton
 										to="/story/create"
 										search={{ templateId: template.id }}
-										className="inline-flex items-center gap-2 px-8 py-4 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 transition-colors text-lg"
+										variant="primary"
+										size="lg"
 									>
 										<Heart className="w-5 h-5" fill="currentColor" />
 										Start Your Story
-									</Link>
+									</LinkButton>
 									<p className="text-slate-500 dark:text-gray-400 text-sm">
 										Your choices will create a unique story experience
 									</p>

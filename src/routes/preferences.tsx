@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, CheckCircle2, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Footer } from "~/components/Footer";
@@ -14,6 +14,7 @@ import {
 	TropesSection,
 } from "~/components/preferences";
 import { Alert } from "~/components/ui/Alert";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { useUpdatePreferencesMutation } from "~/hooks/useUpdatePreferencesMutation";
 import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
@@ -150,13 +151,14 @@ function PreferencesPage() {
 					{/* Header */}
 					<Stack gap="lg">
 						<Stack gap="sm">
-							<Link
+							<LinkButton
 								to="/profile"
-								className="inline-flex items-center text-slate-600 hover:text-romance-600 transition-colors"
+								variant="ghost"
+								className="text-slate-600 hover:text-romance-600"
 							>
 								<ArrowLeft className="w-4 h-4 mr-2" />
 								Back to Profile
-							</Link>
+							</LinkButton>
 							<div className="flex items-center gap-4">
 								<Settings className="w-10 h-10 text-romance-500" />
 								<div className="space-y-1">
@@ -213,12 +215,13 @@ function PreferencesPage() {
 
 							{/* Save Button */}
 							<div className="flex justify-end gap-4">
-								<Link
+								<LinkButton
 									to="/profile"
-									className="px-6 py-3 border-2 border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-200 rounded-lg font-semibold hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors"
+									variant="outline"
+									className="border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-200"
 								>
 									Cancel
-								</Link>
+								</LinkButton>
 								<button
 									type="submit"
 									disabled={updatePreferences.isPending}
