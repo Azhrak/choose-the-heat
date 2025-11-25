@@ -201,6 +201,8 @@ function ReadingPage() {
 	};
 
 	const handleNavigateScene = (sceneNum: number) => {
+		// Scroll to top of content area smoothly
+		window.scrollTo({ top: 0, behavior: "smooth" });
 		navigate({ search: { scene: sceneNum }, replace: false });
 		setSelectedOption(null);
 	};
@@ -318,8 +320,8 @@ function ReadingPage() {
 				/>
 			</div>
 
-			{/* Main Content */}
-			<main className="max-w-2xl mx-auto px-4 pb-8 space-y-6">
+			{/* Main Content - key ensures this section re-renders when scene changes */}
+			<main key={scene.number} className="max-w-2xl mx-auto px-4 pb-8 space-y-6">
 				{/* Scene Content */}
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8">
 					{/* Show streaming indicator while generating */}
