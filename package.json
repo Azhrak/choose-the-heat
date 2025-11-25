@@ -12,6 +12,7 @@
     "dev": "vite dev --port 3000 --host",
     "build": "vite build",
     "start": "vite preview",
+    "typecheck": "tsc --noEmit",
     "lint": "biome check . && markdownlint-cli2",
     "lint:fix": "biome check --write . && markdownlint-cli2 --fix",
     "lint:md": "markdownlint-cli2",

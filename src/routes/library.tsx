@@ -104,6 +104,7 @@ function LibraryPage() {
 					<div className="space-y-4">
 						{/* Status Tabs */}
 						<Tabs
+							defaultValue="in-progress"
 							value={activeTab}
 							onValueChange={(value) =>
 								navigate({
