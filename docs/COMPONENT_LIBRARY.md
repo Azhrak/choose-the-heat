@@ -114,6 +114,72 @@ Same as Section maxWidth scale.
 
 ---
 
+## Typography Components
+
+### Text
+
+Polymorphic text component with consistent color, size, and weight variants.
+
+**Props:**
+
+```tsx
+interface TextProps {
+  as?: 'p' | 'span' | 'div' | 'strong' | 'em' | 'small'; // Default: 'p'
+  variant?: 'primary' | 'secondary' | 'muted' | 'emphasis'; // Default: 'primary'
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'; // Default: 'base'
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold'; // Default: 'normal'
+  mono?: boolean; // Default: false
+  className?: string;
+  children: ReactNode;
+}
+```
+
+**Variants:**
+
+- `primary`: text-slate-700 dark:text-slate-300
+- `secondary`: text-slate-600 dark:text-slate-300
+- `muted`: text-slate-600 dark:text-slate-400
+- `emphasis`: text-slate-900 dark:text-slate-100
+
+**Sizes:**
+
+- `xs`: text-xs
+- `sm`: text-sm
+- `base`: text-base (default)
+- `lg`: text-lg
+- `xl`: text-xl
+
+**Weights:**
+
+- `normal`: font-normal (default)
+- `medium`: font-medium
+- `semibold`: font-semibold
+- `bold`: font-bold
+
+**Usage:**
+
+```tsx
+// Default paragraph
+<Text>Default paragraph text</Text>
+
+// Inline span with custom styling
+<Text as="span" variant="secondary" size="sm">Small secondary text</Text>
+
+// Emphasis with bold weight
+<Text variant="emphasis" weight="bold">Bold important text</Text>
+
+// Code/technical text
+<Text mono>Code or technical text</Text>
+<Text as="code" mono variant="emphasis">SESSION_COOKIE_NAME</Text>
+
+// Strong tag with semantic emphasis
+<Text as="strong" variant="emphasis" weight="semibold">
+  Important notice
+</Text>
+```
+
+---
+
 ## UI Components
 
 ### Modal

@@ -131,6 +131,18 @@ This document tracks progress on the comprehensive refactoring plan to establish
 - [x] Replace all bg-white rounded shadow patterns with Card components
 - [x] Verified TypeScript build and linting pass
 
+### 2.10. Create Text Component and Apply Throughout Codebase
+
+- [x] Create Text component (src/components/ui/Text.tsx)
+- [x] Create ui/index.ts barrel export
+- [x] Update DESIGN_SYSTEM.md with Text component documentation
+- [x] Update COMPONENT_LIBRARY.md with Text component API reference
+- [ ] Apply Text component to policy pages (cookies.tsx, privacy.tsx, terms.tsx)
+- [ ] Apply Text component to user-facing pages
+- [ ] Apply Text component to admin pages
+- [ ] Apply Text component to component library
+- [ ] Add tests for Text component
+
 ---
 
 ## Phase 3: Testing & Documentation
@@ -157,10 +169,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ## Progress Summary
 
 **Phase 1**: 4/4 sections complete (100%)
-**Phase 2**: 5/9 sections complete (56%)
+**Phase 2**: 5/10 sections complete (50%)
 **Phase 3**: 1/2 sections complete (50%)
 
-**Overall Progress**: 10/15 sections (67%)
+**Overall Progress**: 10/16 sections (63%)
 
 ---
 
@@ -210,3 +222,12 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Replaced ~15+ manual spacing patterns with Stack components across all three pages
   - Improved consistency in onboarding flow, story creation, and template detail pages
   - All TypeScript and linting checks pass
+- Started Phase 2.10: Created Text component for standardized typography:
+  - Created polymorphic Text component (src/components/ui/Text.tsx) with variant, size, weight, and mono props
+  - Supports 4 color variants (primary, secondary, muted, emphasis) based on actual usage patterns in codebase
+  - Analyzed codebase: 85 instances of primary text pattern (text-slate-700 dark:text-slate-300)
+  - Created ui/index.ts barrel export for centralized component imports
+  - Updated DESIGN_SYSTEM.md with Text component documentation and migration examples
+  - Updated COMPONENT_LIBRARY.md with complete API reference in new Typography Components section
+  - Component ready for migration across ~165+ text color class instances
+  - Next: Apply Text component to policy pages, user-facing pages, and component library

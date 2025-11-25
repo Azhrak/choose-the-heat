@@ -127,7 +127,65 @@ Use the `Heading` component for all headings:
 - **subsection**: `text-xl` - Subsection headings
 - **label**: `text-lg` - Small labels, emphasized text
 
-### Body Text
+### Text / Paragraph Component
+
+Use the `Text` component for all body text instead of manual color classes:
+
+```tsx
+import { Text } from "~/components/ui";
+
+// Default paragraph
+<Text>This is primary body text</Text>
+
+// Secondary text
+<Text variant="secondary">Less important text</Text>
+
+// Inline span with custom size
+<Text as="span" size="sm" variant="muted">Small muted text</Text>
+
+// Code/technical text
+<Text as="code" mono variant="emphasis">SESSION_COOKIE</Text>
+
+// Strong emphasis
+<Text as="strong" variant="emphasis" weight="semibold">Important!</Text>
+```
+
+**Variants**:
+
+- **primary**: Default body text (text-slate-700 dark:text-slate-300)
+- **secondary**: De-emphasized text (text-slate-600 dark:text-slate-300)
+- **muted**: Subtle text (text-slate-600 dark:text-slate-400)
+- **emphasis**: Important text (text-slate-900 dark:text-slate-100)
+
+**Sizes**: `xs`, `sm`, `base` (default), `lg`, `xl`
+
+**Weights**: `normal` (default), `medium`, `semibold`, `bold`
+
+**Elements**: Can render as `p`, `span`, `div`, `strong`, `em`, `small` via the `as` prop
+
+**Migration Examples**:
+
+```tsx
+// Before
+<p className="text-slate-700 dark:text-slate-300">
+  Some text
+</p>
+
+// After
+<Text>Some text</Text>
+
+// Before
+<span className="text-sm text-slate-600 dark:text-slate-400">
+  Muted small text
+</span>
+
+// After
+<Text as="span" size="sm" variant="muted">
+  Muted small text
+</Text>
+```
+
+### Body Text (Legacy - Use Text Component)
 
 - **Primary**: `text-slate-700 dark:text-slate-200`
 - **Secondary**: `text-slate-600 dark:text-slate-300`
