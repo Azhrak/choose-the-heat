@@ -122,6 +122,15 @@ This document tracks progress on the comprehensive refactoring plan to establish
 - [x] Replace all bg-white rounded shadow patterns with Card components
 - [x] Verified TypeScript build and linting pass
 
+### 2.9. Apply Layout Components to User-Facing Pages ✅
+
+- [x] Refactor onboarding.tsx to use Stack, Card, Container, and Alert
+- [x] Refactor story/create.tsx to use Stack and Card
+- [x] Refactor template/$id.tsx to use Stack and Card
+- [x] Replace all space-y patterns with standardized Stack components
+- [x] Replace all bg-white rounded shadow patterns with Card components
+- [x] Verified TypeScript build and linting pass
+
 ---
 
 ## Phase 3: Testing & Documentation
@@ -148,10 +157,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ## Progress Summary
 
 **Phase 1**: 4/4 sections complete (100%)
-**Phase 2**: 4/8 sections complete (50%)
+**Phase 2**: 5/9 sections complete (56%)
 **Phase 3**: 1/2 sections complete (50%)
 
-**Overall Progress**: 9/14 sections (64%)
+**Overall Progress**: 10/15 sections (67%)
 
 ---
 
@@ -193,4 +202,11 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Replaced all bg-white/rounded/shadow patterns with Card components
   - Used Container component with size="md" for consistent max-width layouts
   - Improved consistency across all legal/policy pages
+  - All TypeScript and linting checks pass
+- Completed Phase 2.9: Applied Stack, Card, Container to user-facing pages:
+  - Refactored onboarding.tsx (8 space-y patterns → Stack, added Alert component, replaced manual card styling with Card component)
+  - Refactored story/create.tsx (4 space-y patterns → Stack, replaced bg-white rounded shadow with Card component)
+  - Refactored template/$id.tsx (4 space-y patterns → Stack, 2 bg-white rounded shadow → Card components)
+  - Replaced ~15+ manual spacing patterns with Stack components across all three pages
+  - Improved consistency in onboarding flow, story creation, and template detail pages
   - All TypeScript and linting checks pass

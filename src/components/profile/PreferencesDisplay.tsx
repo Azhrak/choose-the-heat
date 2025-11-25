@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
 import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 import type { UserPreferences } from "~/lib/types/preferences";
 
 interface PreferencesDisplayProps {
@@ -11,7 +12,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 	if (!preferences) {
 		return (
 			<Card>
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<div className="flex items-center gap-2">
 						<Settings className="w-5 h-5 text-romance-500" />
 						<h2 className="text-2xl font-bold text-slate-900 dark:text-gray-100">
@@ -30,7 +31,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 					>
 						Set Up Preferences
 					</Link>
-				</div>
+				</Stack>
 			</Card>
 		);
 	}
@@ -53,7 +54,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 					</h2>
 				</div>
 
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<div className="space-y-2">
 						<h3 className="font-semibold text-slate-700 dark:text-gray-300">
 							Favorite Genres
@@ -147,7 +148,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 							</p>
 						</div>
 					</div>
-				</div>
+				</Stack>
 
 				<Link
 					to="/preferences"

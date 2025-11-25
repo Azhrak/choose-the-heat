@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "~/components/Button";
+import { Stack } from "~/components/ui/Stack";
 
 interface NoPermissionsProps {
 	title?: string;
@@ -22,7 +23,7 @@ export function NoPermissions({
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-slate-50">
 			<div className="max-w-md w-full bg-white rounded-lg border border-slate-200 p-8 text-center">
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
 						<svg
 							className="w-8 h-8 text-red-600"
@@ -51,7 +52,7 @@ export function NoPermissions({
 					>
 						{backLabel || defaultBackLabel}
 					</Button>
-				</div>
+				</Stack>
 			</div>
 		</div>
 	);

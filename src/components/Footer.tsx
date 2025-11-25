@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
+import { Stack } from "~/components/ui/Stack";
 
 export function Footer() {
 	const currentYear = new Date().getFullYear();
@@ -9,7 +10,7 @@ export function Footer() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 					{/* Brand Section */}
-					<div className="space-y-4">
+					<Stack gap="sm">
 						<div className="flex items-center gap-2">
 							<img
 								src="/logo-200x200.png"
@@ -24,10 +25,10 @@ export function Footer() {
 							AI-powered romance novels tailored to your preferences. Discover
 							your next favorite story.
 						</p>
-					</div>
+					</Stack>
 
 					{/* Quick Links */}
-					<div className="space-y-4">
+					<Stack gap="sm">
 						<h3 className="text-white font-semibold">Quick Links</h3>
 						<ul className="space-y-2 text-sm">
 							<li>
@@ -63,17 +64,17 @@ export function Footer() {
 								</Link>
 							</li>
 						</ul>
-					</div>
+					</Stack>
 
 					{/* About */}
-					<div className="space-y-4">
+					<Stack gap="sm">
 						<h3 className="text-white font-semibold">About</h3>
 						<p className="text-sm">
 							Choose the Heat uses advanced AI to generate personalized romance
 							novels. Each story is unique and crafted to match your reading
 							preferences.
 						</p>
-					</div>
+					</Stack>
 				</div>
 				{/* Bottom Bar */}
 				<div className="border-t border-slate-800 mt-8 pt-6 text-sm text-center md:text-left">

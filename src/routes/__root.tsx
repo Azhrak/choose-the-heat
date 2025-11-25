@@ -13,6 +13,7 @@ import { CookieConsentBanner } from "~/components/CookieConsentBanner";
 import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { ThemeProvider } from "~/components/ThemeProvider";
+import { Stack } from "~/components/ui/Stack";
 
 import { getThemeServerFn } from "~/lib/theme";
 import globalStyles from "~/styles/globals.css?url";
@@ -96,7 +97,7 @@ function NotFoundComponent() {
 				<PageBackground className="flex items-center justify-center p-4">
 					<div className="text-center space-y-6">
 						<Heart className="w-24 h-24 text-romance-400 mx-auto" />
-						<div className="space-y-4">
+						<Stack gap="sm">
 							<Heading level="h1" size="page">
 								Page Not Found
 							</Heading>
@@ -109,7 +110,7 @@ function NotFoundComponent() {
 							>
 								Go Home
 							</Link>
-						</div>
+						</Stack>
 					</div>
 				</PageBackground>
 				<Scripts />

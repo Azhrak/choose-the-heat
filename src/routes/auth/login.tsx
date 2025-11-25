@@ -8,6 +8,7 @@ import { FormInput } from "~/components/FormInput";
 import { GoogleAuthButton } from "~/components/GoogleAuthButton";
 import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
+import { Stack } from "~/components/ui/Stack";
 import { useCookieConsent } from "~/hooks/useCookieConsent";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { ApiError, api } from "~/lib/api/client";
@@ -101,7 +102,7 @@ function LoginPage() {
 					</div>
 				</div>
 
-				<div className="space-y-4">
+				<Stack gap="sm">
 					{/* Already Logged In Notice */}
 					{currentUser && (
 						<AlreadyLoggedInNotice
@@ -141,7 +142,7 @@ function LoginPage() {
 							Sign In
 						</Button>
 					</form>
-				</div>
+				</Stack>
 
 				{/* Sign Up Link */}
 				<p className="text-center text-sm text-slate-600 dark:text-gray-300">

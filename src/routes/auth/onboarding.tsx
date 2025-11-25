@@ -11,6 +11,10 @@ import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { RadioButton } from "~/components/RadioButton";
+import { Alert } from "~/components/ui/Alert";
+import { Card } from "~/components/ui/Card";
+import { Container } from "~/components/ui/Container";
+import { Stack } from "~/components/ui/Stack";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 import { ApiError, api } from "~/lib/api/client";
 import {
@@ -121,275 +125,267 @@ function OnboardingPage() {
 
 	return (
 		<PageBackground>
-			<div className="container mx-auto px-4 py-12">
-				<div className="max-w-3xl mx-auto">
-					<div className="space-y-8">
-						{/* Header */}
-						<div className="text-center space-y-4">
-							<Heart
-								className="w-16 h-16 text-romance-500 mx-auto"
-								fill="currentColor"
-							/>
-							<div className="space-y-2">
-								<Heading level="h1" size="page">
-									Let's Personalize Your Experience
-								</Heading>
-								<p className="text-slate-600">
-									Tell us what you love, and we'll craft stories just for you
-								</p>
-							</div>
-						</div>{" "}
-						{/* Progress Stepper */}
-						<div className="flex items-center justify-center">
-							{[1, 2, 3].map((s) => (
-								<div key={s} className="flex items-center">
-									<div
-										className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-											s === step
-												? "bg-romance-600 text-white"
-												: s < step
-													? "bg-romance-400 text-white"
-													: "bg-slate-200 text-slate-500"
-										}`}
-									>
-										{s}
-									</div>
-									{s < 3 && (
-										<div
-											className={`w-16 h-1 mx-2 transition-colors ${
-												s < step ? "bg-romance-400" : "bg-slate-200"
-											}`}
-										/>
-									)}
+			<Container size="lg" className="py-12">
+				<Stack gap="lg">
+					{/* Header */}
+					<Stack gap="md" className="text-center">
+						<Heart
+							className="w-16 h-16 text-romance-500 mx-auto"
+							fill="currentColor"
+						/>
+						<Stack gap="xs">
+							<Heading level="h1" size="page">
+								Let's Personalize Your Experience
+							</Heading>
+							<p className="text-slate-600">
+								Tell us what you love, and we'll craft stories just for you
+							</p>
+						</Stack>
+					</Stack>
+					{/* Progress Stepper */}
+					<div className="flex items-center justify-center">
+						{[1, 2, 3].map((s) => (
+							<div key={s} className="flex items-center">
+								<div
+									className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+										s === step
+											? "bg-romance-600 text-white"
+											: s < step
+												? "bg-romance-400 text-white"
+												: "bg-slate-200 text-slate-500"
+									}`}
+								>
+									{s}
 								</div>
-							))}
-						</div>
-						{/* Error Message */}
-						{error && (
-							<div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-								{error}
+								{s < 3 && (
+									<div
+										className={`w-16 h-1 mx-2 transition-colors ${
+											s < step ? "bg-romance-400" : "bg-slate-200"
+										}`}
+									/>
+								)}
 							</div>
+						))}
+					</div>
+					{/* Error Message */}
+					{error && <Alert variant="error">{error}</Alert>}
+					{/* Step Content */}
+					<Card className="shadow-lg">
+						{step === 1 && (
+							<Stack gap="md">
+								<div className="flex items-center">
+									<BookOpen className="w-6 h-6 text-romance-500 mr-2" />
+									<Heading level="h2" size="section">
+										Choose Your Genres
+									</Heading>
+								</div>
+								<p className="text-slate-600">Select all that interest you</p>
+								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+									{GENRES.map((genre) => (
+										<button
+											key={genre}
+											type="button"
+											onClick={() => handleGenreToggle(genre)}
+											className={`p-4 rounded-lg border-2 transition-all ${
+												preferences.genres.includes(genre)
+													? "border-romance-500 bg-romance-50 text-romance-700"
+													: "border-slate-200 hover:border-romance-300 text-slate-700"
+											}`}
+										>
+											<div className="font-semibold">{GENRE_LABELS[genre]}</div>
+										</button>
+									))}
+								</div>
+							</Stack>
 						)}
-						{/* Step Content */}
-						<div className="bg-white rounded-2xl shadow-lg p-8">
-							{step === 1 && (
-								<div className="space-y-6">
-									<div className="flex items-center">
-										<BookOpen className="w-6 h-6 text-romance-500 mr-2" />
-										<Heading level="h2" size="section">
-											Choose Your Genres
-										</Heading>
+
+						{step === 2 && (
+							<Stack gap="md">
+								<div className="flex items-center">
+									<Heart className="w-6 h-6 text-romance-500 mr-2" />
+									<Heading level="h2" size="section">
+										Pick Your Tropes
+									</Heading>
+								</div>
+								<p className="text-slate-600">
+									What romance tropes make your heart race?
+								</p>
+								{tropesLoading ? (
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										{[1, 2, 3, 4].map((i) => (
+											<div
+												key={i}
+												className="h-16 bg-slate-100 rounded-lg animate-pulse"
+											/>
+										))}
 									</div>
-									<p className="text-slate-600">Select all that interest you</p>
-									<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-										{GENRES.map((genre) => (
+								) : (
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+										{tropesData?.tropes.map((trope) => (
 											<button
-												key={genre}
 												type="button"
-												onClick={() => handleGenreToggle(genre)}
-												className={`p-4 rounded-lg border-2 transition-all ${
-													preferences.genres.includes(genre)
+												key={trope.key}
+												onClick={() => handleTropeToggle(trope.key)}
+												className={`p-4 rounded-lg border-2 transition-all text-left ${
+													preferences.tropes.includes(trope.key)
 														? "border-romance-500 bg-romance-50 text-romance-700"
 														: "border-slate-200 hover:border-romance-300 text-slate-700"
 												}`}
 											>
-												<div className="font-semibold">
-													{GENRE_LABELS[genre]}
-												</div>
+												<div className="font-semibold">{trope.label}</div>
+												{trope.description && (
+													<div className="text-sm text-slate-500 mt-1">
+														{trope.description}
+													</div>
+												)}
 											</button>
 										))}
 									</div>
-								</div>
-							)}
+								)}
+							</Stack>
+						)}
 
-							{step === 2 && (
-								<div className="space-y-6">
-									<div className="flex items-center">
-										<Heart className="w-6 h-6 text-romance-500 mr-2" />
-										<Heading level="h2" size="section">
-											Pick Your Tropes
-										</Heading>
-									</div>
-									<p className="text-slate-600">
-										What romance tropes make your heart race?
-									</p>
-									{tropesLoading ? (
-										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-											{[1, 2, 3, 4].map((i) => (
-												<div
-													key={i}
-													className="h-16 bg-slate-100 rounded-lg animate-pulse"
-												/>
-											))}
-										</div>
-									) : (
-										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-											{tropesData?.tropes.map((trope) => (
-												<button
-													type="button"
-													key={trope.key}
-													onClick={() => handleTropeToggle(trope.key)}
-													className={`p-4 rounded-lg border-2 transition-all text-left ${
-														preferences.tropes.includes(trope.key)
-															? "border-romance-500 bg-romance-50 text-romance-700"
-															: "border-slate-200 hover:border-romance-300 text-slate-700"
-													}`}
-												>
-													<div className="font-semibold">{trope.label}</div>
-													{trope.description && (
-														<div className="text-sm text-slate-500 mt-1">
-															{trope.description}
-														</div>
-													)}
-												</button>
-											))}
-										</div>
-									)}
-								</div>
-							)}
-
-							{step === 3 && (
-								<div className="space-y-8">
-									<div className="flex items-center">
-										<Flame className="w-6 h-6 text-romance-500 mr-2" />
-										<Heading level="h2" size="section">
-											Set Your Preferences
-										</Heading>
-									</div>{" "}
-									{/* Spice Level */}
-									<div className="space-y-4">
-										<Heading level="h3" size="subsection">
-											Spice Level
-										</Heading>
-										<div className="space-y-3">
-											{([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
-												<button
-													type="button"
-													key={level}
-													onClick={() => handleSpiceLevelChange(level)}
-													className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-														preferences.spiceLevel === level
-															? "border-romance-500 bg-romance-50"
-															: "border-slate-200 hover:border-romance-300"
-													}`}
-												>
-													<div className="flex items-center justify-between">
-														<div>
-															<div className="flex items-center gap-2">
-																<span className="font-semibold text-slate-900">
-																	{SPICE_LABELS[level].label}
-																</span>
-																<div className="flex gap-1">
-																	{Array.from({ length: level }).map(() => (
-																		<Flame
-																			key={level}
-																			className="w-4 h-4 text-romance-500"
-																			fill="currentColor"
-																		/>
-																	))}
-																</div>
+						{step === 3 && (
+							<Stack gap="lg">
+								<div className="flex items-center">
+									<Flame className="w-6 h-6 text-romance-500 mr-2" />
+									<Heading level="h2" size="section">
+										Set Your Preferences
+									</Heading>
+								</div>{" "}
+								{/* Spice Level */}
+								<Stack gap="md">
+									<Heading level="h3" size="subsection">
+										Spice Level
+									</Heading>
+									<Stack gap="sm">
+										{([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
+											<button
+												type="button"
+												key={level}
+												onClick={() => handleSpiceLevelChange(level)}
+												className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+													preferences.spiceLevel === level
+														? "border-romance-500 bg-romance-50"
+														: "border-slate-200 hover:border-romance-300"
+												}`}
+											>
+												<div className="flex items-center justify-between">
+													<div>
+														<div className="flex items-center gap-2">
+															<span className="font-semibold text-slate-900">
+																{SPICE_LABELS[level].label}
+															</span>
+															<div className="flex gap-1">
+																{Array.from({ length: level }).map(() => (
+																	<Flame
+																		key={level}
+																		className="w-4 h-4 text-romance-500"
+																		fill="currentColor"
+																	/>
+																))}
 															</div>
-															<p className="text-sm text-slate-600">
-																{SPICE_LABELS[level].description}
-															</p>
 														</div>
-														<div
-															className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-																preferences.spiceLevel === level
-																	? "border-romance-500 bg-romance-500"
-																	: "border-slate-300"
-															}`}
-														>
-															{preferences.spiceLevel === level && (
-																<div className="w-2 h-2 bg-white rounded-full" />
-															)}
-														</div>
+														<p className="text-sm text-slate-600">
+															{SPICE_LABELS[level].description}
+														</p>
 													</div>
-												</button>
-											))}
-										</div>
-									</div>
-									{/* Pacing */}
-									<div className="space-y-4">
-										<Heading level="h3" size="subsection">
-											Relationship Pacing
-										</Heading>
-										<div className="space-y-3">
-											{PACING_OPTIONS.map((pacing) => (
-												<RadioButton
-													key={pacing}
-													selected={preferences.pacing === pacing}
-													onClick={() => handlePacingChange(pacing)}
-												>
-													<div className="font-semibold text-slate-900">
-														{PACING_LABELS[pacing].label}
+													<div
+														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+															preferences.spiceLevel === level
+																? "border-romance-500 bg-romance-500"
+																: "border-slate-300"
+														}`}
+													>
+														{preferences.spiceLevel === level && (
+															<div className="w-2 h-2 bg-white rounded-full" />
+														)}
 													</div>
-													<p className="text-sm text-slate-600">
-														{PACING_LABELS[pacing].description}
-													</p>
-												</RadioButton>
-											))}
-										</div>
-									</div>
-									{/* Scene Length */}
-									<div className="space-y-4">
-										<Heading level="h3" size="subsection">
-											Scene Length
-										</Heading>
-										<div className="space-y-3">
-											{SCENE_LENGTH_OPTIONS.map((length) => (
-												<RadioButton
-													key={length}
-													selected={preferences.sceneLength === length}
-													onClick={() => handleSceneLengthChange(length)}
-												>
-													<div className="font-semibold text-slate-900">
-														{SCENE_LENGTH_LABELS[length].label}
-													</div>
-													<p className="text-sm text-slate-600">
-														{SCENE_LENGTH_LABELS[length].description}
-													</p>
-													<p className="text-xs text-slate-500 mt-1">
-														{SCENE_LENGTH_LABELS[length].wordCount}
-													</p>
-												</RadioButton>
-											))}
-										</div>
-									</div>
-								</div>
-							)}
-						</div>
-						{/* Navigation Buttons */}
-						<div className="flex justify-between">
-							<Button
-								onClick={handleBack}
-								disabled={step === 1}
-								variant="secondary"
-								className={step === 1 ? "invisible" : ""}
-							>
-								<ChevronLeft className="w-5 h-5" />
-								Back
-							</Button>
+												</div>
+											</button>
+										))}
+									</Stack>
+								</Stack>
+								{/* Pacing */}
+								<Stack gap="md">
+									<Heading level="h3" size="subsection">
+										Relationship Pacing
+									</Heading>
+									<Stack gap="sm">
+										{PACING_OPTIONS.map((pacing) => (
+											<RadioButton
+												key={pacing}
+												selected={preferences.pacing === pacing}
+												onClick={() => handlePacingChange(pacing)}
+											>
+												<div className="font-semibold text-slate-900">
+													{PACING_LABELS[pacing].label}
+												</div>
+												<p className="text-sm text-slate-600">
+													{PACING_LABELS[pacing].description}
+												</p>
+											</RadioButton>
+										))}
+									</Stack>
+								</Stack>
+								{/* Scene Length */}
+								<Stack gap="md">
+									<Heading level="h3" size="subsection">
+										Scene Length
+									</Heading>
+									<Stack gap="sm">
+										{SCENE_LENGTH_OPTIONS.map((length) => (
+											<RadioButton
+												key={length}
+												selected={preferences.sceneLength === length}
+												onClick={() => handleSceneLengthChange(length)}
+											>
+												<div className="font-semibold text-slate-900">
+													{SCENE_LENGTH_LABELS[length].label}
+												</div>
+												<p className="text-sm text-slate-600">
+													{SCENE_LENGTH_LABELS[length].description}
+												</p>
+												<p className="text-xs text-slate-500 mt-1">
+													{SCENE_LENGTH_LABELS[length].wordCount}
+												</p>
+											</RadioButton>
+										))}
+									</Stack>
+								</Stack>
+							</Stack>
+						)}
+					</Card>
+					{/* Navigation Buttons */}
+					<div className="flex justify-between">
+						<Button
+							onClick={handleBack}
+							disabled={step === 1}
+							variant="secondary"
+							className={step === 1 ? "invisible" : ""}
+						>
+							<ChevronLeft className="w-5 h-5" />
+							Back
+						</Button>
 
-							{step < 3 ? (
-								<Button onClick={handleNext} variant="primary">
-									Next
-									<ChevronRight className="w-5 h-5" />
-								</Button>
-							) : (
-								<Button
-									onClick={handleSubmit}
-									loading={isSubmitting}
-									variant="primary"
-								>
-									Complete Setup
-									<ChevronRight className="w-5 h-5" />
-								</Button>
-							)}
-						</div>
+						{step < 3 ? (
+							<Button onClick={handleNext} variant="primary">
+								Next
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						) : (
+							<Button
+								onClick={handleSubmit}
+								loading={isSubmitting}
+								variant="primary"
+							>
+								Complete Setup
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						)}
 					</div>
-				</div>
-			</div>
+				</Stack>
+			</Container>
 		</PageBackground>
 	);
 }

@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "~/components/Button";
 import { FormTextarea } from "~/components/FormTextarea";
+import { Stack } from "~/components/ui/Stack";
 import { type ChoiceOption, ChoicePointOption } from "./ChoicePointOption";
 
 export interface ChoicePoint {
@@ -99,7 +100,7 @@ export function ChoicePointItem({
 
 	return (
 		<div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg p-6">
-			<div className="space-y-4">
+			<Stack gap="sm">
 				{/* Choice Point Header */}
 				<div className="flex items-center justify-between">
 					<h4 className="text-md font-semibold text-slate-900 dark:text-gray-100">
@@ -165,7 +166,7 @@ export function ChoicePointItem({
 				/>
 
 				{/* Options */}
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<div className="flex items-center justify-between">
 						<p className="block text-sm font-medium text-slate-900 dark:text-gray-100">
 							Options (2-4 required)
@@ -193,8 +194,8 @@ export function ChoicePointItem({
 							onRemove={() => removeOption(optIndex)}
 						/>
 					))}
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</div>
 	);
 }

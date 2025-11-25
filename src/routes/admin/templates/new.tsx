@@ -9,6 +9,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useCreateTemplateMutation } from "~/hooks/useCreateTemplateMutation";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { GRADIENT_OPTIONS } from "~/lib/constants/gradients";
@@ -102,7 +103,7 @@ function NewTemplatePage() {
 	return (
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div className="space-y-6">
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<Button
 						variant="ghost"
 						onClick={() => navigate({ to: "/admin/templates" })}
@@ -116,7 +117,7 @@ function NewTemplatePage() {
 							Create a new novel template. It will be saved as a draft.
 						</p>
 					</div>
-				</div>
+				</Stack>
 
 				<div className="max-w-3xl">
 					<form onSubmit={handleSubmit} className="space-y-6">

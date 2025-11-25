@@ -11,6 +11,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryCard } from "~/components/StoryCard";
+import { Stack } from "~/components/ui/Stack";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
@@ -101,7 +102,7 @@ function LibraryPage() {
 					</Heading>
 
 					{/* Tabs and Favorites Filter */}
-					<div className="space-y-4">
+					<Stack gap="sm">
 						{/* Status Tabs */}
 						<Tabs
 							defaultValue="in-progress"
@@ -148,7 +149,7 @@ function LibraryPage() {
 								</span>
 							}
 						/>
-					</div>
+					</Stack>
 					{/* Loading State */}
 					{isLoading && <LoadingSpinner />}
 					{/* Error State */}

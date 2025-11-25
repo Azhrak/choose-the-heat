@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { X } from "lucide-react";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
+import { Stack } from "~/components/ui/Stack";
 
 interface BulkAction {
 	label: string;
@@ -51,7 +52,7 @@ export function BulkActionsToolbar({
 	);
 
 	return (
-		<div className="space-y-4">
+		<Stack gap="sm">
 			<div
 				className={`${accentColorClasses[accentColor]} border rounded-lg p-4 flex items-center justify-between`}
 			>
@@ -83,6 +84,6 @@ export function BulkActionsToolbar({
 			</div>
 
 			{error && <ErrorMessage message={error} />}
-		</div>
+		</Stack>
 	);
 }

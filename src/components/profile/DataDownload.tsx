@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "~/components/Button";
 import { Alert } from "~/components/ui/Alert";
 import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 import { useDownloadUserData } from "~/hooks/useDownloadUserData";
 
 export function DataDownload() {
@@ -31,7 +32,7 @@ export function DataDownload() {
 					</h2>
 				</div>
 
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<p className="text-slate-700 dark:text-gray-300">
 						Download all your personal data in JSON format. This includes your
 						profile information, story metadata, templates used, and choices
@@ -66,7 +67,7 @@ export function DataDownload() {
 						<Download className="w-4 h-4 mr-2" />
 						Download My Data
 					</Button>
-				</div>
+				</Stack>
 			</div>
 		</Card>
 	);

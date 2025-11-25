@@ -16,6 +16,7 @@ import { FormInput } from "~/components/FormInput";
 import { FormTextarea } from "~/components/FormTextarea";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
@@ -191,7 +192,7 @@ function EditTemplatePage() {
 	return (
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
 			<div className="space-y-6">
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<Button
 						variant="ghost"
 						onClick={() => navigate({ to: "/admin/templates" })}
@@ -208,7 +209,7 @@ function EditTemplatePage() {
 						</div>
 						<StatusBadge status={template.status} />
 					</div>
-				</div>
+				</Stack>
 
 				<div className="max-w-3xl">
 					<form onSubmit={handleSubmit} className="space-y-6">

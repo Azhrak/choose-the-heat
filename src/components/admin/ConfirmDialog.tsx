@@ -1,5 +1,6 @@
 import { AlertTriangle, X } from "lucide-react";
 import type { ReactNode } from "react";
+import { Stack } from "~/components/ui/Stack";
 import { Button } from "../Button";
 
 interface ConfirmDialogProps {
@@ -48,7 +49,7 @@ export function ConfirmDialog({
 					>
 						<X className="w-5 h-5" />
 					</Button>
-					<div className="space-y-4">
+					<Stack gap="sm">
 						{/* Icon */}
 						<div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30">
 							<AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
@@ -81,7 +82,7 @@ export function ConfirmDialog({
 								{confirmText}
 							</Button>
 						</div>
-					</div>
+					</Stack>
 				</div>
 			</div>
 		</div>

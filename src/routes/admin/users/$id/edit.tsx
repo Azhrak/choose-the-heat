@@ -12,6 +12,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useAdminUserQuery } from "~/hooks/useAdminUserQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteUserMutation } from "~/hooks/useDeleteUserMutation";
@@ -165,7 +166,7 @@ function EditUserPage() {
 	return (
 		<AdminLayout currentPath="/admin/users" userRole={currentUser.role}>
 			<div className="space-y-6">
-				<div className="space-y-4">
+				<Stack gap="sm">
 					<Button
 						variant="ghost"
 						onClick={() => navigate({ to: "/admin/users" })}
@@ -182,7 +183,7 @@ function EditUserPage() {
 						</div>
 						<RoleBadge role={user.role} />
 					</div>
-				</div>
+				</Stack>
 
 				<div className="max-w-3xl">
 					<form onSubmit={handleSubmit} className="space-y-6">

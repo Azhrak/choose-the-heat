@@ -8,6 +8,8 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { ControlledAccordion } from "~/components/ui/Accordion";
+import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplateQuery } from "~/hooks/useTemplateQuery";
 import { useTropeMap } from "~/hooks/useTropesQuery";
@@ -34,7 +36,7 @@ function TemplateDetailPage() {
 			<Header currentPath="" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="xl">
-				<div className="space-y-8">
+				<Stack gap="lg">
 					{/* Back Button */}
 					<Button variant="ghost" onClick={() => navigate({ to: "/browse" })}>
 						<ArrowLeft className="w-5 h-5" />
@@ -63,7 +65,7 @@ function TemplateDetailPage() {
 					{!isLoading && !error && template && (
 						<>
 							{/* Hero Section */}
-							<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+							<Card className="overflow-hidden">
 								{template.cover_url ? (
 									<div className="h-80 sm:h-160 relative overflow-hidden">
 										<img
@@ -83,15 +85,15 @@ function TemplateDetailPage() {
 									</div>
 								)}
 
-								<div className="p-8 space-y-4">
+								<Stack gap="md" className="p-8">
 									<Heading level="h1" size="page">
 										{template.title}
 									</Heading>
 									<p className="text-lg text-slate-700 dark:text-gray-300 leading-relaxed">
 										{template.description}
-									</p>{" "}
+									</p>
 									{/* Tropes */}
-									<div className="space-y-3">
+									<Stack gap="sm">
 										<Heading
 											level="h3"
 											size="label"
@@ -109,7 +111,7 @@ function TemplateDetailPage() {
 												</span>
 											))}
 										</div>
-									</div>
+									</Stack>
 									{/* Stats */}
 									<div className="flex items-center gap-6 text-slate-600 dark:text-gray-400">
 										<div className="flex items-center gap-2">
@@ -134,12 +136,12 @@ function TemplateDetailPage() {
 										<Heart className="w-5 h-5" fill="currentColor" />
 										Start Your Story
 									</Link>
-								</div>
-							</div>
+								</Stack>
+							</Card>
 
 							{/* Choice Points Preview */}
-							<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-8 space-y-6">
-								<div className="space-y-2">
+							<Card className="p-4 sm:p-8">
+								<Stack gap="xs">
 									<Heading level="h2" size="section">
 										Key Decision Points
 									</Heading>
@@ -147,8 +149,7 @@ function TemplateDetailPage() {
 										Throughout your story, you'll make choices that shape the
 										narrative. Here's a preview of some key moments:
 									</p>
-								</div>
-
+								</Stack>
 								<ControlledAccordion
 									items={template.choicePoints
 										.filter(
@@ -170,11 +171,11 @@ function TemplateDetailPage() {
 												</div>
 											),
 											content: (
-												<div className="space-y-4">
+												<Stack gap="sm">
 													<Heading level="h3" size="subsection">
 														{choice.prompt_text}
 													</Heading>
-													<div className="space-y-2">
+													<Stack gap="xs">
 														{choice.options.map((option) => (
 															<div
 																key={option.id}
@@ -191,16 +192,15 @@ function TemplateDetailPage() {
 																</span>
 															</div>
 														))}
-													</div>
-												</div>
+													</Stack>
+												</Stack>
 											),
 										}))}
 									allowMultiple={true}
 									showToggleAll={true}
 								/>
-
 								{/* Bottom CTA */}
-								<div className="mt-8 text-center">
+								<Stack gap="sm" className="mt-8 text-center">
 									<Link
 										to="/story/create"
 										search={{ templateId: template.id }}
@@ -209,14 +209,14 @@ function TemplateDetailPage() {
 										<Heart className="w-5 h-5" fill="currentColor" />
 										Start Your Story
 									</Link>
-									<p className="text-slate-500 dark:text-gray-400 text-sm mt-3">
+									<p className="text-slate-500 dark:text-gray-400 text-sm">
 										Your choices will create a unique story experience
 									</p>
-								</div>
-							</div>
+								</Stack>
+							</Card>
 						</>
 					)}
-				</div>
+				</Stack>
 			</PageContainer>
 		</PageBackground>
 	);

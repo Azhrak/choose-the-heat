@@ -15,6 +15,7 @@ import { BranchConfirmationDialog } from "~/components/BranchConfirmationDialog"
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { SceneNavigation } from "~/components/SceneNavigation";
+import { Stack } from "~/components/ui/Stack";
 import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
 import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
@@ -373,7 +374,7 @@ function ReadingPage() {
 				{/* Choice Point - only show when streaming is complete */}
 				{streamingState.isComplete && choicePoint && !isLastScene && (
 					<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8 space-y-6">
-						<div className="space-y-4">
+						<Stack gap="sm">
 							<div className="flex items-center gap-2">
 								<Flame className="w-5 h-5 text-rose-500" />
 								<Heading
@@ -387,7 +388,7 @@ function ReadingPage() {
 							<p className="text-gray-600 dark:text-gray-300">
 								{choicePoint.promptText}
 							</p>
-						</div>
+						</Stack>
 
 						{hasAlreadyMadeChoice ? (
 							// Display previous choice in read-only mode

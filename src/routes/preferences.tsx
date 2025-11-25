@@ -14,6 +14,7 @@ import {
 	TropesSection,
 } from "~/components/preferences";
 import { Alert } from "~/components/ui/Alert";
+import { Stack } from "~/components/ui/Stack";
 import { useUpdatePreferencesMutation } from "~/hooks/useUpdatePreferencesMutation";
 import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
 import { ApiError } from "~/lib/api/client";
@@ -148,7 +149,7 @@ function PreferencesPage() {
 				<div className="max-w-4xl mx-auto">
 					{/* Header */}
 					<div className="space-y-8">
-						<div className="space-y-4">
+						<Stack gap="sm">
 							<Link
 								to="/profile"
 								className="inline-flex items-center text-slate-600 hover:text-romance-600 transition-colors"
@@ -165,7 +166,7 @@ function PreferencesPage() {
 									</p>
 								</div>
 							</div>
-						</div>
+						</Stack>
 						{/* Success Message */}
 						{success && (
 							<div className="flex items-center gap-3">
