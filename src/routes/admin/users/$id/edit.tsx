@@ -268,7 +268,7 @@ function EditUserPage() {
 						/>
 
 						{/* Role */}
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<label
 								htmlFor="role"
 								className="block text-sm font-medium text-slate-900"
@@ -298,7 +298,7 @@ function EditUserPage() {
 							<p className="text-sm text-slate-600">
 								Roles determine what actions a user can perform
 							</p>
-						</div>
+						</Stack>
 
 						{/* Save Button */}
 						<div className="pt-4 border-t border-slate-200">

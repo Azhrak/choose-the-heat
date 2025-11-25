@@ -54,7 +54,7 @@ export function ConfirmDialog({
 						<div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30">
 							<AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
 						</div>
-						<div className="space-y-2">
+						<Stack gap="xs">
 							{/* Content */}
 							<h3 className="text-lg font-semibold text-slate-900 dark:text-gray-100">
 								{title}
@@ -62,7 +62,7 @@ export function ConfirmDialog({
 							<div className="text-sm text-slate-600 dark:text-gray-300">
 								{message}
 							</div>
-						</div>
+						</Stack>
 						{/* Actions */}
 						<div className="flex gap-3 justify-end">
 							<Button

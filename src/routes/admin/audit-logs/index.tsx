@@ -143,7 +143,7 @@ function AuditLogsPage() {
 				{/* Filters */}
 				<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4">
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<label
 								htmlFor="search"
 								className="block text-sm font-medium text-slate-900 dark:text-gray-100"
@@ -161,8 +161,8 @@ function AuditLogsPage() {
 								}
 								placeholder="Action, user, or entity ID..."
 							/>
-						</div>
-						<div className="space-y-2">
+						</Stack>
+						<Stack gap="xs">
 							<label
 								htmlFor="entityType"
 								className="block text-sm font-medium text-slate-900 dark:text-gray-100"
@@ -184,7 +184,7 @@ function AuditLogsPage() {
 								<option value="template">Templates</option>
 								<option value="user">Users</option>
 							</select>
-						</div>
+						</Stack>
 						<div className="flex items-end">
 							<button
 								type="button"

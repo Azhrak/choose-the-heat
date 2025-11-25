@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Checkbox } from "~/components/Checkbox";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Alert } from "~/components/ui/Alert";
+import { Stack } from "~/components/ui/Stack";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 
 interface TropeSelectorProps {
@@ -36,25 +37,25 @@ export function TropeSelector({
 
 	if (isLoading) {
 		return (
-			<div className="space-y-2">
+			<Stack gap="xs">
 				<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
 					{label} {required && <span className="text-red-500">*</span>}
 				</div>
 				<div className="flex items-center justify-center p-8 border border-slate-300 dark:border-gray-600 rounded-lg">
 					<LoadingSpinner />
 				</div>
-			</div>
+			</Stack>
 		);
 	}
 
 	if (error || !tropesData) {
 		return (
-			<div className="space-y-2">
+			<Stack gap="xs">
 				<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
 					{label} {required && <span className="text-red-500">*</span>}
 				</div>
 				<Alert message="Failed to load tropes" variant="error" />
-			</div>
+			</Stack>
 		);
 	}
 
@@ -72,7 +73,7 @@ export function TropeSelector({
 	});
 
 	return (
-		<div className="space-y-2">
+		<Stack gap="xs">
 			<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
 				{label} {required && <span className="text-red-500">*</span>}
 			</div>
@@ -169,6 +170,6 @@ export function TropeSelector({
 					})}
 				</div>
 			)}
-		</div>
+		</Stack>
 	);
 }

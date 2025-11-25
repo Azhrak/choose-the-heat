@@ -94,12 +94,12 @@ function LoginPage() {
 							className="w-12 h-12"
 						/>
 					</div>
-					<div className="space-y-2">
+					<Stack gap="xs">
 						<Heading level="h1">Welcome Back</Heading>
 						<p className="text-slate-600 dark:text-gray-300">
 							Sign in to continue your story
 						</p>
-					</div>
+					</Stack>
 				</div>
 
 				<Stack gap="sm">

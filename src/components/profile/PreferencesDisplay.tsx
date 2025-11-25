@@ -55,7 +55,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 				</div>
 
 				<Stack gap="sm">
-					<div className="space-y-2">
+					<Stack gap="xs">
 						<h3 className="font-semibold text-slate-700 dark:text-gray-300">
 							Favorite Genres
 						</h3>
@@ -78,9 +78,9 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 								<span className="text-slate-500">None set</span>
 							)}
 						</div>
-					</div>
+					</Stack>
 
-					<div className="space-y-2">
+					<Stack gap="xs">
 						<h3 className="font-semibold text-slate-700 dark:text-gray-300">
 							Favorite Tropes
 						</h3>
@@ -106,7 +106,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 								</span>
 							)}
 						</div>
-					</div>
+					</Stack>
 
 					<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 						<div className="space-y-1">

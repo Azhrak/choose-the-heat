@@ -198,7 +198,7 @@ function StoryInfoPage() {
 
 						{/* Title & Metadata */}
 						<div className="p-8 space-y-4">
-							<div className="space-y-2">
+							<Stack gap="xs">
 								{!isEditingTitle ? (
 									<div className="flex items-start gap-3">
 										<div className="flex-1">
@@ -217,7 +217,7 @@ function StoryInfoPage() {
 										</Button>
 									</div>
 								) : (
-									<div className="space-y-2">
+									<Stack gap="xs">
 										<FormInput
 											label="Story Title"
 											type="text"
@@ -249,12 +249,12 @@ function StoryInfoPage() {
 												Cancel
 											</Button>
 										</div>
-									</div>
+									</Stack>
 								)}
 								<p className="text-slate-600 dark:text-gray-300">
 									{story.template.description}
 								</p>
-							</div>
+							</Stack>
 
 							<div className="flex items-center gap-6 text-sm text-slate-500 dark:text-gray-400">
 								<div className="flex items-center gap-2">
@@ -275,7 +275,7 @@ function StoryInfoPage() {
 							</div>
 
 							{/* Progress */}
-							<div className="space-y-2">
+							<Stack gap="xs">
 								<div className="flex justify-between items-center">
 									<span className="text-sm font-medium text-slate-700 dark:text-gray-300">
 										Reading Progress
@@ -289,7 +289,7 @@ function StoryInfoPage() {
 									currentScene={story.current_scene}
 									totalScenes={story.template.estimated_scenes}
 								/>
-							</div>
+							</Stack>
 
 							{/* Action Button */}
 							<div className="flex gap-3 justify-between">
@@ -325,7 +325,7 @@ function StoryInfoPage() {
 							<Stack gap="md">
 								{/* Spice Level */}
 								{spiceInfo && (
-									<div className="space-y-2">
+									<Stack gap="xs">
 										<div className="flex items-center gap-2">
 											<Flame className="w-5 h-5 text-romance-600" />
 											<Heading level="h3" size="subsection">
@@ -345,12 +345,12 @@ function StoryInfoPage() {
 												{spiceInfo.description}
 											</p>
 										</div>
-									</div>
+									</Stack>
 								)}
 
 								{/* Pacing */}
 								{pacingInfo && (
-									<div className="space-y-2">
+									<Stack gap="xs">
 										<div className="flex items-center gap-2">
 											<Timer className="w-5 h-5 text-romance-600" />
 											<Heading level="h3" size="subsection">
@@ -365,11 +365,11 @@ function StoryInfoPage() {
 												{pacingInfo.description}
 											</p>
 										</div>
-									</div>
+									</Stack>
 								)}
 
 								{/* Scene Length */}
-								<div className="space-y-2">
+								<Stack gap="xs">
 									<div className="flex items-center gap-2">
 										<FileText className="w-5 h-5 text-romance-600" />
 										<Heading level="h3" size="subsection">
@@ -385,11 +385,11 @@ function StoryInfoPage() {
 											)
 										</p>
 									</div>
-								</div>
+								</Stack>
 
 								{/* Genres */}
 								{preferences.genres && preferences.genres.length > 0 && (
-									<div className="space-y-2">
+									<Stack gap="xs">
 										<div className="flex items-center gap-2">
 											<BookOpen className="w-5 h-5 text-romance-600" />
 											<Heading level="h3" size="subsection">
@@ -408,12 +408,12 @@ function StoryInfoPage() {
 												))}
 											</div>
 										</div>
-									</div>
+									</Stack>
 								)}
 
 								{/* Tropes */}
 								{preferences.tropes && preferences.tropes.length > 0 && (
-									<div className="space-y-2">
+									<Stack gap="xs">
 										<div className="flex items-center gap-2">
 											<Heart className="w-5 h-5 text-romance-600" />
 											<Heading level="h3" size="subsection">
@@ -432,7 +432,7 @@ function StoryInfoPage() {
 												))}
 											</div>
 										</div>
-									</div>
+									</Stack>
 								)}
 							</Stack>
 						</div>

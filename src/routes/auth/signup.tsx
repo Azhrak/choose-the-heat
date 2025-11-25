@@ -115,12 +115,12 @@ function SignupPage() {
 								className="w-12 h-12"
 							/>
 						</div>
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<Heading level="h1">Create Account</Heading>
 							<p className="text-slate-600 dark:text-gray-300">
 								Start your personalized romance journey
 							</p>
-						</div>
+						</Stack>
 					</div>
 					<Stack gap="sm">
 						{/* Already Logged In Notice */}

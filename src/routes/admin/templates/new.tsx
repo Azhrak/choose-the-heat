@@ -141,7 +141,7 @@ function NewTemplatePage() {
 						/>
 
 						{/* Description */}
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<label
 								htmlFor="description"
 								className="block text-sm font-medium text-slate-900"
@@ -159,7 +159,7 @@ function NewTemplatePage() {
 								placeholder="Describe the template..."
 								required
 							/>
-						</div>
+						</Stack>
 
 						{/* Base Tropes */}
 						<TropeSelector
@@ -190,7 +190,7 @@ function NewTemplatePage() {
 						/>
 
 						{/* Cover Gradient */}
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<label
 								htmlFor="gradient"
 								className="block text-sm font-medium text-slate-900"
@@ -217,7 +217,7 @@ function NewTemplatePage() {
 									className={`h-24 rounded-lg bg-linear-to-br ${formData.cover_gradient}`}
 								/>
 							</div>
-						</div>
+						</Stack>
 
 						{/* Choice Points */}
 						<div className="pt-6 border-t border-slate-200">

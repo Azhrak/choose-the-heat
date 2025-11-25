@@ -40,10 +40,10 @@ export function NoPermissions({
 							/>
 						</svg>
 					</div>
-					<div className="space-y-2">
+					<Stack gap="xs">
 						<h1 className="text-2xl font-bold text-slate-900">{title}</h1>
 						<p className="text-slate-600">{message}</p>
-					</div>
+					</Stack>
 					<Button
 						type="button"
 						onClick={() => navigate({ to: backTo })}

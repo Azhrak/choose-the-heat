@@ -214,7 +214,7 @@ function ReadingPage() {
 			<div className="min-h-screen bg-linear-to-br from-rose-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 flex items-center justify-center">
 				<div className="max-w-md mx-auto text-center p-8 space-y-4">
 					<div className="text-red-500 text-6xl">⚠️</div>
-					<div className="space-y-2">
+					<Stack gap="xs">
 						<Heading
 							level="h1"
 							size="section"
@@ -223,7 +223,7 @@ function ReadingPage() {
 							Oops! Something went wrong
 						</Heading>
 						<p className="text-gray-600 dark:text-gray-300">{error}</p>
-					</div>
+					</Stack>
 					<Link
 						to="/library"
 						search={{ tab: "completed", favorites: false }}
@@ -523,7 +523,7 @@ function ReadingPage() {
 				{streamingState.isComplete && isLastScene && (
 					<div className="bg-linear-to-br from-purple-100 to-rose-100 dark:from-purple-900/30 dark:to-rose-900/30 rounded-xl shadow-lg p-8 text-center space-y-4">
 						<Sparkles className="w-16 h-16 text-rose-500 mx-auto" />
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<Heading
 								level="h2"
 								size="section"
@@ -534,7 +534,7 @@ function ReadingPage() {
 							<p className="text-gray-600 dark:text-gray-300">
 								You've completed this story! Thank you for reading.
 							</p>
-						</div>
+						</Stack>
 						<div className="flex flex-col sm:flex-row gap-3 justify-center">
 							<Button
 								type="button"

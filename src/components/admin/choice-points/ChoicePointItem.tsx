@@ -118,7 +118,7 @@ export function ChoicePointItem({
 				</div>
 
 				{/* Scene Number */}
-				<div className="space-y-2">
+				<Stack gap="xs">
 					<label
 						htmlFor={`scene-number-${choicePointIndex}`}
 						className="block text-sm font-medium text-slate-900 dark:text-gray-100"
@@ -152,7 +152,7 @@ export function ChoicePointItem({
 							))}
 						</select>
 					)}
-				</div>
+				</Stack>
 
 				{/* Prompt Text */}
 				<FormTextarea

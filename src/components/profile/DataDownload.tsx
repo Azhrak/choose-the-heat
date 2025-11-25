@@ -40,7 +40,7 @@ export function DataDownload() {
 					</p>
 
 					<div className="text-sm text-slate-600 dark:text-gray-400 bg-slate-50 dark:bg-gray-700/50 p-4 rounded-lg">
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<p className="font-semibold">What's included:</p>
 							<ul className="list-disc list-inside space-y-1">
 								<li>Profile information (name, email, preferences)</li>
@@ -48,7 +48,7 @@ export function DataDownload() {
 								<li>Templates you've used</li>
 								<li>Choices you've made in your stories</li>
 							</ul>
-						</div>
+						</Stack>
 						<p className="mt-3 font-semibold">What's NOT included:</p>
 						<ul className="list-disc list-inside space-y-1">
 							<li>Story scene content (the actual generated text)</li>

@@ -266,7 +266,7 @@ function EditTemplatePage() {
 							required
 						/>
 						{/* Cover Gradient */}
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<label
 								htmlFor="gradient"
 								className="block text-sm font-medium text-slate-900 dark:text-gray-100"
@@ -303,7 +303,7 @@ function EditTemplatePage() {
 									className={`h-24 rounded-lg bg-linear-to-br ${formData.cover_gradient}`}
 								/>
 							</div>
-						</div>{" "}
+						</Stack>
 						{/* Save Template Changes Button */}
 						<div className="pt-4 border-t border-slate-200 dark:border-gray-700">
 							<Button
@@ -319,7 +319,7 @@ function EditTemplatePage() {
 
 					{/* Choice Points Management */}
 					<div className="mt-8 pt-8 border-t border-slate-200 dark:border-gray-700 space-y-6">
-						<div className="space-y-2">
+						<Stack gap="xs">
 							<Heading level="h2" size="subsection">
 								Choice Points
 							</Heading>
@@ -327,7 +327,7 @@ function EditTemplatePage() {
 								Manage choice points that appear throughout the story. Changes
 								are saved separately from template details.
 							</p>
-						</div>
+						</Stack>
 
 						<ChoicePointForm
 							choicePoints={choicePoints}

@@ -1,3 +1,5 @@
+import { Stack } from "~/components/ui/Stack";
+
 interface StoryProgressBarProps {
 	currentScene: number;
 	totalScenes: number;
@@ -16,7 +18,7 @@ export function StoryProgressBar({
 	const width = Math.min((currentScene / totalScenes) * 100, 100);
 
 	return (
-		<div className="space-y-2">
+		<Stack gap="xs">
 			<div className="flex justify-between text-sm text-slate-600 dark:text-gray-300">
 				<span>
 					Scene {currentScene} of {totalScenes}
@@ -29,6 +31,6 @@ export function StoryProgressBar({
 					style={{ width: `${width}%` }}
 				></div>
 			</div>
-		</div>
+		</Stack>
 	);
 }
