@@ -321,7 +321,10 @@ function ReadingPage() {
 			</div>
 
 			{/* Main Content - key ensures this section re-renders when scene changes */}
-			<main key={scene.number} className="max-w-2xl mx-auto px-4 pb-8 space-y-6">
+			<main
+				key={scene.number}
+				className="max-w-2xl mx-auto px-4 pb-8 space-y-6"
+			>
 				{/* Scene Content */}
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8">
 					{/* Show streaming indicator while generating */}
