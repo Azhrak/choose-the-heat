@@ -1,4 +1,4 @@
-import { Edit2 } from "lucide-react";
+import { Edit2, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
@@ -12,42 +12,59 @@ interface Trope {
 	description: string | null;
 }
 
-interface EditTropeModalProps {
-	isOpen: boolean;
-	trope: Trope | null;
-	onClose: () => void;
-	onSubmit: (
-		tropeId: string,
-		data: { key: string; label: string; description?: string },
-	) => void;
-	isLoading: boolean;
-	error?: string;
-}
+type TropeModalProps =
+	| {
+			mode: "add";
+			isOpen: boolean;
+			onClose: () => void;
+			onSubmit: (data: {
+				key: string;
+				label: string;
+				description?: string;
+			}) => void;
+			isLoading: boolean;
+			error?: string;
+			trope?: never;
+	  }
+	| {
+			mode: "edit";
+			isOpen: boolean;
+			trope: Trope | null;
+			onClose: () => void;
+			onSubmit: (
+				tropeId: string,
+				data: { key: string; label: string; description?: string },
+			) => void;
+			isLoading: boolean;
+			error?: string;
+	  };
 
-export function EditTropeModal({
+export function TropeModal({
+	mode,
 	isOpen,
 	trope,
 	onClose,
 	onSubmit,
 	isLoading,
 	error,
-}: EditTropeModalProps) {
+}: TropeModalProps) {
 	const [key, setKey] = useState("");
 	const [label, setLabel] = useState("");
 	const [description, setDescription] = useState("");
 	const [validationError, setValidationError] = useState("");
 
-	// Populate form when trope changes
+	// Populate form when trope changes (edit mode)
 	useEffect(() => {
-		if (trope) {
+		if (mode === "edit" && trope) {
 			setKey(trope.key);
 			setLabel(trope.label);
 			setDescription(trope.description || "");
 			setValidationError("");
 		}
-	}, [trope]);
+	}, [mode, trope]);
 
-	if (!isOpen || !trope) return null;
+	// Don't render if not open, or if edit mode without trope
+	if (!isOpen || (mode === "edit" && !trope)) return null;
 
 	const handleClose = () => {
 		setKey("");
@@ -80,25 +97,57 @@ export function EditTropeModal({
 			return;
 		}
 
-		onSubmit(trope.id, {
+		const data = {
 			key: key.trim(),
 			label: label.trim(),
 			description: description.trim() || undefined,
-		});
+		};
+
+		if (mode === "edit" && trope) {
+			(
+				onSubmit as (
+					tropeId: string,
+					data: { key: string; label: string; description?: string },
+				) => void
+			)(trope.id, data);
+		} else {
+			(
+				onSubmit as (data: {
+					key: string;
+					label: string;
+					description?: string;
+				}) => void
+			)(data);
+		}
 	};
+
+	const config = {
+		add: {
+			icon: Plus,
+			title: "Add New Trope",
+			description: "Add a new trope that can be assigned to story templates.",
+			submitText: isLoading ? "Adding..." : "Add Trope",
+		},
+		edit: {
+			icon: Edit2,
+			title: "Edit Trope",
+			description: "Update the trope information below.",
+			submitText: isLoading ? "Updating..." : "Update Trope",
+		},
+	};
+
+	const { icon: Icon, title, description: desc, submitText } = config[mode];
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
 			<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full p-8">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					<div className="flex items-center gap-2 text-romance-600 dark:text-romance-400">
-						<Edit2 className="w-6 h-6" />
-						<h3 className="text-2xl font-bold">Edit Trope</h3>
+						<Icon className="w-6 h-6" />
+						<h3 className="text-2xl font-bold">{title}</h3>
 					</div>
 
-					<p className="text-slate-600 dark:text-gray-300">
-						Update the trope information below.
-					</p>
+					<p className="text-slate-600 dark:text-gray-300">{desc}</p>
 
 					<FormInput
 						label="Key *"
@@ -148,7 +197,7 @@ export function EditTropeModal({
 							variant="primary"
 							className="flex-1"
 						>
-							{isLoading ? "Updating..." : "Update Trope"}
+							{submitText}
 						</Button>
 					</div>
 				</form>

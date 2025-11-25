@@ -2,8 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
-import { AddTropeModal } from "~/components/admin/AddTropeModal";
-import { EditTropeModal } from "~/components/admin/EditTropeModal";
+import { TropeModal } from "~/components/admin/TropeModal";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
@@ -237,7 +236,8 @@ function TropesListPage() {
 				</div>
 
 				{/* Add Trope Modal */}
-				<AddTropeModal
+				<TropeModal
+					mode="add"
 					isOpen={showAddModal}
 					onClose={() => {
 						setShowAddModal(false);
@@ -249,7 +249,8 @@ function TropesListPage() {
 				/>
 
 				{/* Edit Trope Modal */}
-				<EditTropeModal
+				<TropeModal
+					mode="edit"
 					isOpen={!!editingTrope}
 					trope={editingTrope}
 					onClose={() => {

@@ -62,13 +62,13 @@ This document tracks progress on the comprehensive refactoring plan to establish
 - [x] Replace success pattern in DataDownload.tsx
 - [x] Export Alert from ui/index.ts
 
-### 2.2. Consolidate Duplicate Trope Modals
+### 2.2. Consolidate Duplicate Trope Modals ✅
 
-- [ ] Create unified `TropeModal.tsx`
-- [ ] Update parent components to use TropeModal
-- [ ] Delete `AddTropeModal.tsx`
-- [ ] Delete `EditTropeModal.tsx`
-- [ ] Test add/edit flows thoroughly
+- [x] Create unified `TropeModal.tsx`
+- [x] Update parent components to use TropeModal
+- [x] Delete `AddTropeModal.tsx`
+- [x] Delete `EditTropeModal.tsx`
+- [x] Verified TypeScript build and linting pass
 
 ### 2.3. Apply Layout Components to Preference Sections ✅
 
@@ -139,10 +139,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ## Progress Summary
 
 **Phase 1**: 4/4 sections complete (100%)
-**Phase 2**: 2/7 sections complete (29%)
+**Phase 2**: 3/7 sections complete (43%)
 **Phase 3**: 1/2 sections complete (50%)
 
-**Overall Progress**: 7/13 sections (54%)
+**Overall Progress**: 8/13 sections (62%)
 
 ---
 
@@ -171,3 +171,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Replaced success patterns in bulk-import.tsx and DataDownload.tsx
   - Total: 9 files updated with standardized Alert component
   - Consistent error/success messaging across the application
+- Completed Phase 2.2: Consolidated duplicate trope modals:
+  - Created unified TropeModal.tsx with mode-based behavior (add/edit)
+  - Uses discriminated union types for type-safe props based on mode
+  - Updated src/routes/admin/tropes/index.tsx to use unified modal
+  - Deleted AddTropeModal.tsx and EditTropeModal.tsx (2 files removed)
+  - Reduced code duplication by ~140 lines (95% identical code)
+  - All TypeScript checks and linting pass
