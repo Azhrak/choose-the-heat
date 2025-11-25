@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Heart, Sparkles } from "lucide-react";
+import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { ThemeToggle } from "~/components/ThemeToggle";
+import { Container } from "~/components/ui/Container";
+import { Stack } from "~/components/ui/Stack";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -14,16 +17,16 @@ function Home() {
 		<div className="min-h-screen flex flex-col">
 			<div className="flex-1 bg-linear-to-br from-romance-50 via-white to-romance-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 				{/* Theme Toggle */}
-				<div className="container mx-auto px-4 pt-4">
-					<div className="flex justify-end">
+				<Container>
+					<div className="flex justify-end pt-4">
 						<ThemeToggle />
 					</div>
-				</div>
+				</Container>
 
-				<div className="container mx-auto px-4 py-16">
-					<div className="space-y-16">
+				<Container>
+					<Stack gap="xl" className="py-16">
 						{/* Hero Section */}
-						<div className="text-center max-w-4xl mx-auto space-y-6">
+						<Stack gap="md" className="text-center max-w-4xl mx-auto">
 							<div className="flex justify-center">
 								<img
 									src="/logo-512x512.png"
@@ -38,25 +41,23 @@ function Home() {
 								Experience AI-powered romance novels that adapt to your choices.
 								Every decision shapes your perfect love story.
 							</p>
-							<div className="flex gap-4 justify-center">
-								<Link
-									to="/auth/signup"
-									className="px-8 py-3 bg-romance-600 text-white rounded-lg font-semibold hover:bg-romance-700 dark:bg-romance-500 dark:hover:bg-romance-600 transition-colors"
-								>
-									Get Started
+							<Stack direction="horizontal" gap="md" align="center">
+								<Link to="/auth/signup">
+									<Button variant="primary" size="lg">
+										Get Started
+									</Button>
 								</Link>
-								<Link
-									to="/auth/login"
-									className="px-8 py-3 border-2 border-romance-600 text-romance-600 rounded-lg font-semibold hover:bg-romance-50 dark:border-romance-400 dark:text-romance-400 dark:hover:bg-gray-800 transition-colors"
-								>
-									Sign In
+								<Link to="/auth/login">
+									<Button variant="outline" size="lg">
+										Sign In
+									</Button>
 								</Link>
-							</div>
-						</div>
+							</Stack>
+						</Stack>
 
 						{/* Features */}
 						<div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-							<div className="text-center p-6 space-y-4">
+							<Stack gap="sm" className="text-center p-6">
 								<div className="flex justify-center">
 									<BookOpen className="w-12 h-12 text-romance-500 dark:text-romance-400" />
 								</div>
@@ -67,9 +68,9 @@ function Home() {
 									Make choices that shape the narrative and influence your
 									characters' journey
 								</p>
-							</div>
+							</Stack>
 
-							<div className="text-center p-6 space-y-4">
+							<Stack gap="sm" className="text-center p-6">
 								<div className="flex justify-center">
 									<Sparkles className="w-12 h-12 text-romance-500 dark:text-romance-400" />
 								</div>
@@ -80,9 +81,9 @@ function Home() {
 									Every scene is uniquely generated based on your preferences
 									and decisions
 								</p>
-							</div>
+							</Stack>
 
-							<div className="text-center p-6 space-y-4">
+							<Stack gap="sm" className="text-center p-6">
 								<div className="flex justify-center">
 									<Heart className="w-12 h-12 text-romance-500 dark:text-romance-400" />
 								</div>
@@ -93,16 +94,16 @@ function Home() {
 									Choose your favorite tropes, spice level, and pacing for a
 									personalized experience
 								</p>
-							</div>
+							</Stack>
 						</div>
-					</div>
-				</div>
+					</Stack>
+				</Container>
 			</div>
 
 			{/* Simple Footer */}
 			<footer className="bg-slate-900 dark:bg-gray-950 text-slate-300 dark:text-gray-400 py-8">
-				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto text-center space-y-4">
+				<Container>
+					<Stack gap="sm" className="max-w-4xl mx-auto text-center">
 						<div className="flex items-center justify-center gap-2">
 							<img
 								src="/logo-200x200.png"
@@ -145,8 +146,8 @@ function Home() {
 							/>{" "}
 							for romance readers.
 						</p>
-					</div>
-				</div>
+					</Stack>
+				</Container>
 			</footer>
 		</div>
 	);

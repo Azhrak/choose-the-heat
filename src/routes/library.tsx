@@ -11,6 +11,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryCard } from "~/components/StoryCard";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/Tabs";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
 import { useToggleFavoriteMutation } from "~/hooks/useToggleFavoriteMutation";
@@ -102,44 +103,32 @@ function LibraryPage() {
 					{/* Tabs and Favorites Filter */}
 					<div className="space-y-4">
 						{/* Status Tabs */}
-						<div className="flex gap-4">
-							<button
-								type="button"
-								onClick={() =>
-									navigate({
-										search: { tab: "in-progress", favorites: showFavorites },
-									})
-								}
-								className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-									activeTab === "in-progress"
-										? "bg-romance-600 text-white"
-										: "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
-								}`}
-							>
-								<div className="flex items-center gap-2">
-									<Clock className="w-5 h-5" />
-									In Progress
-								</div>
-							</button>
-							<button
-								type="button"
-								onClick={() =>
-									navigate({
-										search: { tab: "completed", favorites: showFavorites },
-									})
-								}
-								className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-									activeTab === "completed"
-										? "bg-romance-600 text-white"
-										: "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700"
-								}`}
-							>
-								<div className="flex items-center gap-2">
-									<Sparkles className="w-5 h-5" />
-									Completed
-								</div>
-							</button>
-						</div>
+						<Tabs
+							value={activeTab}
+							onValueChange={(value) =>
+								navigate({
+									search: {
+										tab: value as "in-progress" | "completed",
+										favorites: showFavorites,
+									},
+								})
+							}
+						>
+							<TabsList>
+								<TabsTrigger value="in-progress">
+									<div className="flex items-center gap-2">
+										<Clock className="w-5 h-5" />
+										In Progress
+									</div>
+								</TabsTrigger>
+								<TabsTrigger value="completed">
+									<div className="flex items-center gap-2">
+										<Sparkles className="w-5 h-5" />
+										Completed
+									</div>
+								</TabsTrigger>
+							</TabsList>
+						</Tabs>
 
 						{/* Favorites Filter */}
 						<Checkbox

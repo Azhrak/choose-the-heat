@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { LogOut, Menu, Shield, User, X } from "lucide-react";
 import { useState } from "react";
 import { ThemeToggle } from "~/components/ThemeToggle";
+import { NavLink } from "~/components/ui/NavLink";
 import { api } from "~/lib/api/client";
 import type { UserRole } from "~/lib/db/types";
 
@@ -43,50 +44,22 @@ export function Header({ currentPath = "", userRole }: HeaderProps) {
 
 					{/* Desktop Navigation */}
 					<nav className="hidden md:flex items-center gap-4">
-						<Link
-							to="/browse"
-							className={`text-slate-700 dark:text-slate-200 hover:text-romance-600 dark:hover:text-romance-300 font-medium transition-colors ${
-								isActive("/browse")
-									? "text-romance-600 dark:text-romance-300"
-									: ""
-							}`}
-						>
-							Browse
-						</Link>
-						<Link
-							to="/library"
-							className={`text-slate-700 dark:text-slate-200 hover:text-romance-600 dark:hover:text-romance-300 font-medium transition-colors ${
-								isActive("/library")
-									? "text-romance-600 dark:text-romance-300"
-									: ""
-							}`}
-						>
-							My Library
-						</Link>
+						<NavLink to="/browse">Browse</NavLink>
+						<NavLink to="/library">My Library</NavLink>
 						{isEditorOrAdmin && (
-							<Link
+							<NavLink
 								to="/admin"
-								className={`flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:text-romance-600 dark:hover:text-romance-300 font-medium transition-colors ${
-									isActive("/admin") || currentPath.startsWith("/admin")
-										? "text-romance-600 dark:text-romance-300"
-										: ""
-								}`}
+								matchSubpaths
+								className="flex items-center gap-2"
 							>
 								<Shield className="w-4 h-4" />
 								Admin Panel
-							</Link>
+							</NavLink>
 						)}
-						<Link
-							to="/profile"
-							className={`flex items-center gap-2 text-slate-700 dark:text-slate-200 hover:text-romance-600 dark:hover:text-romance-300 font-medium transition-colors ${
-								isActive("/profile")
-									? "text-romance-600 dark:text-romance-300"
-									: ""
-							}`}
-						>
+						<NavLink to="/profile" className="flex items-center gap-2">
 							<User className="w-4 h-4" />
 							Profile
-						</Link>
+						</NavLink>
 						<ThemeToggle />
 						<button
 							onClick={handleLogout}

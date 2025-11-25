@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui";
+import { Stack } from "~/components/ui/Stack";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 import type { Trope } from "~/lib/types/preferences";
 
@@ -17,7 +18,7 @@ export function TropesSection({
 
 	return (
 		<Card padding="md">
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex items-center">
 					<Heart className="w-6 h-6 text-romance-500 mr-2" />
 					<Heading level="h3" size="section">
@@ -59,7 +60,7 @@ export function TropesSection({
 						))}
 					</div>
 				)}
-			</div>
+			</Stack>
 		</Card>
 	);
 }
