@@ -113,6 +113,15 @@ This document tracks progress on the comprehensive refactoring plan to establish
 - [ ] Update ChoicePointItem.tsx to use hook
 - [ ] Add tests for custom hooks
 
+### 2.8. Apply Layout Components to Policy Pages ✅
+
+- [x] Refactor privacy.tsx to use Stack, Card, and Container
+- [x] Refactor terms.tsx to use Stack, Card, and Container
+- [x] Refactor cookies.tsx to use Stack, Card, and Container
+- [x] Replace all space-y patterns with standardized Stack components
+- [x] Replace all bg-white rounded shadow patterns with Card components
+- [x] Verified TypeScript build and linting pass
+
 ---
 
 ## Phase 3: Testing & Documentation
@@ -139,10 +148,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ## Progress Summary
 
 **Phase 1**: 4/4 sections complete (100%)
-**Phase 2**: 3/7 sections complete (43%)
+**Phase 2**: 4/8 sections complete (50%)
 **Phase 3**: 1/2 sections complete (50%)
 
-**Overall Progress**: 8/13 sections (62%)
+**Overall Progress**: 9/14 sections (64%)
 
 ---
 
@@ -178,3 +187,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Deleted AddTropeModal.tsx and EditTropeModal.tsx (2 files removed)
   - Reduced code duplication by ~140 lines (95% identical code)
   - All TypeScript checks and linting pass
+- Completed Phase 2.8: Applied Stack, Card, and Container to policy pages:
+  - Refactored all three policy pages (privacy.tsx, terms.tsx, cookies.tsx)
+  - Replaced ~60+ manual spacing patterns (space-y-8, space-y-6, space-y-4, etc.) with Stack components
+  - Replaced all bg-white/rounded/shadow patterns with Card components
+  - Used Container component with size="md" for consistent max-width layouts
+  - Improved consistency across all legal/policy pages
+  - All TypeScript and linting checks pass
