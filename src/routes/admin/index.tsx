@@ -5,6 +5,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useAdminDashboardQuery } from "~/hooks/useAdminDashboardQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
@@ -66,9 +67,9 @@ function AdminDashboard() {
 			<Stack gap="lg">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">Dashboard</Heading>
-					<p className="text-slate-600 dark:text-gray-300">
+					<Text>
 						Welcome to the admin panel. Here's an overview of your site.
-					</p>
+					</Text>
 				</div>
 
 				{/* Template Statistics (visible to editors and admins) */}

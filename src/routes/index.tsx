@@ -5,6 +5,7 @@ import { Heading } from "~/components/Heading";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { Container } from "~/components/ui/Container";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -15,7 +16,7 @@ function Home() {
 
 	return (
 		<div className="min-h-screen flex flex-col">
-			<div className="flex-1 bg-linear-to-br from-romance-50 via-white to-romance-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+			<div className="flex-1 bg-gradient-to-br from-romance-50 via-white to-romance-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 				{/* Theme Toggle */}
 				<Container>
 					<div className="flex justify-end pt-4">
@@ -37,10 +38,10 @@ function Home() {
 							<Heading level="h1" size="hero">
 								Your Story, Your Way
 							</Heading>
-							<p className="text-xl text-slate-600 dark:text-gray-300">
+							<Text size="xl" variant="secondary">
 								Experience AI-powered romance novels that adapt to your choices.
 								Every decision shapes your perfect love story.
-							</p>
+							</Text>
 							<Stack direction="horizontal" gap="md" align="center">
 								<Link to="/auth/signup">
 									<Button variant="primary" size="lg">
@@ -64,10 +65,10 @@ function Home() {
 								<Heading level="h3" size="subsection">
 									Interactive Stories
 								</Heading>
-								<p className="text-slate-600 dark:text-gray-300">
+								<Text>
 									Make choices that shape the narrative and influence your
 									characters' journey
-								</p>
+								</Text>
 							</Stack>
 
 							<Stack gap="sm" className="text-center p-6">
@@ -77,10 +78,10 @@ function Home() {
 								<Heading level="h3" size="subsection">
 									AI-Powered
 								</Heading>
-								<p className="text-slate-600 dark:text-gray-300">
+								<Text>
 									Every scene is uniquely generated based on your preferences
 									and decisions
-								</p>
+								</Text>
 							</Stack>
 
 							<Stack gap="sm" className="text-center p-6">
@@ -90,10 +91,10 @@ function Home() {
 								<Heading level="h3" size="subsection">
 									Your Preferences
 								</Heading>
-								<p className="text-slate-600 dark:text-gray-300">
+								<Text>
 									Choose your favorite tropes, spice level, and pacing for a
 									personalized experience
-								</p>
+								</Text>
 							</Stack>
 						</div>
 					</Stack>
@@ -114,10 +115,10 @@ function Home() {
 								Choose the Heat
 							</span>
 						</div>
-						<p className="text-sm">
+						<Text size="sm" variant="ondark">
 							AI-powered romance novels tailored to your preferences. Discover
 							your next favorite story.
-						</p>
+						</Text>
 						<div className="flex gap-4 justify-center text-sm">
 							<Link
 								to="/privacy"
@@ -138,14 +139,14 @@ function Home() {
 								Cookie Policy
 							</Link>
 						</div>
-						<p className="text-sm">
+						<Text size="sm" variant="ondark">
 							© {currentYear} Choose the Heat. Made with{" "}
 							<Heart
 								className="w-4 h-4 inline text-romance-500"
 								fill="currentColor"
 							/>{" "}
 							for romance readers.
-						</p>
+						</Text>
 					</Stack>
 				</Container>
 			</footer>

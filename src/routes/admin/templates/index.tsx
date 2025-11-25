@@ -24,6 +24,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import {
 	useAdminTemplatesPaginatedQuery,
 	useAdminTemplatesStatsQuery,
@@ -255,9 +256,9 @@ function TemplatesListPage() {
 				<div className="flex items-center justify-between">
 					<div className="flex flex-col gap-2">
 						<Heading level="h1">Template Management</Heading>
-						<p className="text-slate-600 dark:text-gray-300">
+						<Text>
 							Manage novel templates, including drafts and archived content.
-						</p>
+						</Text>
 					</div>
 					<div className="flex gap-3">
 						<Button

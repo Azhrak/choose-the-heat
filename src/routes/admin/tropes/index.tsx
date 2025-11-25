@@ -8,6 +8,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useCreateTropeMutation } from "~/hooks/useCreateTropeMutation";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteTropeMutation } from "~/hooks/useDeleteTropeMutation";
@@ -147,9 +148,7 @@ function TropesListPage() {
 				<div className="flex items-center justify-between">
 					<div className="flex flex-col gap-2">
 						<Heading level="h1">Tropes</Heading>
-						<p className="text-slate-600 dark:text-gray-300">
-							Manage story tropes that can be assigned to templates.
-						</p>
+						<Text>Manage story tropes that can be assigned to templates.</Text>
 					</div>
 					<Button
 						variant="primary"

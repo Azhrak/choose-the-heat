@@ -25,6 +25,7 @@ import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
 import { useStoryQuery } from "~/hooks/useStoryQuery";
@@ -251,9 +252,7 @@ function StoryInfoPage() {
 										</div>
 									</Stack>
 								)}
-								<p className="text-slate-600 dark:text-gray-300">
-									{story.template.description}
-								</p>
+								<Text>{story.template.description}</Text>
 							</Stack>
 
 							<div className="flex items-center gap-6 text-sm text-slate-500 dark:text-gray-400">

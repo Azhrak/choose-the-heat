@@ -2,6 +2,7 @@ import { Ruler } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import {
 	SCENE_LENGTH_LABELS,
 	SCENE_LENGTH_OPTIONS,
@@ -28,9 +29,7 @@ export function SceneLengthSection({
 						</Heading>
 					</div>
 
-					<p className="text-slate-600 dark:text-gray-300">
-						Choose your preferred scene length
-					</p>
+					<Text>Choose your preferred scene length</Text>
 				</Stack>
 				<Stack gap="xs">
 					{SCENE_LENGTH_OPTIONS.map((length) => (

@@ -4,6 +4,7 @@ import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
 import { FormTextarea } from "~/components/FormTextarea";
 import { Alert } from "~/components/ui/Alert";
+import { Text } from "~/components/ui/Text";
 
 interface Trope {
 	id: string;
@@ -147,7 +148,7 @@ export function TropeModal({
 						<h3 className="text-2xl font-bold">{title}</h3>
 					</div>
 
-					<p className="text-slate-600 dark:text-gray-300">{desc}</p>
+					<Text>{desc}</Text>
 
 					<FormInput
 						label="Key *"

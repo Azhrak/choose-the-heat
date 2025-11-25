@@ -13,6 +13,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import {
 	useAdminUsersPaginatedQuery,
 	useAdminUsersStatsQuery,
@@ -142,9 +143,9 @@ function UsersListPage() {
 			<Stack gap="md">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">User Management</Heading>
-					<p className="text-slate-600 dark:text-gray-300">
+					<Text>
 						Manage user accounts, roles, and permissions. Admin access only.
-					</p>
+					</Text>
 				</div>
 
 				{/* Statistics */}

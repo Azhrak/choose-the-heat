@@ -2,6 +2,7 @@ import { AlertTriangle } from "lucide-react";
 import { Button } from "~/components/Button";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 
 interface DangerZoneProps {
 	onDeleteClick: () => void;
@@ -18,10 +19,10 @@ export function DangerZone({ onDeleteClick }: DangerZoneProps) {
 					</h2>
 				</div>
 
-				<p className="text-slate-600 dark:text-gray-300">
+				<Text>
 					Once you delete your account, there is no going back. All your stories
 					and preferences will be permanently deleted.
-				</p>
+				</Text>
 
 				<Button
 					type="button"

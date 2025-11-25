@@ -2,6 +2,7 @@ import { Heart } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 import type { Trope } from "~/lib/types/preferences";
 
@@ -25,9 +26,7 @@ export function TropesSection({
 						Tropes
 					</Heading>
 				</div>
-				<p className="text-slate-600 dark:text-gray-300">
-					Choose your favorite romance tropes
-				</p>
+				<Text>Choose your favorite romance tropes</Text>
 				{isLoading ? (
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						{[1, 2, 3, 4].map((i) => (

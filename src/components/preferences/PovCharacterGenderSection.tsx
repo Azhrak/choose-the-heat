@@ -3,6 +3,7 @@ import { Heading } from "~/components/Heading";
 import { RadioButton } from "~/components/RadioButton";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import {
 	POV_CHARACTER_GENDER_LABELS,
 	POV_CHARACTER_GENDER_OPTIONS,
@@ -28,9 +29,7 @@ export function PovCharacterGenderSection({
 							POV Character Gender
 						</Heading>
 					</div>
-					<p className="text-slate-600 dark:text-gray-300">
-						What gender identity should the main protagonist have?
-					</p>
+					<Text>What gender identity should the main protagonist have?</Text>
 				</Stack>
 				<Stack gap="xs">
 					{POV_CHARACTER_GENDER_OPTIONS.map((gender) => (

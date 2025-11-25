@@ -9,6 +9,7 @@ import { GoogleAuthButton } from "~/components/GoogleAuthButton";
 import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useCookieConsent } from "~/hooks/useCookieConsent";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { ApiError, api } from "~/lib/api/client";
@@ -96,9 +97,7 @@ function LoginPage() {
 					</div>
 					<Stack gap="xs">
 						<Heading level="h1">Welcome Back</Heading>
-						<p className="text-slate-600 dark:text-gray-300">
-							Sign in to continue your story
-						</p>
+						<Text>Sign in to continue your story</Text>
 					</Stack>
 				</div>
 

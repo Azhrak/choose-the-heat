@@ -6,6 +6,7 @@ import { PageBackground } from "~/components/PageBackground";
 import { Card } from "~/components/ui/Card";
 import { Container } from "~/components/ui/Container";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 
 export const Route = createFileRoute("/terms")({
 	component: TermsOfService,
@@ -32,9 +33,7 @@ function TermsOfService() {
 								<Heading level="h1" size="page">
 									Terms of Service
 								</Heading>
-								<p className="text-slate-600 dark:text-slate-400">
-									Last updated: November 15, 2025
-								</p>
+								<Text variant="muted">Last updated: November 15, 2025</Text>
 							</Stack>
 						</Card>
 					</Stack>
@@ -47,39 +46,37 @@ function TermsOfService() {
 									<Heading level="h2" size="section">
 										1. Acceptance of Terms
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										By accessing or using Choose the Heat, you agree to be bound
 										by these Terms of Service and all applicable laws and
 										regulations. If you do not agree with any of these terms,
 										you are prohibited from using or accessing this service.
-									</p>
+									</Text>
 								</Stack>
-							</section>
-
+							</section>{" "}
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										2. Age Requirement
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										You must be at least 18 years old to use Choose the Heat. By
 										using this service, you represent and warrant that you are
 										at least 18 years of age. The content generated may contain
 										mature themes, including romantic and sexual content, which
 										is intended for adult audiences only.
-									</p>
+									</Text>
 								</Stack>
-							</section>
-
+							</section>{" "}
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										3. User Accounts
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										To access certain features of Choose the Heat, you must
 										create an account. You agree to:
-									</p>
+									</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>Provide accurate and complete information</li>
 										<li>Maintain the security of your password</li>
@@ -92,16 +89,15 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										4. AI-Generated Content
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										Choose the Heat uses artificial intelligence to generate
 										romance novels. You acknowledge and agree that:
-									</p>
+									</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>
 											AI-generated content may vary in quality and consistency
@@ -124,16 +120,15 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										5. Intellectual Property Rights
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										The stories generated for you through Choose the Heat are
 										provided for your personal use. You agree that:
-									</p>
+									</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>
 											Stories are licensed to you for personal, non-commercial
@@ -154,15 +149,12 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										6. Acceptable Use Policy
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
-										You agree not to use Choose the Heat to:
-									</p>
+									<Text>You agree not to use Choose the Heat to:</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>
 											Generate content that is illegal, harmful, or violates
@@ -187,16 +179,15 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										7. Content Guidelines
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										While Choose the Heat allows mature romantic content, we
 										prohibit content that:
-									</p>
+									</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>Depicts or promotes illegal activities</li>
 										<li>Involves minors in any sexual or romantic context</li>
@@ -205,16 +196,15 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										8. Service Availability
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										We strive to provide reliable service but do not guarantee
 										uninterrupted access. We reserve the right to:
-									</p>
+									</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>Modify or discontinue the service at any time</li>
 										<li>Implement usage limits or restrictions</li>
@@ -228,15 +218,12 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										9. Payments and Subscriptions
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
-										If you purchase a subscription or paid features:
-									</p>
+									<Text>If you purchase a subscription or paid features:</Text>
 									<ul className="list-disc list-inside text-slate-700 dark:text-slate-300 space-y-2 ml-4">
 										<li>
 											All fees are charged in advance and are non-refundable
@@ -250,100 +237,94 @@ function TermsOfService() {
 									</ul>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										10. Disclaimers and Limitation of Liability
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										Choose the Heat is provided "as is" without warranties of
 										any kind. We disclaim all warranties, express or implied,
 										including warranties of merchantability and fitness for a
 										particular purpose.
-									</p>
-									<p className="text-slate-700 dark:text-slate-300">
+									</Text>
+									<Text>
 										To the fullest extent permitted by law, Choose the Heat
 										shall not be liable for any indirect, incidental, special,
 										consequential, or punitive damages, or any loss of profits
 										or revenues.
-									</p>
+									</Text>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										11. Indemnification
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										You agree to indemnify and hold harmless Choose the Heat,
 										its officers, directors, employees, and agents from any
 										claims, damages, losses, liabilities, and expenses arising
 										from your use of the service or violation of these terms.
-									</p>
+									</Text>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										12. Termination
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										We may terminate or suspend your account immediately,
 										without prior notice, for conduct that we believe violates
 										these Terms of Service or is harmful to other users, us, or
 										third parties, or for any other reason.
-									</p>
-									<p className="text-slate-700 dark:text-slate-300">
+									</Text>
+									<Text>
 										You may terminate your account at any time through your
 										account settings or by contacting us.
-									</p>
+									</Text>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										13. Governing Law
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										These Terms shall be governed by and construed in accordance
 										with applicable laws, without regard to conflict of law
 										principles. Any disputes shall be resolved through binding
 										arbitration.
-									</p>
+									</Text>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										14. Changes to Terms
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										We reserve the right to modify these Terms at any time. We
 										will provide notice of material changes by posting the
 										updated terms and updating the "Last updated" date. Your
 										continued use after such changes constitutes acceptance of
 										the new terms.
-									</p>
+									</Text>
 								</Stack>
 							</section>
-
 							<section>
 								<Stack gap="md">
 									<Heading level="h2" size="section">
 										15. Contact Information
 									</Heading>
-									<p className="text-slate-700 dark:text-slate-300">
+									<Text>
 										If you have questions about these Terms of Service, please
 										contact us at:
-									</p>
-									<p className="text-slate-700 dark:text-slate-300">
+									</Text>
+									<Text>
 										<strong>Email:</strong> legal@choosetheheat.com
-									</p>
+									</Text>
 								</Stack>
 							</section>
 						</Stack>

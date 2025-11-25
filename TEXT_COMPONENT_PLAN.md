@@ -132,12 +132,14 @@ const weightClasses = {
 **File**: `docs/DESIGN_SYSTEM.md`
 
 **Changes**:
+
 - Add Text component section under "Typography" (after Heading)
 - Document all variants with usage examples
 - Show migration examples
 - Update color palette usage notes to reference Text component
 
 **Content to add**:
+
 ```markdown
 ### Text / Paragraph Component
 
@@ -270,30 +272,37 @@ Add new section under Phase 2 (after 2.9):
 ## Migration Strategy
 
 ### Phase 1: Create Component & Documentation (High Priority)
+
 1. Create Text component
 2. Create ui/index.ts
 3. Update documentation
 
 ### Phase 2: Apply to High-Traffic Pages (Medium Priority)
+
 Apply Text component to frequently edited files:
+
 - Policy pages (cookies.tsx, privacy.tsx, terms.tsx) - 80+ instances
 - Onboarding flow - 10+ instances
 - Story creation pages - 15+ instances
 - Template pages - 10+ instances
 
 ### Phase 3: Apply to Component Library (Medium Priority)
+
 Update reusable components:
+
 - CookieConsentBanner
 - EmptyState
 - LoadingSpinner
 - StoryCard / NovelCard (selectively - preserve custom styling)
 
 ### Phase 4: Apply to Admin Pages (Lower Priority)
+
 - Admin dashboard
 - User management
 - Template management
 
 ### Phase 5: Add Tests (Ongoing)
+
 - Unit tests for Text component
 - Visual regression tests for variants
 - Accessibility tests
@@ -305,12 +314,14 @@ Update reusable components:
 ### Why Polymorphic Component?
 
 **Pros**:
+
 - Single component for all text elements (p, span, div, etc.)
 - Semantic HTML flexibility
 - Consistent API across all text use cases
 - Smaller bundle size (one component vs multiple)
 
 **Cons**:
+
 - Slightly more complex TypeScript types
 - Learning curve for polymorphic pattern
 
@@ -323,6 +334,7 @@ Separate components would duplicate all the variant/size/weight logic. The polym
 ### Variant Names
 
 Use semantic names (primary, secondary, muted, emphasis) instead of color names (slate-700, etc.):
+
 - More maintainable - can change colors without changing component API
 - More semantic - describes purpose, not implementation
 - Matches Heading component pattern
@@ -330,6 +342,7 @@ Use semantic names (primary, secondary, muted, emphasis) instead of color names 
 ### Size vs. Typography Scale
 
 Considered creating a typography scale (body-1, body-2, etc.) but chose explicit sizes (xs, sm, base, etc.):
+
 - More direct mapping to Tailwind classes
 - Easier migration from existing code
 - Clearer for developers
@@ -337,6 +350,7 @@ Considered creating a typography scale (body-1, body-2, etc.) but chose explicit
 ### Mono Font as Boolean vs Variant
 
 Could add mono as a variant, but made it a boolean prop:
+
 - Code text often needs different variants (muted code, emphasis code, etc.)
 - Boolean allows combining with any variant
 - More flexible
@@ -346,6 +360,7 @@ Could add mono as a variant, but made it a boolean prop:
 ## Out of Scope
 
 ### Not Replacing:
+
 1. **Heading component** - Already exists, different use case
 2. **Link text** - Links use romance colors (text-romance-600), need separate component or NavLink
 3. **Badge component** - Semantic component with background colors
@@ -353,6 +368,7 @@ Could add mono as a variant, but made it a boolean prop:
 5. **Form labels** - May need separate FormLabel component with different defaults
 
 ### Future Considerations:
+
 - **Link/Anchor component**: For romance-colored links
 - **Label component**: For form labels with specific styling
 - **Code component**: Dedicated inline code component with background

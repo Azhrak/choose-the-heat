@@ -17,6 +17,7 @@ import { FormTextarea } from "~/components/FormTextarea";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useAdminTemplateQuery } from "~/hooks/useAdminTemplateQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteTemplateMutation } from "~/hooks/useDeleteTemplateMutation";
@@ -203,9 +204,7 @@ function EditTemplatePage() {
 					<div className="flex items-start justify-between">
 						<div className="flex flex-col gap-2">
 							<Heading level="h1">Edit Template</Heading>
-							<p className="text-slate-600 dark:text-gray-300">
-								Update template details and manage its status.
-							</p>
+							<Text>Update template details and manage its status.</Text>
 						</div>
 						<StatusBadge status={template.status} />
 					</div>
@@ -323,10 +322,10 @@ function EditTemplatePage() {
 							<Heading level="h2" size="subsection">
 								Choice Points
 							</Heading>
-							<p className="text-slate-600 dark:text-gray-300">
+							<Text>
 								Manage choice points that appear throughout the story. Changes
 								are saved separately from template details.
-							</p>
+							</Text>
 						</Stack>
 
 						<ChoicePointForm

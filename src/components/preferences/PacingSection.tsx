@@ -3,6 +3,7 @@ import { Heading } from "~/components/Heading";
 import { RadioButton } from "~/components/RadioButton";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import {
 	PACING_LABELS,
 	PACING_OPTIONS,
@@ -28,9 +29,7 @@ export function PacingSection({
 							Relationship Pacing
 						</Heading>
 					</div>
-					<p className="text-slate-600 dark:text-gray-300">
-						How quickly should relationships develop in your stories?
-					</p>
+					<Text>How quickly should relationships develop in your stories?</Text>
 				</Stack>
 				<Stack gap="xs">
 					{PACING_OPTIONS.map((pacing) => (

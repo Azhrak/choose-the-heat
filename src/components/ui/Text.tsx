@@ -18,7 +18,7 @@ interface TextProps {
 	 * - emphasis: Important text (text-slate-900 dark:text-slate-100)
 	 * @default 'primary'
 	 */
-	variant?: "primary" | "secondary" | "muted" | "emphasis";
+	variant?: "primary" | "secondary" | "muted" | "emphasis" | "ondark";
 
 	/**
 	 * Text size
@@ -54,6 +54,7 @@ const variantClasses = {
 	secondary: "text-slate-600 dark:text-slate-300",
 	muted: "text-slate-600 dark:text-slate-400",
 	emphasis: "text-slate-900 dark:text-slate-100",
+	ondark: "text-slate-300",
 };
 
 const sizeClasses = {

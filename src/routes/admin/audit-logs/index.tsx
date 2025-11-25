@@ -7,6 +7,7 @@ import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AuditEntityType } from "~/lib/db/types";
@@ -106,10 +107,10 @@ function AuditLogsPage() {
 			<Stack gap="md">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">Audit Logs</Heading>
-					<p className="text-slate-600 dark:text-gray-300">
+					<Text>
 						View all administrative actions and changes. Logs are retained for
 						90 days.
-					</p>
+					</Text>
 				</div>
 
 				{/* Statistics */}

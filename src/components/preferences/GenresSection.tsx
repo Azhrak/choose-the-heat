@@ -2,6 +2,7 @@ import { BookOpen } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { GENRE_LABELS, GENRES, type Genre } from "~/lib/types/preferences";
 
 interface GenresSectionProps {
@@ -22,9 +23,7 @@ export function GenresSection({
 						Genres
 					</Heading>
 				</div>
-				<p className="text-slate-600 dark:text-gray-300">
-					Select your favorite romance genres
-				</p>
+				<Text>Select your favorite romance genres</Text>
 				<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 					{GENRES.map((genre) => (
 						<button
