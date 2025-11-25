@@ -2,6 +2,7 @@ import { Wind } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { RadioButton } from "~/components/RadioButton";
 import { Card } from "~/components/ui";
+import { Stack } from "~/components/ui/Stack";
 import {
 	PACING_LABELS,
 	PACING_OPTIONS,
@@ -19,8 +20,8 @@ export function PacingSection({
 }: PacingSectionProps) {
 	return (
 		<Card padding="md">
-			<div className="space-y-6">
-				<div className="space-y-4">
+			<Stack gap="md">
+				<Stack gap="sm">
 					<div className="flex items-center">
 						<Wind className="w-6 h-6 text-romance-500 mr-2" />
 						<Heading level="h3" size="section">
@@ -30,8 +31,8 @@ export function PacingSection({
 					<p className="text-slate-600 dark:text-gray-300">
 						How quickly should relationships develop in your stories?
 					</p>
-				</div>
-				<div className="space-y-3">
+				</Stack>
+				<Stack gap="xs">
 					{PACING_OPTIONS.map((pacing) => (
 						<RadioButton
 							key={pacing}
@@ -46,8 +47,8 @@ export function PacingSection({
 							</p>
 						</RadioButton>
 					))}
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</Card>
 	);
 }

@@ -1,6 +1,7 @@
 import { Flame } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui";
+import { Stack } from "~/components/ui/Stack";
 import { SPICE_LABELS, type SpiceLevel } from "~/lib/types/preferences";
 
 interface SpiceLevelSectionProps {
@@ -14,7 +15,7 @@ export function SpiceLevelSection({
 }: SpiceLevelSectionProps) {
 	return (
 		<Card padding="md">
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex items-center">
 					<Flame className="w-6 h-6 text-romance-500 mr-2" />
 					<Heading level="h3" size="section">
@@ -24,7 +25,7 @@ export function SpiceLevelSection({
 				<p className="text-slate-600 dark:text-gray-300">
 					Set your preferred heat level for intimate scenes
 				</p>
-				<div className="space-y-3">
+				<Stack gap="xs">
 					{([1, 2, 3, 4, 5] as SpiceLevel[]).map((level) => (
 						<button
 							key={level}
@@ -70,8 +71,8 @@ export function SpiceLevelSection({
 							</div>
 						</button>
 					))}
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</Card>
 	);
 }

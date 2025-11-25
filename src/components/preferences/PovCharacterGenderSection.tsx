@@ -2,6 +2,7 @@ import { Eye } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { RadioButton } from "~/components/RadioButton";
 import { Card } from "~/components/ui";
+import { Stack } from "~/components/ui/Stack";
 import {
 	POV_CHARACTER_GENDER_LABELS,
 	POV_CHARACTER_GENDER_OPTIONS,
@@ -19,8 +20,8 @@ export function PovCharacterGenderSection({
 }: PovCharacterGenderSectionProps) {
 	return (
 		<Card padding="md">
-			<div className="space-y-6">
-				<div className="space-y-4">
+			<Stack gap="md">
+				<Stack gap="sm">
 					<div className="flex items-center">
 						<Eye className="w-6 h-6 text-romance-500 mr-2" />
 						<Heading level="h3" size="section">
@@ -30,8 +31,8 @@ export function PovCharacterGenderSection({
 					<p className="text-slate-600 dark:text-gray-300">
 						What gender identity should the main protagonist have?
 					</p>
-				</div>
-				<div className="space-y-3">
+				</Stack>
+				<Stack gap="xs">
 					{POV_CHARACTER_GENDER_OPTIONS.map((gender) => (
 						<RadioButton
 							key={gender}
@@ -46,8 +47,8 @@ export function PovCharacterGenderSection({
 							</p>
 						</RadioButton>
 					))}
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</Card>
 	);
 }

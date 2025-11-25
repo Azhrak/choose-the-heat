@@ -1,6 +1,7 @@
 import { Ruler } from "lucide-react";
 import { Heading } from "~/components/Heading";
 import { Card } from "~/components/ui";
+import { Stack } from "~/components/ui/Stack";
 import {
 	SCENE_LENGTH_LABELS,
 	SCENE_LENGTH_OPTIONS,
@@ -18,8 +19,8 @@ export function SceneLengthSection({
 }: SceneLengthSectionProps) {
 	return (
 		<Card padding="md">
-			<div className="space-y-6">
-				<div className="space-y-4">
+			<Stack gap="md">
+				<Stack gap="sm">
 					<div className="flex items-center">
 						<Ruler className="w-6 h-6 text-romance-500 mr-2" />
 						<Heading level="h3" size="section">
@@ -30,8 +31,8 @@ export function SceneLengthSection({
 					<p className="text-slate-600 dark:text-gray-300">
 						Choose your preferred scene length
 					</p>
-				</div>
-				<div className="space-y-3">
+				</Stack>
+				<Stack gap="xs">
 					{SCENE_LENGTH_OPTIONS.map((length) => (
 						<button
 							key={length}
@@ -69,8 +70,8 @@ export function SceneLengthSection({
 							</div>
 						</button>
 					))}
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</Card>
 	);
 }
