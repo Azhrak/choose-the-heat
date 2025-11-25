@@ -13,6 +13,7 @@ import {
 	SpiceLevelSection,
 	TropesSection,
 } from "~/components/preferences";
+import { Alert } from "~/components/ui/Alert";
 import { useUpdatePreferencesMutation } from "~/hooks/useUpdatePreferencesMutation";
 import { useUserPreferencesQuery } from "~/hooks/useUserPreferencesQuery";
 import { ApiError } from "~/lib/api/client";
@@ -167,18 +168,17 @@ function PreferencesPage() {
 						</div>
 						{/* Success Message */}
 						{success && (
-							<div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg flex items-center gap-3 text-green-700 dark:text-green-300">
-								<CheckCircle2 className="w-5 h-5" />
-								<span>Your preferences have been saved successfully!</span>
+							<div className="flex items-center gap-3">
+								<CheckCircle2 className="w-5 h-5 text-green-700 dark:text-green-300" />
+								<Alert
+									message="Your preferences have been saved successfully!"
+									variant="success"
+									className="flex-1"
+								/>
 							</div>
 						)}
 						{/* Error Message */}
-						{error && (
-							<div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300">
-								{error}
-							</div>
-						)}{" "}
-						{/* Form */}
+						<Alert message={error} variant="error" /> {/* Form */}
 						<form onSubmit={handleSubmit} className="space-y-8">
 							<GenresSection
 								selectedGenres={preferences.genres}

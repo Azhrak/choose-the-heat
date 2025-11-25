@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
-import { Card } from "~/components/ui";
+import { Card } from "~/components/ui/Card";
 import type { UserPreferences } from "~/lib/types/preferences";
 
 interface PreferencesDisplayProps {

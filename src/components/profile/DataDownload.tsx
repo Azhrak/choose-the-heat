@@ -1,7 +1,8 @@
 import { Download } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/Button";
-import { Card } from "~/components/ui";
+import { Alert } from "~/components/ui/Alert";
+import { Card } from "~/components/ui/Card";
 import { useDownloadUserData } from "~/hooks/useDownloadUserData";
 
 export function DataDownload() {
@@ -54,11 +55,7 @@ export function DataDownload() {
 						</ul>
 					</div>
 
-					{success && (
-						<div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-700 dark:text-green-400 text-sm">
-							{success}
-						</div>
-					)}
+					<Alert message={success} variant="success" />
 
 					<Button
 						onClick={handleDownload}

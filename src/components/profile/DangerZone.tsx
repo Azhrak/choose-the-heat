@@ -1,6 +1,6 @@
 import { AlertTriangle } from "lucide-react";
 import { Button } from "~/components/Button";
-import { Card } from "~/components/ui";
+import { Card } from "~/components/ui/Card";
 
 interface DangerZoneProps {
 	onDeleteClick: () => void;

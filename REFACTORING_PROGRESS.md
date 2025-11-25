@@ -52,12 +52,15 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ### 2.1. Replace Error Patterns with Alert Component ✅
 
 - [x] Create `Alert` component (src/components/ui/Alert.tsx) - moved to Phase 1.4
-- [ ] Replace error pattern in EditTropeModal.tsx
-- [ ] Replace error pattern in AddTropeModal.tsx
-- [ ] Replace error pattern in PasswordChange.tsx
-- [ ] Replace error pattern in ProfileInformation.tsx
-- [ ] Replace error pattern in TropeSelector.tsx
-- [ ] Replace error pattern in other files
+- [x] Replace error pattern in EditTropeModal.tsx
+- [x] Replace error pattern in AddTropeModal.tsx
+- [x] Replace error pattern in PasswordChange.tsx
+- [x] Replace error pattern in ProfileInformation.tsx
+- [x] Replace error pattern in TropeSelector.tsx
+- [x] Replace error/success patterns in preferences.tsx
+- [x] Replace success pattern in bulk-import.tsx
+- [x] Replace success pattern in DataDownload.tsx
+- [x] Export Alert from ui/index.ts
 
 ### 2.2. Consolidate Duplicate Trope Modals
 
@@ -136,10 +139,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
 ## Progress Summary
 
 **Phase 1**: 4/4 sections complete (100%)
-**Phase 2**: 1/7 sections complete (14%)
+**Phase 2**: 2/7 sections complete (29%)
 **Phase 3**: 1/2 sections complete (50%)
 
-**Overall Progress**: 6/13 sections (46%)
+**Overall Progress**: 7/13 sections (54%)
 
 ---
 
@@ -161,3 +164,10 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Home page (index.tsx) - replaced 6 space-y patterns and 3 container patterns with Stack and Container components
   - Eliminated ~20+ manual spacing classes with standardized components
   - All changes pass linting and formatting checks
+- Completed Phase 2.1: Replaced error/success patterns with Alert component:
+  - Exported Alert from ui/index.ts for easier imports
+  - Replaced error patterns in 5 modal/form components (EditTropeModal, AddTropeModal, PasswordChange, ProfileInformation, TropeSelector)
+  - Replaced error/success patterns in preferences.tsx (kept CheckCircle icon for success)
+  - Replaced success patterns in bulk-import.tsx and DataDownload.tsx
+  - Total: 9 files updated with standardized Alert component
+  - Consistent error/success messaging across the application

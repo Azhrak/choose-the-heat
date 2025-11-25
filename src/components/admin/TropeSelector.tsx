@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp, Search } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "~/components/Checkbox";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Alert } from "~/components/ui/Alert";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 
 interface TropeSelectorProps {
@@ -52,9 +53,7 @@ export function TropeSelector({
 				<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
 					{label} {required && <span className="text-red-500">*</span>}
 				</div>
-				<div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400 text-sm">
-					Failed to load tropes
-				</div>
+				<Alert message="Failed to load tropes" variant="error" />
 			</div>
 		);
 	}

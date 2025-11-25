@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { Card } from "~/components/ui";
+import { Card } from "~/components/ui/Card";
 import { cn } from "~/lib/utils";
 
 interface EmptyStateProps {

@@ -1,6 +1,6 @@
 import { Ruler } from "lucide-react";
 import { Heading } from "~/components/Heading";
-import { Card } from "~/components/ui";
+import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
 import {
 	SCENE_LENGTH_LABELS,

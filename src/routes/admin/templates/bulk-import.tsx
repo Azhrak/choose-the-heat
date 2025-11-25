@@ -6,6 +6,7 @@ import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormTextarea } from "~/components/FormTextarea";
 import { Heading } from "~/components/Heading";
+import { Alert } from "~/components/ui/Alert";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
 export const Route = createFileRoute("/admin/templates/bulk-import")({
@@ -346,11 +347,7 @@ function BulkImportPage() {
 						</div>
 					)}
 
-					{success && (
-						<div className="mt-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded p-4 text-green-800 dark:text-green-300">
-							{success}
-						</div>
-					)}
+					<Alert message={success} variant="success" className="mt-4" />
 
 					<div className="mt-6 flex gap-3">
 						<Button

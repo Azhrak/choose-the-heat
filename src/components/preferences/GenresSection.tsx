@@ -1,6 +1,6 @@
 import { BookOpen } from "lucide-react";
 import { Heading } from "~/components/Heading";
-import { Card } from "~/components/ui";
+import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
 import { GENRE_LABELS, GENRES, type Genre } from "~/lib/types/preferences";
 
