@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "~/lib/utils";
 
 interface AlertProps {
 	message?: string | null;
@@ -29,7 +30,11 @@ export function Alert({
 
 	return (
 		<div
-			className={`p-3 border rounded-lg text-sm ${variantClasses[variant]} ${className}`.trim()}
+			className={cn(
+				"p-3 border rounded-lg text-sm",
+				variantClasses[variant],
+				className,
+			)}
 		>
 			{content}
 		</div>
