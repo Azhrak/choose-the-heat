@@ -23,6 +23,7 @@ import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import {
 	useAdminTemplatesPaginatedQuery,
 	useAdminTemplatesStatsQuery,
@@ -250,7 +251,7 @@ function TemplatesListPage() {
 
 	return (
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex items-center justify-between">
 					<div className="flex flex-col gap-2">
 						<Heading level="h1">Template Management</Heading>
@@ -489,7 +490,7 @@ function TemplatesListPage() {
 					onPageChange={handlePageChange}
 					itemLabel="template"
 				/>
-			</div>
+			</Stack>
 		</AdminLayout>
 	);
 }

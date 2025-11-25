@@ -191,7 +191,7 @@ function EditTemplatePage() {
 
 	return (
 		<AdminLayout currentPath="/admin/templates" userRole={role}>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<Stack gap="sm">
 					<Button
 						variant="ghost"
@@ -384,7 +384,7 @@ function EditTemplatePage() {
 						</div>
 					)}
 				</div>
-			</div>
+			</Stack>
 
 			{/* Delete Confirmation Dialog */}
 			<ConfirmDialog

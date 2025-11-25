@@ -12,6 +12,7 @@ import {
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import {
 	useAdminUsersPaginatedQuery,
 	useAdminUsersStatsQuery,
@@ -138,7 +139,7 @@ function UsersListPage() {
 
 	return (
 		<AdminLayout currentPath="/admin/users" userRole={role}>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">User Management</Heading>
 					<p className="text-slate-600 dark:text-gray-300">
@@ -273,7 +274,7 @@ function UsersListPage() {
 					onPageChange={handlePageChange}
 					itemLabel="user"
 				/>
-			</div>
+			</Stack>
 		</AdminLayout>
 	);
 }

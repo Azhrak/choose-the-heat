@@ -7,6 +7,7 @@ import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useCreateTropeMutation } from "~/hooks/useCreateTropeMutation";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteTropeMutation } from "~/hooks/useDeleteTropeMutation";
@@ -142,7 +143,7 @@ function TropesListPage() {
 
 	return (
 		<AdminLayout currentPath="/admin/tropes" userRole={role}>
-			<div className="space-y-8">
+			<Stack gap="lg">
 				<div className="flex items-center justify-between">
 					<div className="flex flex-col gap-2">
 						<Heading level="h1">Tropes</Heading>
@@ -261,7 +262,7 @@ function TropesListPage() {
 					isLoading={updateMutation.isPending}
 					error={updateError}
 				/>
-			</div>
+			</Stack>
 		</AdminLayout>
 	);
 }

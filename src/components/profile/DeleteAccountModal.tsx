@@ -1,5 +1,6 @@
 import { AlertTriangle } from "lucide-react";
 import { FormInput } from "~/components/FormInput";
+import { Stack } from "~/components/ui/Stack";
 
 interface DeleteAccountModalProps {
 	isOpen: boolean;
@@ -25,7 +26,7 @@ export function DeleteAccountModal({
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
 			<div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-8">
-				<div className="space-y-6">
+				<Stack gap="md">
 					<div className="flex items-center gap-2 text-red-600">
 						<AlertTriangle className="w-6 h-6" />
 						<h3 className="text-2xl font-bold">Delete Account</h3>
@@ -67,7 +68,7 @@ export function DeleteAccountModal({
 							{isDeleting ? "Deleting..." : "Delete Account"}
 						</button>
 					</div>
-				</div>
+				</Stack>
 			</div>
 		</div>
 	);

@@ -24,7 +24,7 @@ export function DataDownload() {
 
 	return (
 		<Card>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex items-center gap-2">
 					<Download className="w-5 h-5 text-romance-500" />
 					<h2 className="text-2xl font-bold text-slate-900 dark:text-gray-100">
@@ -68,7 +68,7 @@ export function DataDownload() {
 						Download My Data
 					</Button>
 				</Stack>
-			</div>
+			</Stack>
 		</Card>
 	);
 }

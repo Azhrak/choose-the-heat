@@ -4,6 +4,7 @@ import { AdminLayout, NoPermissions, StatCard } from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useAdminDashboardQuery } from "~/hooks/useAdminDashboardQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
@@ -62,7 +63,7 @@ function AdminDashboard() {
 
 	return (
 		<AdminLayout currentPath="/admin" userRole={role}>
-			<div className="space-y-8">
+			<Stack gap="lg">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">Dashboard</Heading>
 					<p className="text-slate-600 dark:text-gray-300">
@@ -135,7 +136,7 @@ function AdminDashboard() {
 						</div>
 					</div>
 				)}
-			</div>
+			</Stack>
 		</AdminLayout>
 	);
 }

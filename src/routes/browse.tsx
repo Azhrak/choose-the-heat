@@ -12,6 +12,7 @@ import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { Pagination } from "~/components/Pagination";
 import { TropeFilter } from "~/components/TropeFilter";
+import { Stack } from "~/components/ui/Stack";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTemplatesQuery } from "~/hooks/useTemplatesQuery";
 import type { Trope } from "~/lib/types/preferences";
@@ -93,7 +94,7 @@ function BrowsePage() {
 			<Header currentPath="/browse" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="full">
-				<div className="space-y-8">
+				<Stack gap="lg">
 					{/* Welcome Section */}
 					<div className="text-center space-y-4">
 						<Heading level="h1" size="page">
@@ -159,7 +160,7 @@ function BrowsePage() {
 
 							{/* Pagination and Stats */}
 							{data.templates.length > 0 && data.pagination && (
-								<div className="space-y-6">
+								<Stack gap="md">
 									{/* Stats */}
 									<div className="text-center">
 										<p className="text-slate-600">
@@ -182,11 +183,11 @@ function BrowsePage() {
 										totalPages={data.pagination.totalPages}
 										onPageChange={handlePageChange}
 									/>
-								</div>
+								</Stack>
 							)}
 						</>
 					)}
-				</div>
+				</Stack>
 			</PageContainer>
 			<Footer />
 		</PageBackground>

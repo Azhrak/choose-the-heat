@@ -105,7 +105,7 @@ function SignupPage() {
 	return (
 		<PageBackground className="flex items-center justify-center px-4 py-8">
 			<div className="max-w-md w-full">
-				<div className="space-y-8">
+				<Stack gap="lg">
 					{/* Logo */}
 					<div className="text-center space-y-4">
 						<div className="flex justify-center">
@@ -187,7 +187,7 @@ function SignupPage() {
 							Sign in
 						</Link>
 					</p>
-				</div>
+				</Stack>
 			</div>
 		</PageBackground>
 	);

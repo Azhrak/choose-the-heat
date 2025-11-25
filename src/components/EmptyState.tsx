@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 import { cn } from "~/lib/utils";
 
 interface EmptyStateProps {
@@ -30,7 +31,7 @@ export function EmptyState({
 			<h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
 				{title}
 			</h2>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<p className="text-slate-600 dark:text-slate-300">{description}</p>
 				{action && (
 					<Link
@@ -41,7 +42,7 @@ export function EmptyState({
 					</Link>
 				)}
 				{children}
-			</div>
+			</Stack>
 		</Card>
 	);
 }

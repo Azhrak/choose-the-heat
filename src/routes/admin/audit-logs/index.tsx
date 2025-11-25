@@ -6,6 +6,7 @@ import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
+import { Stack } from "~/components/ui/Stack";
 import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AuditEntityType } from "~/lib/db/types";
@@ -102,7 +103,7 @@ function AuditLogsPage() {
 
 	return (
 		<AdminLayout currentPath="/admin/audit-logs" userRole={role}>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex flex-col gap-2">
 					<Heading level="h1">Audit Logs</Heading>
 					<p className="text-slate-600 dark:text-gray-300">
@@ -302,7 +303,7 @@ function AuditLogsPage() {
 						</code>
 					</p>
 				</div>
-			</div>
+			</Stack>
 		</AdminLayout>
 	);
 }

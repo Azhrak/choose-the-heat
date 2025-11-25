@@ -96,7 +96,7 @@ function LibraryPage() {
 			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl" className="flex-1">
-				<div className="space-y-8">
+				<Stack gap="lg">
 					<Heading level="h1" size="page">
 						My Library
 					</Heading>
@@ -207,7 +207,7 @@ function LibraryPage() {
 							))}
 						</div>
 					)}
-				</div>
+				</Stack>
 			</PageContainer>
 			<Footer />
 		</PageBackground>

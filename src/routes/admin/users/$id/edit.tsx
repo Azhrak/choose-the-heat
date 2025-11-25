@@ -165,7 +165,7 @@ function EditUserPage() {
 
 	return (
 		<AdminLayout currentPath="/admin/users" userRole={currentUser.role}>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<Stack gap="sm">
 					<Button
 						variant="ghost"
@@ -337,7 +337,7 @@ function EditUserPage() {
 						</div>
 					)}
 				</div>
-			</div>
+			</Stack>
 
 			{/* Delete Confirmation Dialog */}
 			<ConfirmDialog

@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { Button } from "~/components/Button";
+import { Stack } from "~/components/ui/Stack";
 import {
 	type ChoiceOption,
 	type ChoicePoint,
@@ -63,7 +64,7 @@ export function ChoicePointForm({
 	};
 
 	return (
-		<div className="space-y-6">
+		<Stack gap="md">
 			{choicePoints.length === 0 ? (
 				<div className="text-center py-8 bg-slate-50 dark:bg-gray-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-gray-600">
 					<p className="text-slate-600 dark:text-gray-400">
@@ -74,7 +75,7 @@ export function ChoicePointForm({
 					</p>
 				</div>
 			) : (
-				<div className="space-y-6">
+				<Stack gap="md">
 					{choicePoints.map((choicePoint, cpIndex) => (
 						<ChoicePointItem
 							key={`choice-point-${choicePoint.scene_number}-${cpIndex}`}
@@ -86,7 +87,7 @@ export function ChoicePointForm({
 							onRemove={() => removeChoicePoint(cpIndex)}
 						/>
 					))}
-				</div>
+				</Stack>
 			)}
 
 			<Button
@@ -99,6 +100,6 @@ export function ChoicePointForm({
 				<Plus className="w-4 h-4" />
 				Add Choice Point
 			</Button>
-		</div>
+		</Stack>
 	);
 }

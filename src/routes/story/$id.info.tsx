@@ -24,6 +24,7 @@ import { Heading } from "~/components/Heading";
 import { PageBackground } from "~/components/PageBackground";
 import { PageContainer } from "~/components/PageContainer";
 import { StoryProgressBar } from "~/components/StoryProgressBar";
+import { Stack } from "~/components/ui/Stack";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useDeleteStoryMutation } from "~/hooks/useDeleteStoryMutation";
 import { useStoryQuery } from "~/hooks/useStoryQuery";
@@ -155,7 +156,7 @@ function StoryInfoPage() {
 			<Header currentPath="/library" userRole={profileData?.role} />
 
 			<PageContainer maxWidth="2xl">
-				<div className="space-y-6">
+				<Stack gap="md">
 					{/* Back Navigation */}
 					<Link
 						to="/library"
@@ -321,7 +322,7 @@ function StoryInfoPage() {
 								Story Settings
 							</Heading>
 
-							<div className="space-y-6">
+							<Stack gap="md">
 								{/* Spice Level */}
 								{spiceInfo && (
 									<div className="space-y-2">
@@ -433,10 +434,10 @@ function StoryInfoPage() {
 										</div>
 									</div>
 								)}
-							</div>
+							</Stack>
 						</div>
 					)}
-				</div>
+				</Stack>
 			</PageContainer>
 
 			{/* Delete Confirmation Dialog */}

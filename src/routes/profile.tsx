@@ -15,6 +15,7 @@ import {
 	PreferencesDisplay,
 	ProfileInformation,
 } from "~/components/profile";
+import { Stack } from "~/components/ui/Stack";
 import { useChangePasswordMutation } from "~/hooks/useChangePasswordMutation";
 import { useDeleteAccountMutation } from "~/hooks/useDeleteAccountMutation";
 import { useProfileQuery } from "~/hooks/useProfileQuery";
@@ -152,7 +153,7 @@ function ProfilePage() {
 			<Header currentPath="/profile" userRole={profile?.role} />
 
 			<PageContainer maxWidth="md">
-				<div className="space-y-8">
+				<Stack gap="lg">
 					<div className="flex items-center gap-3">
 						<User className="w-8 h-8 text-romance-600 dark:text-romance-400" />
 						<Heading level="h1" size="page">
@@ -190,7 +191,7 @@ function ProfilePage() {
 					<DataDownload />
 
 					<DangerZone onDeleteClick={() => setShowDeleteModal(true)} />
-				</div>
+				</Stack>
 			</PageContainer>
 
 			<DeleteAccountModal

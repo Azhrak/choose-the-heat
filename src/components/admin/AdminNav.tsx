@@ -7,6 +7,7 @@ import {
 	Tags,
 	Users,
 } from "lucide-react";
+import { Stack } from "~/components/ui/Stack";
 import type { UserRole } from "~/lib/db/types";
 import { cn } from "~/lib/utils";
 
@@ -60,7 +61,7 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 
 	return (
 		<nav className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 min-h-screen p-6">
-			<div className="space-y-8">
+			<Stack gap="lg">
 				{/* Back to site link */}
 				<Link
 					to="/browse"
@@ -70,7 +71,7 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 					<span className="text-sm font-medium">Back to Site</span>
 				</Link>
 
-				<div className="space-y-6">
+				<Stack gap="md">
 					{/* Navigation title */}
 					<h2 className="text-lg font-bold text-slate-900 dark:text-gray-100">
 						Admin Panel
@@ -100,8 +101,8 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 							);
 						})}
 					</ul>
-				</div>
-			</div>
+				</Stack>
+			</Stack>
 		</nav>
 	);
 }

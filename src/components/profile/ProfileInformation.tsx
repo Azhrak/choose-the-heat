@@ -3,6 +3,7 @@ import { Button } from "~/components/Button";
 import { FormInput } from "~/components/FormInput";
 import { Alert } from "~/components/ui/Alert";
 import { Card } from "~/components/ui/Card";
+import { Stack } from "~/components/ui/Stack";
 
 interface ProfileInformationProps {
 	name: string;
@@ -29,7 +30,7 @@ export function ProfileInformation({
 }: ProfileInformationProps) {
 	return (
 		<Card>
-			<div className="space-y-6">
+			<Stack gap="md">
 				<div className="flex items-center gap-2">
 					<User className="w-5 h-5 text-romance-500" />
 					<h2 className="text-2xl font-bold text-slate-900 dark:text-gray-100">
@@ -66,7 +67,7 @@ export function ProfileInformation({
 						Update Profile
 					</Button>
 				</form>
-			</div>
+			</Stack>
 		</Card>
 	);
 }
