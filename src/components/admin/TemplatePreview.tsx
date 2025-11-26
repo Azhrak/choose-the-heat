@@ -87,7 +87,7 @@ export function TemplatePreview({
 					{tropeLabels.map((label, i) => (
 						<span
 							key={template.base_tropes[i]}
-							className="inline-flex items-center px-3 py-1.5 bg-romance-100 dark:bg-romance-900/30 text-romance-700 dark:text-romance-300 rounded-md text-sm font-medium"
+							className="px-4 py-2 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-romance-700 dark:text-pink-200 font-medium"
 						>
 							{label}
 						</span>
@@ -143,13 +143,15 @@ export function TemplatePreview({
 						>
 							<Stack gap="sm">
 								{/* Choice Point Header */}
-								<div className="flex items-start justify-between">
+								<div className="flex items-center gap-3">
+									<div className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full flex items-center justify-center">
+										<span className="text-sm sm:text-base text-romance-700 dark:text-pink-200 font-bold">
+											{cp.scene_number}
+										</span>
+									</div>
 									<Text weight="semibold" size="sm">
-										Choice Point {index + 1}
+										Decision at Scene {cp.scene_number}
 									</Text>
-									<span className="text-xs px-2 py-1 bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded text-slate-600 dark:text-gray-400">
-										Scene {cp.scene_number}
-									</span>
 								</div>
 
 								{/* Prompt */}
