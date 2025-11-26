@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
 import { Home, LogOut } from "lucide-react";
+import { LinkButton } from "~/components/ui/LinkButton";
 
 interface AlreadyLoggedInNoticeProps {
 	userName: string;
@@ -18,13 +18,15 @@ export function AlreadyLoggedInNotice({
 				You are already logged in as <strong>{userName}</strong>
 			</p>
 			<div className="flex gap-2">
-				<Link
+				<LinkButton
 					to="/browse"
-					className="flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 rounded-md hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors flex items-center justify-center gap-2"
+					variant="secondary"
+					size="sm"
+					className="flex-1 border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300"
 				>
 					<Home className="w-4 h-4" />
 					Go Home
-				</Link>
+				</LinkButton>
 				<button
 					type="button"
 					onClick={onLogout}

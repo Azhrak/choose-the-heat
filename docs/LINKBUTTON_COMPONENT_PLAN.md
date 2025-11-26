@@ -57,6 +57,11 @@ A reusable component that combines TanStack Router's `Link` functionality with B
    - "Start Reading" → `variant="secondary"`, `size="md"`
    - **Impact**: Consistent styling on every novel card in the browse page
 
+9. ✅ **AlreadyLoggedInNotice.tsx** (line 21-27)
+   - Replaced button-styled Link component with `LinkButton`
+   - "Go Home" button → `variant="secondary"`, `size="sm"`
+   - **Impact**: Consistent styling on login/signup pages when user already logged in
+
 ### Original Problem (Now Solved)
 
 We had multiple instances where `Link` components were styled as buttons with inline classNames - all have been refactored to use the `LinkButton` component.
@@ -294,17 +299,17 @@ interface LinkButtonProps {
 
 ### Phase 2 (Additional Refactoring):
 
-- **Components affected**: 2 files (StoryCard, NovelCard)
-- **Link instances refactored**: 4 instances
-- **Lines of code reduced**: ~40 lines
+- **Components affected**: 3 files (StoryCard, NovelCard, AlreadyLoggedInNotice)
+- **Link instances refactored**: 5 instances
+- **Lines of code reduced**: ~50 lines
 
 ### Combined Total:
 
-- **Total components affected**: 8 files
-- **Total Link instances refactored**: 16+ instances
-- **Total lines of code reduced**: ~190-240 lines
+- **Total components affected**: 9 files
+- **Total Link instances refactored**: 17+ instances
+- **Total lines of code reduced**: ~200-250 lines
 - **Consistency improvement**: 100% of all button-styled CTAs now unified with LinkButton
-- **High-impact**: Every story card and novel card in the app now uses consistent styling
+- **High-impact**: Every story card, novel card, and auth notice in the app now uses consistent styling
 
 ---
 
