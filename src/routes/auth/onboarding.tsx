@@ -15,6 +15,7 @@ import { Alert } from "~/components/ui/Alert";
 import { Card } from "~/components/ui/Card";
 import { Container } from "~/components/ui/Container";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useTropesQuery } from "~/hooks/useTropesQuery";
 import { ApiError, api } from "~/lib/api/client";
 import {
@@ -137,9 +138,9 @@ function OnboardingPage() {
 							<Heading level="h1" size="page">
 								Let's Personalize Your Experience
 							</Heading>
-							<p className="text-slate-600">
+							<Text variant="muted">
 								Tell us what you love, and we'll craft stories just for you
-							</p>
+							</Text>
 						</Stack>
 					</Stack>
 					{/* Progress Stepper */}
@@ -179,7 +180,7 @@ function OnboardingPage() {
 										Choose Your Genres
 									</Heading>
 								</div>
-								<p className="text-slate-600">Select all that interest you</p>
+								<Text variant="muted">Select all that interest you</Text>
 								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 									{GENRES.map((genre) => (
 										<button
@@ -207,9 +208,9 @@ function OnboardingPage() {
 										Pick Your Tropes
 									</Heading>
 								</div>
-								<p className="text-slate-600">
+								<Text variant="muted">
 									What romance tropes make your heart race?
-								</p>
+								</Text>
 								{tropesLoading ? (
 									<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 										{[1, 2, 3, 4].map((i) => (
@@ -234,9 +235,9 @@ function OnboardingPage() {
 											>
 												<div className="font-semibold">{trope.label}</div>
 												{trope.description && (
-													<div className="text-sm text-slate-500 mt-1">
+													<Text size="sm" variant="muted" className="mt-1">
 														{trope.description}
-													</div>
+													</Text>
 												)}
 											</button>
 										))}
@@ -273,9 +274,9 @@ function OnboardingPage() {
 												<div className="flex items-center justify-between">
 													<div>
 														<div className="flex items-center gap-2">
-															<span className="font-semibold text-slate-900">
+															<Text weight="semibold">
 																{SPICE_LABELS[level].label}
-															</span>
+															</Text>
 															<div className="flex gap-1">
 																{Array.from({ length: level }).map(() => (
 																	<Flame
@@ -286,9 +287,9 @@ function OnboardingPage() {
 																))}
 															</div>
 														</div>
-														<p className="text-sm text-slate-600">
+														<Text size="sm" variant="muted">
 															{SPICE_LABELS[level].description}
-														</p>
+														</Text>
 													</div>
 													<div
 														className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
@@ -318,12 +319,12 @@ function OnboardingPage() {
 												selected={preferences.pacing === pacing}
 												onClick={() => handlePacingChange(pacing)}
 											>
-												<div className="font-semibold text-slate-900">
+												<Text weight="semibold">
 													{PACING_LABELS[pacing].label}
-												</div>
-												<p className="text-sm text-slate-600">
+												</Text>
+												<Text size="sm" variant="muted">
 													{PACING_LABELS[pacing].description}
-												</p>
+												</Text>
 											</RadioButton>
 										))}
 									</Stack>
@@ -340,15 +341,15 @@ function OnboardingPage() {
 												selected={preferences.sceneLength === length}
 												onClick={() => handleSceneLengthChange(length)}
 											>
-												<div className="font-semibold text-slate-900">
+												<Text weight="semibold">
 													{SCENE_LENGTH_LABELS[length].label}
-												</div>
-												<p className="text-sm text-slate-600">
+												</Text>
+												<Text size="sm" variant="muted">
 													{SCENE_LENGTH_LABELS[length].description}
-												</p>
-												<p className="text-xs text-slate-500 mt-1">
+												</Text>
+												<Text size="xs" variant="muted" className="mt-1">
 													{SCENE_LENGTH_LABELS[length].wordCount}
-												</p>
+												</Text>
 											</RadioButton>
 										))}
 									</Stack>

@@ -137,8 +137,8 @@ This document tracks progress on the comprehensive refactoring plan to establish
 - [x] Create ui/index.ts barrel export
 - [x] Update DESIGN_SYSTEM.md with Text component documentation
 - [x] Update COMPONENT_LIBRARY.md with Text component API reference
-- [ ] Apply Text component to policy pages (cookies.tsx, privacy.tsx, terms.tsx)
-- [ ] Apply Text component to user-facing pages
+- [x] Apply Text component to policy pages (cookies.tsx, privacy.tsx, terms.tsx)
+- [x] Apply Text component to auth pages (login.tsx, signup.tsx, onboarding.tsx)
 - [ ] Apply Text component to admin pages
 - [ ] Apply Text component to component library
 - [ ] Add tests for Text component
@@ -230,4 +230,15 @@ This document tracks progress on the comprehensive refactoring plan to establish
   - Updated DESIGN_SYSTEM.md with Text component documentation and migration examples
   - Updated COMPONENT_LIBRARY.md with complete API reference in new Typography Components section
   - Component ready for migration across ~165+ text color class instances
-  - Next: Apply Text component to policy pages, user-facing pages, and component library
+
+### 2025-11-26
+
+- Continued Phase 2.10: Applied Text component to policy and auth pages:
+  - Applied Text component to cookies.tsx (replaced 12 instances of manual text color classes)
+  - Applied Text component to login.tsx (replaced 1 instance)
+  - Applied Text component to signup.tsx (replaced 1 instance)
+  - Applied Text component to onboarding.tsx (replaced 7 instances including subtitle, descriptions, and labels)
+  - Replaced manual text-slate-600/700 dark:text-slate/gray-300 patterns with Text component using variant prop
+  - Used variant="muted" for secondary/helper text, weight="semibold" for emphasized text
+  - All TypeScript and linting checks pass
+  - Next: Apply Text component to admin pages and component library

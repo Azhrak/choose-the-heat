@@ -177,7 +177,7 @@ function SignupPage() {
 						</form>
 					</Stack>
 					{/* Sign In Link */}
-					<p className="text-center text-sm text-slate-600 dark:text-gray-300">
+					<Text size="sm" variant="muted" className="text-center">
 						Already have an account?{" "}
 						<Link
 							to="/auth/login"
@@ -185,7 +185,7 @@ function SignupPage() {
 						>
 							Sign in
 						</Link>
-					</p>
+					</Text>
 				</Stack>
 			</div>
 		</PageBackground>

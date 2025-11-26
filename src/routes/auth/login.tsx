@@ -144,7 +144,7 @@ function LoginPage() {
 				</Stack>
 
 				{/* Sign Up Link */}
-				<p className="text-center text-sm text-slate-600 dark:text-gray-300">
+				<Text size="sm" variant="muted" className="text-center">
 					Don't have an account?{" "}
 					<Link
 						to="/auth/signup"
@@ -152,7 +152,7 @@ function LoginPage() {
 					>
 						Sign up
 					</Link>
-				</p>
+				</Text>
 			</div>
 		</PageBackground>
 	);
