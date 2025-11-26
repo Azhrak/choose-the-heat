@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { AdminLayout, ChoicePointForm } from "~/components/admin";
+import { AIGenerationModal } from "~/components/admin/AIGenerationModal";
 import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
 import { TropeSelector } from "~/components/admin/TropeSelector";
 import { Button } from "~/components/Button";
@@ -10,8 +11,10 @@ import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
+import { Text } from "~/components/ui/Text";
 import { useCreateTemplateMutation } from "~/hooks/useCreateTemplateMutation";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+import type { GeneratedTemplate } from "~/lib/ai/generateTemplate";
 import { GRADIENT_OPTIONS } from "~/lib/constants/gradients";
 import {
 	type TemplateFormData,
@@ -44,6 +47,7 @@ function NewTemplatePage() {
 		choicePoints: [],
 	});
 	const [formError, setFormError] = useState<string | null>(null);
+	const [showAIModal, setShowAIModal] = useState(false);
 
 	// Fetch current user to get role
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
@@ -57,6 +61,22 @@ function NewTemplatePage() {
 
 	const handleMutationError = (error: Error) => {
 		setFormError(error.message);
+	};
+
+	// Handle AI generation acceptance
+	const handleAcceptTemplate = (template: GeneratedTemplate) => {
+		// Pre-fill form data
+		setFormData({
+			title: template.title,
+			description: template.description,
+			base_tropes: template.base_tropes,
+			estimated_scenes: template.estimated_scenes,
+			cover_gradient: template.cover_gradient,
+			choicePoints: template.choicePoints,
+		});
+
+		setShowAIModal(false);
+		setFormError(null);
 	};
 
 	if (userLoading) {
@@ -111,11 +131,17 @@ function NewTemplatePage() {
 						<ArrowLeft className="w-4 h-4" />
 						Back to Templates
 					</Button>
-					<div className="flex flex-col gap-2">
-						<Heading level="h1">Create New Template</Heading>
-						<p className="text-slate-600">
-							Create a new novel template. It will be saved as a draft.
-						</p>
+					<div className="flex items-center justify-between">
+						<div className="flex flex-col gap-2">
+							<Heading level="h1">Create New Template</Heading>
+							<Text className="text-slate-600 dark:text-gray-400">
+								Create a new novel template. It will be saved as a draft.
+							</Text>
+						</div>
+						<Button variant="secondary" onClick={() => setShowAIModal(true)}>
+							<Sparkles className="w-5 h-5" />
+							Generate with AI
+						</Button>
 					</div>
 				</Stack>
 
@@ -251,6 +277,13 @@ function NewTemplatePage() {
 					</form>
 				</div>
 			</Stack>
+
+			{/* AI Generation Modal */}
+			<AIGenerationModal
+				isOpen={showAIModal}
+				onClose={() => setShowAIModal(false)}
+				onAccept={handleAcceptTemplate}
+			/>
 		</AdminLayout>
 	);
 }
