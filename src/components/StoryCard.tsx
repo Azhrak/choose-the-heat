@@ -13,6 +13,7 @@ interface StoryCardProps {
 	templateDescription: string;
 	baseTropes: string[];
 	coverGradient: string;
+	coverUrl?: string | null;
 	createdAt: string;
 	currentScene: number;
 	totalScenes: number;
@@ -34,6 +35,7 @@ export function StoryCard({
 	templateDescription,
 	baseTropes,
 	coverGradient,
+	coverUrl,
 	createdAt,
 	currentScene,
 	totalScenes,
@@ -59,33 +61,63 @@ export function StoryCard({
 				params={{ id }}
 				search={{ scene: currentScene }}
 			>
-				<div
-					className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
-				>
-					{/* Dark mode overlay to tone down bright gradients */}
-					<div className="absolute inset-0 bg-black/20 dark:block hidden" />
-					<BookOpen className="w-16 h-16 text-white opacity-50 relative z-10" />
-					{/* Favorite button overlay */}
-					<button
-						type="button"
-						onClick={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							onToggleFavorite(id, !isFavorite);
-						}}
-						disabled={isTogglingFavorite}
-						className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
-						title={isFavorite ? "Remove from favorites" : "Add to favorites"}
-					>
-						<Heart
-							className={`w-5 h-5 transition-colors ${
-								isFavorite
-									? "fill-red-500 text-red-500"
-									: "text-slate-600 hover:text-red-500"
-							}`}
+				{coverUrl ? (
+					<div className="h-40 relative cursor-pointer hover:opacity-95 transition-opacity overflow-hidden">
+						<img
+							src={coverUrl}
+							alt={displayTitle}
+							className="w-full h-full object-cover object-top"
 						/>
-					</button>
-				</div>
+						{/* Favorite button overlay */}
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								onToggleFavorite(id, !isFavorite);
+							}}
+							disabled={isTogglingFavorite}
+							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
+							title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+						>
+							<Heart
+								className={`w-5 h-5 transition-colors ${
+									isFavorite
+										? "fill-red-500 text-red-500"
+										: "text-slate-600 hover:text-red-500"
+								}`}
+							/>
+						</button>
+					</div>
+				) : (
+					<div
+						className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
+					>
+						{/* Dark mode overlay to tone down bright gradients */}
+						<div className="absolute inset-0 bg-black/20 dark:block hidden" />
+						<BookOpen className="w-16 h-16 text-white opacity-50 relative z-10" />
+						{/* Favorite button overlay */}
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								onToggleFavorite(id, !isFavorite);
+							}}
+							disabled={isTogglingFavorite}
+							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
+							title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+						>
+							<Heart
+								className={`w-5 h-5 transition-colors ${
+									isFavorite
+										? "fill-red-500 text-red-500"
+										: "text-slate-600 hover:text-red-500"
+								}`}
+							/>
+						</button>
+					</div>
+				)}
 			</Link>
 
 			{/* Content */}
