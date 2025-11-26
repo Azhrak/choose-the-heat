@@ -29,6 +29,7 @@ export async function getAllTemplatesPaginated(params: {
 		| "created_at"
 		| "updated_at";
 	sortOrder?: "asc" | "desc";
+	search?: string;
 }) {
 	const {
 		page,
@@ -36,6 +37,7 @@ export async function getAllTemplatesPaginated(params: {
 		status,
 		sortBy = "updated_at",
 		sortOrder = "desc",
+		search,
 	} = params;
 	const offset = (page - 1) * limit;
 
@@ -45,6 +47,17 @@ export async function getAllTemplatesPaginated(params: {
 	// Apply status filter if provided
 	if (status) {
 		query = query.where("status", "=", status);
+	}
+
+	// Apply search filter if provided
+	if (search?.trim()) {
+		const searchTerm = `%${search.trim().toLowerCase()}%`;
+		query = query.where((eb) =>
+			eb.or([
+				eb("title", "ilike", searchTerm),
+				eb("description", "ilike", searchTerm),
+			]),
+		);
 	}
 
 	// Get total count

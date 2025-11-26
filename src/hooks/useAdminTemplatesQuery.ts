@@ -35,9 +35,18 @@ export function useAdminTemplatesPaginatedQuery(params: {
 		| "created_at"
 		| "updated_at";
 	sortOrder?: "asc" | "desc";
+	search?: string;
 	enabled?: boolean;
 }) {
-	const { page, limit, status, sortBy, sortOrder, enabled = true } = params;
+	const {
+		page,
+		limit,
+		status,
+		sortBy,
+		sortOrder,
+		search,
+		enabled = true,
+	} = params;
 
 	return useQuery({
 		queryKey: [
@@ -48,6 +57,7 @@ export function useAdminTemplatesPaginatedQuery(params: {
 			status || "all",
 			sortBy || "updated_at",
 			sortOrder || "desc",
+			search || "",
 		],
 		queryFn: () => {
 			const searchParams = new URLSearchParams({
@@ -65,6 +75,10 @@ export function useAdminTemplatesPaginatedQuery(params: {
 
 			if (sortOrder) {
 				searchParams.set("sortOrder", sortOrder);
+			}
+
+			if (search) {
+				searchParams.set("search", search);
 			}
 
 			return api.get<{

@@ -6,10 +6,12 @@ import {
 	EyeOff,
 	FileText,
 	Plus,
+	Search,
 	Trash2,
 	Upload,
+	X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	AdminLayout,
 	BulkActionsToolbar,
@@ -39,6 +41,7 @@ type TemplatesSearch = {
 	status?: TemplateStatus | "all";
 	sortBy?: "title" | "status" | "scenes" | "created" | "updated";
 	sortOrder?: "asc" | "desc";
+	search?: string;
 };
 
 export const Route = createFileRoute("/admin/templates/")({
@@ -55,6 +58,7 @@ export const Route = createFileRoute("/admin/templates/")({
 					| "created"
 					| "updated") || "updated",
 			sortOrder: (search.sortOrder as "asc" | "desc") || "desc",
+			search: (search.search as string) || "",
 		};
 	},
 });
@@ -84,7 +88,58 @@ function TemplatesListPage() {
 	// Get state from URL params
 	const currentPage = search.page || 1;
 	const statusFilter = search.status || "all";
+	const searchQuery = search.search || "";
 	const itemsPerPage = 10;
+
+	// Local state for search input (to prevent focus loss)
+	const [searchInput, setSearchInput] = useState(searchQuery);
+
+	// Sync searchInput with URL when searchQuery changes (e.g., page load, back button)
+	useEffect(() => {
+		setSearchInput(searchQuery);
+	}, [searchQuery]);
+
+	// Handle search submission (Enter key or button click)
+	const handleSearchSubmit = () => {
+		const trimmedInput = searchInput.trim();
+		const nonSpaceChars = trimmedInput.replace(/\s/g, "").length;
+
+		// Only search if 3+ non-space characters OR empty (to clear search)
+		if (nonSpaceChars >= 3 || trimmedInput === "") {
+			if (trimmedInput !== searchQuery) {
+				navigate({
+					to: "/admin/templates",
+					search: {
+						...search,
+						search: trimmedInput,
+						page: 1,
+					},
+				});
+			}
+		}
+	};
+
+	// Handle Enter key press in search input
+	const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === "Enter") {
+			handleSearchSubmit();
+		}
+	};
+
+	// Handle clearing the search
+	const handleClearSearch = () => {
+		setSearchInput("");
+		if (searchQuery !== "") {
+			navigate({
+				to: "/admin/templates",
+				search: {
+					...search,
+					search: "",
+					page: 1,
+				},
+			});
+		}
+	};
 
 	// Use table sorting hook
 	const { sortField, sortOrder, handleSort } = useTableSorting({
@@ -113,6 +168,7 @@ function TemplatesListPage() {
 		status: statusFilter,
 		sortBy: sortFieldMap[sortField],
 		sortOrder: sortOrder,
+		search: searchQuery,
 		enabled: !!userData,
 	});
 
@@ -306,6 +362,42 @@ function TemplatesListPage() {
 						icon={Archive}
 						color="bg-gray-500"
 					/>
+				</div>
+
+				{/* Search Bar */}
+				<div className="flex gap-2">
+					<div className="relative flex-1">
+						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+						<input
+							type="text"
+							placeholder="Search templates by title or description... (min 3 characters)"
+							value={searchInput}
+							onChange={(e) => setSearchInput(e.target.value)}
+							onKeyDown={handleSearchKeyDown}
+							className="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-romance-500 dark:bg-gray-800 dark:text-gray-100"
+						/>
+						{searchInput && (
+							<button
+								type="button"
+								onClick={handleClearSearch}
+								className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+								aria-label="Clear search"
+							>
+								<X className="w-5 h-5" />
+							</button>
+						)}
+					</div>
+					<Button
+						type="button"
+						onClick={handleSearchSubmit}
+						variant="primary"
+						disabled={
+							searchInput.trim().replace(/\s/g, "").length > 0 &&
+							searchInput.trim().replace(/\s/g, "").length < 3
+						}
+					>
+						Search
+					</Button>
 				</div>
 
 				{/* Status Filter */}

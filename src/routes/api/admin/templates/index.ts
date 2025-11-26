@@ -57,6 +57,7 @@ export const Route = createFileRoute("/api/admin/templates/")({
 					const limitParam = url.searchParams.get("limit");
 					const sortByParam = url.searchParams.get("sortBy");
 					const sortOrderParam = url.searchParams.get("sortOrder");
+					const searchParam = url.searchParams.get("search");
 
 					// If pagination params are provided, use paginated endpoint
 					if (pageParam || limitParam) {
@@ -111,6 +112,7 @@ export const Route = createFileRoute("/api/admin/templates/")({
 								| "updated_at"
 								| undefined,
 							sortOrder: sortOrderParam as "asc" | "desc" | undefined,
+							search: searchParam || undefined,
 						});
 
 						return json(result);
