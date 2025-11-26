@@ -59,6 +59,7 @@ import { Route as ApiAdminUsersStatsRouteImport } from './routes/api/admin/users
 import { Route as ApiAdminUsersIdRouteImport } from './routes/api/admin/users/$id'
 import { Route as ApiAdminTropesIdRouteImport } from './routes/api/admin/tropes/$id'
 import { Route as ApiAdminTemplatesStatsRouteImport } from './routes/api/admin/templates/stats'
+import { Route as ApiAdminTemplatesGenerateRouteImport } from './routes/api/admin/templates/generate'
 import { Route as ApiAdminTemplatesBulkUpdateRouteImport } from './routes/api/admin/templates/bulk-update'
 import { Route as ApiAdminTemplatesBulkImportRouteImport } from './routes/api/admin/templates/bulk-import'
 import { Route as ApiAdminTemplatesBulkDeleteRouteImport } from './routes/api/admin/templates/bulk-delete'
@@ -320,6 +321,12 @@ const ApiAdminTemplatesStatsRoute = ApiAdminTemplatesStatsRouteImport.update({
   path: '/api/admin/templates/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminTemplatesGenerateRoute =
+  ApiAdminTemplatesGenerateRouteImport.update({
+    id: '/api/admin/templates/generate',
+    path: '/api/admin/templates/generate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAdminTemplatesBulkUpdateRoute =
   ApiAdminTemplatesBulkUpdateRouteImport.update({
     id: '/api/admin/templates/bulk-update',
@@ -416,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
+  '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
@@ -477,6 +485,7 @@ export interface FileRoutesByTo {
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
+  '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
@@ -539,6 +548,7 @@ export interface FileRoutesById {
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
+  '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
@@ -602,6 +612,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
     | '/api/admin/templates/bulk-update'
+    | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
@@ -663,6 +674,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
     | '/api/admin/templates/bulk-update'
+    | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
@@ -724,6 +736,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
     | '/api/admin/templates/bulk-update'
+    | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
@@ -786,6 +799,7 @@ export interface RootRouteChildren {
   ApiAdminTemplatesBulkDeleteRoute: typeof ApiAdminTemplatesBulkDeleteRoute
   ApiAdminTemplatesBulkImportRoute: typeof ApiAdminTemplatesBulkImportRoute
   ApiAdminTemplatesBulkUpdateRoute: typeof ApiAdminTemplatesBulkUpdateRoute
+  ApiAdminTemplatesGenerateRoute: typeof ApiAdminTemplatesGenerateRoute
   ApiAdminTemplatesStatsRoute: typeof ApiAdminTemplatesStatsRoute
   ApiAdminTropesIdRoute: typeof ApiAdminTropesIdRoute
   ApiAdminUsersIdRoute: typeof ApiAdminUsersIdRoute
@@ -1148,6 +1162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminTemplatesStatsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/templates/generate': {
+      id: '/api/admin/templates/generate'
+      path: '/api/admin/templates/generate'
+      fullPath: '/api/admin/templates/generate'
+      preLoaderRoute: typeof ApiAdminTemplatesGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/templates/bulk-update': {
       id: '/api/admin/templates/bulk-update'
       path: '/api/admin/templates/bulk-update'
@@ -1301,6 +1322,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminTemplatesBulkDeleteRoute: ApiAdminTemplatesBulkDeleteRoute,
   ApiAdminTemplatesBulkImportRoute: ApiAdminTemplatesBulkImportRoute,
   ApiAdminTemplatesBulkUpdateRoute: ApiAdminTemplatesBulkUpdateRoute,
+  ApiAdminTemplatesGenerateRoute: ApiAdminTemplatesGenerateRoute,
   ApiAdminTemplatesStatsRoute: ApiAdminTemplatesStatsRoute,
   ApiAdminTropesIdRoute: ApiAdminTropesIdRoute,
   ApiAdminUsersIdRoute: ApiAdminUsersIdRoute,
