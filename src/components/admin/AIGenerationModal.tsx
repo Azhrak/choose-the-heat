@@ -46,28 +46,50 @@ export function AIGenerationModal({
 }: AIGenerationModalProps) {
 	const [state, setState] = useState<ModalState>({ type: "select" });
 	const [promptInput, setPromptInput] = useState("");
+	const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
 
 	// Reset to select mode when modal opens
 	useEffect(() => {
 		if (isOpen) {
 			setState({ type: "select" });
 			setPromptInput("");
+			setShowCloseConfirmation(false);
 		}
 	}, [isOpen]);
+
+	// Handle close attempts - show confirmation if in preview state
+	const handleCloseAttempt = () => {
+		if (state.type === "preview") {
+			setShowCloseConfirmation(true);
+		} else if (state.type !== "generating") {
+			onClose();
+		}
+	};
+
+	const confirmClose = () => {
+		setShowCloseConfirmation(false);
+		onClose();
+	};
 
 	// Close modal with escape key
 	useEffect(() => {
 		if (!isOpen) return;
 
 		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === "Escape" && state.type !== "generating") {
-				onClose();
+			if (e.key === "Escape") {
+				if (showCloseConfirmation) {
+					setShowCloseConfirmation(false);
+				} else if (state.type === "preview") {
+					setShowCloseConfirmation(true);
+				} else if (state.type !== "generating") {
+					onClose();
+				}
 			}
 		};
 
 		window.addEventListener("keydown", handleEscape);
 		return () => window.removeEventListener("keydown", handleEscape);
-	}, [isOpen, onClose, state.type]);
+	}, [isOpen, onClose, state.type, showCloseConfirmation]);
 
 	const handleGenerate = async (input: GenerateTemplateInput) => {
 		setState({ type: "generating", mode: input.mode });
@@ -143,14 +165,10 @@ export function AIGenerationModal({
 			<button
 				type="button"
 				className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-				onClick={() => {
-					if (state.type !== "generating") {
-						onClose();
-					}
-				}}
+				onClick={handleCloseAttempt}
 				onKeyDown={(e) => {
-					if (e.key === "Escape" && state.type !== "generating") {
-						onClose();
+					if (e.key === "Escape") {
+						handleCloseAttempt();
 					}
 				}}
 				aria-label="Close modal"
@@ -170,7 +188,7 @@ export function AIGenerationModal({
 						{state.type !== "generating" && (
 							<button
 								type="button"
-								onClick={onClose}
+								onClick={handleCloseAttempt}
 								className="text-slate-400 hover:text-slate-600 dark:hover:text-gray-300 transition-colors"
 								aria-label="Close"
 							>
@@ -226,7 +244,7 @@ export function AIGenerationModal({
 							onAccept={handleAccept}
 							onRegenerate={handleRegenerate}
 							onModify={returnToInput}
-							onCancel={onClose}
+							onCancel={handleCloseAttempt}
 						/>
 					)}
 
@@ -241,6 +259,42 @@ export function AIGenerationModal({
 							onBack={returnToInput}
 							onCancel={onClose}
 						/>
+					)}
+
+					{/* Close Confirmation Dialog */}
+					{showCloseConfirmation && (
+						<div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-lg flex items-center justify-center p-4">
+							<Card padding="lg" className="max-w-md w-full">
+								<Stack gap="md">
+									<Stack gap="xs">
+										<Text weight="semibold" size="lg">
+											Discard Generated Template?
+										</Text>
+										<Text size="sm" className="text-slate-600 dark:text-gray-400">
+											You have a generated template ready to use. If you close
+											now, you'll lose this template and need to generate a new
+											one.
+										</Text>
+									</Stack>
+									<Stack direction="horizontal" gap="sm">
+										<Button
+											variant="ghost"
+											onClick={() => setShowCloseConfirmation(false)}
+											className="flex-1"
+										>
+											Keep Working
+										</Button>
+										<Button
+											variant="danger"
+											onClick={confirmClose}
+											className="flex-1"
+										>
+											Discard & Close
+										</Button>
+									</Stack>
+								</Stack>
+							</Card>
+						</div>
 					)}
 				</Card>
 			</div>
