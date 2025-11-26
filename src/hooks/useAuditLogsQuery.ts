@@ -39,3 +39,59 @@ export function useAuditLogsQuery(
 		enabled,
 	});
 }
+
+/**
+ * Custom hook to fetch paginated audit logs with optional filters
+ * Requires admin role
+ */
+export function useAuditLogsPaginatedQuery(params: {
+	page: number;
+	limit: number;
+	entityType?: AuditEntityType | "all";
+	userId?: string;
+	action?: string;
+	enabled?: boolean;
+}) {
+	const { page, limit, entityType, userId, action, enabled = true } = params;
+
+	return useQuery({
+		queryKey: [
+			"auditLogs",
+			"paginated",
+			page,
+			limit,
+			entityType || "all",
+			userId || "",
+			action || "",
+		],
+		queryFn: () => {
+			const searchParams = new URLSearchParams({
+				limit: limit.toString(),
+				offset: ((page - 1) * limit).toString(),
+			});
+
+			if (entityType && entityType !== "all") {
+				searchParams.set("entityType", entityType);
+			}
+
+			if (userId) {
+				searchParams.set("userId", userId);
+			}
+
+			if (action) {
+				searchParams.set("action", action);
+			}
+
+			return api.get<{
+				logs: AuditLog[];
+				pagination: {
+					total: number;
+					limit: number;
+					offset: number;
+					hasMore: boolean;
+				};
+			}>(`/api/admin/audit-logs?${searchParams.toString()}`);
+		},
+		enabled,
+	});
+}

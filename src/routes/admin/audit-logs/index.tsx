@@ -1,44 +1,58 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Calendar, FileText, Search, Users } from "lucide-react";
-import { useState } from "react";
-import { AdminLayout, NoPermissions } from "~/components/admin";
+import { Calendar, FileText, Users } from "lucide-react";
+import {
+	AdminLayout,
+	NoPermissions,
+	PaginationControls,
+} from "~/components/admin";
 import { ErrorMessage } from "~/components/ErrorMessage";
-import { FormInput } from "~/components/FormInput";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
 import { Text } from "~/components/ui/Text";
-import { useAuditLogsQuery } from "~/hooks/useAuditLogsQuery";
+import { useAuditLogsPaginatedQuery } from "~/hooks/useAuditLogsQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AuditEntityType } from "~/lib/db/types";
 
+// Search params schema
+type AuditLogsSearch = {
+	page?: number;
+	entityType?: AuditEntityType | "all";
+};
+
 export const Route = createFileRoute("/admin/audit-logs/")({
 	component: AuditLogsPage,
+	validateSearch: (search: Record<string, unknown>): AuditLogsSearch => {
+		return {
+			page: Number(search.page) || 1,
+			entityType: (search.entityType as AuditEntityType | "all") || "all",
+		};
+	},
 });
 
 function AuditLogsPage() {
-	const _navigate = useNavigate();
-	const [filters, setFilters] = useState({
-		entityType: "all" as AuditEntityType | "all",
-		userId: "",
-		search: "",
-	});
+	const navigate = useNavigate();
+	const search = Route.useSearch();
+
+	// Get state from URL params
+	const currentPage = search.page || 1;
+	const entityTypeFilter = search.entityType || "all";
+	const itemsPerPage = 20;
 
 	// Fetch current user to get role
 	const { data: userData, isLoading: userLoading } = useCurrentUserQuery();
 
-	// Fetch audit logs with filters
+	// Fetch paginated audit logs with filters
 	const {
 		data: logsData,
 		isLoading: logsLoading,
 		error,
-	} = useAuditLogsQuery(
-		{
-			entityType: filters.entityType !== "all" ? filters.entityType : undefined,
-			userId: filters.userId || undefined,
-		},
-		!!userData && userData.role === "admin",
-	);
+	} = useAuditLogsPaginatedQuery({
+		page: currentPage,
+		limit: itemsPerPage,
+		entityType: entityTypeFilter,
+		enabled: !!userData && userData.role === "admin",
+	});
 
 	if (userLoading || logsLoading) {
 		return (
@@ -73,28 +87,54 @@ function AuditLogsPage() {
 		);
 	}
 
-	if (!logsData?.logs) {
+	if (!logsData?.logs || !logsData?.pagination) {
 		return null;
 	}
 
 	const { role } = userData;
-	let logs = logsData.logs;
+	const { logs, pagination } = logsData;
 
-	// Apply client-side search filter
-	if (filters.search) {
-		const searchLower = filters.search.toLowerCase();
-		logs = logs.filter(
-			(log) =>
-				log.action.toLowerCase().includes(searchLower) ||
-				log.userEmail?.toLowerCase().includes(searchLower) ||
-				log.userName?.toLowerCase().includes(searchLower) ||
-				log.entityId?.toLowerCase().includes(searchLower),
-		);
-	}
+	// Reset to page 1 when entity type filter changes
+	const handleEntityTypeChange = (entityType: AuditEntityType | "all") => {
+		navigate({
+			to: "/admin/audit-logs",
+			search: {
+				...search,
+				entityType,
+				page: 1,
+			},
+		});
+	};
 
-	// Calculate statistics
+	// Handle page change
+	const handlePageChange = (page: number) => {
+		navigate({
+			to: "/admin/audit-logs",
+			search: {
+				...search,
+				page,
+			},
+		});
+	};
+
+	// Handle clearing all filters
+	const handleClearFilters = () => {
+		navigate({
+			to: "/admin/audit-logs",
+			search: {
+				page: 1,
+				entityType: "all",
+			},
+		});
+	};
+
+	// Pagination metadata from server
+	const totalItems = pagination.total;
+	const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+	// Calculate simple statistics from current page
 	const stats = {
-		total: logs.length,
+		total: totalItems,
 		template: logs.filter((l) => l.entityType === "template").length,
 		user: logs.filter((l) => l.entityType === "user").length,
 		today: logs.filter(
@@ -146,25 +186,6 @@ function AuditLogsPage() {
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 						<Stack gap="xs">
 							<label
-								htmlFor="search"
-								className="block text-sm font-medium text-slate-900 dark:text-gray-100"
-							>
-								<Search className="w-4 h-4 inline mr-1" />
-								Search
-							</label>
-							<FormInput
-								label=""
-								type="text"
-								id="search"
-								value={filters.search}
-								onChange={(e) =>
-									setFilters({ ...filters, search: e.target.value })
-								}
-								placeholder="Action, user, or entity ID..."
-							/>
-						</Stack>
-						<Stack gap="xs">
-							<label
 								htmlFor="entityType"
 								className="block text-sm font-medium text-slate-900 dark:text-gray-100"
 							>
@@ -172,12 +193,11 @@ function AuditLogsPage() {
 							</label>
 							<select
 								id="entityType"
-								value={filters.entityType}
+								value={entityTypeFilter}
 								onChange={(e) =>
-									setFilters({
-										...filters,
-										entityType: e.target.value as AuditEntityType | "all",
-									})
+									handleEntityTypeChange(
+										e.target.value as AuditEntityType | "all",
+									)
 								}
 								className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-100"
 							>
@@ -189,9 +209,7 @@ function AuditLogsPage() {
 						<div className="flex items-end">
 							<button
 								type="button"
-								onClick={() =>
-									setFilters({ entityType: "all", userId: "", search: "" })
-								}
+								onClick={handleClearFilters}
 								className="px-4 py-2 text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-gray-100 transition-colors"
 							>
 								Clear Filters
@@ -292,6 +310,16 @@ function AuditLogsPage() {
 						</div>
 					)}
 				</div>
+
+				{/* Pagination Controls */}
+				<PaginationControls
+					currentPage={currentPage}
+					totalPages={totalPages}
+					totalItems={totalItems}
+					itemsPerPage={itemsPerPage}
+					onPageChange={handlePageChange}
+					itemLabel="log"
+				/>
 
 				{/* Info Box */}
 				<div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">

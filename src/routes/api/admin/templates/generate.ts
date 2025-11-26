@@ -10,7 +10,6 @@ import { requireEditorOrAdmin } from "~/lib/auth/authorization";
 import { GRADIENT_OPTIONS } from "~/lib/constants/gradients";
 import { getAllTropes } from "~/lib/db/queries/tropes";
 
-// @ts-expect-error - Route will be registered after route tree regeneration
 export const Route = createFileRoute("/api/admin/templates/generate")({
 	server: {
 		handlers: {

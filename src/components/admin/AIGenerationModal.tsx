@@ -270,7 +270,10 @@ export function AIGenerationModal({
 										<Text weight="semibold" size="lg">
 											Discard Generated Template?
 										</Text>
-										<Text size="sm" className="text-slate-600 dark:text-gray-400">
+										<Text
+											size="sm"
+											className="text-slate-600 dark:text-gray-400"
+										>
 											You have a generated template ready to use. If you close
 											now, you'll lose this template and need to generate a new
 											one.
