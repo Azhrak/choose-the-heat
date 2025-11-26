@@ -11,13 +11,14 @@ A reusable component that combines TanStack Router's `Link` functionality with B
 ## Implementation Status
 
 ### ✅ Component Created
+
 - **Location**: `src/components/ui/LinkButton.tsx`
 - **Status**: Fully implemented with all variants and sizes
 - **Documentation**: Added to `docs/COMPONENT_LIBRARY.md`
 
 ### ✅ Files Refactored
 
-All originally identified files have been successfully refactored:
+**Phase 1: Original Plan** - All originally identified files successfully refactored:
 
 1. ✅ **PreferencesDisplay.tsx** (lines 28, 150)
    - Using `LinkButton` with `variant="primary"` for "Set Up Preferences"
@@ -41,6 +42,20 @@ All originally identified files have been successfully refactored:
 6. ✅ **preferences.tsx** (lines 154, 218)
    - Using `LinkButton` with `variant="ghost"` for "Back to Profile"
    - Using `LinkButton` with `variant="outline"` for "Cancel"
+
+**Phase 2: Additional High-Priority Refactoring** - Completed December 2024:
+
+7. ✅ **StoryCard.tsx** (lines 163-181)
+   - Replaced two button-styled Link components with `LinkButton`
+   - "Continue Reading"/"Read Again" → `variant="primary"`, `size="md"`
+   - Story info icon button → `variant="secondary"`, `size="sm"`
+   - **Impact**: Consistent styling on every story card in the library
+
+8. ✅ **NovelCard.tsx** (lines 85-102)
+   - Replaced two button-styled Link components with `LinkButton`
+   - "View Details" → `variant="primary"`, `size="md"`
+   - "Start Reading" → `variant="secondary"`, `size="md"`
+   - **Impact**: Consistent styling on every novel card in the browse page
 
 ### Original Problem (Now Solved)
 
@@ -269,12 +284,27 @@ interface LinkButtonProps {
 7. `src/routes/preferences.tsx` - One usage
 8. Update `docs/COMPONENT_LIBRARY.md` - Add documentation
 
-## Actual Impact
+## Total Impact
 
-- **Components affected**: 6 files (component + 5 refactored files)
+### Phase 1 (Original Plan):
+
+- **Components affected**: 6 files
 - **Link instances refactored**: 12+ instances
 - **Lines of code reduced**: ~150-200 lines
-- **Consistency improvement**: 100% of originally identified button-styled links unified
+
+### Phase 2 (Additional Refactoring):
+
+- **Components affected**: 2 files (StoryCard, NovelCard)
+- **Link instances refactored**: 4 instances
+- **Lines of code reduced**: ~40 lines
+
+### Combined Total:
+
+- **Total components affected**: 8 files
+- **Total Link instances refactored**: 16+ instances
+- **Total lines of code reduced**: ~190-240 lines
+- **Consistency improvement**: 100% of all button-styled CTAs now unified with LinkButton
+- **High-impact**: Every story card and novel card in the app now uses consistent styling
 
 ---
 
@@ -283,12 +313,14 @@ interface LinkButtonProps {
 To identify additional places where LinkButton could be beneficial, search for:
 
 1. **Link components with extensive className props**
+
    ```bash
    # Search for Link components with button-like styling
    grep -r "Link" src/routes --include="*.tsx" | grep "className.*px-.*py-"
    ```
 
 2. **Link components with button colors**
+
    ```bash
    # Search for Links with background colors
    grep -r "Link" src --include="*.tsx" | grep -E "bg-(romance|slate|red|green)"
@@ -318,11 +350,13 @@ To identify additional places where LinkButton could be beneficial, search for:
 After comprehensive search, the following files contain Link components with button-like styling that could benefit from LinkButton refactoring:
 
 #### 1. **Header.tsx** - Mobile Navigation Links
+
 **Location**: Lines 93-140
 **Issue**: Mobile menu links have button-like styling with padding, rounded corners, and background colors
 **Impact**: 4 Link components with duplicate className strings
 
 **Current Pattern:**
+
 ```tsx
 <Link
   to="/browse"
@@ -343,11 +377,13 @@ After comprehensive search, the following files contain Link components with but
 ---
 
 #### 2. **StoryCard.tsx** - Action Links
+
 **Location**: Lines 162-177
 **Issue**: Two Link components styled as buttons for story actions
 **Impact**: High - appears on every story card in library
 
 **Current Pattern:**
+
 ```tsx
 <Link
   to="/story/$id/read"
@@ -368,6 +404,7 @@ After comprehensive search, the following files contain Link components with but
 ```
 
 **Recommended Refactoring:**
+
 ```tsx
 <LinkButton
   to="/story/$id/read"
@@ -395,11 +432,13 @@ After comprehensive search, the following files contain Link components with but
 ---
 
 #### 3. **NovelCard.tsx** - Action Links
+
 **Location**: Lines 84-97
 **Issue**: Two Link components styled as buttons for template actions
 **Impact**: High - appears on every novel card in browse page
 
 **Current Pattern:**
+
 ```tsx
 <Link
   to="/template/$id"
@@ -418,6 +457,7 @@ After comprehensive search, the following files contain Link components with but
 ```
 
 **Recommended Refactoring:**
+
 ```tsx
 <LinkButton
   to="/template/$id"
@@ -443,17 +483,17 @@ After comprehensive search, the following files contain Link components with but
 
 ---
 
-### Summary of New Opportunities
+### Summary of Additional Refactoring
 
-| File | Location | Link Count | Priority | Notes |
-|------|----------|-----------|----------|-------|
-| Header.tsx | Lines 93-140 | 4 | Low | Menu items, not CTAs - consider separate MenuLink component |
-| StoryCard.tsx | Lines 162-177 | 2 | **High** | Primary CTAs - perfect for LinkButton |
-| NovelCard.tsx | Lines 84-97 | 2 | **High** | Primary CTAs - perfect for LinkButton |
+| File | Location | Link Count | Priority | Status |
+|------|----------|-----------|----------|--------|
+| Header.tsx | Lines 93-140 | 4 | Low | ⏸️ Deferred - Menu items, consider MenuLink component |
+| StoryCard.tsx | Lines 162-177 | 2 | **High** | ✅ **COMPLETED** |
+| NovelCard.tsx | Lines 84-97 | 2 | **High** | ✅ **COMPLETED** |
 
-**Total Additional Opportunities**: 8 Link components
-**High Priority**: 4 Link components (StoryCard + NovelCard)
-**Estimated Lines Reduced**: ~80-100 additional lines
+**High Priority Completed**: 4 Link components (StoryCard + NovelCard) ✅
+**Lines Reduced**: ~40 lines of duplicate className strings
+**Impact**: Every story card and novel card now uses consistent LinkButton styling
 
 ---
 

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Sparkles } from "lucide-react";
+import { LinkButton } from "~/components/ui/LinkButton";
 import { useTropeMap } from "~/hooks/useTropesQuery";
 
 interface NovelCardProps {
@@ -81,20 +82,24 @@ export function NovelCard({
 
 				{/* Actions */}
 				<div className="flex gap-3 mt-auto">
-					<Link
+					<LinkButton
 						to="/template/$id"
 						params={{ id }}
-						className="flex-1 px-4 py-2 bg-romance-600 text-white rounded-lg font-medium hover:bg-romance-700 transition-colors text-center"
+						variant="primary"
+						size="md"
+						className="flex-1"
 					>
 						View Details
-					</Link>
-					<Link
+					</LinkButton>
+					<LinkButton
 						to="/story/create"
 						search={{ templateId: id }}
-						className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-center"
+						variant="secondary"
+						size="md"
+						className="flex-1"
 					>
 						Start Reading
-					</Link>
+					</LinkButton>
 				</div>
 			</div>
 		</div>
