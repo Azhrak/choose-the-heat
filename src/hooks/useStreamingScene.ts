@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { storySceneQueryKey } from "./useStorySceneQuery";
 
 interface SceneMetadata {
@@ -29,6 +29,7 @@ interface StreamingSceneState {
 	isStreaming: boolean;
 	isComplete: boolean;
 	error: string | null;
+	retry: () => void;
 }
 
 interface CachedSceneData {
@@ -62,24 +63,33 @@ export function useStreamingScene(
 	enabled = true,
 ) {
 	const queryClient = useQueryClient();
+	const [retryCounter, setRetryCounter] = useState(0);
 	const [state, setState] = useState<StreamingSceneState>({
 		content: "",
 		metadata: null,
 		isStreaming: false,
 		isComplete: false,
 		error: null,
+		retry: () => {},
 	});
 
 	const abortControllerRef = useRef<AbortController | null>(null);
 
+	const retry = useCallback(() => {
+		// Clear cache and force refetch
+		const queryKey = storySceneQueryKey(storyId, sceneNumber);
+		queryClient.removeQueries({ queryKey });
+		setRetryCounter((prev) => prev + 1);
+	}, [storyId, sceneNumber, queryClient]);
+
 	useEffect(() => {
 		if (!enabled) return;
 
-		// Check if scene is already in query cache
+		// Check if scene is already in query cache (but not during retry)
 		const queryKey = storySceneQueryKey(storyId, sceneNumber);
 		const cachedData = queryClient.getQueryData<CachedSceneData>(queryKey);
 
-		if (cachedData) {
+		if (cachedData && retryCounter === 0) {
 			// Use cached data immediately
 			setState({
 				content: cachedData.scene.content,
@@ -96,6 +106,7 @@ export function useStreamingScene(
 				isStreaming: false,
 				isComplete: true,
 				error: null,
+				retry,
 			});
 			return;
 		}
@@ -107,6 +118,7 @@ export function useStreamingScene(
 			isStreaming: true,
 			isComplete: false,
 			error: null,
+			retry,
 		});
 
 		// Create abort controller for this request
@@ -161,18 +173,21 @@ export function useStreamingScene(
 								setState((prev) => ({
 									...prev,
 									metadata: finalMetadata,
+									retry,
 								}));
 							} else if (data.type === "content") {
 								finalContent += data.content;
 								setState((prev) => ({
 									...prev,
 									content: prev.content + data.content,
+									retry,
 								}));
 							} else if (data.type === "done") {
 								setState((prev) => ({
 									...prev,
 									isStreaming: false,
 									isComplete: true,
+									retry,
 								}));
 
 								// Cache the complete scene data in React Query
@@ -196,6 +211,7 @@ export function useStreamingScene(
 									isStreaming: false,
 									isComplete: false,
 									error: data.error,
+									retry,
 								}));
 							}
 						}
@@ -213,6 +229,7 @@ export function useStreamingScene(
 					isStreaming: false,
 					isComplete: false,
 					error: error instanceof Error ? error.message : "Unknown error",
+					retry,
 				}));
 			});
 
@@ -220,7 +237,7 @@ export function useStreamingScene(
 		return () => {
 			abortController.abort();
 		};
-	}, [storyId, sceneNumber, enabled, queryClient]);
+	}, [storyId, sceneNumber, enabled, queryClient, retryCounter, retry]);
 
 	return state;
 }

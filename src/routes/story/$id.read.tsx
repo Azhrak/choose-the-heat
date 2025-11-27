@@ -226,15 +226,26 @@ function ReadingPage() {
 						</Heading>
 						<p className="text-gray-600 dark:text-gray-300">{error}</p>
 					</Stack>
-					<LinkButton
-						to="/library"
-						search={{ tab: "completed", favorites: false }}
-						variant="secondary"
-						className="border border-rose-200 dark:border-gray-700 text-rose-600 dark:text-rose-400"
-					>
-						<Home className="w-5 h-5" />
-						Back to Library
-					</LinkButton>
+					<div className="flex flex-col sm:flex-row gap-3 justify-center">
+						<Button
+							type="button"
+							onClick={() => streamingState.retry()}
+							variant="primary"
+							className="bg-purple-600 hover:bg-purple-700"
+						>
+							<Sparkles className="w-5 h-5" />
+							<span>Retry Generation</span>
+						</Button>
+						<LinkButton
+							to="/library"
+							search={{ tab: "in-progress", favorites: false }}
+							variant="secondary"
+							className="border border-rose-200 dark:border-gray-700 text-rose-600 dark:text-rose-400"
+						>
+							<Home className="w-5 h-5" />
+							Back to Library
+						</LinkButton>
+					</div>
 				</div>
 			</div>
 		);
@@ -346,24 +357,38 @@ function ReadingPage() {
 							<span>Generating your story...</span>
 						</div>
 					)}
-
 					<div className="prose prose-lg max-w-none space-y-4">
-						{sceneContent
-							? sceneContent.split("\n\n").map((paragraph: string) => (
-									<p
-										key={paragraph.substring(0, 50)}
-										className="text-gray-800 dark:text-gray-200 leading-relaxed font-garamond"
-									>
-										{paragraph}
-									</p>
-								))
-							: isGenerating && (
-									<div className="flex items-center justify-center py-12">
-										<Loader2 className="w-8 h-8 animate-spin text-purple-600 dark:text-purple-400" />
-									</div>
-								)}
-					</div>
-
+						{sceneContent?.trim() ? (
+							sceneContent.split("\n\n").map((paragraph: string) => (
+								<p
+									key={paragraph.substring(0, 50)}
+									className="text-gray-800 dark:text-gray-200 leading-relaxed font-garamond"
+								>
+									{paragraph}
+								</p>
+							))
+						) : isGenerating ? (
+							<div className="flex items-center justify-center py-12">
+								<Loader2 className="w-8 h-8 animate-spin text-purple-600 dark:text-purple-400" />
+							</div>
+						) : (
+							<div className="flex flex-col items-center justify-center py-12 gap-4">
+								<p className="text-gray-600 dark:text-gray-400 text-center">
+									No content was generated. This sometimes happens with AI
+									models.
+								</p>
+								<Button
+									type="button"
+									onClick={() => streamingState.retry()}
+									variant="primary"
+									className="bg-purple-600 hover:bg-purple-700"
+								>
+									<Sparkles className="w-5 h-5" />
+									<span>Retry Generation</span>
+								</Button>
+							</div>
+						)}
+					</div>{" "}
 					{/* Reading stats - show when complete */}
 					{streamingState.isComplete && sceneContent && (
 						<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
