@@ -1,10 +1,13 @@
 import type { AppSettings } from "~/lib/db/types";
+import { AvailableModelsEditor } from "./AvailableModelsEditor";
 
 interface SettingsFieldProps {
 	setting: AppSettings;
 	value: string;
 	onChange: (value: string) => void;
 	error?: string;
+	allSettings?: AppSettings[];
+	getSettingValue?: (setting: AppSettings) => string;
 }
 
 export function SettingsField({
@@ -12,6 +15,8 @@ export function SettingsField({
 	value,
 	onChange,
 	error,
+	allSettings,
+	getSettingValue,
 }: SettingsFieldProps) {
 	const renderInput = () => {
 		switch (setting.value_type) {
@@ -62,6 +67,17 @@ export function SettingsField({
 			}
 
 			case "json":
+				// Use custom editor for available_models field
+				if (setting.key === "ai.available_models") {
+					return (
+						<AvailableModelsEditor
+							value={value}
+							onChange={onChange}
+							error={error}
+						/>
+					);
+				}
+
 				return (
 					<textarea
 						value={value}
@@ -73,6 +89,42 @@ export function SettingsField({
 				);
 
 			default: {
+				// Special handling for ai.model - make it a dropdown based on selected provider
+				if (setting.key === "ai.model" && allSettings && getSettingValue) {
+					const providerSetting = allSettings.find((s) => s.key === "ai.provider");
+					const availableModelsSetting = allSettings.find(
+						(s) => s.key === "ai.available_models",
+					);
+
+					if (providerSetting && availableModelsSetting) {
+						const currentProvider = getSettingValue(providerSetting);
+						try {
+							const availableModels = JSON.parse(
+								getSettingValue(availableModelsSetting),
+							) as Record<string, string[]>;
+							const models = availableModels[currentProvider] || [];
+
+							if (models.length > 0) {
+								return (
+									<select
+										value={value}
+										onChange={(e) => onChange(e.target.value)}
+										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
+									>
+										{models.sort().map((model) => (
+											<option key={model} value={model}>
+												{model}
+											</option>
+										))}
+									</select>
+								);
+							}
+						} catch (error) {
+							console.error("Failed to parse available models:", error);
+						}
+					}
+				}
+
 				// Check if this is a multi-line text field based on key patterns
 				const isMultiline =
 					setting.key.includes("rules") ||

@@ -244,6 +244,8 @@ function SettingsPage() {
 									value={getValue(setting)}
 									onChange={(value) => handleFieldChange(setting.key, value)}
 									error={errors[setting.key]}
+									allSettings={settings}
+									getSettingValue={getValue}
 								/>
 							))}
 						</div>
