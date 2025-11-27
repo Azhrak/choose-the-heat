@@ -172,31 +172,61 @@ function StoryInfoPage() {
 					{/* Story Header */}
 					<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
 						{/* Cover */}
-						<div
-							className={`h-64 bg-linear-to-br ${story.template.cover_gradient} flex items-center justify-center relative`}
-						>
-							<BookOpen className="w-24 h-24 text-white opacity-50" />
-							{/* Favorite button */}
-							<button
-								type="button"
-								onClick={handleToggleFavorite}
-								disabled={toggleFavoriteMutation.isPending}
-								className="absolute top-6 right-6 p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer"
-								title={
-									story.favorited_at
-										? "Remove from favorites"
-										: "Add to favorites"
-								}
-							>
-								<Heart
-									className={`w-6 h-6 transition-colors ${
-										story.favorited_at
-											? "fill-red-500 text-red-500"
-											: "text-slate-600 dark:text-gray-300 hover:text-red-500"
-									}`}
+						{story.template.cover_url ? (
+							<div className="h-80 sm:h-160 relative overflow-hidden">
+								<img
+									src={story.template.cover_url}
+									alt={story.story_title || story.template.title}
+									className="w-full h-full object-cover object-top"
 								/>
-							</button>
-						</div>
+								{/* Favorite button */}
+								<button
+									type="button"
+									onClick={handleToggleFavorite}
+									disabled={toggleFavoriteMutation.isPending}
+									className="absolute top-6 right-6 p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+									title={
+										story.favorited_at
+											? "Remove from favorites"
+											: "Add to favorites"
+									}
+								>
+									<Heart
+										className={`w-6 h-6 transition-colors ${
+											story.favorited_at
+												? "fill-red-500 text-red-500"
+												: "text-slate-600 dark:text-gray-300 hover:text-red-500"
+										}`}
+									/>
+								</button>
+							</div>
+						) : (
+							<div
+								className={`h-64 bg-linear-to-br ${story.template.cover_gradient} flex items-center justify-center relative`}
+							>
+								<BookOpen className="w-24 h-24 text-white opacity-50" />
+								{/* Favorite button */}
+								<button
+									type="button"
+									onClick={handleToggleFavorite}
+									disabled={toggleFavoriteMutation.isPending}
+									className="absolute top-6 right-6 p-3 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+									title={
+										story.favorited_at
+											? "Remove from favorites"
+											: "Add to favorites"
+									}
+								>
+									<Heart
+										className={`w-6 h-6 transition-colors ${
+											story.favorited_at
+												? "fill-red-500 text-red-500"
+												: "text-slate-600 dark:text-gray-300 hover:text-red-500"
+										}`}
+									/>
+								</button>
+							</div>
+						)}
 
 						{/* Title & Metadata */}
 						<div className="p-8 space-y-4">
