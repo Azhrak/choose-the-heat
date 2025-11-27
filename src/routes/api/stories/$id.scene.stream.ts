@@ -245,6 +245,13 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 						sceneLength: preferences.sceneLength,
 					});
 
+					// Log the prompts being sent
+					console.log("\n=== SYSTEM PROMPT ===");
+					console.log(`${systemPrompt.substring(0, 500)}...`);
+					console.log("\n=== USER PROMPT ===");
+					console.log(userPrompt);
+					console.log("=== END PROMPTS ===\n");
+
 					// Get text stream (using database config for temperature/maxTokens)
 					const textStream = await streamCompletion(systemPrompt, userPrompt);
 
