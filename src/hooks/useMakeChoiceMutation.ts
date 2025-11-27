@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { userStoriesQueryKey } from "~/hooks/useUserStoriesQuery";
 import { api } from "~/lib/api/client";
 import { storySceneQueryKey } from "./useStorySceneQuery";
-import { userStoriesQueryKey } from "./useUserStoriesQuery";
 
 interface ChoiceData {
 	choicePointId: string;
@@ -39,13 +39,10 @@ export function useMakeChoiceMutation(storyId: string) {
 				queryKey: ["story", storyId],
 			});
 
-			// If story is completed, invalidate user stories to update library status
+			// If story is completed, invalidate all user stories queries to update library
 			if (result.completed) {
 				queryClient.invalidateQueries({
-					queryKey: userStoriesQueryKey("in-progress"),
-				});
-				queryClient.invalidateQueries({
-					queryKey: userStoriesQueryKey("completed"),
+					queryKey: userStoriesQueryKey(),
 				});
 			}
 		},

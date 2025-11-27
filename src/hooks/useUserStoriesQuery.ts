@@ -7,7 +7,7 @@ interface UserStoriesResponse {
 }
 
 export const userStoriesQueryKey = (
-	status: StoryStatus,
+	status?: StoryStatus,
 	favoritesOnly?: boolean,
 ) => ["user-stories", status, favoritesOnly] as const;
 
