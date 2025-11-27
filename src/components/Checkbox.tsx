@@ -1,6 +1,6 @@
 import { Check, Minus } from "lucide-react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { forwardRef } from "react";
+import { forwardRef, useId } from "react";
 import { cn } from "~/lib/utils";
 
 interface CheckboxProps
@@ -15,8 +15,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 		{ label, description, className, id, indeterminate, ...props },
 		ref,
 	) {
-		const checkboxId =
-			id || `checkbox-${Math.random().toString(36).substring(2, 9)}`;
+		const generatedId = useId();
+		const checkboxId = id || generatedId;
 
 		return (
 			<label
