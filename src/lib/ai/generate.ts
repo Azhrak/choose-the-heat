@@ -3,8 +3,12 @@ import {
 	getCachedScene,
 	getRecentScenes,
 } from "~/lib/db/queries/scenes";
-import { getChoicePointForScene } from "~/lib/db/queries/stories";
+import {
+	getChoicePointForScene,
+	updateStoryAISettings,
+} from "~/lib/db/queries/stories";
 import { generateCompletion } from "./client";
+import { getAIConfig, getAIConfigForStory } from "./config";
 import {
 	buildScenePrompt,
 	buildSystemPrompt,
@@ -27,6 +31,9 @@ export interface GenerateSceneContext {
 		text: string;
 		tone: string;
 	};
+	aiProvider?: string | null;
+	aiModel?: string | null;
+	aiTemperature?: string | number | null;
 }
 
 /**
@@ -44,7 +51,31 @@ export async function generateScene(
 		estimatedScenes,
 		preferences,
 		lastChoice,
+		aiProvider,
+		aiModel,
+		aiTemperature,
 	} = context;
+
+	// Get AI config for this story (with fallback to current settings)
+	const aiConfig = await getAIConfigForStory(
+		aiProvider,
+		aiModel,
+		aiTemperature,
+	);
+
+	// If this is the first scene and the story doesn't have AI settings saved yet,
+	// save the current AI settings to the story
+	if (sceneNumber === 1 && (!aiProvider || !aiModel)) {
+		const currentConfig = await getAIConfig();
+		await updateStoryAISettings(storyId, {
+			provider: currentConfig.provider,
+			model: currentConfig.model,
+			temperature: currentConfig.temperature,
+		});
+		console.log(
+			`[Scene Generation] Saved AI settings to story: ${currentConfig.provider} / ${currentConfig.model} / temp=${currentConfig.temperature}`,
+		);
+	}
 
 	// Log scene length preference
 	console.log(
@@ -100,8 +131,10 @@ export async function generateScene(
 	console.log(userPrompt);
 	console.log("=== END PROMPTS ===\n");
 
-	// Generate with AI (using database config for temperature/maxTokens)
-	const content = await generateCompletion(systemPrompt, userPrompt);
+	// Generate with AI (using story-specific config or current settings)
+	const content = await generateCompletion(systemPrompt, userPrompt, {
+		config: aiConfig,
+	});
 
 	// Parse content and extract metadata
 	const parsed = parseSceneMeta(content);

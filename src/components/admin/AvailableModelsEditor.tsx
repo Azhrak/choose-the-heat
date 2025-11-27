@@ -73,7 +73,9 @@ export function AvailableModelsEditor({
 		}
 	};
 
-	const handleProviderInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+	const handleProviderInputKeyDown = (
+		e: React.KeyboardEvent<HTMLInputElement>,
+	) => {
 		if (e.key === "Enter") {
 			e.preventDefault();
 			handleAddProvider();
@@ -106,31 +108,26 @@ export function AvailableModelsEditor({
 
 						{/* Models list */}
 						<div className="space-y-2">
-							{[...(data[provider] || [])]
-								.sort()
-								.map((model) => (
-									<div
-										key={model}
-										className="flex items-center justify-between bg-white dark:bg-gray-800 px-3 py-2 rounded border border-slate-200 dark:border-gray-700"
+							{[...(data[provider] || [])].sort().map((model) => (
+								<div
+									key={model}
+									className="flex items-center justify-between bg-white dark:bg-gray-800 px-3 py-2 rounded border border-slate-200 dark:border-gray-700"
+								>
+									<span className="text-sm text-slate-900 dark:text-gray-100 font-mono">
+										{model}
+									</span>
+									<button
+										type="button"
+										onClick={() =>
+											handleRemoveModel(provider, data[provider].indexOf(model))
+										}
+										className="text-slate-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400"
+										title="Remove model"
 									>
-										<span className="text-sm text-slate-900 dark:text-gray-100 font-mono">
-											{model}
-										</span>
-										<button
-											type="button"
-											onClick={() =>
-												handleRemoveModel(
-													provider,
-													data[provider].indexOf(model),
-												)
-											}
-											className="text-slate-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400"
-											title="Remove model"
-										>
-											<X className="w-4 h-4" />
-										</button>
-									</div>
-								))}
+										<X className="w-4 h-4" />
+									</button>
+								</div>
+							))}
 
 							{/* Add model input */}
 							<div className="flex gap-2 mt-2">

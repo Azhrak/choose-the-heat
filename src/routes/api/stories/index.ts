@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
+import { getAIConfig } from "~/lib/ai/config";
 import { getSessionFromRequest } from "~/lib/auth/session";
 import { createUserStory } from "~/lib/db/queries/stories";
 import { validateTropeKeys } from "~/lib/db/queries/tropes";
@@ -62,12 +63,21 @@ export const Route = createFileRoute("/api/stories/")({
 						}
 					}
 
+					// Get current AI settings to save with the story
+					const aiConfig = await getAIConfig();
+					const aiSettings = {
+						provider: aiConfig.provider,
+						model: aiConfig.model,
+						temperature: aiConfig.temperature,
+					};
+
 					// Create the user story with optional preference overrides and custom title
 					const story = await createUserStory(
 						session.userId,
 						templateId,
 						preferences || null,
 						storyTitle,
+						aiSettings,
 					);
 
 					return json(

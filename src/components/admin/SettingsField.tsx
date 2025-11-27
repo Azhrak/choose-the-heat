@@ -91,7 +91,9 @@ export function SettingsField({
 			default: {
 				// Special handling for ai.model - make it a dropdown based on selected provider
 				if (setting.key === "ai.model" && allSettings && getSettingValue) {
-					const providerSetting = allSettings.find((s) => s.key === "ai.provider");
+					const providerSetting = allSettings.find(
+						(s) => s.key === "ai.provider",
+					);
 					const availableModelsSetting = allSettings.find(
 						(s) => s.key === "ai.available_models",
 					);

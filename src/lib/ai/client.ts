@@ -3,7 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
-import { getAIConfig } from "./config";
+import { type AIConfig, getAIConfig } from "./config";
 
 /**
  * Supported AI providers
@@ -19,8 +19,8 @@ export type AIProvider =
 /**
  * Initialize AI provider based on configuration
  */
-async function getAIModel(modelOverride?: string) {
-	const config = await getAIConfig();
+async function getAIModel(modelOverride?: string, configOverride?: AIConfig) {
+	const config = configOverride || (await getAIConfig());
 	const modelName = modelOverride || config.model;
 
 	switch (config.provider) {
@@ -130,12 +130,13 @@ export async function generateCompletion(
 		model?: string;
 		temperature?: number;
 		maxTokens?: number;
+		config?: AIConfig;
 	},
 ): Promise<string> {
-	const config = await getAIConfig();
+	const config = options?.config || (await getAIConfig());
 
 	const { text } = await generateText({
-		model: await getAIModel(options?.model),
+		model: await getAIModel(options?.model, config),
 		system: systemPrompt,
 		prompt: userPrompt,
 		temperature: options?.temperature ?? config.temperature,

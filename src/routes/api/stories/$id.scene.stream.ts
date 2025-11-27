@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
+import { getAIConfig, getAIConfigForStory } from "~/lib/ai/config";
 import type { StoryPreferences } from "~/lib/ai/prompts";
 import {
 	buildScenePrompt,
@@ -15,7 +16,11 @@ import {
 	getCachedScene,
 	getRecentScenes,
 } from "~/lib/db/queries/scenes";
-import { getChoicePointForScene, getStoryById } from "~/lib/db/queries/stories";
+import {
+	getChoicePointForScene,
+	getStoryById,
+	updateStoryAISettings,
+} from "~/lib/db/queries/stories";
 
 // Query params schema
 const sceneQuerySchema = z.object({
@@ -169,6 +174,27 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 					}
 
 					// Scene not cached - stream generation
+					// Get AI config for this story (with fallback to current settings)
+					const aiConfig = await getAIConfigForStory(
+						story.ai_provider,
+						story.ai_model,
+						story.ai_temperature,
+					);
+
+					// If this is the first scene and the story doesn't have AI settings saved yet,
+					// save the current AI settings to the story
+					if (sceneNumber === 1 && (!story.ai_provider || !story.ai_model)) {
+						const currentConfig = await getAIConfig();
+						await updateStoryAISettings(storyId, {
+							provider: currentConfig.provider,
+							model: currentConfig.model,
+							temperature: currentConfig.temperature,
+						});
+						console.log(
+							`[Scene Generation] Saved AI settings to story: ${currentConfig.provider} / ${currentConfig.model} / temp=${currentConfig.temperature}`,
+						);
+					}
+
 					// Get context for generation
 					const recentScenes = await getRecentScenes(storyId, 2);
 					const previousSceneContents = recentScenes.map((s) => s.content);
@@ -252,8 +278,10 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 					console.log(userPrompt);
 					console.log("=== END PROMPTS ===\n");
 
-					// Get text stream (using database config for temperature/maxTokens)
-					const textStream = await streamCompletion(systemPrompt, userPrompt);
+					// Get text stream (using story-specific config or current settings)
+					const textStream = await streamCompletion(systemPrompt, userPrompt, {
+						config: aiConfig,
+					});
 
 					// Create SSE stream
 					const encoder = new TextEncoder();

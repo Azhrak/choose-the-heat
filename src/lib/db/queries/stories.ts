@@ -42,6 +42,11 @@ export async function createUserStory(
 	templateId: string,
 	preferences: UserPreferences | null,
 	customTitle?: string,
+	aiSettings?: {
+		provider: string;
+		model: string;
+		temperature: number;
+	},
 ) {
 	// Get template title for auto-generation
 	const template = await db
@@ -106,6 +111,11 @@ export async function createUserStory(
 			preferences: JSON.stringify(preferences),
 			current_scene: 1,
 			status: "in-progress",
+			...(aiSettings && {
+				ai_provider: aiSettings.provider,
+				ai_model: aiSettings.model,
+				ai_temperature: aiSettings.temperature.toString(),
+			}),
 		})
 		.returning([
 			"id",
@@ -487,6 +497,29 @@ export async function branchStory(
 	await recordChoice(newStoryId, choicePointId, newChoice);
 
 	return newStoryId;
+}
+
+/**
+ * Update AI settings for a story
+ */
+export async function updateStoryAISettings(
+	storyId: string,
+	aiSettings: {
+		provider: string;
+		model: string;
+		temperature: number;
+	},
+) {
+	return db
+		.updateTable("user_stories")
+		.set({
+			ai_provider: aiSettings.provider,
+			ai_model: aiSettings.model,
+			ai_temperature: aiSettings.temperature.toString(),
+			updated_at: new Date(),
+		})
+		.where("id", "=", storyId)
+		.execute();
 }
 
 /**

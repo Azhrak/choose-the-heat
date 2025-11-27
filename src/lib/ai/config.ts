@@ -201,3 +201,59 @@ export async function getAllAvailableModels(): Promise<
 	const config = await getAIConfig();
 	return config.availableModels;
 }
+
+/**
+ * Get AI configuration for a specific story, with fallback to current settings
+ * If the story has saved AI settings, use those (if still valid)
+ * Otherwise, use the current app settings
+ */
+export async function getAIConfigForStory(
+	storyProvider?: string | null,
+	storyModel?: string | null,
+	storyTemperature?: string | number | null,
+): Promise<AIConfig> {
+	const currentConfig = await getAIConfig();
+
+	// If no story-specific settings, use current config
+	if (!storyProvider || !storyModel) {
+		return currentConfig;
+	}
+
+	// Validate that the provider still exists
+	const provider = storyProvider as AIProvider;
+	if (!currentConfig.availableModels[provider]) {
+		console.log(
+			`[AI Config] Story provider "${provider}" no longer available, falling back to current provider "${currentConfig.provider}"`,
+		);
+		return currentConfig;
+	}
+
+	// Validate that the model still exists for this provider
+	const availableModels = currentConfig.availableModels[provider];
+	if (!availableModels.includes(storyModel)) {
+		console.log(
+			`[AI Config] Story model "${storyModel}" no longer available for provider "${provider}", falling back to current model "${currentConfig.model}"`,
+		);
+		return currentConfig;
+	}
+
+	// Parse temperature
+	const temperature =
+		typeof storyTemperature === "string"
+			? Number.parseFloat(storyTemperature)
+			: typeof storyTemperature === "number"
+				? storyTemperature
+				: currentConfig.temperature;
+
+	// Use story-specific settings
+	console.log(
+		`[AI Config] Using story-specific settings: ${provider} / ${storyModel} / temp=${temperature}`,
+	);
+
+	return {
+		...currentConfig,
+		provider,
+		model: storyModel,
+		temperature,
+	};
+}

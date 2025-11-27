@@ -59,6 +59,9 @@ export interface UserStory {
 	favorited_at: string | null;
 	branched_from_story_id?: string | null;
 	branched_at_scene?: number | null;
+	ai_provider?: string | null;
+	ai_model?: string | null;
+	ai_temperature?: number | null;
 	created_at: string;
 	updated_at: string;
 	template: Template;

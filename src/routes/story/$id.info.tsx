@@ -466,6 +466,65 @@ function StoryInfoPage() {
 							</Stack>
 						</div>
 					)}
+					{/* AI Configuration */}
+					{(story.ai_provider || story.ai_model) && (
+						<div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
+							<Heading level="h2" size="section">
+								AI Configuration
+							</Heading>
+
+							<Stack gap="md">
+								{story.ai_provider && (
+									<Stack gap="xs">
+										<div className="flex items-center gap-2">
+											<Sparkles className="w-5 h-5 text-romance-600" />
+											<Heading level="h3" size="subsection">
+												AI Provider
+											</Heading>
+										</div>
+										<div className="pl-7">
+											<p className="font-medium text-slate-700 dark:text-gray-300 capitalize">
+												{story.ai_provider}
+											</p>
+										</div>
+									</Stack>
+								)}
+
+								{story.ai_model && (
+									<Stack gap="xs">
+										<div className="flex items-center gap-2">
+											<Sparkles className="w-5 h-5 text-romance-600" />
+											<Heading level="h3" size="subsection">
+												Model
+											</Heading>
+										</div>
+										<div className="pl-7">
+											<p className="font-medium text-slate-700 dark:text-gray-300 font-mono text-sm">
+												{story.ai_model}
+											</p>
+										</div>
+									</Stack>
+								)}
+
+								{story.ai_temperature !== null &&
+									story.ai_temperature !== undefined && (
+										<Stack gap="xs">
+											<div className="flex items-center gap-2">
+												<Flame className="w-5 h-5 text-romance-600" />
+												<Heading level="h3" size="subsection">
+													Temperature
+												</Heading>
+											</div>
+											<div className="pl-7">
+												<p className="font-medium text-slate-700 dark:text-gray-300">
+													{story.ai_temperature}
+												</p>
+											</div>
+										</Stack>
+									)}
+							</Stack>
+						</div>
+					)}
 				</Stack>
 			</PageContainer>
 

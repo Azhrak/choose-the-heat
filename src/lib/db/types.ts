@@ -23,6 +23,8 @@ export type JsonPrimitive = boolean | number | string | null;
 
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
+export type Numeric = ColumnType<string, number | string, number | string>;
+
 export type TemplateStatus = "archived" | "draft" | "published";
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
@@ -145,6 +147,9 @@ export interface Users {
 }
 
 export interface UserStories {
+	ai_model: string | null;
+	ai_provider: string | null;
+	ai_temperature: Numeric | null;
 	branched_at_scene: number | null;
 	branched_from_story_id: string | null;
 	created_at: Generated<Timestamp>;

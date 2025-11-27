@@ -3,13 +3,13 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
-import { getAIConfig } from "./config";
+import { type AIConfig, getAIConfig } from "./config";
 
 /**
  * Initialize AI provider based on configuration
  */
-async function getAIModel(modelOverride?: string) {
-	const config = await getAIConfig();
+async function getAIModel(modelOverride?: string, configOverride?: AIConfig) {
+	const config = configOverride || (await getAIConfig());
 	const modelName = modelOverride || config.model;
 
 	switch (config.provider) {
@@ -97,12 +97,13 @@ export async function streamCompletion(
 		model?: string;
 		temperature?: number;
 		maxTokens?: number;
+		config?: AIConfig;
 	},
 ) {
-	const config = await getAIConfig();
+	const config = options?.config || (await getAIConfig());
 
 	const result = streamText({
-		model: await getAIModel(options?.model),
+		model: await getAIModel(options?.model, config),
 		system: systemPrompt,
 		prompt: userPrompt,
 		temperature: options?.temperature ?? config.temperature,

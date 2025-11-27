@@ -129,6 +129,9 @@ export const Route = createFileRoute("/api/stories/$id/scene")({
 							estimatedScenes: story.template.estimated_scenes,
 							preferences: story.preferences as unknown as StoryPreferences,
 							lastChoice: lastChoiceData,
+							aiProvider: story.ai_provider,
+							aiModel: story.ai_model,
+							aiTemperature: story.ai_temperature,
 						}); // Fetch the newly cached scene
 						scene = await getCachedScene(storyId, sceneNumber);
 						cached = result.cached;
