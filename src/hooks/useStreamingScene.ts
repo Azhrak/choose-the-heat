@@ -82,6 +82,11 @@ export function useStreamingScene(
 		setRetryCounter((prev) => prev + 1);
 	}, [storyId, sceneNumber, queryClient]);
 
+	// Update the retry function in state whenever it changes
+	useEffect(() => {
+		setState((prev) => ({ ...prev, retry }));
+	}, [retry]);
+
 	useEffect(() => {
 		if (!enabled) return;
 
@@ -90,25 +95,30 @@ export function useStreamingScene(
 		const cachedData = queryClient.getQueryData<CachedSceneData>(queryKey);
 
 		if (cachedData && retryCounter === 0) {
-			// Use cached data immediately
-			setState({
-				content: cachedData.scene.content,
-				metadata: {
-					scene: {
-						number: cachedData.scene.number,
-						wordCount: cachedData.scene.wordCount,
-						cached: true,
+			// Use cached data immediately - but only if it has content
+			if (cachedData.scene.content?.trim()) {
+				setState({
+					content: cachedData.scene.content,
+					metadata: {
+						scene: {
+							number: cachedData.scene.number,
+							wordCount: cachedData.scene.wordCount,
+							cached: true,
+						},
+						story: cachedData.story,
+						choicePoint: cachedData.choicePoint,
+						previousChoice: cachedData.previousChoice,
 					},
-					story: cachedData.story,
-					choicePoint: cachedData.choicePoint,
-					previousChoice: cachedData.previousChoice,
-				},
-				isStreaming: false,
-				isComplete: true,
-				error: null,
-				retry,
-			});
-			return;
+					isStreaming: false,
+					isComplete: true,
+					error: null,
+					retry,
+				});
+				return;
+			} else {
+				// Cached data has empty content, clear and fetch fresh
+				queryClient.removeQueries({ queryKey });
+			}
 		}
 
 		// Reset state when scene changes
@@ -190,8 +200,8 @@ export function useStreamingScene(
 									retry,
 								}));
 
-								// Cache the complete scene data in React Query
-								if (finalMetadata) {
+								// Cache the complete scene data in React Query - but only if we have content
+								if (finalMetadata && finalContent.trim()) {
 									const cacheData: CachedSceneData = {
 										scene: {
 											number: finalMetadata.scene.number,
@@ -204,6 +214,13 @@ export function useStreamingScene(
 										previousChoice: finalMetadata.previousChoice,
 									};
 									queryClient.setQueryData(queryKey, cacheData);
+								} else if (!finalContent.trim()) {
+									console.warn(
+										"AI returned empty content for scene generation. Scene:",
+										finalMetadata?.scene.number,
+										"Story:",
+										storyId,
+									);
 								}
 							} else if (data.type === "error") {
 								setState((prev) => ({

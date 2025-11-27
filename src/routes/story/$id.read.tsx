@@ -534,27 +534,30 @@ function ReadingPage() {
 						)}
 					</div>
 				)}{" "}
-				{/* No Choice Point - Continue to Next Scene - only show when streaming is complete */}
-				{streamingState.isComplete && !choicePoint && !isLastScene && (
-					<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center space-y-6">
-						<p className="text-gray-600 dark:text-gray-300">
-							Ready to continue?
-						</p>
-						<Button
-							type="button"
-							onClick={() => {
-								const nextScene = scene.number + 1;
-								// Just navigate to next scene, don't mark as complete
-								navigate({ search: { scene: nextScene }, replace: false });
-							}}
-							variant="primary"
-							className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
-						>
-							<span>Continue to Next Scene</span>
-							<ChevronRight className="w-5 h-5" />
-						</Button>
-					</div>
-				)}
+				{/* No Choice Point - Continue to Next Scene - only show when streaming is complete and content exists */}
+				{streamingState.isComplete &&
+					!choicePoint &&
+					!isLastScene &&
+					sceneContent?.trim() && (
+						<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center space-y-6">
+							<p className="text-gray-600 dark:text-gray-300">
+								Ready to continue?
+							</p>
+							<Button
+								type="button"
+								onClick={() => {
+									const nextScene = scene.number + 1;
+									// Just navigate to next scene, don't mark as complete
+									navigate({ search: { scene: nextScene }, replace: false });
+								}}
+								variant="primary"
+								className="bg-linear-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700"
+							>
+								<span>Continue to Next Scene</span>
+								<ChevronRight className="w-5 h-5" />
+							</Button>
+						</div>
+					)}
 				{/* Story Complete - only show when streaming is complete */}
 				{streamingState.isComplete && isLastScene && (
 					<div className="bg-linear-to-br from-purple-100 to-rose-100 dark:from-purple-900/30 dark:to-rose-900/30 rounded-xl shadow-lg p-8 text-center space-y-4">
