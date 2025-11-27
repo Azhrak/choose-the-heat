@@ -5,7 +5,7 @@
 
 import type { ColumnType } from "kysely";
 
-export type AuditEntityType = "template" | "user";
+export type AuditEntityType = "setting" | "template" | "user";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 	? ColumnType<S, I | undefined, U>
@@ -37,6 +37,21 @@ export interface AdminAuditLogs {
 	entity_type: AuditEntityType;
 	id: Generated<string>;
 	user_id: string;
+}
+
+export interface AppSettings {
+	category: string;
+	created_at: Generated<Timestamp>;
+	default_value: string | null;
+	description: string | null;
+	id: Generated<string>;
+	is_sensitive: Generated<boolean>;
+	key: string;
+	updated_at: Generated<Timestamp>;
+	updated_by: string | null;
+	validation_rules: Json | null;
+	value: string;
+	value_type: string;
 }
 
 export interface ChoicePoints {
@@ -146,6 +161,7 @@ export interface UserStories {
 
 export interface DB {
 	admin_audit_logs: AdminAuditLogs;
+	app_settings: AppSettings;
 	choice_points: ChoicePoints;
 	choices: Choices;
 	novel_templates: NovelTemplates;

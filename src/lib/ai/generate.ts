@@ -76,7 +76,7 @@ export async function generateScene(
 	const choicePoint = await getChoicePointForScene(templateId, sceneNumber);
 
 	// Build prompts
-	const systemPrompt = buildSystemPrompt(preferences);
+	const systemPrompt = await buildSystemPrompt(preferences);
 	const userPrompt = buildScenePrompt({
 		templateTitle,
 		sceneNumber,

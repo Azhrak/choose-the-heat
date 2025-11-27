@@ -1,3 +1,5 @@
+import { getSettingsMap } from "../db/queries/settings";
+
 /**
  * Preferences for story generation
  */
@@ -71,9 +73,143 @@ function getGenderGuidance(gender: string): string {
 }
 
 /**
+ * Prompt settings cache
+ */
+interface PromptSettingsCache {
+	data: Record<string, string> | null;
+	timestamp: number;
+}
+
+const promptCache: PromptSettingsCache = {
+	data: null,
+	timestamp: 0,
+};
+
+const PROMPT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Get prompt settings from database with caching
+ */
+async function getPromptSettings(): Promise<Record<string, string>> {
+	const now = Date.now();
+	if (promptCache.data && now - promptCache.timestamp < PROMPT_CACHE_TTL) {
+		return promptCache.data;
+	}
+
+	try {
+		const settings = await getSettingsMap({ category: "prompts" });
+		promptCache.data = settings;
+		promptCache.timestamp = now;
+		return settings;
+	} catch (error) {
+		console.error("Failed to load prompt settings:", error);
+		return {};
+	}
+}
+
+/**
+ * Get spice level description from settings or fallback to hardcoded
+ */
+async function getSpiceLevelDescription(
+	level: 1 | 2 | 3 | 4 | 5,
+): Promise<string> {
+	const settings = await getPromptSettings();
+	const key = `prompts.spice_level_${level}`;
+
+	// Fallback descriptions
+	const fallbacks: Record<number, string> = {
+		1: "Sweet / clean: no explicit sensual detail.",
+		2: "Mild: romantic tension, light kissing only.",
+		3: "Moderate: sensuality, implied intimacy; fade before explicit anatomical detail.",
+		4: "Steamy: explicit romantic intimacy with tasteful descriptive detail.",
+		5: "Explicit: detailed intimate scenes, emotionally grounded and consensual.",
+	};
+
+	return settings[key] || fallbacks[level];
+}
+
+/**
+ * Get pacing description from settings or fallback to hardcoded
+ */
+async function getPacingDescription(
+	pacing: "slow-burn" | "fast-paced",
+): Promise<string> {
+	const settings = await getPromptSettings();
+	const key = `prompts.pacing_${pacing.replace("-", "_")}`;
+
+	const fallbacks = {
+		"slow-burn":
+			"Gradual escalation: sustained tension, delayed gratification, layered micro-shifts.",
+		"fast-paced":
+			"Brisk escalation: rapid chemistry beats, early sparks, tight scene economy.",
+	};
+
+	return settings[key] || fallbacks[pacing];
+}
+
+/**
+ * Get consent rules from settings or fallback to hardcoded
+ */
+async function getConsentRules(spiceLevel: 1 | 2 | 3 | 4 | 5): Promise<string> {
+	const settings = await getPromptSettings();
+
+	if (spiceLevel <= 2) {
+		return (
+			settings["prompts.consent_rules_1_2"] ||
+			"No explicit anatomical descriptions. Keep intimacy implied or restrained."
+		);
+	}
+
+	if (spiceLevel === 3) {
+		return (
+			settings["prompts.consent_rules_3"] ||
+			"Stop before explicit anatomical detail. Focus on sensory suggestion and emotional resonance."
+		);
+	}
+
+	if (spiceLevel === 4) {
+		return (
+			settings["prompts.consent_rules_4"] ||
+			"Explicit allowed; maintain emotional context, mutual consent, and aftercare cues when appropriate."
+		);
+	}
+
+	return (
+		settings["prompts.consent_rules_5"] ||
+		"Explicit allowed; avoid gratuitous mechanical detail—always tie intimacy to emotion, consent, and character growth."
+	);
+}
+
+/**
+ * Get content safety rules from settings or fallback to hardcoded
+ */
+async function getContentSafetyRules(): Promise<string> {
+	const settings = await getPromptSettings();
+
+	return (
+		settings["prompts.content_safety_rules"] ||
+		`DO NOT include, depict, or imply ANY of the following:
+- Characters under 18 years of age in ANY context (romantic, intimate, or otherwise)
+- Ambiguous age references—ALL characters must be explicitly adult (18+)
+- Non-consensual sexual acts or coercion of any kind
+- Incest or pseudo-incest (step-relations, adoptive, "not blood related" scenarios)
+- Bestiality or any non-human romantic/sexual content
+- Extreme violence, gore, torture, or sadism
+- Glamorized self-harm, suicide ideation, or eating disorders
+- Illegal activities presented positively
+- Racial, ethnic, or discriminatory stereotypes
+
+ALL romantic and intimate characters MUST be clearly established as adults (minimum 18 years old).
+Use contextual cues: career, education completion, independent living, mature decision-making.`
+	);
+}
+
+/**
  * Build system prompt for romance novelist AI
  */
-export function buildSystemPrompt(preferences: StoryPreferences): string {
+export async function buildSystemPrompt(
+	preferences: StoryPreferences,
+): Promise<string> {
 	const {
 		genres,
 		tropes,
@@ -85,29 +221,11 @@ export function buildSystemPrompt(preferences: StoryPreferences): string {
 		povCharacterGender,
 	} = preferences;
 
-	const spiceDescription: Record<StoryPreferences["spiceLevel"], string> = {
-		1: "Sweet / clean: no explicit sensual detail.",
-		2: "Mild: romantic tension, light kissing only.",
-		3: "Moderate: sensuality, implied intimacy; fade before explicit anatomical detail.",
-		4: "Steamy: explicit romantic intimacy with tasteful descriptive detail.",
-		5: "Explicit: detailed intimate scenes, emotionally grounded and consensual.",
-	};
-
-	const pacingDescription = {
-		"slow-burn":
-			"Gradual escalation: sustained tension, delayed gratification, layered micro-shifts.",
-		"fast-paced":
-			"Brisk escalation: rapid chemistry beats, early sparks, tight scene economy.",
-	};
-
-	const consentRules =
-		spiceLevel <= 2
-			? "No explicit anatomical descriptions. Keep intimacy implied or restrained."
-			: spiceLevel === 3
-				? "Stop before explicit anatomical detail. Focus on sensory suggestion and emotional resonance."
-				: spiceLevel === 4
-					? "Explicit allowed; maintain emotional context, mutual consent, and aftercare cues when appropriate."
-					: "Explicit allowed; avoid gratuitous mechanical detail—always tie intimacy to emotion, consent, and character growth.";
+	// Get configurable descriptions from settings
+	const spiceDescription = await getSpiceLevelDescription(spiceLevel);
+	const pacingDescription = await getPacingDescription(pacing);
+	const consentRules = await getConsentRules(spiceLevel);
+	const contentSafetyRules = await getContentSafetyRules();
 
 	const traitLine = protagonistTraits?.length
 		? `Primary protagonist traits: ${protagonistTraits.join(", ")}. Reflect through action, micro-thoughts, and subtext (avoid flat exposition).`
@@ -136,11 +254,11 @@ STYLE & VOICE:
 - Show emotions via micro-reactions (breath, temperature shifts, gestures) & context—avoid blunt labels
 - Balance: dialogue / internal thought / action / setting (approx 30/25/30/15, flexible)
 - Vary sentence rhythm; avoid monotonous clause chains
-- ${pacingDescription[pacing]}
+- ${pacingDescription}
 
 ROMANCE & TENSION:
 - Tropes to weave organically (no checklist feel): ${tropes.join(", ")}
-- Heat level: ${spiceLevel}/5 (${spiceDescription[spiceLevel]})
+- Heat level: ${spiceLevel}/5 (${spiceDescription})
 - ${consentRules}
 - Consent must be explicit or unmistakably enthusiastic; no coercion or dubious ambiguity
 
@@ -165,19 +283,7 @@ PROSE GUARDRAILS:
 - ADHERE STRICTLY TO WORD COUNT REQUIREMENT (see top of prompt)
 
 CONTENT SAFETY (STRICTLY PROHIBITED):
-DO NOT include, depict, or imply ANY of the following:
-- Characters under 18 years of age in ANY context (romantic, intimate, or otherwise)
-- Ambiguous age references—ALL characters must be explicitly adult (18+)
-- Non-consensual sexual acts or coercion of any kind
-- Incest or pseudo-incest (step-relations, adoptive, "not blood related" scenarios)
-- Bestiality or any non-human romantic/sexual content
-- Extreme violence, gore, torture, or sadism
-- Glamorized self-harm, suicide ideation, or eating disorders
-- Illegal activities presented positively
-- Racial, ethnic, or discriminatory stereotypes
-
-ALL romantic and intimate characters MUST be clearly established as adults (minimum 18 years old).
-Use contextual cues: career, education completion, independent living, mature decision-making.
+${contentSafetyRules}
 
 OUTPUT FORMAT:
 - Pure narrative only (no outlines, bullet lists, analysis)

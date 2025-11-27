@@ -3,6 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { getAIConfig } from "./config";
 
 /**
  * Supported AI providers
@@ -16,42 +17,10 @@ export type AIProvider =
 	| "openrouter";
 
 /**
- * AI provider configuration
- */
-interface AIConfig {
-	provider: AIProvider;
-	model: string;
-}
-
-/**
- * Get AI provider and model from environment variables
- */
-function getAIConfig(): AIConfig {
-	const provider = (
-		process.env.AI_PROVIDER || "openai"
-	).toLowerCase() as AIProvider;
-
-	// Default models for each provider
-	const defaultModels: Record<AIProvider, string> = {
-		openai: process.env.OPENAI_MODEL || "gpt-4o-mini",
-		google: process.env.GOOGLE_MODEL || "gemini-2.5-flash-lite",
-		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
-		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
-		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
-		openrouter: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
-	};
-
-	return {
-		provider,
-		model: defaultModels[provider],
-	};
-}
-
-/**
  * Initialize AI provider based on configuration
  */
-function getAIModel(modelOverride?: string) {
-	const config = getAIConfig();
+async function getAIModel(modelOverride?: string) {
+	const config = await getAIConfig();
 	const modelName = modelOverride || config.model;
 
 	switch (config.provider) {
@@ -129,15 +98,17 @@ function getAIModel(modelOverride?: string) {
 /**
  * Get the default model for the configured provider
  */
-export function getDefaultModel(): string {
-	return getAIConfig().model;
+export async function getDefaultModel(): Promise<string> {
+	const config = await getAIConfig();
+	return config.model;
 }
 
 /**
  * Get the current AI provider
  */
-export function getCurrentProvider(): AIProvider {
-	return getAIConfig().provider;
+export async function getCurrentProvider(): Promise<AIProvider> {
+	const config = await getAIConfig();
+	return config.provider;
 }
 
 /**
@@ -150,8 +121,7 @@ export function getCurrentProvider(): AIProvider {
  * - Built-in error handling
  * - Token usage tracking
  *
- * Configure provider via AI_PROVIDER env var (default: openai)
- * Configure model via provider-specific env var (e.g., OPENAI_MODEL, XAI_MODEL)
+ * Configure provider via database settings (falls back to env vars)
  */
 export async function generateCompletion(
 	systemPrompt: string,
@@ -162,12 +132,14 @@ export async function generateCompletion(
 		maxTokens?: number;
 	},
 ): Promise<string> {
+	const config = await getAIConfig();
+
 	const { text } = await generateText({
-		model: getAIModel(options?.model),
+		model: await getAIModel(options?.model),
 		system: systemPrompt,
 		prompt: userPrompt,
-		temperature: options?.temperature ?? 0.7,
-		maxTokens: options?.maxTokens ?? 2000,
+		temperature: options?.temperature ?? config.temperature,
+		maxTokens: options?.maxTokens ?? config.maxTokens,
 	});
 
 	if (!text) {

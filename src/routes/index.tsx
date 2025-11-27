@@ -16,7 +16,7 @@ function Home() {
 
 	return (
 		<div className="min-h-screen flex flex-col">
-			<div className="flex-1 bg-gradient-to-br from-romance-50 via-white to-romance-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+			<div className="flex-1 bg-linear-to-br from-romance-50 via-white to-romance-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
 				{/* Theme Toggle */}
 				<Container>
 					<div className="flex justify-end pt-4">

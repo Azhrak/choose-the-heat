@@ -228,7 +228,7 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 
 					// Build prompts
 					const preferences = story.preferences as unknown as StoryPreferences;
-					const systemPrompt = buildSystemPrompt(preferences);
+					const systemPrompt = await buildSystemPrompt(preferences);
 					const userPrompt = buildScenePrompt({
 						templateTitle: story.template.title,
 						sceneNumber,

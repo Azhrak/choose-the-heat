@@ -4,6 +4,7 @@ import {
 	FileText,
 	LayoutDashboard,
 	ScrollText,
+	Settings,
 	Tags,
 	Users,
 } from "lucide-react";
@@ -53,6 +54,12 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 			label: "Audit Logs",
 			path: "/admin/audit-logs",
 			icon: ScrollText,
+			roles: ["admin"] as UserRole[],
+		},
+		{
+			label: "Settings",
+			path: "/admin/settings",
+			icon: Settings,
 			roles: ["admin"] as UserRole[],
 		},
 	];
