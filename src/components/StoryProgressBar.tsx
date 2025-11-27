@@ -1,21 +1,29 @@
 import { Stack } from "~/components/ui/Stack";
+import { calculateStoryProgress } from "~/lib/utils";
 
 interface StoryProgressBarProps {
 	currentScene: number;
 	totalScenes: number;
 	showPercentage?: boolean;
+	status?: "in-progress" | "completed";
 }
 
 /**
  * Reusable progress bar component for story completion tracking
+ * Progress is based on completed scenes (currentScene - 1), not the current scene being read.
+ * Shows 100% only when status is "completed" and currentScene equals totalScenes.
  */
 export function StoryProgressBar({
 	currentScene,
 	totalScenes,
 	showPercentage = true,
+	status = "in-progress",
 }: StoryProgressBarProps) {
-	const percentage = Math.round((currentScene / totalScenes) * 100);
-	const width = Math.min((currentScene / totalScenes) * 100, 100);
+	const { percentage, width } = calculateStoryProgress(
+		currentScene,
+		totalScenes,
+		status,
+	);
 
 	return (
 		<Stack gap="xs">

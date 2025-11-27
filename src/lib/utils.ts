@@ -38,3 +38,28 @@ export function hasProperty<T extends string>(
 export function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/**
+ * Calculate story reading progress percentage
+ * Progress is based on completed scenes (currentScene - 1), not the current scene being read.
+ * Shows 100% only when status is "completed" and currentScene equals totalScenes.
+ * 
+ * @param currentScene - The current scene number (1-based)
+ * @param totalScenes - Total number of scenes in the story
+ * @param status - Story status ("in-progress" or "completed")
+ * @returns Object containing percentage and width for progress bar
+ */
+export function calculateStoryProgress(
+	currentScene: number,
+	totalScenes: number,
+	status: "in-progress" | "completed" = "in-progress",
+): { percentage: number; width: number } {
+	// Progress is based on completed scenes
+	// If status is completed and we're at the last scene, show 100%
+	const isFullyCompleted = status === "completed" && currentScene === totalScenes;
+	const completedScenes = isFullyCompleted ? totalScenes : currentScene - 1;
+	const percentage = Math.round((completedScenes / totalScenes) * 100);
+	const width = Math.min((completedScenes / totalScenes) * 100, 100);
+	
+	return { percentage, width };
+}

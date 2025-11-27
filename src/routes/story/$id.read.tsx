@@ -22,6 +22,7 @@ import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
 import { useStreamingScene } from "~/hooks/useStreamingScene";
 import { useUpdateProgressMutation } from "~/hooks/useUpdateProgressMutation";
+import { calculateStoryProgress } from "~/lib/utils";
 
 export const Route = createFileRoute("/story/$id/read")({
 	validateSearch: (search: Record<string, unknown>): { scene?: number } => {
@@ -249,7 +250,11 @@ function ReadingPage() {
 	const story = sceneMetadata.story;
 	const choicePoint = sceneMetadata.choicePoint;
 	const previousChoice = sceneMetadata.previousChoice;
-	const progress = (scene.number / story.estimatedScenes) * 100;
+	const { percentage: progress } = calculateStoryProgress(
+		scene.number,
+		story.estimatedScenes,
+		story.status as "in-progress" | "completed",
+	);
 	const isLastScene = scene.number >= story.estimatedScenes;
 	const hasAlreadyMadeChoice = previousChoice !== null;
 

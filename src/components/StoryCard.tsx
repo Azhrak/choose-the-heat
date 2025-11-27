@@ -183,6 +183,7 @@ export function StoryCard({
 					<StoryProgressBar
 						currentScene={currentScene}
 						totalScenes={totalScenes}
+						status={status}
 					/>
 				) : (
 					<div className="text-sm text-slate-600 py-2">

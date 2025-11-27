@@ -318,6 +318,7 @@ function StoryInfoPage() {
 								<StoryProgressBar
 									currentScene={story.current_scene}
 									totalScenes={story.template.estimated_scenes}
+									status={story.status}
 								/>
 							</Stack>
 
