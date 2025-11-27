@@ -13,6 +13,7 @@ import { getSessionFromRequest } from "~/lib/auth/session";
 import { db } from "~/lib/db";
 import {
 	cacheScene,
+	deleteScene,
 	getCachedScene,
 	getRecentScenes,
 } from "~/lib/db/queries/scenes";
@@ -25,6 +26,10 @@ import {
 // Query params schema
 const sceneQuerySchema = z.object({
 	number: z.coerce.number().int().positive().optional(),
+	forceRegenerate: z
+		.enum(["true", "false"])
+		.optional()
+		.transform((val) => val === "true"),
 });
 
 export const Route = createFileRoute("/api/stories/$id/scene/stream")({
@@ -74,6 +79,7 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 					const defaultScene =
 						story.status === "completed" ? 1 : story.current_scene;
 					const sceneNumber = parseResult.data.number ?? defaultScene;
+					const forceRegenerate = parseResult.data.forceRegenerate ?? false;
 
 					// Check if scene number is valid
 					if (sceneNumber < 1) {
@@ -90,7 +96,14 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 					// Check if scene is cached
 					const cachedScene = await getCachedScene(storyId, sceneNumber);
 
-					if (cachedScene) {
+					// If forceRegenerate is true, delete the cached scene and regenerate
+					if (forceRegenerate && cachedScene) {
+						console.log(
+							`[Scene Generation] Force regenerate requested for scene ${sceneNumber} in story ${storyId}`,
+						);
+						await deleteScene(storyId, sceneNumber);
+						// Continue to generation below (don't return cached scene)
+					} else if (cachedScene) {
 						// Return cached scene immediately (non-streaming)
 						const choicePoint = await getChoicePointForScene(
 							story.template_id,

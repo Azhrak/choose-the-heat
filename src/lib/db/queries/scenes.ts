@@ -96,6 +96,17 @@ export async function deleteStoryScenes(storyId: string) {
 }
 
 /**
+ * Delete a specific scene (for regeneration)
+ */
+export async function deleteScene(storyId: string, sceneNumber: number) {
+	return db
+		.deleteFrom("scenes")
+		.where("story_id", "=", storyId)
+		.where("scene_number", "=", sceneNumber)
+		.execute();
+}
+
+/**
  * Get story statistics
  */
 export async function getStoryStats(storyId: string) {

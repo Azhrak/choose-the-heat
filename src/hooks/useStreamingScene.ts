@@ -29,7 +29,6 @@ interface StreamingSceneState {
 	isStreaming: boolean;
 	isComplete: boolean;
 	error: string | null;
-	retry: () => void;
 }
 
 interface CachedSceneData {
@@ -64,13 +63,13 @@ export function useStreamingScene(
 ) {
 	const queryClient = useQueryClient();
 	const [retryCounter, setRetryCounter] = useState(0);
+	const [forceRegenerate, setForceRegenerate] = useState(false);
 	const [state, setState] = useState<StreamingSceneState>({
 		content: "",
 		metadata: null,
 		isStreaming: false,
 		isComplete: false,
 		error: null,
-		retry: () => {},
 	});
 
 	const abortControllerRef = useRef<AbortController | null>(null);
@@ -79,13 +78,9 @@ export function useStreamingScene(
 		// Clear cache and force refetch
 		const queryKey = storySceneQueryKey(storyId, sceneNumber);
 		queryClient.removeQueries({ queryKey });
+		setForceRegenerate(true);
 		setRetryCounter((prev) => prev + 1);
 	}, [storyId, sceneNumber, queryClient]);
-
-	// Update the retry function in state whenever it changes
-	useEffect(() => {
-		setState((prev) => ({ ...prev, retry }));
-	}, [retry]);
 
 	useEffect(() => {
 		if (!enabled) return;
@@ -112,7 +107,6 @@ export function useStreamingScene(
 					isStreaming: false,
 					isComplete: true,
 					error: null,
-					retry,
 				});
 				return;
 			} else {
@@ -128,7 +122,6 @@ export function useStreamingScene(
 			isStreaming: true,
 			isComplete: false,
 			error: null,
-			retry,
 		});
 
 		// Create abort controller for this request
@@ -138,6 +131,9 @@ export function useStreamingScene(
 		const params = new URLSearchParams();
 		if (sceneNumber !== null) {
 			params.append("number", sceneNumber.toString());
+		}
+		if (forceRegenerate) {
+			params.append("forceRegenerate", "true");
 		}
 
 		const url = `/api/stories/${storyId}/scene/stream?${params.toString()}`;
@@ -183,24 +179,21 @@ export function useStreamingScene(
 								setState((prev) => ({
 									...prev,
 									metadata: finalMetadata,
-									retry,
 								}));
 							} else if (data.type === "content") {
 								finalContent += data.content;
 								setState((prev) => ({
 									...prev,
 									content: prev.content + data.content,
-									retry,
 								}));
 							} else if (data.type === "done") {
+								// Reset forceRegenerate flag on successful completion
+								setForceRegenerate(false);
 								setState((prev) => ({
 									...prev,
 									isStreaming: false,
 									isComplete: true,
-									retry,
-								}));
-
-								// Cache the complete scene data in React Query - but only if we have content
+								})); // Cache the complete scene data in React Query - but only if we have content
 								if (finalMetadata && finalContent.trim()) {
 									const cacheData: CachedSceneData = {
 										scene: {
@@ -228,7 +221,6 @@ export function useStreamingScene(
 									isStreaming: false,
 									isComplete: false,
 									error: data.error,
-									retry,
 								}));
 							}
 						}
@@ -246,7 +238,6 @@ export function useStreamingScene(
 					isStreaming: false,
 					isComplete: false,
 					error: error instanceof Error ? error.message : "Unknown error",
-					retry,
 				}));
 			});
 
@@ -254,7 +245,14 @@ export function useStreamingScene(
 		return () => {
 			abortController.abort();
 		};
-	}, [storyId, sceneNumber, enabled, queryClient, retryCounter, retry]);
+	}, [
+		storyId,
+		sceneNumber,
+		enabled,
+		queryClient,
+		retryCounter,
+		forceRegenerate,
+	]);
 
-	return state;
+	return { ...state, retry };
 }
