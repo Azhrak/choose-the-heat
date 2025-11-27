@@ -276,6 +276,8 @@ CONTINUITY & ECONOMY:
 - Track introduced characters, their established traits, and relationship dynamics
 
 PROSE GUARDRAILS:
+- BEGIN IMMEDIATELY WITH NARRATIVE PROSE—no preambles, no meta commentary like "Here is a scene..." or "This is a story about..."
+- Write ONLY the scene itself—never describe what you're about to write or summarize what you wrote
 - No meta commentary about 'the story' or 'this scene'
 - No bracketed placeholders
 - Descriptive but not purple; metaphors precise & sparing
@@ -436,7 +438,12 @@ You MUST write exactly within this range. Count words as you write and stop when
 OBJECTIVES:
 ${objectivesBlock}
 
-${characterContext}${contextSection}${choiceImpact}${choiceDirective}Write the scene narrative now (no meta, no lists, no outlines). Remember: ${lengthRange.min}-${lengthRange.max} words MAXIMUM.
+${characterContext}${contextSection}${choiceImpact}${choiceDirective}BEGIN WRITING THE SCENE NOW:
+- Start IMMEDIATELY with the first sentence of the narrative prose
+- DO NOT write any preamble like "Here is..." or "This scene..." or similar meta text
+- Write ONLY the scene content itself (no meta, no lists, no outlines)
+- Remember: ${lengthRange.min}-${lengthRange.max} words MAXIMUM
+- After completing the narrative prose, include the metadata section below
 
 After the narrative, include a metadata section:
 <SCENE_META>

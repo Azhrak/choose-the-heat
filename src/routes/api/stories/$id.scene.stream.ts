@@ -245,11 +245,8 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 						sceneLength: preferences.sceneLength,
 					});
 
-					// Get text stream
-					const textStream = await streamCompletion(systemPrompt, userPrompt, {
-						temperature: 0.8,
-						maxTokens: 2000,
-					});
+					// Get text stream (using database config for temperature/maxTokens)
+					const textStream = await streamCompletion(systemPrompt, userPrompt);
 
 					// Create SSE stream
 					const encoder = new TextEncoder();

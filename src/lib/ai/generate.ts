@@ -100,11 +100,8 @@ export async function generateScene(
 	console.log(userPrompt);
 	console.log("=== END PROMPTS ===\n");
 
-	// Generate with OpenAI
-	const content = await generateCompletion(systemPrompt, userPrompt, {
-		temperature: 0.8, // Higher temperature for more creative writing
-		maxTokens: 2000, // ~1500 words
-	});
+	// Generate with AI (using database config for temperature/maxTokens)
+	const content = await generateCompletion(systemPrompt, userPrompt);
 
 	// Parse content and extract metadata
 	const parsed = parseSceneMeta(content);

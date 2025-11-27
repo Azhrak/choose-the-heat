@@ -3,45 +3,13 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
-import type { AIProvider } from "./client";
-
-/**
- * AI provider configuration
- */
-interface AIConfig {
-	provider: AIProvider;
-	model: string;
-}
-
-/**
- * Get AI provider and model from environment variables
- */
-function getAIConfig(): AIConfig {
-	const provider = (
-		process.env.AI_PROVIDER || "openai"
-	).toLowerCase() as AIProvider;
-
-	// Default models for each provider
-	const defaultModels: Record<AIProvider, string> = {
-		openai: process.env.OPENAI_MODEL || "gpt-4o-mini",
-		google: process.env.GOOGLE_MODEL || "gemini-2.5-flash-lite",
-		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
-		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
-		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
-		openrouter: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
-	};
-
-	return {
-		provider,
-		model: defaultModels[provider],
-	};
-}
+import { getAIConfig } from "./config";
 
 /**
  * Initialize AI provider based on configuration
  */
-function getAIModel(modelOverride?: string) {
-	const config = getAIConfig();
+async function getAIModel(modelOverride?: string) {
+	const config = await getAIConfig();
 	const modelName = modelOverride || config.model;
 
 	switch (config.provider) {
@@ -119,6 +87,8 @@ function getAIModel(modelOverride?: string) {
 /**
  * Stream text completion using Vercel AI SDK
  * Returns a text stream that can be piped to the response
+ *
+ * Configure provider via database settings (falls back to env vars)
  */
 export async function streamCompletion(
 	systemPrompt: string,
@@ -129,12 +99,14 @@ export async function streamCompletion(
 		maxTokens?: number;
 	},
 ) {
-	const result = await streamText({
-		model: getAIModel(options?.model),
+	const config = await getAIConfig();
+
+	const result = streamText({
+		model: await getAIModel(options?.model),
 		system: systemPrompt,
 		prompt: userPrompt,
-		temperature: options?.temperature ?? 0.7,
-		maxTokens: options?.maxTokens ?? 2000,
+		temperature: options?.temperature ?? config.temperature,
+		maxTokens: options?.maxTokens ?? config.maxTokens,
 	});
 
 	return result.textStream;
