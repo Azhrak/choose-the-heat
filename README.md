@@ -2,34 +2,79 @@
 
 Full-stack TypeScript app for AI-generated interactive romance novels. Users make choices that influence the narrative, with all preferences and progress saved.
 
-**Repo**: [github.com/Azhrak/choose-the-heat](https://github.com/Azhrak/choose-the-heat) | **Status**: MVP Complete! 🎉
+**Repo**: [github.com/Azhrak/choose-the-heat](https://github.com/Azhrak/choose-the-heat) | **Status**: Production Ready! 🎉
 
 ## Features
 
-- 🔐 Authentication (Google OAuth + Email/Password)
-- 📚 AI-generated romance novels with choice-based branching
-- ⚡ Real-time streaming content generation (see stories being written!)
-- 🌳 Story branching system (explore alternative storylines)
-- ✏️ Edit story titles anytime
-- ❤️ Mark stories as favorites and filter by favorites
-- 🎨 Custom preferences (genres, tropes, spice level, pacing, scene length)
-- ⚙️ Preferences management page
-- 💾 Progress tracking with scene caching
-- 👤 User profiles & account management
-- 📊 Smart metadata (emotional tracking, tension threads)
-- 🛡️ Enhanced safety guardrails
-- 👑 Admin dashboard with role-based access control
-- 🤖 Automated CI/CD with database migrations
+### 🔐 Authentication & User Management
+- Google OAuth + Email/Password authentication
+- Secure session management with httpOnly cookies
+- User profiles with customizable preferences
+- Account management and deletion
+
+### 📚 AI-Powered Story Generation
+- AI-generated romance novels with choice-based branching
+- Real-time streaming content generation (watch stories being written!)
+- Story-specific AI configuration (temperature, max tokens, model selection)
+- 5 AI providers supported (OpenAI, Google Gemini, Anthropic Claude, Mistral, xAI)
+- Smart scene regeneration with retry logic
+- Scene metadata tracking (emotions, tension, relationship progress)
+
+### 🎨 Personalization & Preferences
+- Custom reading preferences (genres, tropes, spice level, pacing, POV, scene length)
+- Mark stories as favorites with filtering
+- Editable story titles and cover images
+- Preferences management page
+
+### 🌳 Story Experience
+- Interactive choice-based branching
+- Story branching system (explore alternative storylines)
+- Progress tracking with scene caching
+- Library with in-progress and completed stories
+- Reading statistics and progress bars
+- Custom tropes management
+
+### 👑 Admin Dashboard
+- Role-based access control (user, editor, admin)
+- Template management with AI-assisted generation
+- User management and audit logging
+- System settings with import/export
+- Bulk operations for templates
+- Paginated views with search functionality
+
+### 🤖 Technical Features
+- Automated CI/CD with database migrations
+- Enhanced safety guardrails for content generation
+- GDPR compliance with cookie consent
+- Responsive design with dark mode support
 
 ## Documentation
 
-- [PROGRESS.md](PROGRESS.md) - Implementation status & roadmap
-- [SESSION_SUMMARY.md](SESSION_SUMMARY.md) - Session recap
-- [ADMIN.md](ADMIN.md) - Admin dashboard guide
-- [DOCKER.md](DOCKER.md) - Docker setup guide
-- [AI_PROVIDERS.md](AI_PROVIDERS.md) - AI configuration
-- [SCENE_METADATA.md](SCENE_METADATA.md) - Metadata system
-- [docs/CI_MIGRATIONS.md](docs/CI_MIGRATIONS.md) - CI/CD & migrations guide
+📚 **[Complete Documentation Index](docs/DOCUMENTATION_INDEX.md)** - Navigate all documentation
+
+### Getting Started
+- [Docker Setup](docs/getting-started/DOCKER.md) - Docker setup guide (recommended)
+- [Deployment Guide](docs/getting-started/DEPLOYMENT.md) - Production deployment instructions
+- [Environment Variables](.env.example) - Configuration template
+
+### Configuration
+- [AI Providers](docs/configuration/AI_PROVIDERS.md) - Configure OpenAI, Gemini, Claude, Mistral, or xAI
+
+### Development
+- [Implementation Progress](docs/development/PROGRESS.md) - Implementation status & roadmap
+- [Coding Standards](docs/development/CODING_PRACTICES.md) - Development standards and patterns
+- [Component Usage](docs/development/COMPONENT_USAGE.md) - Component library guidelines
+- [Design System](docs/development/DESIGN_SYSTEM.md) - Design system documentation
+- [Component Library](docs/development/COMPONENT_LIBRARY.md) - Component API reference
+- [Refactoring](docs/development/REFACTORING.md) - Refactoring history and guidelines
+- [CI/CD & Migrations](docs/development/CI_MIGRATIONS.md) - Automated deployment & database migrations
+
+### Technical Reference
+- [Admin Dashboard](docs/technical/ADMIN.md) - Admin features and role-based access
+- [AI Metadata System](docs/technical/SCENE_METADATA.md) - Scene metadata and context management
+
+### Legal & Compliance
+- [GDPR Implementation](docs/legal/GDPR_IMPLEMENTATION_SUMMARY.md) - Privacy and compliance details
 
 ## Tech Stack
 
@@ -37,7 +82,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 **Backend**: Node.js, Vite
 **Database**: PostgreSQL + Kysely
 **Auth**: Arctic (OAuth), Argon2 (passwords)
-**AI**: Vercel AI SDK (OpenAI, Gemini, Claude, Mistral, xAI)
+**AI**: Vercel AI SDK (OpenAI, Google Gemini, Anthropic Claude, Mistral, xAI)
 **State**: TanStack Query
 
 ## Prerequisites
@@ -48,7 +93,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - AI Provider API key: OpenAI, Google Gemini, Anthropic Claude, Mistral, or xAI
 - Google OAuth credentials (optional)
 
-See [AI_PROVIDERS.md](AI_PROVIDERS.md) for detailed configuration.
+See [AI_PROVIDERS.md](docs/configuration/AI_PROVIDERS.md) for detailed configuration.
 
 **OR use Docker** (recommended - includes PostgreSQL & Redis):
 
@@ -66,7 +111,7 @@ docker-compose up --build
 # Visit http://localhost:3000
 ```
 
-See [DOCKER.md](DOCKER.md) for full Docker setup.
+See [DOCKER.md](docs/getting-started/DOCKER.md) for full Docker setup.
 
 ### Local Development
 
@@ -210,13 +255,26 @@ pnpm db:seed
 - Scenes cached in DB to avoid regeneration
 - Consider pre-generating next scenes in background
 
-## Next Steps
+## Recent Updates
 
-See [PROGRESS.md](PROGRESS.md) for:
+- ✅ **Story-specific AI Settings** - Configure temperature, max tokens, and model per story
+- ✅ **App Settings Management** - Database-driven admin settings with import/export
+- ✅ **Cover Images** - Support for custom cover URLs on stories and templates
+- ✅ **Scene Regeneration** - Force regenerate scenes with retry logic
+- ✅ **Custom Tropes** - Admin can create and manage custom tropes
+- ✅ **Favorites** - Mark and filter favorite stories
+- ✅ **Pagination & Search** - Enhanced admin views with search and pagination
+- ✅ **GDPR Compliance** - Cookie consent and data privacy features
 
-- Phase 15: Polish & UX improvements
-- Phase 16: Advanced features (exports, dashboards, branching visualization)
-- Full technical debt & roadmap
+## Roadmap
+
+See [PROGRESS.md](docs/development/PROGRESS.md) for detailed roadmap. Upcoming features:
+
+- Advanced story analytics and visualizations
+- Story export (PDF/EPUB)
+- Enhanced branching visualization
+- Multi-language support
+- Mobile app version
 
 ## License
 
