@@ -9,14 +9,19 @@ import {
 	Info,
 	Loader2,
 	Sparkles,
+	Volume2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AudioGenerationButton } from "~/components/AudioGenerationButton";
+import { AudioIndicator } from "~/components/AudioIndicator";
+import { AudioPlayer } from "~/components/AudioPlayer";
 import { BranchConfirmationDialog } from "~/components/BranchConfirmationDialog";
 import { Button } from "~/components/Button";
 import { Heading } from "~/components/Heading";
 import { SceneNavigation } from "~/components/SceneNavigation";
 import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
+import { useAudioGeneration } from "~/hooks/useAudioGeneration";
 import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
 import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
@@ -44,6 +49,11 @@ function ReadingPage() {
 	const lastUpdatedSceneRef = useRef<number>(0);
 	const lastScrollY = useRef(0);
 
+	// Audio player state
+	const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
+	const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+	const [hasAudio, setHasAudio] = useState(false);
+
 	// Use scene from URL, fallback to null (which uses current_scene from API)
 	const currentSceneNumber = sceneFromUrl ?? null;
 
@@ -61,6 +71,12 @@ function ReadingPage() {
 	const sceneContent = streamingState.content;
 	const isGenerating = streamingState.isStreaming;
 	const error = streamingState.error;
+
+	// Check if audio exists for current scene
+	const { audio: sceneAudio } = useAudioGeneration(
+		id,
+		sceneMetadata?.scene.number ?? 0,
+	);
 
 	// Check for existing branch when dialog is shown
 	const { data: existingBranchData, isLoading: isCheckingExistingBranch } =
@@ -290,6 +306,22 @@ function ReadingPage() {
 							Back to Library
 						</LinkButton>
 						<div className="flex items-center gap-4">
+							<AudioIndicator storyId={id} sceneNumber={scene.number} />
+							<AudioGenerationButton
+								storyId={id}
+								sceneNumber={scene.number}
+								isSceneGenerating={isGenerating}
+								isSceneComplete={streamingState.isComplete}
+								sceneError={error}
+								onAudioReady={(url) => {
+									setCurrentAudioUrl(url);
+									setHasAudio(true);
+									// Only auto-open if player isn't already shown and we don't have audio yet
+									if (!hasAudio) {
+										setShowAudioPlayer(true);
+									}
+								}}
+							/>
 							<div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
 								<BookOpen className="w-4 h-4" />
 								Scene {scene.number} of {story.estimatedScenes}
@@ -346,7 +378,7 @@ function ReadingPage() {
 			{/* Main Content - key ensures this section re-renders when scene changes */}
 			<main
 				key={scene.number}
-				className="max-w-2xl mx-auto px-4 pb-8 space-y-6"
+				className={`max-w-2xl mx-auto px-4 pb-8 space-y-6 ${showAudioPlayer ? "mb-24" : ""}`}
 			>
 				{/* Scene Content */}
 				<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-8">
@@ -645,6 +677,33 @@ function ReadingPage() {
 					isLoading={branchMutation.isPending}
 				/>
 			)}
+
+			{/* Floating Audio Player */}
+			{showAudioPlayer && currentAudioUrl && (
+				<div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-20">
+					<div className="max-w-4xl mx-auto px-4 py-3">
+						<AudioPlayer
+							audioUrl={currentAudioUrl}
+							onClose={() => setShowAudioPlayer(false)}
+						/>
+					</div>
+				</div>
+			)}
+
+			{/* Floating Audio Icon - when player is closed but audio exists */}
+			{!showAudioPlayer &&
+				hasAudio &&
+				currentAudioUrl &&
+				sceneAudio?.exists && (
+					<button
+						type="button"
+						onClick={() => setShowAudioPlayer(true)}
+						className="fixed bottom-6 right-6 p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-lg transition-all hover:scale-110 z-20 animate-in fade-in zoom-in duration-300"
+						title="Open audio player"
+					>
+						<Volume2 className="w-6 h-6" />
+					</button>
+				)}
 		</div>
 	);
 }

@@ -13,7 +13,7 @@ import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AppSettings } from "~/lib/db/types";
 import { cn } from "~/lib/utils";
 
-type TabId = "ai" | "prompts";
+type TabId = "ai" | "prompts" | "tts";
 
 export const Route = createFileRoute("/admin/settings/")({
 	component: SettingsPage,
@@ -146,13 +146,19 @@ function SettingsPage() {
 	const tabs: Array<{ id: TabId; label: string; description: string }> = [
 		{
 			id: "ai",
-			label: "AI & Generation",
-			description: "Configure AI provider, model, and generation parameters",
+			label: "Text Generation",
+			description:
+				"Configure AI provider, model, and generation parameters for story creation",
 		},
 		{
 			id: "prompts",
 			label: "Prompt Configuration",
 			description: "Customize spice level, pacing, and content safety rules",
+		},
+		{
+			id: "tts",
+			label: "Text-to-Speech",
+			description: "Configure TTS provider, model, and voice settings",
 		},
 	];
 

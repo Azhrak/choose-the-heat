@@ -1,0 +1,105 @@
+import { Loader2, Volume2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "~/components/Button";
+import { useAudioGeneration } from "~/hooks/useAudioGeneration";
+
+interface AudioGenerationButtonProps {
+	storyId: string;
+	sceneNumber: number;
+	onAudioReady?: (audioUrl: string) => void;
+	isSceneGenerating?: boolean;
+	isSceneComplete?: boolean;
+	sceneError?: string | null;
+}
+
+/**
+ * Button to generate audio for a scene
+ * Shows different states: generate, loading, ready
+ * Disabled while scene is still being generated
+ */
+export function AudioGenerationButton({
+	storyId,
+	sceneNumber,
+	onAudioReady,
+	isSceneGenerating = false,
+	isSceneComplete = false,
+	sceneError = null,
+}: AudioGenerationButtonProps) {
+	const { audio, isLoading, generate, isGenerating } = useAudioGeneration(
+		storyId,
+		sceneNumber,
+	);
+	const [isQueued, setIsQueued] = useState(false);
+
+	// Notify parent when audio becomes available
+	useEffect(() => {
+		if (audio?.audioUrl && onAudioReady) {
+			onAudioReady(audio.audioUrl);
+		}
+	}, [audio?.audioUrl, onAudioReady]);
+
+	// Handle queued generation when scene completes
+	useEffect(() => {
+		if (isQueued && !isSceneGenerating) {
+			if (sceneError) {
+				// Cancel queued generation if scene failed
+				setIsQueued(false);
+			} else if (isSceneComplete) {
+				// Start audio generation now that scene is ready
+				setIsQueued(false);
+				generate(undefined);
+			}
+		}
+	}, [isQueued, isSceneGenerating, isSceneComplete, sceneError, generate]);
+
+	// Don't show button if audio already exists
+	if (audio?.exists) {
+		return null;
+	}
+
+	// Show loading state while checking
+	if (isLoading) {
+		return (
+			<div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+				<Loader2 className="w-4 h-4 animate-spin" />
+				<span>Checking audio...</span>
+			</div>
+		);
+	}
+
+	return (
+		<Button
+			type="button"
+			onClick={() => {
+				if (isSceneGenerating) {
+					// Queue audio generation to start when scene is ready
+					setIsQueued(true);
+				} else {
+					// Start immediately if scene is ready
+					generate(undefined);
+				}
+			}}
+			disabled={isGenerating}
+			variant="ghost"
+			size="sm"
+			className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
+		>
+			{isGenerating ? (
+				<>
+					<Loader2 className="w-4 h-4 animate-spin" />
+					<span>Generating...</span>
+				</>
+			) : isQueued ? (
+				<>
+					<Loader2 className="w-4 h-4 animate-spin" />
+					<span>Waiting for scene...</span>
+				</>
+			) : (
+				<>
+					<Volume2 className="w-4 h-4" />
+					<span>Generate Audio</span>
+				</>
+			)}
+		</Button>
+	);
+}

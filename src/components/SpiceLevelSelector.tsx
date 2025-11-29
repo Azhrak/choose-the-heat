@@ -35,12 +35,15 @@ export function SpiceLevelSelector({
 					>
 						<div className="flex flex-col items-center gap-1">
 							<div className="flex gap-0.5">
-								{Array.from({ length: level }).map(() => (
-									<Flame
-										key={`flame-${level}`}
-										className="w-4 h-4 text-romance-500 fill-romance-500 dark:text-romance-400 dark:fill-romance-400"
-									/>
-								))}
+								{Array.from({ length: level }, (_, i) => {
+									const flameNumber = i + 1;
+									return (
+										<Flame
+											key={`level-${level}-flame-${flameNumber}`}
+											className="w-4 h-4 text-romance-500 fill-romance-500 dark:text-romance-400 dark:fill-romance-400"
+										/>
+									);
+								})}
 							</div>
 							<span className="text-xs font-medium text-slate-700 dark:text-slate-300">
 								{SPICE_LABELS[level].label}

@@ -14,6 +14,13 @@ export async function getCachedScene(storyId: string, sceneNumber: number) {
 }
 
 /**
+ * Alias for getCachedScene - get scene by number
+ */
+export async function getSceneByNumber(storyId: string, sceneNumber: number) {
+	return getCachedScene(storyId, sceneNumber);
+}
+
+/**
  * Cache a generated scene (with duplicate handling)
  */
 export async function cacheScene(

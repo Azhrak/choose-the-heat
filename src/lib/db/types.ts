@@ -107,6 +107,20 @@ export interface PasswordAccounts {
 	user_id: string;
 }
 
+export interface SceneAudio {
+	audio_url: string;
+	created_at: Generated<Timestamp>;
+	duration: Numeric;
+	file_size: number;
+	generated_at: Generated<Timestamp>;
+	id: Generated<string>;
+	scene_number: number;
+	story_id: string;
+	tts_provider: string;
+	voice_id: string;
+	voice_name: string;
+}
+
 export interface Scenes {
 	content: string;
 	created_at: Generated<Timestamp>;
@@ -138,6 +152,9 @@ export interface Users {
 	avatar_url: string | null;
 	created_at: Generated<Timestamp>;
 	default_preferences: Json | null;
+	default_tts_provider: string | null;
+	default_tts_voice_id: string | null;
+	default_tts_voice_name: string | null;
 	email: string;
 	email_verified: Generated<boolean>;
 	id: Generated<string>;
@@ -160,6 +177,9 @@ export interface UserStories {
 	status: Generated<string>;
 	story_title: string | null;
 	template_id: string;
+	tts_provider: string | null;
+	tts_voice_id: string | null;
+	tts_voice_name: string | null;
 	updated_at: Generated<Timestamp>;
 	user_id: string;
 }
@@ -172,6 +192,7 @@ export interface DB {
 	novel_templates: NovelTemplates;
 	oauth_accounts: OauthAccounts;
 	password_accounts: PasswordAccounts;
+	scene_audio: SceneAudio;
 	scenes: Scenes;
 	sessions: Sessions;
 	tropes: Tropes;

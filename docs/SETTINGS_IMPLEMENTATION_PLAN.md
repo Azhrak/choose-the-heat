@@ -45,7 +45,7 @@ CREATE TABLE app_settings (
 
 ### Settings Categories
 
-#### 1. AI & Generation (`category: 'ai'`)
+#### 1. Text Generation (`category: 'ai'`)
 
 **Provider & Model Configuration**:
 
@@ -102,7 +102,7 @@ CREATE TABLE app_settings (
 
 ---
 
-## V1 Scope: AI & Generation + Prompts Only
+## V1 Scope: Text Generation + Prompts Only
 
 Based on user feedback, **v1 will focus exclusively on AI configuration and prompt customization**. Other categories (moderation, UX, maintenance, features, notifications) are deferred to future releases.
 
@@ -210,7 +210,7 @@ export async function getAIConfig(): Promise<AIConfig> {
 AdminLayout
   ├─ Header: "Website Settings"
   ├─ Tab Navigation
-  │   ├─ AI & Generation Tab
+  │   ├─ Text Generation Tab
   │   └─ Prompt Configuration Tab
   ├─ Tab Content (Settings Form)
   │   ├─ Provider Selection (dropdown)
@@ -233,7 +233,7 @@ AdminLayout
 
 **Features**:
 
-- Tab-based layout (AI & Generation | Prompt Configuration)
+- Tab-based layout (Text Generation | Prompt Configuration)
 - Unsaved changes warning
 - Bulk save with confirmation
 - Individual field reset to default
@@ -333,7 +333,7 @@ AdminLayout
 ### ✅ 1. UI Layout: Tabs
 
 - One category visible at a time for cleaner interface
-- Tab navigation for AI & Generation vs Prompt Configuration
+- Tab navigation for Text Generation vs Prompt Configuration
 
 ### ✅ 2. Model Selection: Dropdown with Management
 
@@ -344,7 +344,7 @@ AdminLayout
 
 ### ✅ 3. V1 Scope: AI & Prompts Only
 
-- Focus on AI & Generation settings
+- Focus on Text Generation settings
 - Add Prompt Configuration category for customizable descriptions
 - Defer other categories (moderation, features, notifications) to future releases
 
@@ -394,7 +394,7 @@ AdminLayout
 
 ### ✅ Phase 4: Admin UI - COMPLETE
 
-- ✅ Admin UI renders both tabs (AI & Generation, Prompt Configuration) with proper validation
+- ✅ Admin UI renders both tabs (Text Generation, Prompt Configuration) with proper validation
 - ✅ Model selection dropdown populated from available_models setting
 - ✅ Export settings downloads JSON file
 - ✅ Import settings validates and applies JSON file
@@ -498,7 +498,7 @@ Implementation complete when:
 - ✅ AI generation uses database settings (with env fallback)
 - ✅ Prompt building uses configurable descriptions (with hardcoded fallback)
 - ✅ Settings cache works and invalidates on update
-- ✅ Admin UI renders both tabs (AI & Generation, Prompt Configuration) with proper validation
+- ✅ Admin UI renders both tabs (Text Generation, Prompt Configuration) with proper validation
 - ✅ Model selection dropdown populated from available_models setting
 - ✅ Export settings downloads JSON file
 - ✅ Import settings validates and applies JSON file

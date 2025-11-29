@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
+import { invalidateSettingsCache } from "~/lib/ai/config";
 import { requireAdmin } from "~/lib/auth/authorization";
 import {
 	bulkUpdateSettings,
 	getAllSettings,
 	getSettingsByCategory,
 } from "~/lib/db/queries/settings";
+import { invalidateTTSCache } from "~/lib/tts/config";
 
 // Validation schema for bulk update
 const bulkUpdateSchema = z.object({
@@ -17,6 +19,26 @@ const bulkUpdateSchema = z.object({
 		}),
 	),
 });
+
+/**
+ * Invalidate relevant caches based on which settings were updated
+ */
+function invalidateCachesForUpdates(
+	updates: Array<{ key: string; value: string }>,
+) {
+	const hasAIUpdates = updates.some((update) => update.key.startsWith("ai."));
+	const hasTTSUpdates = updates.some((update) => update.key.startsWith("tts."));
+
+	if (hasAIUpdates) {
+		invalidateSettingsCache();
+		console.log("[Settings API] Invalidated AI cache");
+	}
+
+	if (hasTTSUpdates) {
+		invalidateTTSCache();
+		console.log("[Settings API] Invalidated TTS cache");
+	}
+}
 
 export const Route = createFileRoute("/api/admin/settings/")({
 	server: {
@@ -63,7 +85,16 @@ export const Route = createFileRoute("/api/admin/settings/")({
 					const body = await request.json();
 					const validatedData = bulkUpdateSchema.parse(body);
 
-					await bulkUpdateSettings(validatedData.updates, user.userId);
+					// Trim all string values
+					const trimmedUpdates = validatedData.updates.map((update) => ({
+						key: update.key,
+						value: update.value.trim(),
+					}));
+
+					await bulkUpdateSettings(trimmedUpdates, user.userId);
+
+					// Invalidate relevant caches based on updated settings
+					invalidateCachesForUpdates(trimmedUpdates);
 
 					return json({ success: true });
 				} catch (error) {

@@ -78,6 +78,17 @@ export function SettingsField({
 					);
 				}
 
+				// Use custom editor for tts.available_models field
+				if (setting.key === "tts.available_models") {
+					return (
+						<AvailableModelsEditor
+							value={value}
+							onChange={onChange}
+							error={error}
+						/>
+					);
+				}
+
 				return (
 					<textarea
 						value={value}
@@ -116,6 +127,78 @@ export function SettingsField({
 										{models.sort().map((model) => (
 											<option key={model} value={model}>
 												{model}
+											</option>
+										))}
+									</select>
+								);
+							}
+						} catch (error) {
+							console.error("Failed to parse available models:", error);
+						}
+					}
+				}
+
+				// Special handling for tts.model - make it a dropdown based on selected provider
+				if (setting.key === "tts.model" && allSettings && getSettingValue) {
+					const providerSetting = allSettings.find(
+						(s) => s.key === "tts.provider",
+					);
+					const availableModelsSetting = allSettings.find(
+						(s) => s.key === "tts.available_models",
+					);
+
+					if (providerSetting && availableModelsSetting) {
+						const currentProvider = getSettingValue(providerSetting);
+						try {
+							const availableModels = JSON.parse(
+								getSettingValue(availableModelsSetting),
+							) as Record<string, string[]>;
+							const models = availableModels[currentProvider] || [];
+
+							if (models.length > 0) {
+								return (
+									<select
+										value={value}
+										onChange={(e) => onChange(e.target.value)}
+										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
+									>
+										{models.sort().map((model) => (
+											<option key={model} value={model}>
+												{model}
+											</option>
+										))}
+									</select>
+								);
+							}
+						} catch (error) {
+							console.error("Failed to parse available models:", error);
+						}
+					}
+				}
+
+				// Special handling for tts.provider - make it a dropdown based on available providers
+				if (setting.key === "tts.provider" && allSettings && getSettingValue) {
+					const availableModelsSetting = allSettings.find(
+						(s) => s.key === "tts.available_models",
+					);
+
+					if (availableModelsSetting) {
+						try {
+							const availableModels = JSON.parse(
+								getSettingValue(availableModelsSetting),
+							) as Record<string, string[]>;
+							const providers = Object.keys(availableModels).sort();
+
+							if (providers.length > 0) {
+								return (
+									<select
+										value={value}
+										onChange={(e) => onChange(e.target.value)}
+										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
+									>
+										{providers.map((provider) => (
+											<option key={provider} value={provider}>
+												{provider}
 											</option>
 										))}
 									</select>

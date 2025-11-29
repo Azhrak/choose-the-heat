@@ -35,6 +35,7 @@ import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/
 import { Route as AdminAuditLogsIndexRouteImport } from './routes/admin/audit-logs/index'
 import { Route as StoryIdReadRouteImport } from './routes/story/$id.read'
 import { Route as StoryIdInfoRouteImport } from './routes/story/$id.info'
+import { Route as ApiTtsVoicesRouteImport } from './routes/api/tts/voices'
 import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
 import { Route as ApiStoriesUserRouteImport } from './routes/api/stories/user'
 import { Route as ApiStoriesIdRouteImport } from './routes/api/stories/$id'
@@ -74,6 +75,7 @@ import { Route as AdminTemplatesIdEditRouteImport } from './routes/admin/templat
 import { Route as ApiStoriesIdSceneStreamRouteImport } from './routes/api/stories/$id.scene.stream'
 import { Route as ApiAdminTemplatesIdStatusRouteImport } from './routes/api/admin/templates/$id.status'
 import { Route as ApiAdminTemplatesIdChoicePointsRouteImport } from './routes/api/admin/templates/$id/choice-points'
+import { Route as ApiStoriesIdSceneNumberAudioRouteImport } from './routes/api/stories/$id/scene/$number/audio'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -203,6 +205,11 @@ const StoryIdReadRoute = StoryIdReadRouteImport.update({
 const StoryIdInfoRoute = StoryIdInfoRouteImport.update({
   id: '/story/$id/info',
   path: '/story/$id/info',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTtsVoicesRoute = ApiTtsVoicesRouteImport.update({
+  id: '/api/tts/voices',
+  path: '/api/tts/voices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiTemplatesIdRoute = ApiTemplatesIdRouteImport.update({
@@ -407,6 +414,12 @@ const ApiAdminTemplatesIdChoicePointsRoute =
     path: '/choice-points',
     getParentRoute: () => ApiAdminTemplatesIdRoute,
   } as any)
+const ApiStoriesIdSceneNumberAudioRoute =
+  ApiStoriesIdSceneNumberAudioRouteImport.update({
+    id: '/$number/audio',
+    path: '/$number/audio',
+    getParentRoute: () => ApiStoriesIdSceneRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -437,6 +450,7 @@ export interface FileRoutesByFullPath {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
@@ -474,6 +488,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
+  '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -504,6 +519,7 @@ export interface FileRoutesByTo {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
@@ -541,6 +557,7 @@ export interface FileRoutesByTo {
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
+  '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -572,6 +589,7 @@ export interface FileRoutesById {
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
+  '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs/': typeof AdminAuditLogsIndexRoute
@@ -609,6 +627,7 @@ export interface FileRoutesById {
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
+  '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -641,6 +660,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/api/tts/voices'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
@@ -678,6 +698,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
+    | '/api/stories/$id/scene/$number/audio'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -708,6 +729,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/api/tts/voices'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
@@ -745,6 +767,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
+    | '/api/stories/$id/scene/$number/audio'
   id:
     | '__root__'
     | '/'
@@ -775,6 +798,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id'
     | '/api/stories/user'
     | '/api/templates/$id'
+    | '/api/tts/voices'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs/'
@@ -812,6 +836,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
+    | '/api/stories/$id/scene/$number/audio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -843,6 +868,7 @@ export interface RootRouteChildren {
   ApiStoriesIdRoute: typeof ApiStoriesIdRouteWithChildren
   ApiStoriesUserRoute: typeof ApiStoriesUserRoute
   ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
+  ApiTtsVoicesRoute: typeof ApiTtsVoicesRoute
   StoryIdInfoRoute: typeof StoryIdInfoRoute
   StoryIdReadRoute: typeof StoryIdReadRoute
   AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
@@ -1057,6 +1083,13 @@ declare module '@tanstack/react-router' {
       path: '/story/$id/info'
       fullPath: '/story/$id/info'
       preLoaderRoute: typeof StoryIdInfoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/tts/voices': {
+      id: '/api/tts/voices'
+      path: '/api/tts/voices'
+      fullPath: '/api/tts/voices'
+      preLoaderRoute: typeof ApiTtsVoicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/templates/$id': {
@@ -1332,15 +1365,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminTemplatesIdChoicePointsRouteImport
       parentRoute: typeof ApiAdminTemplatesIdRoute
     }
+    '/api/stories/$id/scene/$number/audio': {
+      id: '/api/stories/$id/scene/$number/audio'
+      path: '/$number/audio'
+      fullPath: '/api/stories/$id/scene/$number/audio'
+      preLoaderRoute: typeof ApiStoriesIdSceneNumberAudioRouteImport
+      parentRoute: typeof ApiStoriesIdSceneRoute
+    }
   }
 }
 
 interface ApiStoriesIdSceneRouteChildren {
   ApiStoriesIdSceneStreamRoute: typeof ApiStoriesIdSceneStreamRoute
+  ApiStoriesIdSceneNumberAudioRoute: typeof ApiStoriesIdSceneNumberAudioRoute
 }
 
 const ApiStoriesIdSceneRouteChildren: ApiStoriesIdSceneRouteChildren = {
   ApiStoriesIdSceneStreamRoute: ApiStoriesIdSceneStreamRoute,
+  ApiStoriesIdSceneNumberAudioRoute: ApiStoriesIdSceneNumberAudioRoute,
 }
 
 const ApiStoriesIdSceneRouteWithChildren =
@@ -1406,6 +1448,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiStoriesIdRoute: ApiStoriesIdRouteWithChildren,
   ApiStoriesUserRoute: ApiStoriesUserRoute,
   ApiTemplatesIdRoute: ApiTemplatesIdRoute,
+  ApiTtsVoicesRoute: ApiTtsVoicesRoute,
   StoryIdInfoRoute: StoryIdInfoRoute,
   StoryIdReadRoute: StoryIdReadRoute,
   AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,

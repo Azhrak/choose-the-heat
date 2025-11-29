@@ -424,3 +424,55 @@ export async function getUserVerifiedCount() {
 
 	return Number(result?.count || 0);
 }
+
+/**
+ * Update user's default TTS settings
+ */
+export async function updateUserDefaultTTS(
+	userId: string,
+	settings: {
+		provider: string;
+		voiceId: string;
+		voiceName: string;
+	},
+) {
+	return db
+		.updateTable("users")
+		.set({
+			default_tts_provider: settings.provider,
+			default_tts_voice_id: settings.voiceId,
+			default_tts_voice_name: settings.voiceName,
+			updated_at: new Date(),
+		})
+		.where("id", "=", userId)
+		.execute();
+}
+
+/**
+ * Get user's default TTS settings
+ */
+export async function getUserDefaultTTS(userId: string): Promise<{
+	provider?: string;
+	voiceId?: string;
+	voiceName?: string;
+} | null> {
+	const result = await db
+		.selectFrom("users")
+		.select([
+			"default_tts_provider",
+			"default_tts_voice_id",
+			"default_tts_voice_name",
+		])
+		.where("id", "=", userId)
+		.executeTakeFirst();
+
+	if (!result) {
+		return null;
+	}
+
+	return {
+		provider: result.default_tts_provider || undefined,
+		voiceId: result.default_tts_voice_id || undefined,
+		voiceName: result.default_tts_voice_name || undefined,
+	};
+}

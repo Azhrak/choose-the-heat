@@ -523,6 +523,54 @@ export async function updateStoryAISettings(
 }
 
 /**
+ * Update TTS settings for a story
+ */
+export async function updateStoryTTSSettings(
+	storyId: string,
+	settings: {
+		provider: string;
+		voiceId: string;
+		voiceName: string;
+	},
+) {
+	return db
+		.updateTable("user_stories")
+		.set({
+			tts_provider: settings.provider,
+			tts_voice_id: settings.voiceId,
+			tts_voice_name: settings.voiceName,
+			updated_at: new Date(),
+		})
+		.where("id", "=", storyId)
+		.execute();
+}
+
+/**
+ * Get TTS settings for a story
+ */
+export async function getStoryTTSSettings(storyId: string): Promise<{
+	provider?: string;
+	voiceId?: string;
+	voiceName?: string;
+} | null> {
+	const result = await db
+		.selectFrom("user_stories")
+		.select(["tts_provider", "tts_voice_id", "tts_voice_name"])
+		.where("id", "=", storyId)
+		.executeTakeFirst();
+
+	if (!result) {
+		return null;
+	}
+
+	return {
+		provider: result.tts_provider || undefined,
+		voiceId: result.tts_voice_id || undefined,
+		voiceName: result.tts_voice_name || undefined,
+	};
+}
+
+/**
  * Toggle favorite status of a story
  */
 export async function toggleStoryFavorite(
