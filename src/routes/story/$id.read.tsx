@@ -25,6 +25,7 @@ import { useAudioGeneration } from "~/hooks/useAudioGeneration";
 import { useBranchStoryMutation } from "~/hooks/useBranchStoryMutation";
 import { useCheckExistingBranch } from "~/hooks/useCheckExistingBranch";
 import { useMakeChoiceMutation } from "~/hooks/useMakeChoiceMutation";
+import { useStoryQuery } from "~/hooks/useStoryQuery";
 import { useStreamingScene } from "~/hooks/useStreamingScene";
 import { useUpdateProgressMutation } from "~/hooks/useUpdateProgressMutation";
 import { calculateStoryProgress } from "~/lib/utils";
@@ -60,6 +61,10 @@ function ReadingPage() {
 	// Use streaming hook for scene data
 	// Only enable when we have a valid story ID
 	const streamingState = useStreamingScene(id, currentSceneNumber, !!id);
+
+	// Fetch story data to get template cover
+	const { data: storyData } = useStoryQuery(id);
+	const coverUrl = storyData?.story?.template?.cover_url;
 
 	// Mutations
 	const choiceMutation = useMakeChoiceMutation(id);
@@ -289,11 +294,22 @@ function ReadingPage() {
 		<div className="min-h-screen bg-linear-to-br from-rose-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
 			{/* Header */}
 			<header
-				className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10 transition-transform duration-300 ${
+				className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-rose-200 dark:border-gray-700 sticky top-0 z-10 transition-transform duration-300 overflow-hidden ${
 					showHeader ? "translate-y-0" : "-translate-y-full"
 				}`}
 			>
-				<div className="max-w-4xl mx-auto px-4 py-4 space-y-3">
+				{/* Cover Image Background */}
+				{coverUrl && (
+					<div className="absolute inset-0 z-0 overflow-hidden">
+						<img
+							src={coverUrl}
+							alt="Story Cover"
+							className="absolute inset-0 w-full h-full object-cover object-center opacity-15 blur-sm scale-110"
+						/>
+					</div>
+				)}
+
+				<div className="relative z-10 max-w-4xl mx-auto px-4 py-4 space-y-3">
 					<div className="flex items-center justify-between">
 						<LinkButton
 							to="/library"
