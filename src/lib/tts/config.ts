@@ -68,12 +68,7 @@ function getConfigFromEnv(): TTSConfig {
 		gcsBucketPath: process.env.GCS_BUCKET_PATH || "audio/",
 		availableModels: {
 			openai: ["tts-1", "tts-1-hd"],
-			google: [
-				"en-US-Neural2-A",
-				"en-US-Neural2-C",
-				"en-US-Neural2-D",
-				"en-US-Neural2-F",
-			],
+			google: ["gemini-2.5-flash-tts", "gemini-2.5-flash-lite-preview-tts"],
 			elevenlabs: ["Rachel", "Domi"],
 			azure: ["en-US-JennyNeural", "en-US-GuyNeural", "en-US-AriaNeural"],
 		},
@@ -88,28 +83,58 @@ function getConfigFromEnv(): TTSConfig {
 			],
 			google: [
 				{
-					id: "en-US-Neural2-A",
-					name: "US Female (Neural2-A)",
-					language: "en-US",
-					gender: "female",
-				},
-				{
-					id: "en-US-Neural2-C",
-					name: "US Female (Neural2-C)",
-					language: "en-US",
-					gender: "female",
-				},
-				{
-					id: "en-US-Neural2-D",
-					name: "US Male (Neural2-D)",
+					id: "Enceladus",
+					name: "Enceladus (Male)",
 					language: "en-US",
 					gender: "male",
 				},
 				{
-					id: "en-US-Neural2-F",
-					name: "US Female (Neural2-F)",
+					id: "Puck",
+					name: "Puck (Male)",
+					language: "en-US",
+					gender: "male",
+				},
+				{
+					id: "Charon",
+					name: "Charon (Male)",
+					language: "en-US",
+					gender: "male",
+				},
+				{
+					id: "Kore",
+					name: "Kore (Female)",
 					language: "en-US",
 					gender: "female",
+				},
+				{
+					id: "Fenrir",
+					name: "Fenrir (Male)",
+					language: "en-US",
+					gender: "male",
+				},
+				{
+					id: "Aoede",
+					name: "Aoede (Female)",
+					language: "en-US",
+					gender: "female",
+				},
+				{
+					id: "Achernar",
+					name: "Achernar (Female)",
+					language: "en-US",
+					gender: "female",
+				},
+				{
+					id: "Zephyr",
+					name: "Zephyr (Female)",
+					language: "en-US",
+					gender: "female",
+				},
+				{
+					id: "Orus",
+					name: "Orus (Male)",
+					language: "en-US",
+					gender: "male",
 				},
 			],
 			elevenlabs: [

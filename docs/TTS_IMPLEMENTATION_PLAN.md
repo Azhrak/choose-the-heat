@@ -8,7 +8,7 @@ Add text-to-speech functionality to the story reading page, allowing users to li
 
 ## Requirements
 
-- **TTS Providers**: Configurable (OpenAI ✅, Google Cloud TTS 🚧, ElevenLabs 🚧, Azure 🚧)
+- **TTS Providers**: Configurable (OpenAI ✅, Google Cloud TTS ✅, ElevenLabs 🚧, Azure 🚧)
 - **Storage**: Google Cloud Storage bucket for generated audio files ✅
 - **Voice Selection**: User default preference + story-specific voice (maintains consistency) ✅
 - **Player Features**: play, pause, volume, speed, seek controls (no auto-play) ✅
@@ -112,8 +112,8 @@ export async function generateSpeech(options: {
 }
 
 // Provider implementations:
-- generateSpeechOpenAI(): ✅ Uses OpenAI tts-1-hd model with automatic text chunking
-- generateSpeechGoogle(): 🚧 TODO: Google Cloud TTS Neural2
+- generateSpeechOpenAI(): ✅ Uses OpenAI tts-1-hd model with automatic text chunking (4096 chars)
+- generateSpeechGoogle(): ✅ Uses Google Cloud TTS Journey voices with byte-aware chunking (3800 bytes, MP3 format)
 - generateSpeechElevenLabs(): 🚧 TODO: ElevenLabs API
 - generateSpeechAzure(): 🚧 TODO: Azure Cognitive Services
 
@@ -318,9 +318,11 @@ GCS_BUCKET_NAME=your-bucket-name
 GCS_BUCKET_PATH=audio/
 GCS_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
 
+# Google TTS (optional, falls back to GCS_SERVICE_ACCOUNT_JSON)
+GOOGLE_TTS_ACCOUNT_JSON={"type":"service_account",...}
+
 # Provider API Keys
 OPENAI_API_KEY=... # Reused from AI config
-GOOGLE_CLOUD_TTS_API_KEY=...
 ELEVENLABS_API_KEY=...
 AZURE_TTS_KEY=...
 AZURE_TTS_REGION=eastus
@@ -400,7 +402,6 @@ AZURE_TTS_REGION=eastus
 ### 🚧 Future Enhancements
 
 1. **Additional TTS Providers**
-   - Google Cloud TTS implementation
    - ElevenLabs API integration
    - Azure Cognitive Services implementation
 
@@ -542,5 +543,39 @@ AZURE_TTS_REGION=eastus
 - Signed URLs expire after 7 days (regenerated on-demand)
 - Users cannot regenerate audio (cost control)
 - Voice locked to story after first generation (consistency)
-- MP3 format chosen for universal browser support
+- MP3 format for OpenAI, WAV format for Gemini (both universally supported)
 - Chunking happens transparently (no user awareness needed)
+
+## Google Cloud TTS Implementation Notes
+
+The Google Cloud Text-to-Speech implementation uses the **Neural2 voices** with MP3 output:
+
+- **Model**: Journey voices (e.g., `en-US-Journey-F`) or Gemini models (e.g., `gemini-2.5-flash-lite-preview-tts`)
+- **API**: `@google-cloud/text-to-speech` SDK
+- **Voices**: Puck, Charon, Kore, Fenrir, Aoede, Achernar, Zephyr, Orus, and more
+- **Output Format**: MP3 (configurable)
+- **Chunk Size**: 450 bytes for Gemini Lite (512 byte limit), 4500 bytes for Journey voices (5000 byte limit)
+- **Authentication**: `GOOGLE_TTS_ACCOUNT_JSON` environment variable (OAuth2 service account), falls back to `GCS_SERVICE_ACCOUNT_JSON`
+
+### Differences from OpenAI:
+
+1. **Output Format**: Returns MP3 with configurable audio settings
+2. **Voice Names**: Named voices (e.g., "Puck", "Kore") with distinct personalities
+3. **API Style**: Uses Cloud TTS `synthesizeSpeech` method
+4. **Audio Config**: Supports speaking rate, pitch, and volume adjustments
+5. **Language Support**: Model specifies language (e.g., "en-US-Journey-F")
+
+### Available Configuration:
+
+- Speaking rate: 0.25 to 4.0 (default: 1.0)
+- Pitch: -20.0 to 20.0 (default: 0.0)
+- Volume gain: -96.0 to 16.0 dB (default: 0.0)
+- Audio encoding: MP3, LINEAR16, OGG_OPUS, MULAW, ALAW
+
+### Benefits:
+
+- Native MP3 support (no conversion needed)
+- Consistent file sizes with OpenAI
+- Fine-grained audio control options
+- Named voices with distinct characteristics (celestial theme)
+- Professional quality Journey voice models

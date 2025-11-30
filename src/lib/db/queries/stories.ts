@@ -1,7 +1,9 @@
 import { jsonArrayFrom, jsonObjectFrom } from "kysely/helpers/postgres";
 import type { StoryStatus } from "~/lib/api/types";
 import { db } from "~/lib/db";
+import { deleteAudioFromGCS } from "~/lib/tts/storage";
 import type { UserPreferences } from "~/lib/types/preferences";
+import { getStoryAudio } from "./scene-audio";
 
 /**
  * Get all novel templates
@@ -300,6 +302,7 @@ export async function updateStoryTitle(
 /**
  * Delete a user story and all associated data
  * This will cascade delete: scenes, choices, and any other related data
+ * Also deletes associated audio files from Google Cloud Storage
  */
 export async function deleteUserStory(storyId: string, userId: string) {
 	// Verify ownership before deleting
@@ -314,7 +317,36 @@ export async function deleteUserStory(storyId: string, userId: string) {
 		throw new Error("Story not found or access denied");
 	}
 
-	// Delete the story (cascading will handle related records)
+	// Delete audio files from GCS before deleting database records
+	try {
+		const audioFiles = await getStoryAudio(storyId);
+		console.log(
+			`[deleteUserStory] Deleting ${audioFiles.length} audio files for story ${storyId}`,
+		);
+
+		// Delete each audio file from GCS
+		for (const audio of audioFiles) {
+			if (audio.audio_url) {
+				try {
+					await deleteAudioFromGCS(audio.audio_url);
+					console.log(
+						`[deleteUserStory] Deleted audio for scene ${audio.scene_number}`,
+					);
+				} catch (error) {
+					// Log error but continue deleting other files
+					console.error(
+						`[deleteUserStory] Failed to delete audio for scene ${audio.scene_number}:`,
+						error,
+					);
+				}
+			}
+		}
+	} catch (error) {
+		// Log error but continue with story deletion
+		console.error(`[deleteUserStory] Error deleting audio files:`, error);
+	}
+
+	// Delete the story (cascading will handle related records including scene_audio)
 	const result = await db
 		.deleteFrom("user_stories")
 		.where("id", "=", storyId)
