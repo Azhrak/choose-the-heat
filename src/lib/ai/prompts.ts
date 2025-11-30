@@ -1,4 +1,5 @@
 import { getSettingsMap } from "../db/queries/settings";
+import { getGenderGuidance, selectCharacterName } from "./character-names";
 
 /**
  * Preferences for story generation
@@ -20,56 +21,7 @@ export interface StoryPreferences {
 		| "genderfluid";
 	protagonistTraits?: string[];
 	settingPreferences?: string[];
-}
-
-/**
- * Generate appropriate pronoun and gender guidance based on POV character gender
- */
-function getGenderGuidance(gender: string): string {
-	const genderMap: Record<string, { pronouns: string; guidance: string }> = {
-		male: {
-			pronouns: "he/him/his",
-			guidance:
-				"The protagonist is a man. Use he/him/his pronouns and reflect his male identity naturally through his perspective and experiences.",
-		},
-		female: {
-			pronouns: "she/her/hers",
-			guidance:
-				"The protagonist is a woman. Use she/her/hers pronouns and reflect her female identity naturally through her perspective and experiences.",
-		},
-		"non-binary": {
-			pronouns: "they/them/theirs",
-			guidance:
-				"The protagonist is non-binary. Use they/them/theirs pronouns and reflect their non-binary identity authentically through their perspective and experiences.",
-		},
-		genderqueer: {
-			pronouns: "they/them/theirs (or other chosen pronouns)",
-			guidance:
-				"The protagonist is genderqueer. Use they/them pronouns (or other appropriate pronouns) and authentically represent their genderqueer identity through their lived experience and self-perception.",
-		},
-		"trans-man": {
-			pronouns: "he/him/his",
-			guidance:
-				"The protagonist is a trans man. Use he/him/his pronouns. He is a man whose gender identity may inform his experiences and perspective in nuanced ways.",
-		},
-		"trans-woman": {
-			pronouns: "she/her/hers",
-			guidance:
-				"The protagonist is a trans woman. Use she/her/hers pronouns. She is a woman whose gender identity may inform her experiences and perspective in nuanced ways.",
-		},
-		agender: {
-			pronouns: "they/them/theirs (or other chosen pronouns)",
-			guidance:
-				"The protagonist is agender. Use they/them pronouns (or other appropriate pronouns) and respect their lack of gender identity, reflecting this naturally in the narrative.",
-		},
-		genderfluid: {
-			pronouns: "they/them/theirs (or pronouns matching current identity)",
-			guidance:
-				"The protagonist is genderfluid. Their gender identity may shift; use pronouns that honor their fluidity and reflect this aspect of their identity authentically.",
-		},
-	};
-
-	return genderMap[gender]?.guidance || "";
+	protagonistName?: string; // Optional override - if not provided, auto-selected from name lists
 }
 
 /**
@@ -219,6 +171,7 @@ export async function buildSystemPrompt(
 		settingPreferences,
 		sceneLength,
 		povCharacterGender,
+		protagonistName,
 	} = preferences;
 
 	// Get configurable descriptions from settings
@@ -239,6 +192,14 @@ export async function buildSystemPrompt(
 	const genderGuidance = povCharacterGender
 		? getGenderGuidance(povCharacterGender)
 		: "Protagonist gender identity is flexible; establish it naturally through context, pronouns, and character self-perception.";
+
+	// Character name guidance - name should already be set in preferences from story creation
+	// If somehow missing, we'll still generate one, but this should be rare
+	const selectedName =
+		protagonistName || selectCharacterName(povCharacterGender);
+	const nameGuidance = selectedName
+		? `The protagonist's name is ${selectedName}. Use this name consistently when introducing and referring to the protagonist throughout the story.`
+		: "Generate an appropriate name for the protagonist based on the genre and setting.";
 
 	// Scene length guidance
 	const lengthGuidance = getSceneLengthGuidance(sceneLength);
@@ -266,6 +227,7 @@ CHARACTER & SETTING:
 ${traitLine}
 ${settingLine}
 ${genderGuidance}
+${nameGuidance}
 
 CONTINUITY & ECONOMY:
 - CHARACTER TRACKING: When introducing a character for the first time, establish their key traits, appearance, and mannerisms. In subsequent appearances, reference established details and show character evolution rather than restating descriptions.
@@ -326,7 +288,7 @@ export function buildScenePrompt(params: {
 	if (sceneNumber === 1) {
 		phase = "Opening";
 		objectives = [
-			"Introduce protagonist organically (no dossier)",
+			"Introduce protagonist by name organically (no dossier)",
 			"Seed initial unmet desire or vulnerability",
 			"Plant first faint spark OR obstacle toward romance",
 		];

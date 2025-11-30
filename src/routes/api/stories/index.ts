@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
+import { selectCharacterName } from "~/lib/ai/character-names";
 import { getAIConfig } from "~/lib/ai/config";
 import { getSessionFromRequest } from "~/lib/auth/session";
 import { createUserStory } from "~/lib/db/queries/stories";
@@ -24,6 +25,7 @@ const createStorySchema = z.object({
 			pacing: z.enum(PACING_OPTIONS),
 			sceneLength: z.enum(SCENE_LENGTH_OPTIONS).optional(),
 			povCharacterGender: z.enum(POV_CHARACTER_GENDER_OPTIONS).optional(),
+			protagonistName: z.string().optional(),
 		})
 		.optional(),
 });
@@ -71,11 +73,21 @@ export const Route = createFileRoute("/api/stories/")({
 						temperature: aiConfig.temperature,
 					};
 
+					// Generate protagonist name if not provided in preferences
+					const preferencesWithName = preferences
+						? {
+								...preferences,
+								protagonistName:
+									preferences.protagonistName ||
+									selectCharacterName(preferences.povCharacterGender),
+							}
+						: null;
+
 					// Create the user story with optional preference overrides and custom title
 					const story = await createUserStory(
 						session.userId,
 						templateId,
-						preferences || null,
+						preferencesWithName,
 						storyTitle,
 						aiSettings,
 					);
