@@ -2,7 +2,7 @@
 
 This index helps navigate the Choose the Heat project documentation.
 
-**Last Updated**: 2025-11-28
+**Last Updated**: 2025-12-04
 
 ---
 
@@ -95,6 +95,13 @@ Start here if you're new to the project:
   - Parsing and storage
   - Context summarization
 
+- **[Text-to-Speech System](technical/TEXT_TO_SPEECH.md)** - TTS integration and audio generation
+  - Multi-provider support (OpenAI, Google Cloud TTS)
+  - Google Cloud Storage integration
+  - Audio player features
+  - Voice management and consistency
+  - Cost estimation and performance
+
 ### Admin Features
 - **[Admin Dashboard](technical/ADMIN.md)** - Admin dashboard guide
   - Role-based access control
@@ -120,6 +127,7 @@ Start here if you're new to the project:
 ```
 docs/
 ├── DOCUMENTATION_INDEX.md (this file)
+├── api-key-management.md
 ├── getting-started/
 │   ├── DOCKER.md
 │   └── DEPLOYMENT.md
@@ -137,13 +145,16 @@ docs/
 │   └── COMPONENT_STRUCTURE.md
 ├── technical/
 │   ├── ADMIN.md
-│   └── SCENE_METADATA.md
+│   ├── SCENE_METADATA.md
+│   └── TEXT_TO_SPEECH.md
 ├── legal/
 │   └── GDPR_IMPLEMENTATION_SUMMARY.md
 └── archive/
     ├── DOCUMENTATION_CLEANUP_2025-11-28.md
+    ├── DOCUMENTATION_REORGANIZATION_2025-11-28.md
     ├── LINKBUTTON_COMPONENT_PLAN.md
-    └── SETTINGS_IMPLEMENTATION_PLAN.md
+    ├── SETTINGS_IMPLEMENTATION_PLAN.md
+    └── TTS_IMPLEMENTATION_PLAN.md
 ```
 
 ---
@@ -169,7 +180,8 @@ docs/
 ### AI Integration Engineer
 1. [AI Providers](configuration/AI_PROVIDERS.md) - Provider config
 2. [AI Metadata System](technical/SCENE_METADATA.md) - Metadata system
-3. [Implementation Progress](development/PROGRESS.md#phase-35-ai-integration) - AI features
+3. [Text-to-Speech System](technical/TEXT_TO_SPEECH.md) - TTS integration
+4. [Implementation Progress](development/PROGRESS.md#phase-35-ai-integration) - AI features
 
 ---
 
@@ -220,6 +232,7 @@ Update documentation when:
 | | COMPONENT_STRUCTURE.md | ✅ Active | ~300 lines |
 | **Technical** | ADMIN.md | ✅ Active | ~550 lines |
 | | SCENE_METADATA.md | ✅ Active | ~320 lines |
+| | TEXT_TO_SPEECH.md | ✅ Active | ~650 lines |
 | **Legal** | GDPR_IMPLEMENTATION_SUMMARY.md | ✅ Active | ~300 lines |
 
 ---
