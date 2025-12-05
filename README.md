@@ -7,12 +7,14 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 ## Features
 
 ### 🔐 Authentication & User Management
+
 - Google OAuth + Email/Password authentication
 - Secure session management with httpOnly cookies
 - User profiles with customizable preferences
 - Account management and deletion
 
 ### 📚 AI-Powered Story Generation
+
 - AI-generated romance novels with choice-based branching
 - Real-time streaming content generation (watch stories being written!)
 - Story-specific AI configuration (temperature, max tokens, model selection)
@@ -21,12 +23,14 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - Scene metadata tracking (emotions, tension, relationship progress)
 
 ### 🎨 Personalization & Preferences
+
 - Custom reading preferences (genres, tropes, spice level, pacing, POV, scene length)
 - Mark stories as favorites with filtering
 - Editable story titles and cover images
 - Preferences management page
 
 ### 🌳 Story Experience
+
 - Interactive choice-based branching
 - Story branching system (explore alternative storylines)
 - Progress tracking with scene caching
@@ -35,7 +39,9 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - Custom tropes management
 
 ### 👑 Admin Dashboard
+
 - Role-based access control (user, editor, admin)
+- Secure API key management with encryption (AES-256-GCM)
 - Template management with AI-assisted generation
 - User management and audit logging
 - System settings with import/export
@@ -43,6 +49,7 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - Paginated views with search functionality
 
 ### 🤖 Technical Features
+
 - Automated CI/CD with database migrations
 - Enhanced safety guardrails for content generation
 - GDPR compliance with cookie consent
@@ -53,14 +60,17 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 📚 **[Complete Documentation Index](docs/DOCUMENTATION_INDEX.md)** - Navigate all documentation
 
 ### Getting Started
+
 - [Docker Setup](docs/getting-started/DOCKER.md) - Docker setup guide (recommended)
 - [Deployment Guide](docs/getting-started/DEPLOYMENT.md) - Production deployment instructions
 - [Environment Variables](.env.example) - Configuration template
 
 ### Configuration
+
 - [AI Providers](docs/configuration/AI_PROVIDERS.md) - Configure OpenAI, Gemini, Claude, Mistral, or xAI
 
 ### Development
+
 - [Implementation Progress](docs/development/PROGRESS.md) - Implementation status & roadmap
 - [Coding Standards](docs/development/CODING_PRACTICES.md) - Development standards and patterns
 - [Component Usage](docs/development/COMPONENT_USAGE.md) - Component library guidelines
@@ -70,10 +80,12 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - [CI/CD & Migrations](docs/development/CI_MIGRATIONS.md) - Automated deployment & database migrations
 
 ### Technical Reference
+
 - [Admin Dashboard](docs/technical/ADMIN.md) - Admin features and role-based access
 - [AI Metadata System](docs/technical/SCENE_METADATA.md) - Scene metadata and context management
 
 ### Legal & Compliance
+
 - [GDPR Implementation](docs/legal/GDPR_IMPLEMENTATION_SUMMARY.md) - Privacy and compliance details
 
 ## Tech Stack
@@ -147,19 +159,18 @@ DATABASE_URL=postgresql://user:password@localhost:5432/romance_novels
 # Application
 APP_URL=http://localhost:3000
 
+# Encryption Key (REQUIRED - generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))")
+ENCRYPTION_KEY=your-base64-encoded-key
+
 # Google OAuth (get from https://console.cloud.google.com/)
 GOOGLE_CLIENT_ID=your-client-id
 GOOGLE_CLIENT_SECRET=your-client-secret
 
-# AI Provider (choose one)
+# AI Provider Keys (can be set via Admin Settings > API Keys or here as fallback)
 OPENAI_API_KEY=sk-your-api-key
-# OR
 ANTHROPIC_API_KEY=your-key
-# OR
 GOOGLE_API_KEY=your-key
-# OR
 MISTRAL_API_KEY=your-key
-# OR
 XAI_API_KEY=your-key
 
 # Session (generate: openssl rand -base64 32)
@@ -193,6 +204,24 @@ src/
 │   └── utils.ts     # Utilities
 └── styles/          # Global styles
 ```
+
+## API Key Management
+
+The app now includes a secure, encrypted API key management system accessible from the Admin Settings:
+
+1. **Navigate to Admin Settings > API Keys** - Access the encrypted key management interface
+2. **Configure Provider Keys** - Add keys for OpenAI, Google, Anthropic, Mistral, xAI, or OpenRouter
+3. **Automatic Validation** - Keys are tested automatically when saved
+4. **Visual Status Indicators** - See at a glance which keys are valid, invalid, or untested
+5. **Encrypted Storage** - All keys encrypted with AES-256-GCM before database storage
+6. **Fallback Support** - Environment variable keys still work if database keys not configured
+
+**Security Features:**
+
+- Keys encrypted at rest with AES-256-GCM authenticated encryption
+- Admin-only access control
+- Full audit logging of all key operations
+- Keys never exposed in API responses or logs
 
 ## User Flow
 
@@ -245,7 +274,9 @@ pnpm db:seed
 - ✅ httpOnly, secure cookies
 - ✅ CSRF protection (SameSite)
 - ✅ Password hashing (Argon2)
+- ✅ AES-256-GCM encryption for API keys
 - ✅ Input validation (Zod)
+- ✅ Admin-only access control for sensitive operations
 - ⚠️ TODO: Rate limiting
 - ⚠️ TODO: Content moderation
 
@@ -257,6 +288,7 @@ pnpm db:seed
 
 ## Recent Updates
 
+- ✅ **Encrypted API Key Management** - Securely manage AI provider keys in Admin Settings with AES-256-GCM encryption
 - ✅ **Story-specific AI Settings** - Configure temperature, max tokens, and model per story
 - ✅ **App Settings Management** - Database-driven admin settings with import/export
 - ✅ **Cover Images** - Support for custom cover URLs on stories and templates

@@ -21,11 +21,13 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 1: Component Extraction (Complete)
 
 **Files Created:**
+
 - `src/components/ui/Card.tsx` - Unified card component
 - `src/components/admin/StatCard.tsx` - Statistics display
 - `src/lib/constants/gradients.ts` - Centralized gradient options (expanded from 8 to 32 variants)
 
 **Impact:**
+
 - ~200 lines eliminated
 - 19 files refactored
 - Consistent styling across 12 components
@@ -33,6 +35,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 2: Advanced Refactoring (Complete)
 
 **Created:**
+
 - `src/lib/validation/templates.ts` - Validation utilities (~130 lines)
 - `src/components/admin/TemplateStatusManager.tsx` - Status management (~120 lines)
 - `src/hooks/useTableSorting.ts` - Table sorting hook (~60 lines)
@@ -40,11 +43,13 @@ This document consolidates all refactoring-related documentation for the Choose 
 - `src/components/admin/choice-points/ChoicePointOption.tsx` (~90 lines)
 
 **Files Modified:**
+
 - `routes/admin/templates/$id/edit.tsx` - Reduced from 513 to ~380 lines (26% reduction)
 - `routes/admin/templates/index.tsx` - Reduced by ~6%
 - `components/admin/ChoicePointForm.tsx` - Reduced from 348 to 110 lines (68% reduction)
 
 **Impact:**
+
 - ~390 lines eliminated/reorganized
 - Better separation of concerns
 - More testable and reusable code
@@ -53,6 +58,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 3: Design System & Layout Components (Complete)
 
 **Created Core Components:**
+
 - `src/components/ui/Stack.tsx` - Consistent spacing
 - `src/components/ui/Section.tsx` - Page sections
 - `src/components/ui/Container.tsx` - Max-width containers
@@ -65,17 +71,20 @@ This document consolidates all refactoring-related documentation for the Choose 
 - `src/components/ui/Text.tsx` - Polymorphic text component
 
 **Documentation:**
+
 - `docs/DESIGN_SYSTEM.md` - Design system guidelines
 - `docs/COMPONENT_LIBRARY.md` - Component API reference
 - `src/components/ui/index.ts` - Barrel exports
 
 **Files Refactored:**
+
 - All 6 preference sections (GenresSection, TropesSection, etc.)
 - All 3 policy pages (privacy.tsx, terms.tsx, cookies.tsx)
 - User-facing pages (onboarding.tsx, story/create.tsx, template/$id.tsx)
 - Auth pages with Text component adoption
 
 **Impact:**
+
 - Replaced ~80+ manual spacing patterns (space-y-*) with Stack components
 - Replaced ~15+ manual card patterns with Card component
 - Applied Text component to ~20+ instances of manual text color classes
@@ -86,6 +95,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 **Created 27 Custom Hooks:**
 
 *Query Hooks (14):*
+
 - useCurrentUserQuery
 - useUserStoriesQuery
 - useTemplatesQuery
@@ -102,6 +112,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - useProfileQuery
 
 *Mutation Hooks (13):*
+
 - useDeleteStoryMutation
 - useUpdateUserMutation
 - useDeleteUserMutation
@@ -117,6 +128,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - useDeleteAccountMutation
 
 **Created API Client:**
+
 - `src/lib/api/client.ts` - Centralized fetch wrapper with:
   - Type-safe methods (get, post, patch, put, delete)
   - Automatic auth redirects (401 → login)
@@ -125,6 +137,7 @@ This document consolidates all refactoring-related documentation for the Choose 
   - ApiError class for error handling
 
 **Impact:**
+
 - ~2,610 lines of duplicate query/mutation code eliminated
 - ~800 lines of fetch boilerplate eliminated
 - 34 fetch() calls replaced with centralized API client
@@ -134,6 +147,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 5: Component Extraction (Complete)
 
 **Profile Components (6 files):**
+
 - ProfileInformation.tsx
 - PasswordChange.tsx
 - PreferencesDisplay.tsx
@@ -142,6 +156,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - index.ts (barrel export)
 
 **Preferences Components (6 files):**
+
 - GenresSection.tsx
 - TropesSection.tsx
 - SpiceLevelSection.tsx
@@ -150,6 +165,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - index.ts (barrel export)
 
 **General Components (5 files):**
+
 - FullPageLoader.tsx
 - StoryProgressBar.tsx
 - SpiceLevelSelector.tsx
@@ -157,6 +173,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - admin/StatCard.tsx
 
 **Impact:**
+
 - profile.tsx: Reduced from 613 to ~140 lines (77% reduction)
 - preferences.tsx: Reduced from 462 to ~220 lines (52% reduction)
 - ~715 lines extracted into focused, reusable components
@@ -164,13 +181,16 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 6: Modal Consolidation (Complete)
 
 **Created:**
+
 - Unified `TropeModal.tsx` with mode-based behavior (add/edit)
 
 **Deleted:**
+
 - `AddTropeModal.tsx`
 - `EditTropeModal.tsx`
 
 **Impact:**
+
 - ~140 lines of duplicate code eliminated (95% similarity)
 - Type-safe discriminated union for props
 - Consistent modal behavior
@@ -178,6 +198,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Phase 7: FormInput Adoption (Complete)
 
 **Files Updated (7):**
+
 - profile.tsx (6 input fields)
 - admin/users/$id/edit.tsx (2 fields)
 - admin/templates/new.tsx (3 fields)
@@ -187,6 +208,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - story/create.tsx (1 title field)
 
 **Impact:**
+
 - 17 manual input fields → FormInput component
 - ~340 lines eliminated
 - Consistent form styling and error handling
@@ -234,6 +256,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 ### Low Priority
 
 #### 1. Documentation Consolidation
+
 - **PROGRESS.md** (1,216 lines) - Consider splitting into:
   - PROGRESS.md (summary + recent work, ~200 lines)
   - docs/PROGRESS_PHASES.md (organized by phase)
@@ -241,12 +264,15 @@ This document consolidates all refactoring-related documentation for the Choose 
 - **Estimated Effort**: 1 hour
 
 #### 2. Cross-Link Documentation
+
 Add "Related Documents" sections to link:
+
 - CODING_PRACTICES.md ↔ COMPONENT_USAGE.md
 - AI_PROVIDERS.md ↔ SCENE_METADATA.md
 - **Estimated Effort**: 30 minutes
 
 #### 3. Additional Unit Tests
+
 - Test validation utilities
 - Test pagination utility
 - Test custom hooks (useClickOutside, useTableSorting)
@@ -280,12 +306,14 @@ Add "Related Documents" sections to link:
 ### When to Refactor
 
 ✅ **DO refactor when:**
+
 - Before adding new features to related areas
 - During bug fixes if refactoring simplifies the fix
 - In dedicated refactoring sprints with proper testing time
 - When file becomes difficult to navigate (>500 lines)
 
 ❌ **DON'T refactor when:**
+
 - During critical bug fixes - don't mix concerns
 - Under tight deadlines - refactoring requires proper testing
 - Without tests - ensure test coverage before major changes

@@ -92,6 +92,7 @@ CREATE TABLE api_keys (
 ```
 
 **Fields**:
+
 - `provider`: AI provider identifier (openai, google, anthropic, mistral, xai, openrouter)
 - `encrypted_key`: Base64-encoded encrypted API key
 - `iv`: Hex-encoded initialization vector for decryption
@@ -167,6 +168,7 @@ Common error responses:
 List all API keys metadata (admin only).
 
 **Response**:
+
 ```json
 {
   "keys": [
@@ -190,6 +192,7 @@ List all API keys metadata (admin only).
 Update an API key for a specific provider (admin only).
 
 **Request**:
+
 ```json
 {
   "apiKey": "sk-..."
@@ -197,6 +200,7 @@ Update an API key for a specific provider (admin only).
 ```
 
 **Response**:
+
 ```json
 {
   "success": true
@@ -210,6 +214,7 @@ Update an API key for a specific provider (admin only).
 Test an existing API key (admin only).
 
 **Response**:
+
 ```json
 {
   "valid": true,
@@ -218,6 +223,7 @@ Test an existing API key (admin only).
 ```
 
 Or if invalid:
+
 ```json
 {
   "valid": false,
@@ -289,6 +295,7 @@ The system supports `encryption_version` for future encryption key rotation if n
 - Keep separate from application code and database backups
 
 If the encryption key is lost, you'll need to:
+
 1. Generate a new encryption key
 2. Re-enter all API keys through the admin UI
 
@@ -297,6 +304,7 @@ If the encryption key is lost, you'll need to:
 ### Check API Key Status
 
 As an admin:
+
 1. Navigate to Admin Settings > API Keys
 2. Review status indicators for each provider
 3. Use "Test" button to validate keys periodically
@@ -333,6 +341,7 @@ WHERE encrypted_key != '';
 **Problem**: `ENCRYPTION_KEY` environment variable is missing or invalid.
 
 **Solution**:
+
 1. Generate a new key: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`
 2. Add to `.env`: `ENCRYPTION_KEY=<generated-key>`
 3. Restart the application
@@ -342,6 +351,7 @@ WHERE encrypted_key != '';
 **Problem**: Encryption key changed or corrupted data.
 
 **Solution**:
+
 1. Verify `ENCRYPTION_KEY` is correct across all environments
 2. If key is lost, re-enter all API keys through admin UI
 3. Check database for data corruption
@@ -351,6 +361,7 @@ WHERE encrypted_key != '';
 **Problem**: Key validation returns "invalid".
 
 **Solution**:
+
 1. Verify the API key is correct (copy-paste from provider)
 2. Check the key has required permissions at the provider
 3. Verify no leading/trailing whitespace in the key
@@ -362,6 +373,7 @@ WHERE encrypted_key != '';
 **Problem**: "No valid API key configured" error.
 
 **Solution**:
+
 1. Navigate to Admin Settings > API Keys
 2. Verify the selected provider has a valid key
 3. Test the key using the "Test" button
@@ -372,12 +384,14 @@ WHERE encrypted_key != '';
 If you previously used environment variables for API keys:
 
 ### Old Approach (No longer used)
+
 ```bash
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 ### New Approach (Current)
+
 ```bash
 # Only this is needed:
 ENCRYPTION_KEY=<base64-encoded-32-byte-key>
@@ -401,20 +415,24 @@ For local development:
 
 1. Generate encryption key
 2. Add to `.env.local`:
+
    ```bash
    ENCRYPTION_KEY=your-dev-key-here
    ```
+
 3. Run migration: `pnpm db:migrate`
 4. Configure test API keys via UI
 
 ### Testing
 
 Run encryption tests:
+
 ```bash
 pnpm test src/lib/crypto/encryption.test.ts
 ```
 
 Run query layer tests:
+
 ```bash
 pnpm test src/lib/db/queries/apiKeys.test.ts
 ```

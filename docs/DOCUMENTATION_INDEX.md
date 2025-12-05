@@ -20,6 +20,7 @@ Start here if you're new to the project:
 ## ⚙️ Configuration
 
 ### AI Configuration
+
 - **[AI Providers](configuration/AI_PROVIDERS.md)** - Configure OpenAI, Google Gemini, Anthropic Claude, Mistral, or xAI
   - API key setup for each provider
   - Model selection and configuration
@@ -30,6 +31,7 @@ Start here if you're new to the project:
 ## 👨‍💻 Development
 
 ### Development Standards
+
 - **[Coding Practices](development/CODING_PRACTICES.md)** - Development standards and patterns
   - Custom hooks patterns
   - Component patterns
@@ -43,6 +45,7 @@ Start here if you're new to the project:
   - Reusability patterns
 
 ### Project Status
+
 - **[Implementation Progress](development/PROGRESS.md)** - Detailed implementation status and roadmap
   - Completed phases (1-15+)
   - Feature implementation details
@@ -56,6 +59,7 @@ Start here if you're new to the project:
   - Technical debt tracking
 
 ### Database & CI/CD
+
 - **[CI/CD & Migrations](development/CI_MIGRATIONS.md)** - CI/CD and database migrations
   - GitHub Actions workflow
   - Migration best practices
@@ -68,6 +72,7 @@ Start here if you're new to the project:
   - Manual migration procedures
 
 ### Design System
+
 - **[Design System](development/DESIGN_SYSTEM.md)** - Design system guidelines
   - Color palette
   - Typography scales
@@ -89,6 +94,7 @@ Start here if you're new to the project:
 ## 🔧 Technical Reference
 
 ### Architecture
+
 - **[AI Metadata System](technical/SCENE_METADATA.md)** - AI metadata system
   - Metadata structure (emotional_beat, tension_threads, etc.)
   - Token reduction strategy (97% reduction)
@@ -103,6 +109,7 @@ Start here if you're new to the project:
   - Cost estimation and performance
 
 ### Admin Features
+
 - **[Admin Dashboard](technical/ADMIN.md)** - Admin dashboard guide
   - Role-based access control
   - Template management
@@ -162,22 +169,26 @@ docs/
 ## 🔍 Quick Links by Role
 
 ### New Developer
+
 1. [README.md](../README.md) - Project overview
 2. [Docker Setup](getting-started/DOCKER.md) - Setup environment
 3. [Coding Practices](development/CODING_PRACTICES.md) - Learn patterns
 4. [Component Library](development/COMPONENT_LIBRARY.md) - UI components
 
 ### DevOps Engineer
+
 1. [Deployment Guide](getting-started/DEPLOYMENT.md) - Deploy application
 2. [Docker Setup](getting-started/DOCKER.md) - Container setup
 3. [CI/CD & Migrations](development/CI_MIGRATIONS.md) - CI/CD pipeline
 
 ### Product Manager
+
 1. [README.md](../README.md) - Feature overview
 2. [Implementation Progress](development/PROGRESS.md) - Implementation status
 3. [Admin Dashboard](technical/ADMIN.md) - Admin capabilities
 
 ### AI Integration Engineer
+
 1. [AI Providers](configuration/AI_PROVIDERS.md) - Provider config
 2. [AI Metadata System](technical/SCENE_METADATA.md) - Metadata system
 3. [Text-to-Speech System](technical/TEXT_TO_SPEECH.md) - TTS integration
@@ -190,6 +201,7 @@ docs/
 ### When to Create New Documentation
 
 Create new documentation when:
+
 - Adding a new major feature or system
 - Introducing new development patterns
 - Documenting complex technical decisions
@@ -198,6 +210,7 @@ Create new documentation when:
 ### When to Update Existing Documentation
 
 Update documentation when:
+
 - Features change significantly
 - New patterns are established
 - Dependencies are updated
@@ -240,6 +253,7 @@ Update documentation when:
 ## 📧 Contributing
 
 When contributing documentation:
+
 1. Place docs in appropriate subfolder under `docs/`
 2. Update this index if adding new docs
 3. Cross-reference related documentation with relative links

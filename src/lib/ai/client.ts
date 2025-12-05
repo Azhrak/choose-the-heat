@@ -3,6 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { getApiKey } from "../db/queries/apiKeys";
 import { type AIConfig, getAIConfig } from "./config";
 
 /**
@@ -25,66 +26,104 @@ async function getAIModel(modelOverride?: string, configOverride?: AIConfig) {
 
 	switch (config.provider) {
 		case "openai": {
-			if (!process.env.OPENAI_API_KEY) {
-				throw new Error("OPENAI_API_KEY environment variable is not set");
+			// Try database first, fall back to environment variable
+			const apiKey = (await getApiKey("openai")) || process.env.OPENAI_API_KEY;
+
+			if (!apiKey) {
+				throw new Error(
+					"OpenAI API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
+				);
 			}
 			const openai = createOpenAI({
-				apiKey: process.env.OPENAI_API_KEY,
+				apiKey,
 			});
 			return openai(modelName);
 		}
 
 		case "google": {
-			if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+			// Try database first, fall back to environment variable
+			const apiKey =
+				(await getApiKey("google")) || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+
+			if (!apiKey) {
 				throw new Error(
-					"GOOGLE_GENERATIVE_AI_API_KEY environment variable is not set",
+					"Google API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
 				);
 			}
 			const google = createGoogleGenerativeAI({
-				apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+				apiKey,
 			});
 			return google(modelName);
 		}
 
 		case "anthropic": {
-			if (!process.env.ANTHROPIC_API_KEY) {
-				throw new Error("ANTHROPIC_API_KEY environment variable is not set");
+			// Try database first, fall back to environment variable
+			const apiKey =
+				(await getApiKey("anthropic")) || process.env.ANTHROPIC_API_KEY;
+
+			if (!apiKey) {
+				throw new Error(
+					"Anthropic API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
+				);
 			}
 			const anthropic = createAnthropic({
-				apiKey: process.env.ANTHROPIC_API_KEY,
+				apiKey,
 			});
 			return anthropic(modelName);
 		}
 
 		case "mistral": {
-			if (!process.env.MISTRAL_API_KEY) {
-				throw new Error("MISTRAL_API_KEY environment variable is not set");
+			// Try database first, fall back to environment variable
+			const apiKey =
+				(await getApiKey("mistral")) || process.env.MISTRAL_API_KEY;
+
+			if (!apiKey) {
+				throw new Error(
+					"Mistral API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
+				);
 			}
 			const mistral = createMistral({
-				apiKey: process.env.MISTRAL_API_KEY,
+				apiKey,
 			});
 			return mistral(modelName);
 		}
 
 		case "xai": {
-			if (!process.env.XAI_API_KEY) {
-				throw new Error("XAI_API_KEY environment variable is not set");
+			// Try database first, fall back to environment variable
+			const apiKey = (await getApiKey("xai")) || process.env.XAI_API_KEY;
+
+			if (!apiKey) {
+				throw new Error(
+					"xAI API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
+				);
 			}
 			// xAI uses OpenAI-compatible API
 			const xai = createOpenAI({
-				apiKey: process.env.XAI_API_KEY,
+				apiKey,
 				baseURL: "https://api.x.ai/v1",
 			});
 			return xai(modelName);
 		}
 
 		case "openrouter": {
-			if (!process.env.OPENROUTER_API_KEY) {
-				throw new Error("OPENROUTER_API_KEY environment variable is not set");
+			// Try database first, fall back to environment variable
+			const apiKey =
+				(await getApiKey("openrouter")) || process.env.OPENROUTER_API_KEY;
+
+			if (!apiKey) {
+				throw new Error(
+					"OpenRouter API key not configured. " +
+						"Please set it in Admin Settings > API Keys",
+				);
 			}
 			// OpenRouter uses OpenAI-compatible API
 			const openrouter = createOpenAI({
-				apiKey: process.env.OPENROUTER_API_KEY,
+				apiKey,
 				baseURL: "https://openrouter.ai/api/v1",
 			});
 			return openrouter(modelName);

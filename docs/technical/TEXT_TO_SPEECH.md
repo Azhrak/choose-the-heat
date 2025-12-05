@@ -118,6 +118,7 @@ interface Voice {
 ```
 
 **Features**:
+
 - In-memory cache with 5-minute TTL
 - Falls back: DB → environment variables
 - Story-specific configuration support
@@ -141,10 +142,12 @@ export async function generateSpeech(options: {
 ```
 
 **Supported Providers**:
+
 - **OpenAI**: `tts-1-hd` model with 4096 char chunking
 - **Google Cloud TTS**: Journey voices or Gemini models with byte-aware chunking (3800 bytes for Gemini Lite)
 
 **Text Chunking**:
+
 - Automatically splits text over provider limits
 - Splits at sentence boundaries for natural flow
 - Falls back to word boundaries for long sentences
@@ -166,6 +169,7 @@ export async function uploadAudioToGCS(options: {
 ```
 
 **Features**:
+
 - Uploads to GCS with structured path: `{storyId}/scene-{number}-{hash}.mp3`
 - Returns GCS path (`gs://bucket/path`) for database storage
 - Generates signed URLs with 7-day expiry
@@ -173,6 +177,7 @@ export async function uploadAudioToGCS(options: {
 - Background cleanup job for 90-day retention
 
 **Signed URL Management**:
+
 - Database stores permanent GCS paths
 - Signed URLs generated on-demand
 - Works with uniform bucket-level access
@@ -187,6 +192,7 @@ export async function getAvailableVoices(
 ```
 
 **Static Voice Lists**:
+
 - OpenAI voices: alloy, echo, fable, onyx, nova, shimmer
 - Google Journey voices: Puck, Charon, Kore, Fenrir, Aoede, etc.
 
@@ -199,6 +205,7 @@ export async function getAvailableVoices(
 Check if audio exists or generate new audio for a scene.
 
 **Flow**:
+
 1. Authenticate user
 2. Verify story ownership
 3. Check if audio exists in database
@@ -213,6 +220,7 @@ Check if audio exists or generate new audio for a scene.
    - Generate signed URL and return
 
 **Response**:
+
 ```typescript
 {
   exists: boolean;
@@ -229,6 +237,7 @@ Check if audio exists or generate new audio for a scene.
 Remove audio (admin only).
 
 **Flow**:
+
 1. Authenticate user (admin role required)
 2. Delete from GCS
 3. Delete from database
@@ -240,6 +249,7 @@ List available voices.
 **Query Params**: `provider` (optional)
 
 **Response**:
+
 ```typescript
 {
   [provider: string]: Voice[]
@@ -255,6 +265,7 @@ List available voices.
 Floating audio player with full controls:
 
 **Features**:
+
 - Play/pause button
 - Progress bar with seek capability
 - Current time / total duration display
@@ -269,11 +280,13 @@ Floating audio player with full controls:
 Button to trigger audio generation:
 
 **States**:
+
 - Loading: Shows spinner during audio generation
 - Disabled: While scene text is still streaming
 - Hidden: When audio already exists
 
 **Features**:
+
 - Notifies parent via callback when audio is ready
 - Shows "Scene generating..." when scene is incomplete
 
@@ -282,6 +295,7 @@ Button to trigger audio generation:
 Visual indicator when audio exists:
 
 **Features**:
+
 - Small green volume icon
 - Tooltip on hover
 - Accessibility labels
@@ -297,6 +311,7 @@ const { data, isLoading, mutate } = useAudioGeneration(storyId, sceneNumber);
 ```
 
 **Features**:
+
 - 5-minute stale time for caching
 - Mutation for triggering generation
 - Automatic refetch on success
@@ -321,6 +336,7 @@ const {
 ```
 
 **Features**:
+
 - Auto-cleanup on unmount
 - Error handling
 - Loading state management
@@ -332,18 +348,22 @@ const {
 The reading page (`src/routes/story/$id.read.tsx`) integrates all audio components:
 
 **Header**:
+
 - Audio indicator (when audio exists)
 - Audio generation button (when no audio)
 
 **Content Area**:
+
 - Scene text and choices
 - Generation button disabled during streaming
 
 **Footer**:
+
 - Floating audio player (only visible after generation)
 - Proper z-index and margin for footer
 
 **State Management**:
+
 - Tracks audio player state
 - Passes scene generation state to disable button
 - Shows/hides components based on audio availability
@@ -394,6 +414,7 @@ AZURE_TTS_REGION=eastus
 **Voices**: alloy, echo, fable, onyx, nova, shimmer
 
 **Features**:
+
 - High-quality neural voices
 - Automatic text chunking (4096 chars)
 - MP3 output format
@@ -404,12 +425,14 @@ AZURE_TTS_REGION=eastus
 ### Google Cloud TTS
 
 **Models**:
+
 - Journey voices (e.g., `en-US-Journey-F`)
 - Gemini models (e.g., `gemini-2.5-flash-lite-preview-tts`)
 
 **Voices**: Puck, Charon, Kore, Fenrir, Aoede, Achernar, Zephyr, Orus, etc.
 
 **Features**:
+
 - Named voices with distinct personalities
 - Native MP3 support
 - Configurable audio settings:
@@ -418,6 +441,7 @@ AZURE_TTS_REGION=eastus
   - Volume gain: -96.0 to 16.0 dB (default: 0.0)
 
 **Chunk Sizes**:
+
 - Gemini Lite: 450 bytes (512 byte limit)
 - Journey voices: 4500 bytes (5000 byte limit)
 
@@ -461,6 +485,7 @@ AZURE_TTS_REGION=eastus
 - **Input Validation**: Scene number and text validation
 
 **Recommendations**:
+
 - Consider adding rate limiting for audio generation
 - Monitor API usage and costs
 - Set up alerts for unusual activity
@@ -474,6 +499,7 @@ AZURE_TTS_REGION=eastus
 Audio files are automatically deleted after 90 days:
 
 **GCS Lifecycle Rule**:
+
 ```json
 {
   "action": { "type": "Delete" },
@@ -492,6 +518,7 @@ pnpm cleanup:audit-logs [days]  # Default 90 days
 ### Background Jobs
 
 Planned features:
+
 - Scheduled 90-day cleanup job
 - Orphaned file detection and cleanup
 - Signed URL refresh job (optional)
@@ -601,6 +628,7 @@ Planned features:
 **Problem**: No valid API key for selected TTS provider.
 
 **Solution**:
+
 1. Navigate to Admin Settings > API Keys
 2. Configure the TTS provider's API key
 3. Test the key
@@ -611,6 +639,7 @@ Planned features:
 **Problem**: TTS generation failed.
 
 **Solution**:
+
 1. Check provider API status
 2. Verify API key is valid and has quota
 3. Check scene content for special characters
@@ -621,6 +650,7 @@ Planned features:
 **Problem**: GCS upload failed.
 
 **Solution**:
+
 1. Verify GCS_BUCKET_NAME is correct
 2. Check service account has Storage Admin permissions
 3. Verify GCS_SERVICE_ACCOUNT_JSON is valid
@@ -631,6 +661,7 @@ Planned features:
 **Problem**: Audio URL returns 403 Forbidden.
 
 **Solution**:
+
 - Refresh the page (new signed URL generated automatically)
 - URLs expire after 7 days but regenerate on demand
 

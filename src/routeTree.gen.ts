@@ -53,6 +53,7 @@ import { Route as ApiAdminUsersIndexRouteImport } from './routes/api/admin/users
 import { Route as ApiAdminTropesIndexRouteImport } from './routes/api/admin/tropes/index'
 import { Route as ApiAdminTemplatesIndexRouteImport } from './routes/api/admin/templates/index'
 import { Route as ApiAdminSettingsIndexRouteImport } from './routes/api/admin/settings/index'
+import { Route as ApiAdminApiKeysIndexRouteImport } from './routes/api/admin/api-keys/index'
 import { Route as ApiStoriesIdSceneRouteImport } from './routes/api/stories/$id.scene'
 import { Route as ApiStoriesIdFavoriteRouteImport } from './routes/api/stories/$id/favorite'
 import { Route as ApiStoriesIdChooseRouteImport } from './routes/api/stories/$id.choose'
@@ -70,11 +71,13 @@ import { Route as ApiAdminTemplatesIdRouteImport } from './routes/api/admin/temp
 import { Route as ApiAdminSettingsImportRouteImport } from './routes/api/admin/settings/import'
 import { Route as ApiAdminSettingsExportRouteImport } from './routes/api/admin/settings/export'
 import { Route as ApiAdminSettingsKeyRouteImport } from './routes/api/admin/settings/$key'
+import { Route as ApiAdminApiKeysProviderRouteImport } from './routes/api/admin/api-keys/$provider'
 import { Route as AdminUsersIdEditRouteImport } from './routes/admin/users/$id/edit'
 import { Route as AdminTemplatesIdEditRouteImport } from './routes/admin/templates/$id/edit'
 import { Route as ApiStoriesIdSceneStreamRouteImport } from './routes/api/stories/$id.scene.stream'
 import { Route as ApiAdminTemplatesIdStatusRouteImport } from './routes/api/admin/templates/$id.status'
 import { Route as ApiAdminTemplatesIdChoicePointsRouteImport } from './routes/api/admin/templates/$id/choice-points'
+import { Route as ApiAdminApiKeysProviderTestRouteImport } from './routes/api/admin/api-keys/$provider.test'
 import { Route as ApiStoriesIdSceneNumberAudioRouteImport } from './routes/api/stories/$id/scene/$number/audio'
 
 const TermsRoute = TermsRouteImport.update({
@@ -298,6 +301,11 @@ const ApiAdminSettingsIndexRoute = ApiAdminSettingsIndexRouteImport.update({
   path: '/api/admin/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminApiKeysIndexRoute = ApiAdminApiKeysIndexRouteImport.update({
+  id: '/api/admin/api-keys/',
+  path: '/api/admin/api-keys/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStoriesIdSceneRoute = ApiStoriesIdSceneRouteImport.update({
   id: '/scene',
   path: '/scene',
@@ -387,6 +395,11 @@ const ApiAdminSettingsKeyRoute = ApiAdminSettingsKeyRouteImport.update({
   path: '/api/admin/settings/$key',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminApiKeysProviderRoute = ApiAdminApiKeysProviderRouteImport.update({
+  id: '/api/admin/api-keys/$provider',
+  path: '/api/admin/api-keys/$provider',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsersIdEditRoute = AdminUsersIdEditRouteImport.update({
   id: '/admin/users/$id/edit',
   path: '/admin/users/$id/edit',
@@ -413,6 +426,12 @@ const ApiAdminTemplatesIdChoicePointsRoute =
     id: '/choice-points',
     path: '/choice-points',
     getParentRoute: () => ApiAdminTemplatesIdRoute,
+  } as any)
+const ApiAdminApiKeysProviderTestRoute =
+  ApiAdminApiKeysProviderTestRouteImport.update({
+    id: '/test',
+    path: '/test',
+    getParentRoute: () => ApiAdminApiKeysProviderRoute,
   } as any)
 const ApiStoriesIdSceneNumberAudioRoute =
   ApiStoriesIdSceneNumberAudioRouteImport.update({
@@ -464,6 +483,7 @@ export interface FileRoutesByFullPath {
   '/api/tropes': typeof ApiTropesIndexRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -481,10 +501,12 @@ export interface FileRoutesByFullPath {
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
+  '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
+  '/api/admin/api-keys/$provider/test': typeof ApiAdminApiKeysProviderTestRoute
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
@@ -533,6 +555,7 @@ export interface FileRoutesByTo {
   '/api/tropes': typeof ApiTropesIndexRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -550,10 +573,12 @@ export interface FileRoutesByTo {
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
+  '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
+  '/api/admin/api-keys/$provider/test': typeof ApiAdminApiKeysProviderTestRoute
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
@@ -603,6 +628,7 @@ export interface FileRoutesById {
   '/api/tropes/': typeof ApiTropesIndexRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
+  '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -620,10 +646,12 @@ export interface FileRoutesById {
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
+  '/api/admin/api-keys/': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/settings/': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates/': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes/': typeof ApiAdminTropesIndexRoute
   '/api/admin/users/': typeof ApiAdminUsersIndexRoute
+  '/api/admin/api-keys/$provider/test': typeof ApiAdminApiKeysProviderTestRoute
   '/api/admin/templates/$id/choice-points': typeof ApiAdminTemplatesIdChoicePointsRoute
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
@@ -674,6 +702,7 @@ export interface FileRouteTypes {
     | '/api/tropes'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
+    | '/api/admin/api-keys/$provider'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -691,10 +720,12 @@ export interface FileRouteTypes {
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
+    | '/api/admin/api-keys'
     | '/api/admin/settings'
     | '/api/admin/templates'
     | '/api/admin/tropes'
     | '/api/admin/users'
+    | '/api/admin/api-keys/$provider/test'
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
@@ -743,6 +774,7 @@ export interface FileRouteTypes {
     | '/api/tropes'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
+    | '/api/admin/api-keys/$provider'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -760,10 +792,12 @@ export interface FileRouteTypes {
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
+    | '/api/admin/api-keys'
     | '/api/admin/settings'
     | '/api/admin/templates'
     | '/api/admin/tropes'
     | '/api/admin/users'
+    | '/api/admin/api-keys/$provider/test'
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
@@ -812,6 +846,7 @@ export interface FileRouteTypes {
     | '/api/tropes/'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
+    | '/api/admin/api-keys/$provider'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -829,10 +864,12 @@ export interface FileRouteTypes {
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
+    | '/api/admin/api-keys/'
     | '/api/admin/settings/'
     | '/api/admin/templates/'
     | '/api/admin/tropes/'
     | '/api/admin/users/'
+    | '/api/admin/api-keys/$provider/test'
     | '/api/admin/templates/$id/choice-points'
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
@@ -882,6 +919,7 @@ export interface RootRouteChildren {
   ApiTropesIndexRoute: typeof ApiTropesIndexRoute
   AdminTemplatesIdEditRoute: typeof AdminTemplatesIdEditRoute
   AdminUsersIdEditRoute: typeof AdminUsersIdEditRoute
+  ApiAdminApiKeysProviderRoute: typeof ApiAdminApiKeysProviderRouteWithChildren
   ApiAdminSettingsKeyRoute: typeof ApiAdminSettingsKeyRoute
   ApiAdminSettingsExportRoute: typeof ApiAdminSettingsExportRoute
   ApiAdminSettingsImportRoute: typeof ApiAdminSettingsImportRoute
@@ -895,6 +933,7 @@ export interface RootRouteChildren {
   ApiAdminUsersIdRoute: typeof ApiAdminUsersIdRoute
   ApiAdminUsersStatsRoute: typeof ApiAdminUsersStatsRoute
   ApiAuthCallbackGoogleRoute: typeof ApiAuthCallbackGoogleRoute
+  ApiAdminApiKeysIndexRoute: typeof ApiAdminApiKeysIndexRoute
   ApiAdminSettingsIndexRoute: typeof ApiAdminSettingsIndexRoute
   ApiAdminTemplatesIndexRoute: typeof ApiAdminTemplatesIndexRoute
   ApiAdminTropesIndexRoute: typeof ApiAdminTropesIndexRoute
@@ -1211,6 +1250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminSettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/api-keys/': {
+      id: '/api/admin/api-keys/'
+      path: '/api/admin/api-keys'
+      fullPath: '/api/admin/api-keys'
+      preLoaderRoute: typeof ApiAdminApiKeysIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stories/$id/scene': {
       id: '/api/stories/$id/scene'
       path: '/scene'
@@ -1330,6 +1376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminSettingsKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/api-keys/$provider': {
+      id: '/api/admin/api-keys/$provider'
+      path: '/api/admin/api-keys/$provider'
+      fullPath: '/api/admin/api-keys/$provider'
+      preLoaderRoute: typeof ApiAdminApiKeysProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/users/$id/edit': {
       id: '/admin/users/$id/edit'
       path: '/admin/users/$id/edit'
@@ -1364,6 +1417,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/admin/templates/$id/choice-points'
       preLoaderRoute: typeof ApiAdminTemplatesIdChoicePointsRouteImport
       parentRoute: typeof ApiAdminTemplatesIdRoute
+    }
+    '/api/admin/api-keys/$provider/test': {
+      id: '/api/admin/api-keys/$provider/test'
+      path: '/test'
+      fullPath: '/api/admin/api-keys/$provider/test'
+      preLoaderRoute: typeof ApiAdminApiKeysProviderTestRouteImport
+      parentRoute: typeof ApiAdminApiKeysProviderRoute
     }
     '/api/stories/$id/scene/$number/audio': {
       id: '/api/stories/$id/scene/$number/audio'
@@ -1405,6 +1465,20 @@ const ApiStoriesIdRouteChildren: ApiStoriesIdRouteChildren = {
 const ApiStoriesIdRouteWithChildren = ApiStoriesIdRoute._addFileChildren(
   ApiStoriesIdRouteChildren,
 )
+
+interface ApiAdminApiKeysProviderRouteChildren {
+  ApiAdminApiKeysProviderTestRoute: typeof ApiAdminApiKeysProviderTestRoute
+}
+
+const ApiAdminApiKeysProviderRouteChildren: ApiAdminApiKeysProviderRouteChildren =
+  {
+    ApiAdminApiKeysProviderTestRoute: ApiAdminApiKeysProviderTestRoute,
+  }
+
+const ApiAdminApiKeysProviderRouteWithChildren =
+  ApiAdminApiKeysProviderRoute._addFileChildren(
+    ApiAdminApiKeysProviderRouteChildren,
+  )
 
 interface ApiAdminTemplatesIdRouteChildren {
   ApiAdminTemplatesIdChoicePointsRoute: typeof ApiAdminTemplatesIdChoicePointsRoute
@@ -1462,6 +1536,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiTropesIndexRoute: ApiTropesIndexRoute,
   AdminTemplatesIdEditRoute: AdminTemplatesIdEditRoute,
   AdminUsersIdEditRoute: AdminUsersIdEditRoute,
+  ApiAdminApiKeysProviderRoute: ApiAdminApiKeysProviderRouteWithChildren,
   ApiAdminSettingsKeyRoute: ApiAdminSettingsKeyRoute,
   ApiAdminSettingsExportRoute: ApiAdminSettingsExportRoute,
   ApiAdminSettingsImportRoute: ApiAdminSettingsImportRoute,
@@ -1475,6 +1550,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminUsersIdRoute: ApiAdminUsersIdRoute,
   ApiAdminUsersStatsRoute: ApiAdminUsersStatsRoute,
   ApiAuthCallbackGoogleRoute: ApiAuthCallbackGoogleRoute,
+  ApiAdminApiKeysIndexRoute: ApiAdminApiKeysIndexRoute,
   ApiAdminSettingsIndexRoute: ApiAdminSettingsIndexRoute,
   ApiAdminTemplatesIndexRoute: ApiAdminTemplatesIndexRoute,
   ApiAdminTropesIndexRoute: ApiAdminTropesIndexRoute,

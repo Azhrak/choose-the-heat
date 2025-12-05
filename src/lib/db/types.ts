@@ -41,6 +41,22 @@ export interface AdminAuditLogs {
 	user_id: string;
 }
 
+export interface ApiKeys {
+	auth_tag: string;
+	created_at: Generated<Timestamp>;
+	created_by: string | null;
+	encrypted_key: string;
+	encryption_version: Generated<number>;
+	id: Generated<string>;
+	iv: string;
+	last_tested_at: Timestamp | null;
+	provider: string;
+	test_error: string | null;
+	test_status: string | null;
+	updated_at: Generated<Timestamp>;
+	updated_by: string | null;
+}
+
 export interface AppSettings {
 	category: string;
 	created_at: Generated<Timestamp>;
@@ -186,6 +202,7 @@ export interface UserStories {
 
 export interface DB {
 	admin_audit_logs: AdminAuditLogs;
+	api_keys: ApiKeys;
 	app_settings: AppSettings;
 	choice_points: ChoicePoints;
 	choices: Choices;

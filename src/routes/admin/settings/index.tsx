@@ -2,7 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Download, Save, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { AdminLayout } from "~/components/admin/AdminLayout";
+import { APIKeysSettings } from "~/components/admin/APIKeysSettings";
 import { SettingsField } from "~/components/admin/SettingsField";
+import {
+	useAPIKeysQuery,
+	useDeleteAPIKeyMutation,
+	useTestAPIKeyMutation,
+	useUpdateAPIKeyMutation,
+} from "~/hooks/useAPIKeysQuery";
 import {
 	useAppSettingsQuery,
 	useExportSettingsMutation,
@@ -13,7 +20,7 @@ import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import type { AppSettings } from "~/lib/db/types";
 import { cn } from "~/lib/utils";
 
-type TabId = "ai" | "prompts" | "tts";
+type TabId = "ai" | "prompts" | "tts" | "apikeys";
 
 export const Route = createFileRoute("/admin/settings/")({
 	component: SettingsPage,
@@ -27,10 +34,16 @@ function SettingsPage() {
 	);
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
-	// Query settings by category based on active tab
+	// Query settings by category based on active tab (only for non-apikeys tabs)
 	const { data: settingsData, isLoading } = useAppSettingsQuery({
-		category: activeTab,
+		category: activeTab === "apikeys" ? "ai" : activeTab,
 	});
+
+	// API Keys queries
+	const { data: apiKeysData, isLoading: isLoadingApiKeys } = useAPIKeysQuery();
+	const updateApiKeyMutation = useUpdateAPIKeyMutation();
+	const testApiKeyMutation = useTestAPIKeyMutation();
+	const deleteApiKeyMutation = useDeleteAPIKeyMutation();
 
 	const updateMutation = useUpdateSettingsMutation();
 	const exportMutation = useExportSettingsMutation();
@@ -160,6 +173,12 @@ function SettingsPage() {
 			label: "Text-to-Speech",
 			description: "Configure TTS provider, model, and voice settings",
 		},
+		{
+			id: "apikeys",
+			label: "API Keys",
+			description:
+				"Securely manage encrypted API keys for AI and TTS providers",
+		},
 	];
 
 	const getValue = (setting: AppSettings): string => {
@@ -182,27 +201,29 @@ function SettingsPage() {
 						</p>
 					</div>
 
-					<div className="flex gap-2">
-						<button
-							type="button"
-							onClick={handleExport}
-							disabled={exportMutation.isPending}
-							className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-50"
-						>
-							<Download className="w-4 h-4" />
-							Export
-						</button>
+					{activeTab !== "apikeys" && (
+						<div className="flex gap-2">
+							<button
+								type="button"
+								onClick={handleExport}
+								disabled={exportMutation.isPending}
+								className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-50"
+							>
+								<Download className="w-4 h-4" />
+								Export
+							</button>
 
-						<button
-							type="button"
-							onClick={handleImport}
-							disabled={importMutation.isPending}
-							className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-50"
-						>
-							<Upload className="w-4 h-4" />
-							Import
-						</button>
-					</div>
+							<button
+								type="button"
+								onClick={handleImport}
+								disabled={importMutation.isPending}
+								className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 disabled:opacity-50"
+							>
+								<Upload className="w-4 h-4" />
+								Import
+							</button>
+						</div>
+					)}
 				</div>
 
 				{/* Tabs */}
@@ -226,15 +247,40 @@ function SettingsPage() {
 					</nav>
 				</div>
 
-				{/* Tab description */}
-				<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-					<p className="text-sm text-blue-800 dark:text-blue-300">
-						{tabs.find((t) => t.id === activeTab)?.description}
-					</p>
-				</div>
+				{/* Tab description - Hide for API Keys tab */}
+				{activeTab !== "apikeys" && (
+					<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+						<p className="text-sm text-blue-800 dark:text-blue-300">
+							{tabs.find((t) => t.id === activeTab)?.description}
+						</p>
+					</div>
+				)}
 
-				{/* Settings Form */}
-				{isLoading ? (
+				{/* Settings Content */}
+				{activeTab === "apikeys" ? (
+					// API Keys Tab
+					isLoadingApiKeys ? (
+						<div className="flex items-center justify-center py-12">
+							<div className="text-slate-600 dark:text-gray-400">
+								Loading API keys...
+							</div>
+						</div>
+					) : (
+						<APIKeysSettings
+							apiKeys={apiKeysData?.keys || []}
+							onUpdate={async (provider, apiKey) => {
+								await updateApiKeyMutation.mutateAsync({ provider, apiKey });
+							}}
+							onTest={async (provider) => {
+								return await testApiKeyMutation.mutateAsync(provider);
+							}}
+							onDelete={async (provider) => {
+								await deleteApiKeyMutation.mutateAsync(provider);
+							}}
+						/>
+					)
+				) : // Other Settings Tabs
+				isLoading ? (
 					<div className="flex items-center justify-center py-12">
 						<div className="text-slate-600 dark:text-gray-400">
 							Loading settings...
