@@ -7,14 +7,15 @@ import type { APIKeyProvider } from "../db/queries/apiKeys";
 
 /**
  * Test models for each provider (cheapest/fastest)
+ * TODO: Update models as providers evolve
  */
 const TEST_MODELS: Record<APIKeyProvider, string> = {
-	openai: "gpt-3.5-turbo",
-	google: "gemini-1.5-flash",
-	anthropic: "claude-3-haiku-20240307",
+	openai: "gpt-4o-mini",
+	google: "gemini-2.5-flash-lite",
+	anthropic: "claude-haiku-4-5",
 	mistral: "mistral-small-latest",
-	xai: "grok-beta",
-	openrouter: "openai/gpt-3.5-turbo",
+	xai: "grok-4-fast-non-reasoning",
+	openrouter: "arcee-ai/trinity-mini:free",
 };
 
 /**

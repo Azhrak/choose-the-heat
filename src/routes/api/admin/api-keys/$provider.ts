@@ -42,10 +42,7 @@ export const Route = createFileRoute("/api/admin/api-keys/$provider")({
 					const { apiKey } = updateApiKeySchema.parse(body);
 
 					// Validate the API key before saving
-					const validation = await validateApiKey(
-						provider as APIKeyProvider,
-						apiKey.trim(),
-					);
+					const validation = await validateApiKey(provider, apiKey.trim());
 
 					if (!validation.valid) {
 						await createAuditLog({

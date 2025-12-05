@@ -100,7 +100,7 @@ export function APIKeysSettings({
 			const result = await onTest(providerId);
 			setTestResults({
 				[providerId]: result.valid
-					? "API key is valid and working!"
+					? "API key is valid and working successfully!"
 					: result.error || "API key validation failed",
 			});
 		} catch (error) {
