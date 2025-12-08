@@ -1,4 +1,5 @@
 import {
+	AlertTriangle,
 	Check,
 	Eye,
 	EyeOff,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "~/lib/utils";
+import { useToast } from "./ToastContext";
 
 interface APIKey {
 	id: string;
@@ -39,6 +41,7 @@ const PROVIDERS = [
 		name: "OpenRouter",
 		description: "Multi-provider access",
 	},
+	{ id: "google_tts", name: "Google TTS", description: "Text-to-Speech API" },
 ] as const;
 
 export function APIKeysSettings({
@@ -47,11 +50,12 @@ export function APIKeysSettings({
 	onTest,
 	onDelete,
 }: APIKeysSettingsProps) {
+	const { showToast } = useToast();
 	const [editingProvider, setEditingProvider] = useState<string | null>(null);
 	const [editValue, setEditValue] = useState("");
 	const [showKey, setShowKey] = useState<Record<string, boolean>>({});
 	const [loading, setLoading] = useState<string | null>(null);
-	const [testResults, setTestResults] = useState<Record<string, string>>({});
+	const [testingAll, setTestingAll] = useState(false);
 
 	const getKeyData = (providerId: string) => {
 		return apiKeys.find((k) => k.provider === providerId);
@@ -66,27 +70,25 @@ export function APIKeysSettings({
 	const handleCancel = () => {
 		setEditingProvider(null);
 		setEditValue("");
-		setTestResults({});
 	};
 
 	const handleSave = async (providerId: string) => {
 		if (!editValue.trim()) return;
 
 		setLoading(providerId);
-		setTestResults({});
 
 		try {
 			await onUpdate(providerId, editValue);
 			setEditingProvider(null);
 			setEditValue("");
-			setTestResults({
-				[providerId]: "API key saved and validated successfully!",
+			showToast({
+				message: `${PROVIDERS.find((p) => p.id === providerId)?.name} API key saved and validated successfully!`,
+				type: "success",
 			});
 		} catch (error) {
-			setTestResults({
-				[providerId]:
-					error instanceof Error ? error.message : "Failed to save API key",
-			});
+			const errorMessage =
+				error instanceof Error ? error.message : "Failed to save API key";
+			showToast({ message: errorMessage, type: "error" });
 		} finally {
 			setLoading(null);
 		}
@@ -94,45 +96,101 @@ export function APIKeysSettings({
 
 	const handleTest = async (providerId: string) => {
 		setLoading(providerId);
-		setTestResults({});
 
 		try {
 			const result = await onTest(providerId);
-			setTestResults({
-				[providerId]: result.valid
-					? "API key is valid and working successfully!"
-					: result.error || "API key validation failed",
-			});
+			const providerName = PROVIDERS.find((p) => p.id === providerId)?.name;
+			if (result.valid) {
+				showToast({
+					message: `${providerName} API key is valid and working!`,
+					type: "success",
+				});
+			} else {
+				showToast({
+					message: result.error || `${providerName} API key validation failed`,
+					type: "error",
+				});
+			}
 		} catch (error) {
-			setTestResults({
-				[providerId]:
-					error instanceof Error ? error.message : "Failed to test API key",
-			});
+			const errorMessage =
+				error instanceof Error ? error.message : "Failed to test API key";
+			showToast({ message: errorMessage, type: "error" });
 		} finally {
 			setLoading(null);
 		}
 	};
 
+	const handleTestAll = async () => {
+		const providersWithKeys = PROVIDERS.filter((p) => {
+			const keyData = getKeyData(p.id);
+			return keyData?.encryptedKey;
+		});
+
+		if (providersWithKeys.length === 0) return;
+
+		setTestingAll(true);
+
+		let validCount = 0;
+		let invalidCount = 0;
+
+		for (const provider of providersWithKeys) {
+			setLoading(provider.id);
+			try {
+				const result = await onTest(provider.id);
+				if (result.valid) {
+					validCount++;
+				} else {
+					invalidCount++;
+				}
+			} catch {
+				invalidCount++;
+			}
+		}
+
+		setLoading(null);
+		setTestingAll(false);
+
+		// Show summary toast
+		if (invalidCount === 0) {
+			showToast({
+				message: `All ${validCount} API keys tested successfully!`,
+				type: "success",
+			});
+		} else if (validCount === 0) {
+			showToast({
+				message: `All ${invalidCount} API keys failed validation`,
+				type: "error",
+			});
+		} else {
+			showToast({
+				message: `Testing complete: ${validCount} valid, ${invalidCount} invalid`,
+				type: "warning",
+			});
+		}
+	};
+
 	const handleDelete = async (providerId: string) => {
+		const providerName = PROVIDERS.find((p) => p.id === providerId)?.name;
 		if (
 			!confirm(
-				`Are you sure you want to delete the ${providerId} API key? This cannot be undone.`,
+				`Are you sure you want to delete the ${providerName} API key? This cannot be undone.`,
 			)
 		) {
 			return;
 		}
 
 		setLoading(providerId);
-		setTestResults({});
 
 		try {
 			await onDelete(providerId);
-			setTestResults({ [providerId]: "API key deleted successfully" });
-		} catch (error) {
-			setTestResults({
-				[providerId]:
-					error instanceof Error ? error.message : "Failed to delete API key",
+			showToast({
+				message: `${providerName} API key deleted successfully`,
+				type: "success",
 			});
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : "Failed to delete API key";
+			showToast({ message: errorMessage, type: "error" });
 		} finally {
 			setLoading(null);
 		}
@@ -171,14 +229,73 @@ export function APIKeysSettings({
 		return keyData.testStatus || "untested";
 	};
 
+	const isProductionFailure = (keyData: APIKey | undefined) => {
+		if (!keyData?.testError) return false;
+		// Check if error came from production use (scene generation, audio generation, etc.)
+		return (
+			keyData.testError.includes("[scene generation]") ||
+			keyData.testError.includes("[audio generation]") ||
+			keyData.testError.includes("[AI streaming]")
+		);
+	};
+
+	// Check if any keys have production failures
+	const hasProductionFailures = apiKeys.some((key) => isProductionFailure(key));
+
+	// Count configured keys
+	const configuredKeysCount = apiKeys.filter((k) => k.encryptedKey).length;
+
 	return (
 		<div className="space-y-6">
 			<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-				<p className="text-sm text-blue-800 dark:text-blue-300">
-					API keys are encrypted and stored securely. Configure keys for the AI
-					providers you want to use. Keys are tested automatically when saved.
-				</p>
+				<div className="flex items-start justify-between gap-4">
+					<p className="text-sm text-blue-800 dark:text-blue-300">
+						API keys are encrypted and stored securely. Configure keys for the
+						AI providers you want to use. Keys are tested automatically when
+						saved.
+					</p>
+					{configuredKeysCount > 0 && (
+						<button
+							type="button"
+							onClick={handleTestAll}
+							disabled={testingAll || loading !== null}
+							className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap"
+						>
+							{testingAll ? (
+								<>
+									<Loader2 className="w-4 h-4 animate-spin" />
+									Testing All...
+								</>
+							) : (
+								<>
+									<Check className="w-4 h-4" />
+									Test All Keys ({configuredKeysCount})
+								</>
+							)}
+						</button>
+					)}
+				</div>
 			</div>
+
+			{/* Production Failure Alert */}
+			{hasProductionFailures && (
+				<div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 rounded-lg p-4">
+					<div className="flex items-start gap-3">
+						<AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+						<div>
+							<h4 className="font-semibold text-red-800 dark:text-red-300 mb-1">
+								Production API Key Failures Detected
+							</h4>
+							<p className="text-sm text-red-700 dark:text-red-400">
+								One or more API keys failed during actual use (scene generation,
+								audio generation, etc.). This usually means the key is invalid,
+								expired, or has insufficient permissions. Please update the
+								affected keys below.
+							</p>
+						</div>
+					</div>
+				</div>
+			)}
 
 			<div className="space-y-4">
 				{PROVIDERS.map((provider) => {
@@ -186,11 +303,17 @@ export function APIKeysSettings({
 					const isEditing = editingProvider === provider.id;
 					const isLoading = loading === provider.id;
 					const hasKey = keyData?.encryptedKey;
+					const hasProductionFailure = isProductionFailure(keyData);
 
 					return (
 						<div
 							key={provider.id}
-							className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg p-6"
+							className={cn(
+								"bg-white dark:bg-gray-800 border rounded-lg p-6",
+								hasProductionFailure
+									? "border-red-300 dark:border-red-700 border-2"
+									: "border-slate-200 dark:border-gray-700",
+							)}
 						>
 							<div className="flex items-start justify-between mb-4">
 								<div className="flex-1">
@@ -220,21 +343,33 @@ export function APIKeysSettings({
 										)}
 									</div>
 									{keyData?.testError && (
-										<p className="text-sm text-red-600 dark:text-red-400 mt-1">
-											{keyData.testError}
-										</p>
-									)}
-									{testResults[provider.id] && (
-										<p
+										<div
 											className={cn(
-												"text-sm mt-1",
-												testResults[provider.id].includes("success")
-													? "text-green-600 dark:text-green-400"
-													: "text-red-600 dark:text-red-400",
+												"mt-2 p-3 rounded-lg border",
+												hasProductionFailure
+													? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+													: "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800",
 											)}
 										>
-											{testResults[provider.id]}
-										</p>
+											{hasProductionFailure && (
+												<div className="flex items-center gap-2 mb-1">
+													<AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
+													<span className="text-xs font-semibold text-red-700 dark:text-red-300 uppercase">
+														Production Failure
+													</span>
+												</div>
+											)}
+											<p
+												className={cn(
+													"text-sm",
+													hasProductionFailure
+														? "text-red-700 dark:text-red-300"
+														: "text-yellow-700 dark:text-yellow-300",
+												)}
+											>
+												{keyData.testError}
+											</p>
+										</div>
 									)}
 								</div>
 

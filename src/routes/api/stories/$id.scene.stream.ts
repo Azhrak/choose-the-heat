@@ -12,6 +12,10 @@ import { streamCompletion } from "~/lib/ai/streaming";
 import { getSessionFromRequest } from "~/lib/auth/session";
 import { db } from "~/lib/db";
 import {
+	type APIKeyProvider,
+	markApiKeyAsProductionFailed,
+} from "~/lib/db/queries/apiKeys";
+import {
 	cacheScene,
 	deleteScene,
 	getCachedScene,
@@ -299,6 +303,7 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 					// Create SSE stream
 					const encoder = new TextEncoder();
 					let fullContent = "";
+					let chunkCount = 0;
 
 					const stream = new ReadableStream({
 						async start(controller) {
@@ -341,8 +346,15 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 								const BUFFER_SIZE = 200; // Keep last 200 chars to detect opening tag
 
 								for await (const chunk of textStream) {
+									chunkCount++;
 									fullContent += chunk;
 									buffer += chunk;
+
+									if (chunkCount === 1) {
+										console.log(
+											`[Scene Stream] First chunk received from ${aiConfig.provider}`,
+										);
+									}
 
 									// Check if we've accumulated enough content to safely stream
 									// (avoiding streaming metadata tags)
@@ -395,7 +407,30 @@ export const Route = createFileRoute("/api/stories/$id/scene/stream")({
 											),
 										);
 									}
-								} // Parse and cache the complete content
+								}
+
+								console.log(
+									`[Scene Stream] Stream complete. Received ${chunkCount} chunks, ${fullContent.length} characters from ${aiConfig.provider}`,
+								);
+
+								if (!fullContent || fullContent.trim().length === 0) {
+									console.error(
+										`[Scene Stream] ERROR: ${aiConfig.provider} returned empty content!`,
+									);
+
+									// Mark the API key as failed since it returned empty content
+									await markApiKeyAsProductionFailed(
+										aiConfig.provider as APIKeyProvider,
+										"Returned empty content during scene generation. This usually means the API key is invalid, expired, or the model doesn't support the prompt format.",
+										"scene generation",
+									);
+
+									throw new Error(
+										`${aiConfig.provider} returned empty content. The API key has been marked as invalid. Please update it in Admin Settings > API Keys.`,
+									);
+								}
+
+								// Parse and cache the complete content
 								const parsed = parseSceneMeta(fullContent);
 								await cacheScene(
 									storyId,

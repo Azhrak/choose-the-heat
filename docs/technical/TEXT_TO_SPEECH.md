@@ -1,12 +1,29 @@
 # Text-to-Speech (TTS) System
 
-**Last Updated**: 2025-12-04 | **Status**: ✅ Production Ready
+**Last Updated**: 2025-12-08 | **Status**: ✅ Production Ready (Non-Streaming)
 
 ---
 
 ## Overview
 
 The Text-to-Speech system enables users to listen to their stories with high-quality AI-generated audio narration. The system supports multiple TTS providers, stores audio files in Google Cloud Storage, and provides a full-featured audio player with playback controls.
+
+### Current Production Status
+
+**Active Features** ✅:
+
+- Non-streaming audio generation with progress feedback
+- Multi-provider support (OpenAI, Google Cloud TTS)
+- Google Cloud Storage with 90-day lifecycle
+- Signed URLs with 7-day expiry
+- Full-featured audio player with controls
+- Intelligent text chunking for long scenes
+- Voice consistency per story
+
+**Experimental Features** ⚠️:
+
+- Streaming audio playback (MediaSource API) - Complete but disabled
+- See [Streaming TTS](#streaming-tts) and [Future Enhancements](#streaming-audio-playback-re-enable-and-stabilize) for details
 
 ---
 
@@ -198,11 +215,201 @@ export async function getAvailableVoices(
 
 ---
 
+## Streaming TTS
+
+**Added**: 2025-12-07 | **Status**: ⚠️ Implemented but Disabled (Feature Flag Ready)
+
+The TTS system has a complete streaming implementation that delivers audio chunks progressively, but it's currently disabled in production due to client-side stability issues with MediaSource API.
+
+### Current Production Behavior
+
+- **Non-Streaming Mode**: Full audio generation before playback (stable)
+- **Progress Feedback**: Real-time progress percentage during generation
+- **GCS Persistence**: All generated audio saved to Google Cloud Storage
+- **Fallback Support**: Streaming endpoint falls back to blob URL if MediaSource fails
+
+### Streaming Features (Implemented)
+
+- **Progressive Delivery**: Audio chunks streamed as generated
+- **Lower Latency**: Faster time-to-first-byte
+- **Better UX**: Start playback before complete generation
+- **Multiple Formats**: Supports both MP3 (OpenAI) and PCM (Google Gemini)
+- **Provider Support**: OpenAI and Google Gemini
+- **Background Persistence**: Streams to client while saving to GCS in parallel
+
+### Implementation Status
+
+**What's Complete**:
+
+- ✅ Server-side streaming endpoints (`audio-stream.ts`)
+- ✅ NDJSON protocol with proper line buffering
+- ✅ Client-side streaming hook (`useStreamingAudioPlayer.ts`)
+- ✅ MediaSource Extensions API integration
+- ✅ Streaming UI component (`StreamingAudioPlayer.tsx`)
+- ✅ Progress tracking and chunk counting
+- ✅ Auto-play after buffering 2 seconds
+- ✅ Fallback to blob URL when MediaSource unsupported
+- ✅ Background GCS upload during streaming
+- ✅ Voice name tracking and metadata persistence
+
+**Known Issues** (Why It's Disabled):
+
+- ⚠️ React effect infinite loop with MediaSource cleanup
+- ⚠️ AbortController timing issues causing re-mounts
+- ⚠️ Browser compatibility varies for MediaSource with MP3
+- ⚠️ PCM format requires additional client-side processing
+
+**Files Preserved for Future**:
+
+- `src/hooks/useStreamingAudioPlayer.ts` - MediaSource playback hook
+- `src/components/StreamingAudioPlayer.tsx` - Streaming player UI
+- `src/routes/api/stories/$id/scene/$number/audio-stream.ts` - Streaming endpoint
+
+### Streaming API Endpoint
+
+#### GET /api/stories/:id/scene/:number/audio-stream
+
+Stream audio generation with progressive chunk delivery.
+
+**Response Format**: NDJSON (Newline-Delimited JSON)
+
+**First Chunk (Metadata)**:
+
+```json
+{
+  "type": "metadata",
+  "metadata": {
+    "estimatedDuration": 45.5,
+    "format": "mp3",  // or "pcm"
+    "totalChunks": 3,
+    "provider": "openai",
+    "audioFormat": "mp3",
+    // For PCM audio only:
+    "pcmSpecs": {
+      "sampleRate": 24000,
+      "bitDepth": 16,
+      "channels": 1
+    }
+  }
+}
+```
+
+**Audio Chunks**:
+
+```json
+{
+  "type": "audio",
+  "index": 0,
+  "isLast": false,
+  "data": "base64-encoded-audio-data",
+  "format": "mp3"
+}
+```
+
+### Audio Formats
+
+#### MP3 (OpenAI)
+
+- **Ready for Playback**: Direct browser support
+- **Compressed**: Smaller file sizes
+- **Streaming**: Compatible with Media Source Extensions
+- **Provider**: OpenAI TTS
+
+#### PCM (Google Gemini)
+
+- **Raw Audio**: 24000 Hz, 16-bit, mono
+- **Uncompressed**: Larger file sizes
+- **Processing Required**: Needs Web Audio API or conversion
+- **Provider**: Google Gemini TTS
+- **Format**: `audio/L16;codec=pcm;rate=24000`
+
+### Client Implementation Example
+
+```typescript
+async function streamAudio(storyId: string, sceneNumber: number) {
+  const response = await fetch(
+    `/api/stories/${storyId}/scene/${sceneNumber}/audio-stream`
+  );
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+
+  let metadata: any;
+  const audioChunks: Buffer[] = [];
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const lines = decoder.decode(value).split('\n');
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      const chunk = JSON.parse(line);
+
+      if (chunk.type === 'metadata') {
+        metadata = chunk.metadata;
+        console.log(`Format: ${metadata.audioFormat}`);
+        console.log(`Duration: ${metadata.estimatedDuration}s`);
+      } else if (chunk.type === 'audio') {
+        const audioData = atob(chunk.data);
+
+        // Handle based on format
+        if (metadata.audioFormat === 'mp3') {
+          // Create blob and play
+          const blob = new Blob([audioData], { type: 'audio/mp3' });
+          audioElement.src = URL.createObjectURL(blob);
+        } else if (metadata.audioFormat === 'pcm') {
+          // Use Web Audio API
+          const audioContext = new AudioContext();
+          // Convert PCM to AudioBuffer...
+        }
+
+        if (chunk.isLast) {
+          console.log('Streaming complete');
+        }
+      }
+    }
+  }
+}
+```
+
+### Backend Implementation
+
+**Streaming Functions**:
+
+- `generateSpeechOpenAIStream()` - MP3 streaming
+- `generateSpeechGoogleStream()` - PCM streaming
+
+**Async Generators**:
+
+```typescript
+async function* generateAudioChunks() {
+  for (let i = 0; i < chunks.length; i++) {
+    const audioBuffer = await generateChunk(chunks[i]);
+    yield {
+      chunk: audioBuffer,
+      index: i,
+      isLast: i === chunks.length - 1
+    };
+  }
+}
+```
+
+---
+
 ## API Endpoints
 
-### GET /api/stories/:id/scene/:number/audio
+### Production Endpoints (Currently Active)
 
-Check if audio exists or generate new audio for a scene.
+#### GET /api/stories/:id/scene/:number/audio
+
+**Status**: ✅ Active in Production
+
+Check if audio exists or generate new audio for a scene. This is the stable, non-streaming endpoint currently used by the application.
+
+**Query Parameters**:
+
+- `generate=true` - Trigger audio generation if not exists
 
 **Flow**:
 
@@ -232,7 +439,9 @@ Check if audio exists or generate new audio for a scene.
 }
 ```
 
-### DELETE /api/stories/:id/scene/:number/audio
+#### DELETE /api/stories/:id/scene/:number/audio
+
+**Status**: ✅ Active in Production
 
 Remove audio (admin only).
 
@@ -242,7 +451,21 @@ Remove audio (admin only).
 2. Delete from GCS
 3. Delete from database
 
-### GET /api/tts/voices
+### Experimental Endpoints (Implemented but Not Active)
+
+#### GET /api/stories/:id/scene/:number/audio-stream
+
+**Status**: ⚠️ Implemented but Disabled
+
+Streaming endpoint that delivers audio chunks progressively using NDJSON protocol. Complete implementation exists but is not used in production due to client-side stability issues with MediaSource API.
+
+See [Streaming TTS](#streaming-tts) section for full details.
+
+### Other Endpoints
+
+#### GET /api/tts/voices
+
+**Status**: ✅ Active in Production
 
 List available voices.
 
@@ -260,7 +483,11 @@ List available voices.
 
 ## Frontend Components
 
-### AudioPlayer (`src/components/AudioPlayer.tsx`)
+### Active Production Components
+
+#### AudioPlayer (`src/components/AudioPlayer.tsx`)
+
+**Status**: ✅ Active in Production
 
 Floating audio player with full controls:
 
@@ -275,13 +502,15 @@ Floating audio player with full controls:
 - Dark mode support
 - Responsive design
 
-### AudioGenerationButton (`src/components/AudioGenerationButton.tsx`)
+#### AudioGenerationButton (`src/components/AudioGenerationButton.tsx`)
+
+**Status**: ✅ Active in Production
 
 Button to trigger audio generation:
 
 **States**:
 
-- Loading: Shows spinner during audio generation
+- Loading: Shows spinner and progress percentage during audio generation
 - Disabled: While scene text is still streaming
 - Hidden: When audio already exists
 
@@ -289,8 +518,11 @@ Button to trigger audio generation:
 
 - Notifies parent via callback when audio is ready
 - Shows "Scene generating..." when scene is incomplete
+- Displays streaming progress percentage (e.g., "Streaming... 45%")
 
-### AudioIndicator (`src/components/AudioIndicator.tsx`)
+#### AudioIndicator (`src/components/AudioIndicator.tsx`)
+
+**Status**: ✅ Active in Production
 
 Visual indicator when audio exists:
 
@@ -300,9 +532,29 @@ Visual indicator when audio exists:
 - Tooltip on hover
 - Accessibility labels
 
+### Experimental Components (Not Active)
+
+#### StreamingAudioPlayer (`src/components/StreamingAudioPlayer.tsx`)
+
+**Status**: ⚠️ Implemented but Disabled
+
+Complete streaming audio player using MediaSource Extensions API. Features include:
+
+- Real-time streaming with progressive chunk loading
+- MediaSource API integration with SourceBuffer management
+- Auto-play after buffering 2 seconds of audio
+- Full playback controls (play/pause, seek, volume, speed)
+- Progress tracking with streaming percentage
+- Automatic fallback to blob URL if MediaSource unsupported
+- Support for both MP3 (OpenAI) and PCM (Google) formats
+
+**Why Disabled**: React effect infinite loop issues and AbortController timing problems. See [Future Enhancements](#streaming-audio-playback-re-enable-and-stabilize) for re-enabling plan.
+
 ### React Hooks
 
 #### useAudioGeneration (`src/hooks/useAudioGeneration.ts`)
+
+**Status**: ✅ Active in Production
 
 React Query hook for checking/generating audio:
 
@@ -313,10 +565,22 @@ const { data, isLoading, mutate } = useAudioGeneration(storyId, sceneNumber);
 **Features**:
 
 - 5-minute stale time for caching
-- Mutation for triggering generation
+- Mutation for triggering generation with progress callbacks
 - Automatic refetch on success
+- NDJSON streaming protocol with line buffering
+- Fallback to non-streaming generation if streaming fails
+
+**Progress Tracking**:
+
+```typescript
+generate({
+  onProgress: (percentage) => console.log(`${percentage}%`)
+});
+```
 
 #### useAudioPlayer (`src/hooks/useAudioPlayer.ts`)
+
+**Status**: ✅ Active in Production
 
 HTML5 Audio element management:
 
@@ -340,6 +604,44 @@ const {
 - Auto-cleanup on unmount
 - Error handling
 - Loading state management
+
+#### useStreamingAudioPlayer (`src/hooks/useStreamingAudioPlayer.ts`)
+
+**Status**: ⚠️ Implemented but Disabled
+
+Advanced hook for MediaSource-based streaming audio playback:
+
+```typescript
+const {
+  isPlaying,
+  currentTime,
+  duration,
+  isReady,
+  initializeMediaSource,
+  addChunk,
+  finalize,
+  reset,
+  play,
+  pause,
+  seek,
+  setVolume,
+  setPlaybackRate
+} = useStreamingAudioPlayer({
+  onPlaybackStart: () => console.log('Started'),
+  onPlaybackEnd: () => console.log('Ended'),
+});
+```
+
+**Features**:
+
+- MediaSource Extensions API integration
+- SourceBuffer management with chunk queueing
+- Auto-play when 2 seconds buffered
+- Graceful fallback when MediaSource unsupported
+- Complete playback control surface
+- MIME type detection and validation
+
+**Why Disabled**: Infinite loop issues with React effects and cleanup. Needs refactoring of effect dependencies and AbortController lifecycle.
 
 ---
 
@@ -370,6 +672,179 @@ The reading page (`src/routes/story/$id.read.tsx`) integrates all audio componen
 
 ---
 
+## Admin Testing Interface
+
+**Location**: `/admin/test` | **Status**: ✅ Active in Production
+
+The admin panel includes a comprehensive testing interface for validating AI text generation and TTS audio generation without affecting app settings or user stories.
+
+### Features
+
+#### Text Generation Testing
+
+- **Multi-Provider Support**: Test OpenAI, Google, Anthropic, Mistral, xAI, OpenRouter
+- **Model Selection**: Choose any available model per provider
+- **Custom Prompts**: Enter custom prompts or use pre-built romance scene generator
+- **Real-time Results**: See generated text immediately
+- **Auto-population**: Generated text automatically populates TTS input
+
+#### TTS Audio Testing
+
+- **Multi-Provider Support**: Test OpenAI, Google, ElevenLabs, Azure
+- **Voice Selection**: Choose from available voices per provider
+- **Model Configuration**: Test different TTS models
+- **Integrated Player**: Built-in audio player for immediate playback
+- **GCS Upload**: Audio uploaded to GCS with "test" prefix for cleanup
+
+### Interface Layout
+
+**Current Settings Display**:
+
+- Shows active AI configuration (provider, model, temperature, max tokens, timeout)
+- Shows active TTS configuration (provider, model)
+- Reference only - test changes don't affect these settings
+
+**Text Generation Section**:
+
+- Provider selector (OpenAI, Google, Anthropic, Mistral, xAI, OpenRouter)
+- Model selector (dynamically populated per provider)
+- Prompt textarea
+- "Generate Text" button
+- "Random Romance Sample" button (pre-built prompt)
+- Error display for failed generations
+- Output display with formatted text
+
+**TTS Generation Section**:
+
+- Provider selector (OpenAI, Google, ElevenLabs, Azure)
+- Model selector (dynamically populated per provider)
+- Voice selector with friendly names
+- Text input textarea (auto-populated from text generation)
+- "Generate Audio" button
+- Error display for failed generations
+- Audio player for playback
+
+### API Endpoints
+
+#### POST /api/admin/test/generate-audio
+
+**Status**: ✅ Active in Production
+
+**Authorization**: Admin only (enforced via `requireAdmin` middleware)
+
+**Request Body**:
+
+```typescript
+{
+  text: string;          // Text to convert
+  provider: TTSProvider; // openai | google | elevenlabs | azure
+  model: string;         // Model name
+  voiceId: string;       // Voice identifier
+}
+```
+
+**Response**:
+
+```typescript
+{
+  audioUrl: string;   // Signed GCS URL
+  duration: number;   // Audio duration in seconds
+  fileSize: number;   // Buffer size in bytes
+  provider: string;   // Echo provider used
+  model: string;      // Echo model used
+  voiceId: string;    // Echo voice used
+}
+```
+
+**Process Flow**:
+
+1. Validate admin authorization
+2. Parse and validate request body
+3. Generate speech using TTS client
+4. Upload to GCS with "test" story ID prefix
+5. Generate 7-day signed URL
+6. Return audio URL and metadata
+
+#### POST /api/admin/test/generate-text
+
+**Status**: ✅ Active in Production
+
+**Authorization**: Admin only
+
+Generate text using AI providers for testing purposes.
+
+### Voice Options by Provider
+
+**OpenAI**:
+
+- Alloy, Echo, Fable, Onyx, Nova, Shimmer
+
+**Google**:
+
+- Enceladus (Male), Puck (Male), Charon (Male), Kore (Female), Fenrir (Male), Aoede (Female)
+
+**ElevenLabs**:
+
+- Rachel, Domi
+
+**Azure**:
+
+- Jenny (Female), Guy (Male), Aria (Female)
+
+### React Hooks
+
+#### useTestAudioGenerationMutation (`src/hooks/useTestAudioGenerationMutation.ts`)
+
+React Query mutation for admin audio testing:
+
+```typescript
+const ttsGenerationMutation = useTestAudioGenerationMutation();
+
+ttsGenerationMutation.mutate(
+  {
+    text: "Test audio",
+    provider: "openai",
+    model: "tts-1-hd",
+    voiceId: "alloy"
+  },
+  {
+    onSuccess: (audioUrl) => console.log("Audio ready:", audioUrl)
+  }
+);
+```
+
+#### useTestTextGenerationMutation (`src/hooks/useTestTextGenerationMutation.ts`)
+
+React Query mutation for admin text testing.
+
+### Usage Notes
+
+- Test audio files stored with "test" prefix for easy cleanup
+- Changes don't affect app settings or user data
+- Requires admin role to access
+- Real API calls incur costs (monitor usage)
+- Audio files uploaded to GCS (count toward storage quota)
+- Audio files follow same 90-day lifecycle as production audio
+
+### Cleanup Recommendations
+
+Test audio files should be cleaned up periodically:
+
+```bash
+# List test audio files
+gsutil ls gs://your-bucket/audio/test/
+
+# Delete test audio files older than 7 days
+gsutil -m rm gs://your-bucket/audio/test/**
+```
+
+Consider adding automated cleanup for test files:
+
+- Scheduled job to delete test prefix files after 7 days
+- Manual "Clear Test Audio" button in admin panel
+
+---
+
 ## Configuration
 
 ### Environment Variables
@@ -383,8 +858,13 @@ GCS_BUCKET_NAME=your-bucket-name
 GCS_BUCKET_PATH=audio/
 GCS_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
 
-# Google TTS (optional, falls back to GCS_SERVICE_ACCOUNT_JSON)
+# Google Cloud TTS (non-streaming, MP3 output)
+# Optional, falls back to GCS_SERVICE_ACCOUNT_JSON
 GOOGLE_TTS_ACCOUNT_JSON={"type":"service_account",...}
+
+# Google Gemini TTS (streaming, PCM output)
+# Required for streaming TTS with Google provider
+GOOGLE_TTS_API_KEY=your-google-api-key
 
 # Provider API Keys (managed via Admin Settings > API Keys)
 # OpenAI API key reused from AI config
@@ -399,6 +879,7 @@ AZURE_TTS_REGION=eastus
 {
   "@google-cloud/storage": "^7.17.3",
   "@google-cloud/text-to-speech": "^6.4.0",
+  "@google/genai": "^1.31.0",
   "openai": "^6.9.1"
 }
 ```
@@ -519,7 +1000,8 @@ pnpm cleanup:audit-logs [days]  # Default 90 days
 
 Planned features:
 
-- Scheduled 90-day cleanup job
+- Scheduled 90-day cleanup job for production audio
+- Scheduled 7-day cleanup job for test audio (with "test" prefix)
 - Orphaned file detection and cleanup
 - Signed URL refresh job (optional)
 
@@ -679,6 +1161,8 @@ Planned features:
 - [ ] Cost monitoring dashboard
 - [ ] Bulk audio deletion
 - [ ] Provider usage statistics
+- [ ] "Clear Test Audio" button in admin panel
+- [ ] Test audio usage statistics and cleanup scheduling
 
 ### User Features
 
@@ -686,11 +1170,48 @@ Planned features:
 - [ ] Voice selection interface
 - [ ] Audio playback history
 
-### Optimization
+### Streaming Audio Playback (Re-enable and Stabilize)
 
-- [ ] Streaming audio generation (chunk-based)
-- [ ] Progressive audio loading
+**Status**: Complete implementation exists but disabled due to client-side issues
+
+**What's Done**:
+
+- ✅ Full MediaSource Extensions API integration
+- ✅ Streaming server endpoint with NDJSON protocol
+- ✅ Line buffering to handle stream chunk boundaries
+- ✅ Progress tracking and auto-play after buffering
+- ✅ Fallback to blob URL when MediaSource unsupported
+- ✅ Complete UI component with playback controls
+
+**What's Needed**:
+
+- [ ] Fix React effect infinite loop with MediaSource cleanup
+- [ ] Resolve AbortController timing issues
+- [ ] Test and fix browser compatibility (especially Safari)
+- [ ] Add PCM to MP3 client-side conversion for Google streaming
+- [ ] Implement feature flag system
+- [ ] Add comprehensive error recovery
+- [ ] Test with various network conditions (slow connections, interruptions)
+- [ ] Performance testing with concurrent streams
+
+**Files to Reference**:
+
+- [src/hooks/useStreamingAudioPlayer.ts](../../src/hooks/useStreamingAudioPlayer.ts) - Complete MediaSource playback hook
+- [src/components/StreamingAudioPlayer.tsx](../../src/components/StreamingAudioPlayer.tsx) - Full streaming UI with controls
+- [src/routes/api/stories/$id/scene/$number/audio-stream.ts](../../src/routes/api/stories/$id/scene/$number/audio-stream.ts) - Working streaming endpoint
+
+**Benefits When Fixed**:
+
+- Start playback within 2 seconds instead of waiting for full generation
+- Better UX for long scenes (5+ minutes of audio)
+- Lower perceived latency
+- Spotify-like streaming experience
+
+### Other Optimizations
+
 - [ ] Audio preloading for next scene
+- [ ] Service worker caching for frequently played scenes
+- [ ] Adaptive bitrate based on connection speed
 
 ---
 

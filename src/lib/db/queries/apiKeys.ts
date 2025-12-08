@@ -10,7 +10,8 @@ export type APIKeyProvider =
 	| "anthropic"
 	| "mistral"
 	| "xai"
-	| "openrouter";
+	| "openrouter"
+	| "google_tts";
 
 /**
  * API key test status
@@ -200,4 +201,30 @@ export async function hasApiKey(provider: APIKeyProvider): Promise<boolean> {
 		.executeTakeFirst();
 
 	return !!record?.encrypted_key;
+}
+
+/**
+ * Mark an API key as failed during production use
+ * This is different from test failures - it means the key failed during actual generation
+ * @param provider AI provider name
+ * @param error Error message or object
+ * @param context Additional context (e.g., "scene generation", "audio generation")
+ */
+export async function markApiKeyAsProductionFailed(
+	provider: APIKeyProvider,
+	error: string | Error,
+	context?: string,
+): Promise<void> {
+	const errorMessage =
+		typeof error === "string" ? error : error.message || "Unknown error";
+	const fullError = context ? `[${context}] ${errorMessage}` : errorMessage;
+
+	console.error(
+		`[API Key Failure] ${provider} key failed during production use: ${fullError}`,
+	);
+
+	await updateApiKeyTestStatus(provider, "invalid", fullError);
+
+	// TODO: Send notification to admins (email, in-app notification, etc.)
+	// For now, we're just logging and updating the database
 }

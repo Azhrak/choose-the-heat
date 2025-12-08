@@ -16,6 +16,7 @@ const TEST_MODELS: Record<APIKeyProvider, string> = {
 	mistral: "mistral-small-latest",
 	xai: "grok-4-fast-non-reasoning",
 	openrouter: "arcee-ai/trinity-mini:free",
+	google_tts: "gemini-2.5-flash-lite-preview-tts",
 };
 
 /**
@@ -94,6 +95,30 @@ export async function validateApiKey(
 					model: openrouter(model),
 					prompt: "Say OK",
 					maxTokens: 10,
+				});
+				return { valid: true };
+			}
+
+			case "google_tts": {
+				// Dynamically import to avoid issues if module is not available
+				const { GoogleGenAI } = await import("@google/genai");
+				const ai = new GoogleGenAI({
+					apiKey,
+					vertexai: false,
+				});
+				// Test with a minimal TTS request
+				await ai.models.generateContent({
+					model,
+					contents: "Test",
+					config: {
+						speechConfig: {
+							voiceConfig: {
+								prebuiltVoiceConfig: {
+									voiceName: "Puck",
+								},
+							},
+						},
+					},
 				});
 				return { valid: true };
 			}

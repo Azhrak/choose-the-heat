@@ -7,6 +7,7 @@ interface AudioGenerationButtonProps {
 	storyId: string;
 	sceneNumber: number;
 	onAudioReady?: (audioUrl: string) => void;
+	onStartStreaming?: () => void;
 	isSceneGenerating?: boolean;
 	isSceneComplete?: boolean;
 	sceneError?: string | null;
@@ -21,6 +22,7 @@ export function AudioGenerationButton({
 	storyId,
 	sceneNumber,
 	onAudioReady,
+	onStartStreaming,
 	isSceneGenerating = false,
 	isSceneComplete = false,
 	sceneError = null,
@@ -30,11 +32,13 @@ export function AudioGenerationButton({
 		sceneNumber,
 	);
 	const [isQueued, setIsQueued] = useState(false);
+	const [progress, setProgress] = useState(0);
 
 	// Notify parent when audio becomes available
 	useEffect(() => {
 		if (audio?.audioUrl && onAudioReady) {
 			onAudioReady(audio.audioUrl);
+			setProgress(0); // Reset progress when audio is ready
 		}
 	}, [audio?.audioUrl, onAudioReady]);
 
@@ -47,10 +51,24 @@ export function AudioGenerationButton({
 			} else if (isSceneComplete) {
 				// Start audio generation now that scene is ready
 				setIsQueued(false);
-				generate(undefined);
+				if (onStartStreaming) {
+					onStartStreaming();
+				} else {
+					setProgress(0);
+					generate({
+						onProgress: (p) => setProgress(p),
+					});
+				}
 			}
 		}
-	}, [isQueued, isSceneGenerating, isSceneComplete, sceneError, generate]);
+	}, [
+		isQueued,
+		isSceneGenerating,
+		isSceneComplete,
+		sceneError,
+		generate,
+		onStartStreaming,
+	]);
 
 	// Don't show button if audio already exists
 	if (audio?.exists) {
@@ -75,8 +93,16 @@ export function AudioGenerationButton({
 					// Queue audio generation to start when scene is ready
 					setIsQueued(true);
 				} else {
-					// Start immediately if scene is ready
-					generate(undefined);
+					// Trigger streaming playback
+					if (onStartStreaming) {
+						onStartStreaming();
+					} else {
+						// Fallback to old approach if no streaming callback provided
+						setProgress(0);
+						generate({
+							onProgress: (p) => setProgress(p),
+						});
+					}
 				}
 			}}
 			disabled={isGenerating}
@@ -87,7 +113,11 @@ export function AudioGenerationButton({
 			{isGenerating ? (
 				<>
 					<Loader2 className="w-4 h-4 animate-spin" />
-					<span>Generating...</span>
+					<span>
+						{progress > 0 && progress < 100
+							? `Streaming... ${Math.round(progress)}%`
+							: "Generating..."}
+					</span>
 				</>
 			) : isQueued ? (
 				<>

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
 	ArrowLeft,
+	Beaker,
 	FileText,
 	LayoutDashboard,
 	ScrollText,
@@ -60,6 +61,12 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 			label: "Settings",
 			path: "/admin/settings",
 			icon: Settings,
+			roles: ["admin"] as UserRole[],
+		},
+		{
+			label: "Test Generation",
+			path: "/admin/test",
+			icon: Beaker,
 			roles: ["admin"] as UserRole[],
 		},
 	];

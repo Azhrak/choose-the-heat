@@ -18,6 +18,7 @@ const providerSchema = z.enum([
 	"mistral",
 	"xai",
 	"openrouter",
+	"google_tts",
 ]);
 
 export const Route = createFileRoute("/api/admin/api-keys/$provider/test")({

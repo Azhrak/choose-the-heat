@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AdminLayout } from "~/components/admin/AdminLayout";
 import { APIKeysSettings } from "~/components/admin/APIKeysSettings";
 import { SettingsField } from "~/components/admin/SettingsField";
+import { useToast } from "~/components/admin/ToastContext";
 import {
 	useAPIKeysQuery,
 	useDeleteAPIKeyMutation,
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/admin/settings/")({
 
 function SettingsPage() {
 	const { data: currentUser } = useCurrentUserQuery();
+	const { showToast } = useToast();
 	const [activeTab, setActiveTab] = useState<TabId>("ai");
 	const [editedSettings, setEditedSettings] = useState<Record<string, string>>(
 		{},
@@ -63,6 +65,18 @@ function SettingsPage() {
 		});
 	};
 
+	const handleMultipleFieldChanges = (changes: Record<string, string>) => {
+		setEditedSettings((prev) => ({ ...prev, ...changes }));
+		// Clear errors for changed fields
+		setErrors((prev) => {
+			const newErrors = { ...prev };
+			for (const key of Object.keys(changes)) {
+				delete newErrors[key];
+			}
+			return newErrors;
+		});
+	};
+
 	const handleSave = async () => {
 		// Validate JSON fields
 		const newErrors: Record<string, string> = {};
@@ -86,13 +100,13 @@ function SettingsPage() {
 		try {
 			await updateMutation.mutateAsync(updates);
 			setEditedSettings({});
-			// Show success message (you might want to add a toast notification here)
-			alert("Settings saved successfully!");
+			showToast({ message: "Settings saved successfully!", type: "success" });
 		} catch (error) {
 			console.error("Failed to save settings:", error);
-			alert(
-				`Failed to save settings: ${error instanceof Error ? error.message : "Unknown error"}`,
-			);
+			showToast({
+				message: `Failed to save settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+				type: "error",
+			});
 		}
 	};
 
@@ -117,7 +131,7 @@ function SettingsPage() {
 			URL.revokeObjectURL(url);
 		} catch (error) {
 			console.error("Failed to export settings:", error);
-			alert("Failed to export settings");
+			showToast({ message: "Failed to export settings", type: "error" });
 		}
 	};
 
@@ -140,17 +154,22 @@ function SettingsPage() {
 				const result = await importMutation.mutateAsync(data);
 
 				if (result.skipped.length > 0) {
-					alert(
-						`Import complete!\nUpdated: ${result.updated}\nSkipped: ${result.skipped.length} (${result.skipped.join(", ")})`,
-					);
+					showToast({
+						message: `Import complete! Updated: ${result.updated}, Skipped: ${result.skipped.length}`,
+						type: "warning",
+					});
 				} else {
-					alert(`Import complete! Updated ${result.updated} settings.`);
+					showToast({
+						message: `Import complete! Updated ${result.updated} settings.`,
+						type: "success",
+					});
 				}
 			} catch (error) {
 				console.error("Failed to import settings:", error);
-				alert(
-					`Failed to import settings: ${error instanceof Error ? error.message : "Unknown error"}`,
-				);
+				showToast({
+					message: `Failed to import settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+					type: "error",
+				});
 			}
 		};
 		input.click();
@@ -295,6 +314,7 @@ function SettingsPage() {
 									setting={setting}
 									value={getValue(setting)}
 									onChange={(value) => handleFieldChange(setting.key, value)}
+									onChangeMultiple={handleMultipleFieldChanges}
 									error={errors[setting.key]}
 									allSettings={settings}
 									getSettingValue={getValue}

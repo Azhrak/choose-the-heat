@@ -16,6 +16,7 @@ import { Route as PreferencesRouteImport } from './routes/preferences'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as TemplateIdRouteImport } from './routes/template/$id'
@@ -24,6 +25,7 @@ import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthOnboardingRouteImport } from './routes/auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiPreferencesRouteImport } from './routes/api/preferences'
+import { Route as AdminTestRouteImport } from './routes/admin/test'
 import { Route as ApiTropesIndexRouteImport } from './routes/api/tropes/index'
 import { Route as ApiTemplatesIndexRouteImport } from './routes/api/templates/index'
 import { Route as ApiStoriesIndexRouteImport } from './routes/api/stories/index'
@@ -62,6 +64,8 @@ import { Route as ApiAuthCallbackGoogleRouteImport } from './routes/api/auth/cal
 import { Route as ApiAdminUsersStatsRouteImport } from './routes/api/admin/users/stats'
 import { Route as ApiAdminUsersIdRouteImport } from './routes/api/admin/users/$id'
 import { Route as ApiAdminTropesIdRouteImport } from './routes/api/admin/tropes/$id'
+import { Route as ApiAdminTestGenerateTextRouteImport } from './routes/api/admin/test/generate-text'
+import { Route as ApiAdminTestGenerateAudioRouteImport } from './routes/api/admin/test/generate-audio'
 import { Route as ApiAdminTemplatesStatsRouteImport } from './routes/api/admin/templates/stats'
 import { Route as ApiAdminTemplatesGenerateRouteImport } from './routes/api/admin/templates/generate'
 import { Route as ApiAdminTemplatesBulkUpdateRouteImport } from './routes/api/admin/templates/bulk-update'
@@ -78,6 +82,7 @@ import { Route as ApiStoriesIdSceneStreamRouteImport } from './routes/api/storie
 import { Route as ApiAdminTemplatesIdStatusRouteImport } from './routes/api/admin/templates/$id.status'
 import { Route as ApiAdminTemplatesIdChoicePointsRouteImport } from './routes/api/admin/templates/$id/choice-points'
 import { Route as ApiAdminApiKeysProviderTestRouteImport } from './routes/api/admin/api-keys/$provider.test'
+import { Route as ApiStoriesIdSceneNumberAudioStreamRouteImport } from './routes/api/stories/$id/scene/$number/audio-stream'
 import { Route as ApiStoriesIdSceneNumberAudioRouteImport } from './routes/api/stories/$id/scene/$number/audio'
 
 const TermsRoute = TermsRouteImport.update({
@@ -115,15 +120,20 @@ const BrowseRoute = BrowseRouteImport.update({
   path: '/browse',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const TemplateIdRoute = TemplateIdRouteImport.update({
   id: '/template/$id',
@@ -155,6 +165,11 @@ const ApiPreferencesRoute = ApiPreferencesRouteImport.update({
   path: '/api/preferences',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTestRoute = AdminTestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiTropesIndexRoute = ApiTropesIndexRouteImport.update({
   id: '/api/tropes/',
   path: '/api/tropes/',
@@ -176,29 +191,29 @@ const ApiProfileIndexRoute = ApiProfileIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersIndexRoute = AdminUsersIndexRouteImport.update({
-  id: '/admin/users/',
-  path: '/admin/users/',
-  getParentRoute: () => rootRouteImport,
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTropesIndexRoute = AdminTropesIndexRouteImport.update({
-  id: '/admin/tropes/',
-  path: '/admin/tropes/',
-  getParentRoute: () => rootRouteImport,
+  id: '/tropes/',
+  path: '/tropes/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTemplatesIndexRoute = AdminTemplatesIndexRouteImport.update({
-  id: '/admin/templates/',
-  path: '/admin/templates/',
-  getParentRoute: () => rootRouteImport,
+  id: '/templates/',
+  path: '/templates/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
-  id: '/admin/settings/',
-  path: '/admin/settings/',
-  getParentRoute: () => rootRouteImport,
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAuditLogsIndexRoute = AdminAuditLogsIndexRouteImport.update({
-  id: '/admin/audit-logs/',
-  path: '/admin/audit-logs/',
-  getParentRoute: () => rootRouteImport,
+  id: '/audit-logs/',
+  path: '/audit-logs/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const StoryIdReadRoute = StoryIdReadRouteImport.update({
   id: '/story/$id/read',
@@ -271,15 +286,15 @@ const ApiAdminAuditLogsRoute = ApiAdminAuditLogsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTemplatesNewRoute = AdminTemplatesNewRouteImport.update({
-  id: '/admin/templates/new',
-  path: '/admin/templates/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/templates/new',
+  path: '/templates/new',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTemplatesBulkImportRoute =
   AdminTemplatesBulkImportRouteImport.update({
-    id: '/admin/templates/bulk-import',
-    path: '/admin/templates/bulk-import',
-    getParentRoute: () => rootRouteImport,
+    id: '/templates/bulk-import',
+    path: '/templates/bulk-import',
+    getParentRoute: () => AdminRoute,
   } as any)
 const ApiAdminUsersIndexRoute = ApiAdminUsersIndexRouteImport.update({
   id: '/api/admin/users/',
@@ -346,6 +361,18 @@ const ApiAdminTropesIdRoute = ApiAdminTropesIdRouteImport.update({
   path: '/api/admin/tropes/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminTestGenerateTextRoute =
+  ApiAdminTestGenerateTextRouteImport.update({
+    id: '/api/admin/test/generate-text',
+    path: '/api/admin/test/generate-text',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminTestGenerateAudioRoute =
+  ApiAdminTestGenerateAudioRouteImport.update({
+    id: '/api/admin/test/generate-audio',
+    path: '/api/admin/test/generate-audio',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAdminTemplatesStatsRoute = ApiAdminTemplatesStatsRouteImport.update({
   id: '/api/admin/templates/stats',
   path: '/api/admin/templates/stats',
@@ -401,14 +428,14 @@ const ApiAdminApiKeysProviderRoute = ApiAdminApiKeysProviderRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUsersIdEditRoute = AdminUsersIdEditRouteImport.update({
-  id: '/admin/users/$id/edit',
-  path: '/admin/users/$id/edit',
-  getParentRoute: () => rootRouteImport,
+  id: '/users/$id/edit',
+  path: '/users/$id/edit',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTemplatesIdEditRoute = AdminTemplatesIdEditRouteImport.update({
-  id: '/admin/templates/$id/edit',
-  path: '/admin/templates/$id/edit',
-  getParentRoute: () => rootRouteImport,
+  id: '/templates/$id/edit',
+  path: '/templates/$id/edit',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ApiStoriesIdSceneStreamRoute = ApiStoriesIdSceneStreamRouteImport.update({
   id: '/stream',
@@ -433,6 +460,12 @@ const ApiAdminApiKeysProviderTestRoute =
     path: '/test',
     getParentRoute: () => ApiAdminApiKeysProviderRoute,
   } as any)
+const ApiStoriesIdSceneNumberAudioStreamRoute =
+  ApiStoriesIdSceneNumberAudioStreamRouteImport.update({
+    id: '/$number/audio-stream',
+    path: '/$number/audio-stream',
+    getParentRoute: () => ApiStoriesIdSceneRoute,
+  } as any)
 const ApiStoriesIdSceneNumberAudioRoute =
   ApiStoriesIdSceneNumberAudioRouteImport.update({
     id: '/$number/audio',
@@ -442,6 +475,7 @@ const ApiStoriesIdSceneNumberAudioRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
   '/cookies': typeof CookiesRoute
   '/library': typeof LibraryRoute
@@ -449,13 +483,14 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/terms': typeof TermsRoute
+  '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
   '/story/create': typeof StoryCreateRoute
   '/template/$id': typeof TemplateIdRoute
-  '/admin': typeof AdminIndexRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/templates/bulk-import': typeof AdminTemplatesBulkImportRoute
   '/admin/templates/new': typeof AdminTemplatesNewRoute
   '/api/admin/audit-logs': typeof ApiAdminAuditLogsRoute
@@ -493,6 +528,8 @@ export interface FileRoutesByFullPath {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
+  '/api/admin/test/generate-audio': typeof ApiAdminTestGenerateAudioRoute
+  '/api/admin/test/generate-text': typeof ApiAdminTestGenerateTextRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
@@ -511,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
   '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
+  '/api/stories/$id/scene/$number/audio-stream': typeof ApiStoriesIdSceneNumberAudioStreamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -521,6 +559,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/terms': typeof TermsRoute
+  '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
@@ -565,6 +604,8 @@ export interface FileRoutesByTo {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
+  '/api/admin/test/generate-audio': typeof ApiAdminTestGenerateAudioRoute
+  '/api/admin/test/generate-text': typeof ApiAdminTestGenerateTextRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
@@ -583,10 +624,12 @@ export interface FileRoutesByTo {
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
   '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
+  '/api/stories/$id/scene/$number/audio-stream': typeof ApiStoriesIdSceneNumberAudioStreamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
   '/cookies': typeof CookiesRoute
   '/library': typeof LibraryRoute
@@ -594,6 +637,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/terms': typeof TermsRoute
+  '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
@@ -638,6 +682,8 @@ export interface FileRoutesById {
   '/api/admin/templates/bulk-update': typeof ApiAdminTemplatesBulkUpdateRoute
   '/api/admin/templates/generate': typeof ApiAdminTemplatesGenerateRoute
   '/api/admin/templates/stats': typeof ApiAdminTemplatesStatsRoute
+  '/api/admin/test/generate-audio': typeof ApiAdminTestGenerateAudioRoute
+  '/api/admin/test/generate-text': typeof ApiAdminTestGenerateTextRoute
   '/api/admin/tropes/$id': typeof ApiAdminTropesIdRoute
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
@@ -656,11 +702,13 @@ export interface FileRoutesById {
   '/api/admin/templates/$id/status': typeof ApiAdminTemplatesIdStatusRoute
   '/api/stories/$id/scene/stream': typeof ApiStoriesIdSceneStreamRoute
   '/api/stories/$id/scene/$number/audio': typeof ApiStoriesIdSceneNumberAudioRoute
+  '/api/stories/$id/scene/$number/audio-stream': typeof ApiStoriesIdSceneNumberAudioStreamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/browse'
     | '/cookies'
     | '/library'
@@ -668,13 +716,14 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/terms'
+    | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
     | '/story/create'
     | '/template/$id'
-    | '/admin'
+    | '/admin/'
     | '/admin/templates/bulk-import'
     | '/admin/templates/new'
     | '/api/admin/audit-logs'
@@ -712,6 +761,8 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
+    | '/api/admin/test/generate-audio'
+    | '/api/admin/test/generate-text'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
@@ -730,6 +781,7 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
     | '/api/stories/$id/scene/$number/audio'
+    | '/api/stories/$id/scene/$number/audio-stream'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -740,6 +792,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/terms'
+    | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
@@ -784,6 +837,8 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
+    | '/api/admin/test/generate-audio'
+    | '/api/admin/test/generate-text'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
@@ -802,9 +857,11 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
     | '/api/stories/$id/scene/$number/audio'
+    | '/api/stories/$id/scene/$number/audio-stream'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/browse'
     | '/cookies'
     | '/library'
@@ -812,6 +869,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/terms'
+    | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
@@ -856,6 +914,8 @@ export interface FileRouteTypes {
     | '/api/admin/templates/bulk-update'
     | '/api/admin/templates/generate'
     | '/api/admin/templates/stats'
+    | '/api/admin/test/generate-audio'
+    | '/api/admin/test/generate-text'
     | '/api/admin/tropes/$id'
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
@@ -874,10 +934,12 @@ export interface FileRouteTypes {
     | '/api/admin/templates/$id/status'
     | '/api/stories/$id/scene/stream'
     | '/api/stories/$id/scene/$number/audio'
+    | '/api/stories/$id/scene/$number/audio-stream'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   BrowseRoute: typeof BrowseRoute
   CookiesRoute: typeof CookiesRoute
   LibraryRoute: typeof LibraryRoute
@@ -891,9 +953,6 @@ export interface RootRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
   StoryCreateRoute: typeof StoryCreateRoute
   TemplateIdRoute: typeof TemplateIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminTemplatesBulkImportRoute: typeof AdminTemplatesBulkImportRoute
-  AdminTemplatesNewRoute: typeof AdminTemplatesNewRoute
   ApiAdminAuditLogsRoute: typeof ApiAdminAuditLogsRoute
   ApiAdminDashboardRoute: typeof ApiAdminDashboardRoute
   ApiAuthGoogleRoute: typeof ApiAuthGoogleRoute
@@ -908,17 +967,10 @@ export interface RootRouteChildren {
   ApiTtsVoicesRoute: typeof ApiTtsVoicesRoute
   StoryIdInfoRoute: typeof StoryIdInfoRoute
   StoryIdReadRoute: typeof StoryIdReadRoute
-  AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
-  AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
-  AdminTemplatesIndexRoute: typeof AdminTemplatesIndexRoute
-  AdminTropesIndexRoute: typeof AdminTropesIndexRoute
-  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
   ApiProfileIndexRoute: typeof ApiProfileIndexRoute
   ApiStoriesIndexRoute: typeof ApiStoriesIndexRoute
   ApiTemplatesIndexRoute: typeof ApiTemplatesIndexRoute
   ApiTropesIndexRoute: typeof ApiTropesIndexRoute
-  AdminTemplatesIdEditRoute: typeof AdminTemplatesIdEditRoute
-  AdminUsersIdEditRoute: typeof AdminUsersIdEditRoute
   ApiAdminApiKeysProviderRoute: typeof ApiAdminApiKeysProviderRouteWithChildren
   ApiAdminSettingsKeyRoute: typeof ApiAdminSettingsKeyRoute
   ApiAdminSettingsExportRoute: typeof ApiAdminSettingsExportRoute
@@ -929,6 +981,8 @@ export interface RootRouteChildren {
   ApiAdminTemplatesBulkUpdateRoute: typeof ApiAdminTemplatesBulkUpdateRoute
   ApiAdminTemplatesGenerateRoute: typeof ApiAdminTemplatesGenerateRoute
   ApiAdminTemplatesStatsRoute: typeof ApiAdminTemplatesStatsRoute
+  ApiAdminTestGenerateAudioRoute: typeof ApiAdminTestGenerateAudioRoute
+  ApiAdminTestGenerateTextRoute: typeof ApiAdminTestGenerateTextRoute
   ApiAdminTropesIdRoute: typeof ApiAdminTropesIdRoute
   ApiAdminUsersIdRoute: typeof ApiAdminUsersIdRoute
   ApiAdminUsersStatsRoute: typeof ApiAdminUsersStatsRoute
@@ -991,6 +1045,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -1000,10 +1061,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
+      path: '/'
+      fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/template/$id': {
       id: '/template/$id'
@@ -1047,6 +1108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPreferencesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/test': {
+      id: '/admin/test'
+      path: '/test'
+      fullPath: '/admin/test'
+      preLoaderRoute: typeof AdminTestRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/tropes/': {
       id: '/api/tropes/'
       path: '/api/tropes'
@@ -1077,38 +1145,38 @@ declare module '@tanstack/react-router' {
     }
     '/admin/users/': {
       id: '/admin/users/'
-      path: '/admin/users'
+      path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/tropes/': {
       id: '/admin/tropes/'
-      path: '/admin/tropes'
+      path: '/tropes'
       fullPath: '/admin/tropes'
       preLoaderRoute: typeof AdminTropesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/templates/': {
       id: '/admin/templates/'
-      path: '/admin/templates'
+      path: '/templates'
       fullPath: '/admin/templates'
       preLoaderRoute: typeof AdminTemplatesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/settings/': {
       id: '/admin/settings/'
-      path: '/admin/settings'
+      path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/audit-logs/': {
       id: '/admin/audit-logs/'
-      path: '/admin/audit-logs'
+      path: '/audit-logs'
       fullPath: '/admin/audit-logs'
       preLoaderRoute: typeof AdminAuditLogsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/story/$id/read': {
       id: '/story/$id/read'
@@ -1210,17 +1278,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/templates/new': {
       id: '/admin/templates/new'
-      path: '/admin/templates/new'
+      path: '/templates/new'
       fullPath: '/admin/templates/new'
       preLoaderRoute: typeof AdminTemplatesNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/templates/bulk-import': {
       id: '/admin/templates/bulk-import'
-      path: '/admin/templates/bulk-import'
+      path: '/templates/bulk-import'
       fullPath: '/admin/templates/bulk-import'
       preLoaderRoute: typeof AdminTemplatesBulkImportRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/api/admin/users/': {
       id: '/api/admin/users/'
@@ -1313,6 +1381,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminTropesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/test/generate-text': {
+      id: '/api/admin/test/generate-text'
+      path: '/api/admin/test/generate-text'
+      fullPath: '/api/admin/test/generate-text'
+      preLoaderRoute: typeof ApiAdminTestGenerateTextRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/test/generate-audio': {
+      id: '/api/admin/test/generate-audio'
+      path: '/api/admin/test/generate-audio'
+      fullPath: '/api/admin/test/generate-audio'
+      preLoaderRoute: typeof ApiAdminTestGenerateAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/templates/stats': {
       id: '/api/admin/templates/stats'
       path: '/api/admin/templates/stats'
@@ -1385,17 +1467,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/users/$id/edit': {
       id: '/admin/users/$id/edit'
-      path: '/admin/users/$id/edit'
+      path: '/users/$id/edit'
       fullPath: '/admin/users/$id/edit'
       preLoaderRoute: typeof AdminUsersIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/templates/$id/edit': {
       id: '/admin/templates/$id/edit'
-      path: '/admin/templates/$id/edit'
+      path: '/templates/$id/edit'
       fullPath: '/admin/templates/$id/edit'
       preLoaderRoute: typeof AdminTemplatesIdEditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/api/stories/$id/scene/stream': {
       id: '/api/stories/$id/scene/stream'
@@ -1425,6 +1507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminApiKeysProviderTestRouteImport
       parentRoute: typeof ApiAdminApiKeysProviderRoute
     }
+    '/api/stories/$id/scene/$number/audio-stream': {
+      id: '/api/stories/$id/scene/$number/audio-stream'
+      path: '/$number/audio-stream'
+      fullPath: '/api/stories/$id/scene/$number/audio-stream'
+      preLoaderRoute: typeof ApiStoriesIdSceneNumberAudioStreamRouteImport
+      parentRoute: typeof ApiStoriesIdSceneRoute
+    }
     '/api/stories/$id/scene/$number/audio': {
       id: '/api/stories/$id/scene/$number/audio'
       path: '/$number/audio'
@@ -1435,14 +1524,47 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminTestRoute: typeof AdminTestRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminTemplatesBulkImportRoute: typeof AdminTemplatesBulkImportRoute
+  AdminTemplatesNewRoute: typeof AdminTemplatesNewRoute
+  AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
+  AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
+  AdminTemplatesIndexRoute: typeof AdminTemplatesIndexRoute
+  AdminTropesIndexRoute: typeof AdminTropesIndexRoute
+  AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminTemplatesIdEditRoute: typeof AdminTemplatesIdEditRoute
+  AdminUsersIdEditRoute: typeof AdminUsersIdEditRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminTestRoute: AdminTestRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminTemplatesBulkImportRoute: AdminTemplatesBulkImportRoute,
+  AdminTemplatesNewRoute: AdminTemplatesNewRoute,
+  AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,
+  AdminSettingsIndexRoute: AdminSettingsIndexRoute,
+  AdminTemplatesIndexRoute: AdminTemplatesIndexRoute,
+  AdminTropesIndexRoute: AdminTropesIndexRoute,
+  AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminTemplatesIdEditRoute: AdminTemplatesIdEditRoute,
+  AdminUsersIdEditRoute: AdminUsersIdEditRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface ApiStoriesIdSceneRouteChildren {
   ApiStoriesIdSceneStreamRoute: typeof ApiStoriesIdSceneStreamRoute
   ApiStoriesIdSceneNumberAudioRoute: typeof ApiStoriesIdSceneNumberAudioRoute
+  ApiStoriesIdSceneNumberAudioStreamRoute: typeof ApiStoriesIdSceneNumberAudioStreamRoute
 }
 
 const ApiStoriesIdSceneRouteChildren: ApiStoriesIdSceneRouteChildren = {
   ApiStoriesIdSceneStreamRoute: ApiStoriesIdSceneStreamRoute,
   ApiStoriesIdSceneNumberAudioRoute: ApiStoriesIdSceneNumberAudioRoute,
+  ApiStoriesIdSceneNumberAudioStreamRoute:
+    ApiStoriesIdSceneNumberAudioStreamRoute,
 }
 
 const ApiStoriesIdSceneRouteWithChildren =
@@ -1495,6 +1617,7 @@ const ApiAdminTemplatesIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   BrowseRoute: BrowseRoute,
   CookiesRoute: CookiesRoute,
   LibraryRoute: LibraryRoute,
@@ -1508,9 +1631,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
   StoryCreateRoute: StoryCreateRoute,
   TemplateIdRoute: TemplateIdRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminTemplatesBulkImportRoute: AdminTemplatesBulkImportRoute,
-  AdminTemplatesNewRoute: AdminTemplatesNewRoute,
   ApiAdminAuditLogsRoute: ApiAdminAuditLogsRoute,
   ApiAdminDashboardRoute: ApiAdminDashboardRoute,
   ApiAuthGoogleRoute: ApiAuthGoogleRoute,
@@ -1525,17 +1645,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApiTtsVoicesRoute: ApiTtsVoicesRoute,
   StoryIdInfoRoute: StoryIdInfoRoute,
   StoryIdReadRoute: StoryIdReadRoute,
-  AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,
-  AdminSettingsIndexRoute: AdminSettingsIndexRoute,
-  AdminTemplatesIndexRoute: AdminTemplatesIndexRoute,
-  AdminTropesIndexRoute: AdminTropesIndexRoute,
-  AdminUsersIndexRoute: AdminUsersIndexRoute,
   ApiProfileIndexRoute: ApiProfileIndexRoute,
   ApiStoriesIndexRoute: ApiStoriesIndexRoute,
   ApiTemplatesIndexRoute: ApiTemplatesIndexRoute,
   ApiTropesIndexRoute: ApiTropesIndexRoute,
-  AdminTemplatesIdEditRoute: AdminTemplatesIdEditRoute,
-  AdminUsersIdEditRoute: AdminUsersIdEditRoute,
   ApiAdminApiKeysProviderRoute: ApiAdminApiKeysProviderRouteWithChildren,
   ApiAdminSettingsKeyRoute: ApiAdminSettingsKeyRoute,
   ApiAdminSettingsExportRoute: ApiAdminSettingsExportRoute,
@@ -1546,6 +1659,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminTemplatesBulkUpdateRoute: ApiAdminTemplatesBulkUpdateRoute,
   ApiAdminTemplatesGenerateRoute: ApiAdminTemplatesGenerateRoute,
   ApiAdminTemplatesStatsRoute: ApiAdminTemplatesStatsRoute,
+  ApiAdminTestGenerateAudioRoute: ApiAdminTestGenerateAudioRoute,
+  ApiAdminTestGenerateTextRoute: ApiAdminTestGenerateTextRoute,
   ApiAdminTropesIdRoute: ApiAdminTropesIdRoute,
   ApiAdminUsersIdRoute: ApiAdminUsersIdRoute,
   ApiAdminUsersStatsRoute: ApiAdminUsersStatsRoute,

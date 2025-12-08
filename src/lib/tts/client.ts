@@ -5,7 +5,9 @@ import {
 	generateSpeechGoogle,
 	generateSpeechOpenAI,
 } from "./providers";
-import type { SpeechGenerationResult } from "./types";
+import { generateSpeechGoogleStream } from "./providers/google";
+import { generateSpeechOpenAIStream } from "./providers/openai";
+import type { SpeechGenerationResult, SpeechStreamResult } from "./types";
 
 /**
  * Options for generating speech
@@ -62,5 +64,48 @@ export async function generateSpeech(
 	}
 }
 
+/**
+ * Main function to generate speech from text in streaming fashion
+ * Dispatches to the appropriate provider implementation
+ * Currently supports OpenAI and Google (Gemini) providers
+ */
+export async function generateSpeechStream(
+	options: GenerateSpeechOptions,
+): Promise<SpeechStreamResult> {
+	const { text, provider, voiceId, config } = options;
+
+	// Validate text length
+	if (!text || text.trim().length === 0) {
+		throw new Error("Text is required for speech generation");
+	}
+
+	console.log(
+		`[TTS Stream] Generating streaming speech with ${provider}, voice: ${voiceId}, text length: ${text.length}`,
+	);
+
+	// Dispatch to provider-specific implementation
+	switch (provider) {
+		case "openai":
+			return generateSpeechOpenAIStream(
+				text,
+				voiceId,
+				config?.model || "tts-1",
+			);
+		case "google":
+			return generateSpeechGoogleStream(
+				text,
+				voiceId,
+				config?.model || "gemini-2.5-flash-tts",
+			);
+		case "elevenlabs":
+		case "azure":
+			throw new Error(
+				`Streaming TTS is not yet supported for provider: ${provider}. Only OpenAI and Google are currently supported.`,
+			);
+		default:
+			throw new Error(`Unsupported TTS provider: ${provider}`);
+	}
+}
+
 // Re-export types for convenience
-export type { SpeechGenerationResult } from "./types";
+export type { SpeechGenerationResult, SpeechStreamResult } from "./types";

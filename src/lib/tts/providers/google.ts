@@ -1,6 +1,11 @@
+import { GoogleGenAI } from "@google/genai";
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
 import type { google } from "@google-cloud/text-to-speech/build/protos/protos";
-import type { SpeechGenerationResult } from "../types";
+import type {
+	SpeechGenerationResult,
+	SpeechStreamChunk,
+	SpeechStreamResult,
+} from "../types";
 import { chunkTextByBytes, estimateDuration } from "../utils";
 
 // Google Cloud TTS byte limits vary by model:
@@ -135,5 +140,106 @@ export async function generateSpeechGoogle(
 		audioBuffer: combinedBuffer,
 		duration: totalDuration,
 		format: "mp3",
+	};
+}
+
+/**
+ * Generate speech using Google Gemini TTS in streaming fashion
+ * Uses @google/genai package with Gemini models
+ * Returns PCM 16bit 24kHz audio (not MP3)
+ */
+export async function generateSpeechGoogleStream(
+	text: string,
+	voiceId: string,
+	model: string,
+): Promise<SpeechStreamResult> {
+	// Import getApiKey dynamically to avoid circular dependencies
+	const { getApiKey } = await import("~/lib/db/queries/apiKeys");
+
+	// Get API key from database or fall back to environment variable
+	const apiKey =
+		(await getApiKey("google_tts")) || process.env.GOOGLE_TTS_API_KEY;
+	if (!apiKey) {
+		throw new Error(
+			"GOOGLE_TTS_API_KEY is not configured. Please add it in the admin settings.",
+		);
+	}
+
+	// Configure for Gemini Developer API (not Vertex AI)
+	const ai = new GoogleGenAI({
+		apiKey,
+		// Ensure we're using the Gemini Developer API endpoint
+		vertexai: false,
+	});
+
+	// Gemini TTS models support longer input, but we'll still chunk for safety
+	// Using a conservative 4KB limit
+	const chunks = chunkTextByBytes(text, 4000);
+
+	console.log(
+		`[TTS Google Stream] Processing ${chunks.length} chunk(s) for ${text.length} characters with model ${model}`,
+	);
+
+	// Calculate total estimated duration
+	const totalDuration = chunks.reduce(
+		(acc, chunk) => acc + estimateDuration(chunk),
+		0,
+	);
+
+	// Create async generator for audio chunks
+	async function* generateAudioChunks(): AsyncIterable<SpeechStreamChunk> {
+		for (let i = 0; i < chunks.length; i++) {
+			const chunk = chunks[i];
+			console.log(
+				`[TTS Google Stream] Generating chunk ${i + 1}/${chunks.length} (${chunk.length} chars)`,
+			);
+
+			// Generate audio using Gemini TTS
+			const response = await ai.models.generateContent({
+				model,
+				contents: chunk,
+				config: {
+					speechConfig: {
+						voiceConfig: {
+							prebuiltVoiceConfig: {
+								voiceName: voiceId,
+							},
+						},
+					},
+				},
+			});
+
+			// Extract audio data from response
+			const audioData =
+				response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+
+			if (!audioData) {
+				throw new Error(
+					`Google Gemini TTS returned no audio content for chunk ${i + 1}`,
+				);
+			}
+
+			// Convert base64 to buffer
+			const buffer = Buffer.from(audioData, "base64");
+
+			yield {
+				chunk: buffer,
+				index: i,
+				isLast: i === chunks.length - 1,
+			};
+
+			console.log(
+				`[TTS Google Stream] Chunk ${i + 1}/${chunks.length} generated (${buffer.length} bytes)`,
+			);
+		}
+	}
+
+	return {
+		metadata: {
+			estimatedDuration: totalDuration,
+			format: "pcm", // PCM 16bit 24kHz
+			totalChunks: chunks.length,
+		},
+		stream: generateAudioChunks(),
 	};
 }

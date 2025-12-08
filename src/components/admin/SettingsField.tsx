@@ -8,6 +8,7 @@ interface SettingsFieldProps {
 	error?: string;
 	allSettings?: AppSettings[];
 	getSettingValue?: (setting: AppSettings) => string;
+	onChangeMultiple?: (changes: Record<string, string>) => void;
 }
 
 export function SettingsField({
@@ -17,6 +18,7 @@ export function SettingsField({
 	error,
 	allSettings,
 	getSettingValue,
+	onChangeMultiple,
 }: SettingsFieldProps) {
 	const renderInput = () => {
 		switch (setting.value_type) {
@@ -193,7 +195,20 @@ export function SettingsField({
 								return (
 									<select
 										value={value}
-										onChange={(e) => onChange(e.target.value)}
+										onChange={(e) => {
+											const newProvider = e.target.value;
+											if (onChangeMultiple) {
+												const models = availableModels[newProvider] || [];
+												const firstModel = models[0] || "";
+												// Update both provider and model
+												onChangeMultiple({
+													"tts.provider": newProvider,
+													"tts.model": firstModel,
+												});
+											} else {
+												onChange(newProvider);
+											}
+										}}
 										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 									>
 										{providers.map((provider) => (
@@ -220,6 +235,52 @@ export function SettingsField({
 				const rules = setting.validation_rules as { enum?: string[] } | null;
 
 				if (rules?.enum) {
+					// Special handling for ai.provider - auto-update model when provider changes
+					if (
+						setting.key === "ai.provider" &&
+						allSettings &&
+						getSettingValue &&
+						onChangeMultiple
+					) {
+						const availableModelsSetting = allSettings.find(
+							(s) => s.key === "ai.available_models",
+						);
+
+						if (availableModelsSetting) {
+							return (
+								<select
+									value={value}
+									onChange={(e) => {
+										const newProvider = e.target.value;
+										try {
+											const availableModels = JSON.parse(
+												getSettingValue(availableModelsSetting),
+											) as Record<string, string[]>;
+											const models = availableModels[newProvider] || [];
+											const firstModel = models[0] || "";
+
+											// Update both provider and model
+											onChangeMultiple({
+												"ai.provider": newProvider,
+												"ai.model": firstModel,
+											});
+										} catch (error) {
+											console.error("Failed to parse available models:", error);
+											onChange(newProvider);
+										}
+									}}
+									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
+								>
+									{rules.enum.map((option) => (
+										<option key={option} value={option}>
+											{option || "(empty)"}
+										</option>
+									))}
+								</select>
+							);
+						}
+					}
+
 					return (
 						<select
 							value={value}
