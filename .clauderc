@@ -62,10 +62,13 @@ All AI agents MUST read and follow the coding practices defined in:
 # TypeScript & React Best Practices
 
 ## Core Principle: Local Types
+
 Define types where they're used, not in global type files. Each component should only know about its own data structure.
 
 ## Props: No Destructuring Rule
+
 Always use `props` object. Only destructure functions when required for dependency array stability.
+
 ```typescript
 // ❌ Never destructure props
 function UserCard({ name, email, onUpdate }: Props) { }
@@ -89,6 +92,7 @@ function UserCard(props: Props) {
 ## Avoid Shared Types
 
 Don't create central type definition files. Define types locally where they're used.
+
 ```typescript
 // ❌ Shared types in central file
 // types/user.ts
@@ -121,6 +125,7 @@ type User = Awaited<ReturnType<typeof getUser>>;
 ## Avoid Barrel Files (index.ts)
 
 Don't use index.ts files to re-export multiple modules. Import directly from source files.
+
 ```typescript
 // ❌ Barrel file pattern
 // components/index.ts
@@ -138,6 +143,7 @@ import { Card } from '@/components/Card';
 ```
 
 **Why avoid barrels?**
+
 - **Bundle size**: Imports entire barrel file, not tree-shakeable
 - **Slow builds**: Bundler must parse all re-exports
 - **Circular dependencies**: Easy to create import cycles
@@ -147,6 +153,7 @@ import { Card } from '@/components/Card';
 **Exception**: Barrel files are OK for small, tightly-coupled modules that are always used together (e.g., a UI component with its types and hooks in one folder).
 
 ## Type Definition Patterns
+
 ```typescript
 // Small components - inline types
 function Button(props: { label: string; onClick: () => void }) {
@@ -171,6 +178,7 @@ type User = Awaited<ReturnType<typeof getUser>>;
 ```
 
 ## Type Inference Over Explicit
+
 ```typescript
 // ❌ Redundant
 const items: string[] = ["a", "b", "c"];
@@ -183,6 +191,7 @@ const config = { timeout: 5000 } as const;
 ```
 
 ## Avoid Type Bloat
+
 ```typescript
 // ❌ Over-typed - passing entire nested object
 type Props = {
@@ -195,6 +204,7 @@ type Props = { userName: string };
 ```
 
 ## Zod for Runtime + Types
+
 ```typescript
 import { z } from 'zod';
 
@@ -208,6 +218,7 @@ const user = UserSchema.parse(apiResponse);
 ```
 
 ## Discriminated Unions for States
+
 ```typescript
 type State = 
   | { status: 'loading' }
@@ -224,6 +235,7 @@ function render(props: { state: State }) {
 ```
 
 ## Generic Components - Use Sparingly
+
 ```typescript
 // ✅ Good: Reusable data structures
 function List<T>(props: {
@@ -237,6 +249,7 @@ function List<T>(props: {
 ```
 
 ## API Layer Pattern
+
 ```typescript
 // api/users.ts
 export async function fetchUser(id: string) {
