@@ -28,21 +28,16 @@ const TOAST_STYLES = {
 	info: "bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-800 dark:text-blue-300",
 } as const;
 
-export function Toast({
-	message,
-	type = "success",
-	onClose,
-	duration = 5000,
-}: ToastProps) {
-	const Icon = TOAST_ICONS[type];
+export function Toast(props: ToastProps) {
+	const Icon = TOAST_ICONS[props.type || "success"];
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
-			onClose();
-		}, duration);
+			props.onClose();
+		}, props.duration || 5000);
 
 		return () => clearTimeout(timer);
-	}, [duration, onClose]);
+	}, [props.duration, props.onClose]);
 
 	return (
 		<div
@@ -50,15 +45,15 @@ export function Toast({
 				"fixed top-4 left-1/2 -translate-x-1/2 z-50 min-w-[320px] max-w-md",
 				"flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border-l-4",
 				"animate-in slide-in-from-top-5 duration-300",
-				TOAST_STYLES[type],
+				TOAST_STYLES[props.type || "success"],
 			)}
 			role="alert"
 		>
 			<Icon className="w-5 h-5 shrink-0" />
-			<p className="flex-1 text-sm font-medium">{message}</p>
+			<p className="flex-1 text-sm font-medium">{props.message}</p>
 			<button
 				type="button"
-				onClick={onClose}
+				onClick={props.onClose}
 				className="shrink-0 p-1 rounded hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
 				aria-label="Close notification"
 			>

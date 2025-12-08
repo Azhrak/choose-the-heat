@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Beaker, Loader2, Volume2, Wand2 } from "lucide-react";
+import { Beaker } from "lucide-react";
 import { useState } from "react";
 import { AdminLayout, NoPermissions } from "~/components/admin";
-import { ErrorMessage } from "~/components/ErrorMessage";
+import { AudioGenerationSection } from "~/components/admin/AudioGenerationSection";
+import { CurrentSettingsDisplay } from "~/components/admin/CurrentSettingsDisplay";
+import { TextGenerationSection } from "~/components/admin/TextGenerationSection";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Stack } from "~/components/ui/Stack";
@@ -12,8 +14,8 @@ import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 import { useTestAudioGenerationMutation } from "~/hooks/useTestAudioGenerationMutation";
 import { useTestTextGenerationMutation } from "~/hooks/useTestTextGenerationMutation";
 import type { AIProvider } from "~/lib/ai/client";
+import { TTS_VOICES } from "~/lib/constants/tts-voices";
 import type { TTSProvider } from "~/lib/tts/config";
-import { cn } from "~/lib/utils";
 
 export const Route = createFileRoute("/admin/test")({
 	component: TestPage,
@@ -139,34 +141,8 @@ function TestPage() {
 		console.error("Failed to parse TTS models:", error);
 	}
 
-	// Voice options (hardcoded based on provider)
-	const availableVoices: Record<TTSProvider, { id: string; name: string }[]> = {
-		openai: [
-			{ id: "alloy", name: "Alloy" },
-			{ id: "echo", name: "Echo" },
-			{ id: "fable", name: "Fable" },
-			{ id: "onyx", name: "Onyx" },
-			{ id: "nova", name: "Nova" },
-			{ id: "shimmer", name: "Shimmer" },
-		],
-		google: [
-			{ id: "Enceladus", name: "Enceladus (Male)" },
-			{ id: "Puck", name: "Puck (Male)" },
-			{ id: "Charon", name: "Charon (Male)" },
-			{ id: "Kore", name: "Kore (Female)" },
-			{ id: "Fenrir", name: "Fenrir (Male)" },
-			{ id: "Aoede", name: "Aoede (Female)" },
-		],
-		elevenlabs: [
-			{ id: "Rachel", name: "Rachel" },
-			{ id: "Domi", name: "Domi" },
-		],
-		azure: [
-			{ id: "en-US-JennyNeural", name: "Jenny (Female)" },
-			{ id: "en-US-GuyNeural", name: "Guy (Male)" },
-			{ id: "en-US-AriaNeural", name: "Aria (Female)" },
-		],
-	};
+	// Use centralized voice options from constants
+	const availableVoices = TTS_VOICES;
 
 	const handleGenerateText = () => {
 		if (!textPrompt.trim()) {
@@ -230,383 +206,58 @@ function TestPage() {
 					providers and models. Changes here don't affect app settings.
 				</Text>
 
-				{/* Current Settings Display */}
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					{/* Current AI Settings */}
-					<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
-						<Heading level="h3" className="mb-4">
-							Current AI Settings
-						</Heading>
-						<div className="space-y-3 text-sm">
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Provider:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentAIProvider || "Not set"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Model:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentAIModel || "Not set"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Temperature:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentTemperature || "0.7"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Max Tokens:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentMaxTokens || "2000"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Timeout:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentTimeout || "60"}s
-								</span>
-							</div>
-						</div>
-					</div>
+				<CurrentSettingsDisplay
+					aiSettings={{
+						provider: currentAIProvider,
+						model: currentAIModel,
+						temperature: currentTemperature,
+						maxTokens: currentMaxTokens,
+						timeout: currentTimeout,
+					}}
+					ttsSettings={{
+						provider: currentTTSProvider,
+						model: currentTTSModel,
+					}}
+				/>
 
-					{/* Current TTS Settings */}
-					<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
-						<Heading level="h3" className="mb-4">
-							Current TTS Settings
-						</Heading>
-						<div className="space-y-3 text-sm">
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Provider:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentTTSProvider || "Not set"}
-								</span>
-							</div>
-							<div className="flex justify-between">
-								<span className="text-slate-600 dark:text-gray-400">
-									Model:
-								</span>
-								<span className="font-medium text-slate-900 dark:text-gray-100">
-									{currentTTSModel || "Not set"}
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
+				<TextGenerationSection
+					selectedProvider={selectedAIProvider}
+					selectedModel={selectedAIModel}
+					availableModels={availableAIModels}
+					textPrompt={textPrompt}
+					generatedText={generatedText}
+					isGenerating={textGenerationMutation.isPending}
+					error={textGenerationMutation.error}
+					onProviderChange={(provider) => {
+						setSelectedAIProvider(provider);
+						setSelectedAIModel("");
+					}}
+					onModelChange={setSelectedAIModel}
+					onPromptChange={setTextPrompt}
+					onGenerate={handleGenerateText}
+					onGenerateRandom={handleGenerateRandomRomance}
+				/>
 
-				{/* Text Generation Section */}
-				<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
-					<Heading level="h2" className="mb-6">
-						Text Generation
-					</Heading>
-
-					<Stack gap="md">
-						{/* Provider & Model Selection */}
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div>
-								<label
-									htmlFor="ai-provider"
-									className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-								>
-									AI Provider
-								</label>
-								<select
-									id="ai-provider"
-									value={selectedAIProvider}
-									onChange={(e) => {
-										setSelectedAIProvider(e.target.value as AIProvider);
-										setSelectedAIModel("");
-									}}
-									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								>
-									<option value="openai">OpenAI</option>
-									<option value="google">Google</option>
-									<option value="anthropic">Anthropic</option>
-									<option value="mistral">Mistral</option>
-									<option value="xai">xAI</option>
-									<option value="openrouter">OpenRouter</option>
-								</select>
-							</div>
-
-							<div>
-								<label
-									htmlFor="ai-model"
-									className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-								>
-									Model
-								</label>
-								<select
-									id="ai-model"
-									value={selectedAIModel}
-									onChange={(e) => setSelectedAIModel(e.target.value)}
-									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								>
-									{availableAIModels[selectedAIProvider]?.map((model) => (
-										<option key={model} value={model}>
-											{model}
-										</option>
-									))}
-								</select>
-							</div>
-						</div>
-
-						{/* Prompt Input */}
-						<div>
-							<label
-								htmlFor="text-prompt"
-								className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-							>
-								Prompt
-							</label>
-							<textarea
-								id="text-prompt"
-								value={textPrompt}
-								onChange={(e) => setTextPrompt(e.target.value)}
-								rows={4}
-								placeholder="Enter your prompt here..."
-								className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-							/>
-						</div>
-
-						{/* Action Buttons */}
-						<div className="flex gap-3">
-							<button
-								type="button"
-								onClick={handleGenerateText}
-								disabled={
-									!textPrompt.trim() || textGenerationMutation.isPending
-								}
-								className={cn(
-									"flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-colors",
-									!textPrompt.trim() || textGenerationMutation.isPending
-										? "bg-slate-300 dark:bg-gray-700 text-slate-500 dark:text-gray-500 cursor-not-allowed"
-										: "bg-romance-600 hover:bg-romance-700 text-white",
-								)}
-							>
-								{textGenerationMutation.isPending ? (
-									<>
-										<Loader2 className="w-4 h-4 animate-spin" />
-										Generating...
-									</>
-								) : (
-									<>
-										<Wand2 className="w-4 h-4" />
-										Generate Text
-									</>
-								)}
-							</button>
-
-							<button
-								type="button"
-								onClick={handleGenerateRandomRomance}
-								disabled={textGenerationMutation.isPending}
-								className={cn(
-									"flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-colors",
-									textGenerationMutation.isPending
-										? "bg-slate-300 dark:bg-gray-700 text-slate-500 dark:text-gray-500 cursor-not-allowed"
-										: "bg-purple-600 hover:bg-purple-700 text-white",
-								)}
-							>
-								{textGenerationMutation.isPending ? (
-									<>
-										<Loader2 className="w-4 h-4 animate-spin" />
-										Generating...
-									</>
-								) : (
-									<>
-										<Beaker className="w-4 h-4" />
-										Random Romance Sample
-									</>
-								)}
-							</button>
-						</div>
-
-						{/* Error Display */}
-						{textGenerationMutation.isError && (
-							<ErrorMessage
-								message={
-									textGenerationMutation.error instanceof Error
-										? textGenerationMutation.error.message
-										: "Failed to generate text"
-								}
-							/>
-						)}
-
-						{/* Output Display */}
-						{generatedText && (
-							<div>
-								<div className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-									Generated Text
-								</div>
-								<div className="p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-lg">
-									<p className="text-slate-900 dark:text-gray-100 whitespace-pre-wrap">
-										{generatedText}
-									</p>
-								</div>
-							</div>
-						)}
-					</Stack>
-				</div>
-
-				{/* TTS Generation Section */}
-				<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
-					<Heading level="h2" className="mb-6">
-						Text-to-Speech Generation
-					</Heading>
-
-					<Stack gap="md">
-						{/* Provider, Model & Voice Selection */}
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-							<div>
-								<label
-									htmlFor="tts-provider"
-									className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-								>
-									TTS Provider
-								</label>
-								<select
-									id="tts-provider"
-									value={selectedTTSProvider}
-									onChange={(e) => {
-										setSelectedTTSProvider(e.target.value as TTSProvider);
-										setSelectedTTSModel("");
-										setSelectedVoice("");
-									}}
-									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								>
-									<option value="openai">OpenAI</option>
-									<option value="google">Google</option>
-									<option value="elevenlabs">ElevenLabs</option>
-									<option value="azure">Azure</option>
-								</select>
-							</div>
-
-							<div>
-								<label
-									htmlFor="tts-model"
-									className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-								>
-									Model
-								</label>
-								<select
-									id="tts-model"
-									value={selectedTTSModel}
-									onChange={(e) => setSelectedTTSModel(e.target.value)}
-									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								>
-									{availableTTSModels[selectedTTSProvider]?.map((model) => (
-										<option key={model} value={model}>
-											{model}
-										</option>
-									))}
-								</select>
-							</div>
-
-							<div>
-								<label
-									htmlFor="tts-voice"
-									className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-								>
-									Voice
-								</label>
-								<select
-									id="tts-voice"
-									value={selectedVoice}
-									onChange={(e) => setSelectedVoice(e.target.value)}
-									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								>
-									{availableVoices[selectedTTSProvider]?.map((voice) => (
-										<option key={voice.id} value={voice.id}>
-											{voice.name}
-										</option>
-									))}
-								</select>
-							</div>
-						</div>
-
-						{/* Text Input */}
-						<div>
-							<label
-								htmlFor="tts-text"
-								className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2"
-							>
-								Text to Convert
-							</label>
-							<textarea
-								id="tts-text"
-								value={ttsText}
-								onChange={(e) => setTtsText(e.target.value)}
-								rows={4}
-								placeholder="Enter text to convert to speech, or generate text above..."
-								className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-							/>
-						</div>
-
-						{/* Generate Button */}
-						<div>
-							<button
-								type="button"
-								onClick={handleGenerateAudio}
-								disabled={!ttsText.trim() || ttsGenerationMutation.isPending}
-								className={cn(
-									"flex items-center gap-2 px-6 py-2.5 rounded-lg font-medium transition-colors",
-									!ttsText.trim() || ttsGenerationMutation.isPending
-										? "bg-slate-300 dark:bg-gray-700 text-slate-500 dark:text-gray-500 cursor-not-allowed"
-										: "bg-romance-600 hover:bg-romance-700 text-white",
-								)}
-							>
-								{ttsGenerationMutation.isPending ? (
-									<>
-										<Loader2 className="w-4 h-4 animate-spin" />
-										Generating Audio...
-									</>
-								) : (
-									<>
-										<Volume2 className="w-4 h-4" />
-										Generate Audio
-									</>
-								)}
-							</button>
-						</div>
-
-						{/* Error Display */}
-						{ttsGenerationMutation.isError && (
-							<ErrorMessage
-								message={
-									ttsGenerationMutation.error instanceof Error
-										? ttsGenerationMutation.error.message
-										: "Failed to generate audio"
-								}
-							/>
-						)}
-
-						{/* Audio Player */}
-						{audioUrl && (
-							<div>
-								<div className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-									Generated Audio
-								</div>
-								{/* biome-ignore lint/a11y/useMediaCaption: Admin test page for audio generation testing */}
-								<audio controls src={audioUrl} className="w-full">
-									Your browser does not support the audio element.
-								</audio>
-							</div>
-						)}
-					</Stack>
-				</div>
+				<AudioGenerationSection
+					selectedProvider={selectedTTSProvider}
+					selectedModel={selectedTTSModel}
+					selectedVoice={selectedVoice}
+					availableModels={availableTTSModels}
+					availableVoices={availableVoices}
+					ttsText={ttsText}
+					audioUrl={audioUrl}
+					isGenerating={ttsGenerationMutation.isPending}
+					error={ttsGenerationMutation.error}
+					onProviderChange={(provider) => {
+						setSelectedTTSProvider(provider);
+						setSelectedTTSModel("");
+						setSelectedVoice("");
+					}}
+					onModelChange={setSelectedTTSModel}
+					onVoiceChange={setSelectedVoice}
+					onTextChange={setTtsText}
+					onGenerate={handleGenerateAudio}
+				/>
 			</Stack>
 		</AdminLayout>
 	);

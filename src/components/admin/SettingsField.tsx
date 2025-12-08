@@ -11,39 +11,33 @@ interface SettingsFieldProps {
 	onChangeMultiple?: (changes: Record<string, string>) => void;
 }
 
-export function SettingsField({
-	setting,
-	value,
-	onChange,
-	error,
-	allSettings,
-	getSettingValue,
-	onChangeMultiple,
-}: SettingsFieldProps) {
+export function SettingsField(props: SettingsFieldProps) {
 	const renderInput = () => {
-		switch (setting.value_type) {
+		switch (props.setting.value_type) {
 			case "boolean":
 				return (
 					<label className="flex items-center gap-3 cursor-pointer">
 						<div className="relative">
 							<input
 								type="checkbox"
-								checked={value === "true"}
-								onChange={(e) => onChange(e.target.checked ? "true" : "false")}
+								checked={props.value === "true"}
+								onChange={(e) =>
+									props.onChange(e.target.checked ? "true" : "false")
+								}
 								className="sr-only peer"
 							/>
 							<div className="w-11 h-6 bg-slate-200 dark:bg-gray-700 rounded-full peer peer-checked:bg-romance-600 transition-colors" />
 							<div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
 						</div>
 						<span className="text-sm text-slate-600 dark:text-gray-400">
-							{value === "true" ? "Enabled" : "Disabled"}
+							{props.value === "true" ? "Enabled" : "Disabled"}
 						</span>
 					</label>
 				);
 
 			case "number": {
 				// Check if there are min/max validation rules
-				const rules = setting.validation_rules as {
+				const rules = props.setting.validation_rules as {
 					min?: number;
 					max?: number;
 				} | null;
@@ -52,11 +46,11 @@ export function SettingsField({
 					<div className="space-y-2">
 						<input
 							type="number"
-							value={value}
-							onChange={(e) => onChange(e.target.value)}
+							value={props.value}
+							onChange={(e) => props.onChange(e.target.value)}
 							min={rules?.min}
 							max={rules?.max}
-							step={setting.key.includes("temperature") ? "0.1" : "1"}
+							step={props.setting.key.includes("temperature") ? "0.1" : "1"}
 							className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 						/>
 						{rules && (
@@ -70,31 +64,31 @@ export function SettingsField({
 
 			case "json":
 				// Use custom editor for available_models field
-				if (setting.key === "ai.available_models") {
+				if (props.setting.key === "ai.available_models") {
 					return (
 						<AvailableModelsEditor
-							value={value}
-							onChange={onChange}
-							error={error}
+							value={props.value}
+							onChange={props.onChange}
+							error={props.error}
 						/>
 					);
 				}
 
 				// Use custom editor for tts.available_models field
-				if (setting.key === "tts.available_models") {
+				if (props.setting.key === "tts.available_models") {
 					return (
 						<AvailableModelsEditor
-							value={value}
-							onChange={onChange}
-							error={error}
+							value={props.value}
+							onChange={props.onChange}
+							error={props.error}
 						/>
 					);
 				}
 
 				return (
 					<textarea
-						value={value}
-						onChange={(e) => onChange(e.target.value)}
+						value={props.value}
+						onChange={(e) => props.onChange(e.target.value)}
 						rows={10}
 						className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-romance-500"
 						placeholder='{"key": "value"}'
@@ -103,27 +97,31 @@ export function SettingsField({
 
 			default: {
 				// Special handling for ai.model - make it a dropdown based on selected provider
-				if (setting.key === "ai.model" && allSettings && getSettingValue) {
-					const providerSetting = allSettings.find(
+				if (
+					props.setting.key === "ai.model" &&
+					props.allSettings &&
+					props.getSettingValue
+				) {
+					const providerSetting = props.allSettings.find(
 						(s) => s.key === "ai.provider",
 					);
-					const availableModelsSetting = allSettings.find(
+					const availableModelsSetting = props.allSettings.find(
 						(s) => s.key === "ai.available_models",
 					);
 
 					if (providerSetting && availableModelsSetting) {
-						const currentProvider = getSettingValue(providerSetting);
+						const currentProvider = props.getSettingValue(providerSetting);
 						try {
 							const availableModels = JSON.parse(
-								getSettingValue(availableModelsSetting),
+								props.getSettingValue(availableModelsSetting),
 							) as Record<string, string[]>;
 							const models = availableModels[currentProvider] || [];
 
 							if (models.length > 0) {
 								return (
 									<select
-										value={value}
-										onChange={(e) => onChange(e.target.value)}
+										value={props.value}
+										onChange={(e) => props.onChange(e.target.value)}
 										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 									>
 										{models.sort().map((model) => (
@@ -141,27 +139,31 @@ export function SettingsField({
 				}
 
 				// Special handling for tts.model - make it a dropdown based on selected provider
-				if (setting.key === "tts.model" && allSettings && getSettingValue) {
-					const providerSetting = allSettings.find(
+				if (
+					props.setting.key === "tts.model" &&
+					props.allSettings &&
+					props.getSettingValue
+				) {
+					const providerSetting = props.allSettings.find(
 						(s) => s.key === "tts.provider",
 					);
-					const availableModelsSetting = allSettings.find(
+					const availableModelsSetting = props.allSettings.find(
 						(s) => s.key === "tts.available_models",
 					);
 
 					if (providerSetting && availableModelsSetting) {
-						const currentProvider = getSettingValue(providerSetting);
+						const currentProvider = props.getSettingValue(providerSetting);
 						try {
 							const availableModels = JSON.parse(
-								getSettingValue(availableModelsSetting),
+								props.getSettingValue(availableModelsSetting),
 							) as Record<string, string[]>;
 							const models = availableModels[currentProvider] || [];
 
 							if (models.length > 0) {
 								return (
 									<select
-										value={value}
-										onChange={(e) => onChange(e.target.value)}
+										value={props.value}
+										onChange={(e) => props.onChange(e.target.value)}
 										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 									>
 										{models.sort().map((model) => (
@@ -179,34 +181,38 @@ export function SettingsField({
 				}
 
 				// Special handling for tts.provider - make it a dropdown based on available providers
-				if (setting.key === "tts.provider" && allSettings && getSettingValue) {
-					const availableModelsSetting = allSettings.find(
+				if (
+					props.setting.key === "tts.provider" &&
+					props.allSettings &&
+					props.getSettingValue
+				) {
+					const availableModelsSetting = props.allSettings.find(
 						(s) => s.key === "tts.available_models",
 					);
 
 					if (availableModelsSetting) {
 						try {
 							const availableModels = JSON.parse(
-								getSettingValue(availableModelsSetting),
+								props.getSettingValue(availableModelsSetting),
 							) as Record<string, string[]>;
 							const providers = Object.keys(availableModels).sort();
 
 							if (providers.length > 0) {
 								return (
 									<select
-										value={value}
+										value={props.value}
 										onChange={(e) => {
 											const newProvider = e.target.value;
-											if (onChangeMultiple) {
+											if (props.onChangeMultiple) {
 												const models = availableModels[newProvider] || [];
 												const firstModel = models[0] || "";
 												// Update both provider and model
-												onChangeMultiple({
+												props.onChangeMultiple({
 													"tts.provider": newProvider,
 													"tts.model": firstModel,
 												});
 											} else {
-												onChange(newProvider);
+												props.onChange(newProvider);
 											}
 										}}
 										className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
@@ -227,46 +233,50 @@ export function SettingsField({
 
 				// Check if this is a multi-line text field based on key patterns
 				const isMultiline =
-					setting.key.includes("rules") ||
-					setting.key.includes("description") ||
-					value.includes("\n");
+					props.setting.key.includes("rules") ||
+					props.setting.key.includes("description") ||
+					props.value.includes("\n");
 
 				// Check if there's an enum validation
-				const rules = setting.validation_rules as { enum?: string[] } | null;
+				const rules = props.setting.validation_rules as {
+					enum?: string[];
+				} | null;
 
 				if (rules?.enum) {
 					// Special handling for ai.provider - auto-update model when provider changes
 					if (
-						setting.key === "ai.provider" &&
-						allSettings &&
-						getSettingValue &&
-						onChangeMultiple
+						props.setting.key === "ai.provider" &&
+						props.allSettings &&
+						props.getSettingValue &&
+						props.onChangeMultiple
 					) {
-						const availableModelsSetting = allSettings.find(
+						const availableModelsSetting = props.allSettings.find(
 							(s) => s.key === "ai.available_models",
 						);
 
 						if (availableModelsSetting) {
 							return (
 								<select
-									value={value}
+									value={props.value}
 									onChange={(e) => {
 										const newProvider = e.target.value;
 										try {
-											const availableModels = JSON.parse(
-												getSettingValue(availableModelsSetting),
-											) as Record<string, string[]>;
-											const models = availableModels[newProvider] || [];
-											const firstModel = models[0] || "";
+											if (props.getSettingValue && props.onChangeMultiple) {
+												const availableModels = JSON.parse(
+													props.getSettingValue(availableModelsSetting),
+												) as Record<string, string[]>;
+												const models = availableModels[newProvider] || [];
+												const firstModel = models[0] || "";
 
-											// Update both provider and model
-											onChangeMultiple({
-												"ai.provider": newProvider,
-												"ai.model": firstModel,
-											});
+												// Update both provider and model
+												props.onChangeMultiple({
+													"ai.provider": newProvider,
+													"ai.model": firstModel,
+												});
+											}
 										} catch (error) {
 											console.error("Failed to parse available models:", error);
-											onChange(newProvider);
+											props.onChange(newProvider);
 										}
 									}}
 									className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
@@ -283,8 +293,8 @@ export function SettingsField({
 
 					return (
 						<select
-							value={value}
-							onChange={(e) => onChange(e.target.value)}
+							value={props.value}
+							onChange={(e) => props.onChange(e.target.value)}
 							className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 						>
 							{rules.enum.map((option) => (
@@ -299,9 +309,9 @@ export function SettingsField({
 				if (isMultiline) {
 					return (
 						<textarea
-							value={value}
-							onChange={(e) => onChange(e.target.value)}
-							rows={value.split("\n").length + 2}
+							value={props.value}
+							onChange={(e) => props.onChange(e.target.value)}
+							rows={props.value.split("\n").length + 2}
 							className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 						/>
 					);
@@ -309,9 +319,9 @@ export function SettingsField({
 
 				return (
 					<input
-						type={setting.is_sensitive ? "password" : "text"}
-						value={value}
-						onChange={(e) => onChange(e.target.value)}
+						type={props.setting.is_sensitive ? "password" : "text"}
+						value={props.value}
+						onChange={(e) => props.onChange(e.target.value)}
 						className="w-full px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
 					/>
 				);
@@ -324,23 +334,23 @@ export function SettingsField({
 			<div className="flex items-start justify-between">
 				<div className="flex-1">
 					<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
-						{setting.key.split(".").pop()?.replace(/_/g, " ")}
-						{setting.is_sensitive && (
+						{props.setting.key.split(".").pop()?.replace(/_/g, " ")}
+						{props.setting.is_sensitive && (
 							<span className="ml-2 text-xs text-slate-500 dark:text-gray-500">
 								(sensitive)
 							</span>
 						)}
 					</div>
-					{setting.description && (
+					{props.setting.description && (
 						<p className="mt-1 text-sm text-slate-600 dark:text-gray-400">
-							{setting.description}
+							{props.setting.description}
 						</p>
 					)}
 				</div>
-				{setting.default_value && (
+				{props.setting.default_value && (
 					<button
 						type="button"
-						onClick={() => onChange(setting.default_value || "")}
+						onClick={() => props.onChange(props.setting.default_value || "")}
 						className="text-xs text-romance-600 dark:text-romance-400 hover:underline"
 					>
 						Reset to default
@@ -350,15 +360,16 @@ export function SettingsField({
 
 			{renderInput()}
 
-			{error && (
-				<p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+			{props.error && (
+				<p className="text-sm text-red-600 dark:text-red-400">{props.error}</p>
 			)}
 
-			{setting.default_value && value !== setting.default_value && (
-				<p className="text-xs text-slate-500 dark:text-gray-500">
-					Default: {setting.default_value}
-				</p>
-			)}
+			{props.setting.default_value &&
+				props.value !== props.setting.default_value && (
+					<p className="text-xs text-slate-500 dark:text-gray-500">
+						Default: {props.setting.default_value}
+					</p>
+				)}
 		</div>
 	);
 }

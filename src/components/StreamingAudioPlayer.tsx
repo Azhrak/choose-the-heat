@@ -25,17 +25,17 @@ interface StreamingAudioPlayerProps {
 	className?: string;
 }
 
+type StreamingState =
+	| { status: "initializing"; progress: 0 }
+	| { status: "streaming"; progress: number }
+	| { status: "ready"; progress: 100 }
+	| { status: "error"; error: string };
+
 /**
  * Audio player that streams audio chunks in real-time using MediaSource API
  * Starts playback before all chunks are downloaded
  */
-export function StreamingAudioPlayer({
-	storyId,
-	sceneNumber,
-	onClose,
-	onComplete,
-	className = "",
-}: StreamingAudioPlayerProps) {
+export function StreamingAudioPlayer(props: StreamingAudioPlayerProps) {
 	const player = useStreamingAudioPlayer({
 		onPlaybackStart: () => {
 			console.log("[Streaming Player] Playback started");
@@ -45,22 +45,22 @@ export function StreamingAudioPlayer({
 		},
 	});
 
-	const [status, setStatus] = useState<
-		"initializing" | "streaming" | "ready" | "error"
-	>("initializing");
-	const [streamProgress, setStreamProgress] = useState(0);
+	const [streamingState, setStreamingState] = useState<StreamingState>({
+		status: "initializing",
+		progress: 0,
+	});
 	const abortControllerRef = useRef<AbortController | null>(null);
 	const audioChunksRef = useRef<Uint8Array[]>([]); // Keep for fallback blob creation
 
 	// Start streaming
 	const startStreaming = useCallback(async () => {
 		try {
-			setStatus("initializing");
+			setStreamingState({ status: "initializing", progress: 0 });
 
 			abortControllerRef.current = new AbortController();
 
 			const response = await fetch(
-				`/api/stories/${storyId}/scene/${sceneNumber}/audio-stream`,
+				`/api/stories/${props.storyId}/scene/${props.sceneNumber}/audio-stream`,
 				{
 					signal: abortControllerRef.current.signal,
 				},
@@ -81,7 +81,7 @@ export function StreamingAudioPlayer({
 			let mediaSourceInitialized = false;
 			let receivedChunks = 0;
 
-			setStatus("streaming");
+			setStreamingState({ status: "streaming", progress: 0 });
 
 			while (true) {
 				const { done, value } = await reader.read();
@@ -140,7 +140,10 @@ export function StreamingAudioPlayer({
 
 						receivedChunks++;
 						if (metadata?.totalChunks) {
-							setStreamProgress((receivedChunks / metadata.totalChunks) * 100);
+							setStreamingState({
+								status: "streaming",
+								progress: (receivedChunks / metadata.totalChunks) * 100,
+							});
 						}
 
 						if (chunk.isLast) {
@@ -196,12 +199,12 @@ export function StreamingAudioPlayer({
 				const audioUrl = URL.createObjectURL(blob);
 
 				// Notify parent with blob URL
-				if (onComplete) {
-					onComplete(audioUrl);
+				if (props.onComplete) {
+					props.onComplete(audioUrl);
 				}
 			}
 
-			setStatus("ready");
+			setStreamingState({ status: "ready", progress: 100 });
 			console.log(
 				`[Streaming Player] Complete: ${audioChunksRef.current.length} chunks`,
 			);
@@ -213,12 +216,15 @@ export function StreamingAudioPlayer({
 			}
 
 			console.error("[Streaming Player] Error:", error);
-			setStatus("error");
+			setStreamingState({
+				status: "error",
+				error: error instanceof Error ? error.message : "Unknown error",
+			});
 			if (error instanceof Error) {
 				alert(`Streaming error: ${error.message}`);
 			}
 		}
-	}, [storyId, sceneNumber, player, onComplete]);
+	}, [props.storyId, props.sceneNumber, player, props.onComplete]);
 
 	// Start streaming exactly once on mount
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <run only on mount>
@@ -248,11 +254,16 @@ export function StreamingAudioPlayer({
 	const progress =
 		player.duration > 0 ? (player.currentTime / player.duration) * 100 : 0;
 
-	if (status === "error" || player.error) {
+	if (streamingState.status === "error" || player.error) {
 		return (
-			<div className={`bg-red-50 dark:bg-red-900/20 p-4 rounded ${className}`}>
+			<div
+				className={`bg-red-50 dark:bg-red-900/20 p-4 rounded ${props.className}`}
+			>
 				<div className="text-red-800 dark:text-red-200">
-					Streaming error: {player.error || "Unknown error"}
+					Streaming error:{" "}
+					{streamingState.status === "error"
+						? streamingState.error
+						: player.error || "Unknown error"}
 				</div>
 			</div>
 		);
@@ -260,99 +271,105 @@ export function StreamingAudioPlayer({
 
 	return (
 		<div
-			className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg ${className}`}
+			className={`bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg ${props.className}`}
 		>
-			{status === "streaming" && (
-				<div className="mb-2 text-sm text-gray-600 dark:text-gray-400">
-					Streaming... {Math.round(streamProgress)}%
+			{streamingState.status === "streaming" && (
+				<div className="text-sm text-gray-600 dark:text-gray-400">
+					Streaming... {Math.round(streamingState.progress)}%
 				</div>
 			)}
 
-			<div className="flex items-center gap-4">
-				{/* Play/Pause Button */}
-				<button
-					type="button"
-					onClick={player.isPlaying ? player.pause : player.play}
-					disabled={!player.isReady && status !== "ready"}
-					className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
-					aria-label={player.isPlaying ? "Pause" : "Play"}
-				>
-					{player.isPlaying ? (
-						<Pause className="w-6 h-6 text-gray-800 dark:text-gray-200" />
-					) : (
-						<Play className="w-6 h-6 text-gray-800 dark:text-gray-200" />
-					)}
-				</button>
-
-				{/* Progress Bar */}
-				<div className="flex-1">
-					<div className="flex items-center gap-2 mb-1">
-						<span className="text-xs text-gray-600 dark:text-gray-400">
-							{formatTime(player.currentTime)}
-						</span>
-						<div className="flex-1">
-							<input
-								type="range"
-								min={0}
-								max={player.duration || 100}
-								value={player.currentTime}
-								onChange={(e) => player.seek(Number.parseFloat(e.target.value))}
-								disabled={!player.isReady && status !== "ready"}
-								className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer disabled:opacity-50"
-								style={{
-									background: `linear-gradient(to right, rgb(219 39 119) 0%, rgb(219 39 119) ${progress}%, rgb(229 231 235) ${progress}%, rgb(229 231 235) 100%)`,
-								}}
-							/>
-						</div>
-						<span className="text-xs text-gray-600 dark:text-gray-400">
-							{formatTime(player.duration)}
-						</span>
-					</div>
-				</div>
-
-				{/* Volume Control */}
-				<div className="flex items-center gap-2">
-					<Volume2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-					<input
-						type="range"
-						min={0}
-						max={1}
-						step={0.1}
-						value={player.volume}
-						onChange={(e) =>
-							player.setVolume(Number.parseFloat(e.target.value))
-						}
-						className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
-					/>
-				</div>
-
-				{/* Playback Speed */}
-				<select
-					value={player.playbackRate}
-					onChange={(e) =>
-						player.setPlaybackRate(Number.parseFloat(e.target.value))
-					}
-					className="text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded px-2 py-1 cursor-pointer"
-				>
-					<option value={0.5}>0.5x</option>
-					<option value={0.75}>0.75x</option>
-					<option value={1}>1x</option>
-					<option value={1.25}>1.25x</option>
-					<option value={1.5}>1.5x</option>
-					<option value={2}>2x</option>
-				</select>
-
-				{/* Close Button */}
-				{onClose && (
+			<div className="flex flex-col gap-2">
+				<div className="flex items-center gap-4">
+					{/* Play/Pause Button */}
 					<button
 						type="button"
-						onClick={onClose}
-						className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-						aria-label="Close player"
+						onClick={player.isPlaying ? player.pause : player.play}
+						disabled={!player.isReady && streamingState.status !== "ready"}
+						className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+						aria-label={player.isPlaying ? "Pause" : "Play"}
 					>
-						<X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+						{player.isPlaying ? (
+							<Pause className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+						) : (
+							<Play className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+						)}
 					</button>
-				)}
+
+					{/* Progress Bar */}
+					<div className="flex-1">
+						<div className="flex items-center gap-2">
+							<span className="text-xs text-gray-600 dark:text-gray-400">
+								{formatTime(player.currentTime)}
+							</span>
+							<div className="flex-1">
+								<input
+									type="range"
+									min={0}
+									max={player.duration || 100}
+									value={player.currentTime}
+									onChange={(e) =>
+										player.seek(Number.parseFloat(e.target.value))
+									}
+									disabled={
+										!player.isReady && streamingState.status !== "ready"
+									}
+									className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer disabled:opacity-50"
+									style={{
+										background: `linear-gradient(to right, rgb(219 39 119) 0%, rgb(219 39 119) ${progress}%, rgb(229 231 235) ${progress}%, rgb(229 231 235) 100%)`,
+									}}
+								/>
+							</div>
+							<span className="text-xs text-gray-600 dark:text-gray-400">
+								{formatTime(player.duration)}
+							</span>
+						</div>
+					</div>
+
+					{/* Volume Control */}
+					<div className="flex items-center gap-2">
+						<Volume2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+						<input
+							type="range"
+							min={0}
+							max={1}
+							step={0.1}
+							value={player.volume}
+							onChange={(e) =>
+								player.setVolume(Number.parseFloat(e.target.value))
+							}
+							className="w-20 h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+						/>
+					</div>
+
+					{/* Playback Speed */}
+					<select
+						value={player.playbackRate}
+						onChange={(e) =>
+							player.setPlaybackRate(Number.parseFloat(e.target.value))
+						}
+						className="text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded px-2 py-1 cursor-pointer"
+					>
+						<option value={0.5}>0.5x</option>
+						<option value={0.75}>0.75x</option>
+						<option value={1}>1x</option>
+						<option value={1.25}>1.25x</option>
+						<option value={1.5}>1.5x</option>
+						<option value={2}>2x</option>
+					</select>
+
+					{/* Close Button */}
+					{props.onClose && (
+						<button
+							type="button"
+							onClick={props.onClose}
+							className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+							aria-label="Close player"
+						>
+							<X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);
