@@ -12,7 +12,7 @@
 | Property | Value |
 |----------|-------|
 | **Feature Status** | Backend ✅ Complete, Frontend 🚧 In Progress |
-| **Last Updated** | 2025-12-09 |
+| **Last Updated** | 2025-12-10 |
 | **Related Features** | [Authentication](./authentication.md), [AI Story Generation](./ai-story-generation.md), [Story Experience](./story-experience.md), [Text-to-Speech](./text-to-speech.md) |
 | **Primary Maintainer** | Core Team |
 | **API Stability** | Backend Stable, Frontend Beta |
@@ -34,6 +34,7 @@ The admin dashboard provides role-based access control for managing the Choose t
 - **Role-Based Access Control**: Three-tier permission system (User, Editor, Admin)
 - **Template Management**: Create, edit, publish, archive, and delete novel templates
 - **User Management**: Admin-only user administration with role assignment
+- **API Key Management**: Secure encrypted storage and management of AI provider API keys (Admin only)
 - **Audit Logging**: Comprehensive tracking of all admin and editor actions
 - **Dashboard Statistics**: Role-specific system metrics and insights
 - **Test Interface**: Admin testing page for AI text generation and TTS audio
@@ -58,6 +59,12 @@ The admin dashboard provides role-based access control for managing the Choose t
    - Editor views template statistics
    - Admin monitors user growth metrics
 
+4. **API Key Management**
+   - Admin adds new AI provider API key
+   - Admin tests existing API key for validity
+   - Admin rotates expired API keys
+   - Admin removes unused provider keys
+
 <!-- UPDATE TRIGGER: Add new use cases when feature scope expands -->
 
 ---
@@ -71,6 +78,7 @@ The admin dashboard provides role-based access control for managing the Choose t
 | Admin Dashboard | `/admin` route (to be implemented) | Editor, Admin |
 | Template Management | `/admin/templates` (to be implemented) | Editor, Admin |
 | User Management | `/admin/users` (to be implemented) | Admin |
+| API Key Management | [/admin/settings](../../src/routes/admin/settings/index.tsx) (API Keys tab) | Admin |
 | Test Page | [/admin/test](../../src/routes/admin/test.tsx) | Admin |
 | Audit Logs | `/admin/audit` (to be implemented) | Admin |
 
@@ -97,12 +105,18 @@ The admin dashboard provides role-based access control for managing the Choose t
    - User actions: View users, edit details, assign roles, delete users
    - Visual location: `/admin/users`
 
-4. **Test Page** ([src/routes/admin/test.tsx](../../src/routes/admin/test.tsx))
+4. **API Key Management Interface** ([src/routes/admin/settings/index.tsx](../../src/routes/admin/settings/index.tsx))
+   - Purpose: Secure management of AI provider API keys
+   - User actions: Add/edit keys, test validation, view status, delete keys
+   - Visual location: `/admin/settings` (API Keys tab)
+   - Features: Encrypted storage, automatic validation, status indicators
+
+5. **Test Page** ([src/routes/admin/test.tsx](../../src/routes/admin/test.tsx))
    - Purpose: Test AI text generation and TTS audio generation
    - User actions: Select providers, generate text/audio, play audio
    - Visual location: `/admin/test`
 
-5. **Audit Log Viewer** (Planned)
+6. **Audit Log Viewer** (Planned)
    - Purpose: View system audit logs with filtering
    - User actions: Filter by entity type, user, action
    - Visual location: `/admin/audit`
@@ -179,6 +193,7 @@ graph LR
 
 | Component | Path | Responsibility |
 |-----------|------|----------------|
+| Admin Settings Page | [src/routes/admin/settings/index.tsx](../../src/routes/admin/settings/index.tsx) | Admin settings with API Keys tab |
 | Admin Test Page | [src/routes/admin/test.tsx](../../src/routes/admin/test.tsx) | AI and TTS testing interface |
 | Admin Layout | TBD | Admin panel layout wrapper |
 | Template List | TBD | Template management UI |
@@ -201,6 +216,9 @@ graph LR
 | Get User | GET | [src/routes/api/admin/users/$id.ts](../../src/routes/api/admin/users/$id.ts) | Get single user (Admin only) |
 | Update User | PATCH | [src/routes/api/admin/users/$id.ts](../../src/routes/api/admin/users/$id.ts) | Update user (Admin only) |
 | Delete User | DELETE | [src/routes/api/admin/users/$id.ts](../../src/routes/api/admin/users/$id.ts) | Delete user (Admin only) |
+| List API Keys | GET | [src/routes/api/admin/api-keys/index.ts](../../src/routes/api/admin/api-keys/index.ts) | Get all API keys metadata (Admin only) |
+| Update API Key | PUT | [src/routes/api/admin/api-keys/$provider.ts](../../src/routes/api/admin/api-keys/$provider.ts) | Update/create key with validation (Admin only) |
+| Delete API Key | DELETE | [src/routes/api/admin/api-keys/$provider.ts](../../src/routes/api/admin/api-keys/$provider.ts) | Delete API key (Admin only) |
 | Dashboard Stats | GET | [src/routes/api/admin/dashboard.ts](../../src/routes/api/admin/dashboard.ts) | Get statistics (Editor+) |
 | Audit Logs | GET | [src/routes/api/admin/audit-logs.ts](../../src/routes/api/admin/audit-logs.ts) | Get audit logs (Admin only) |
 
@@ -255,6 +273,28 @@ graph LR
   // - (user_id, created_at)
   // - (entity_type, entity_id, created_at)
   // - (created_at) for cleanup queries
+}
+```
+
+**api_keys Table**:
+
+```typescript
+{
+  id: uuid (primary key)
+  provider: varchar(50) unique        // 'openai' | 'google' | 'anthropic' | 'mistral' | 'xai' | 'openrouter' | 'google_tts'
+  encrypted_key: text                 // AES-256-GCM encrypted API key
+  iv: varchar(32)                     // Initialization vector for decryption
+  encryption_version: integer         // Version for future key rotation (default: 1)
+  last_tested_at: timestamp (nullable)
+  test_status: varchar(20)            // 'valid' | 'invalid' | 'untested'
+  test_error: text (nullable)
+  created_at: timestamp
+  updated_at: timestamp
+  created_by: uuid (foreign key → users, nullable)
+  updated_by: uuid (foreign key → users, nullable)
+
+  // Indexes:
+  // - provider (unique)
 }
 ```
 
@@ -713,10 +753,133 @@ graph LR
 
 **Users**: `update_user`, `update_user_role`, `delete_user`
 
+**API Keys**: `api_key_updated`, `api_key_deleted`
+
 **Error Codes**:
 
 - `401`: User not authenticated
 - `403`: User is not admin
+- `500`: Database error
+
+<!-- UPDATE TRIGGER: Update when API signatures change -->
+
+#### GET /api/admin/api-keys
+
+**Status**: ✅ Active in Production
+
+**Purpose**: List all API keys metadata (Admin only)
+
+**Authorization**: Admin role required
+
+**Response**:
+
+```typescript
+{
+  keys: Array<{
+    id: string;
+    provider: "openai" | "google" | "anthropic" | "mistral" | "xai" | "openrouter" | "google_tts";
+    encryptedKey: string;          // Always "******" or empty (never exposed)
+    testStatus: "valid" | "invalid" | "untested" | null;
+    testError: string | null;
+    lastTestedAt: string | null;
+    updatedAt: string;
+  }>;
+}
+```
+
+**Error Codes**:
+
+- `401`: User not authenticated
+- `403`: User is not admin
+- `500`: Database error
+
+<!-- UPDATE TRIGGER: Update when API signatures change -->
+
+#### PUT /api/admin/api-keys/:provider
+
+**Status**: ✅ Active in Production
+
+**Purpose**: Update/create API key for a specific provider (Admin only)
+
+**Authorization**: Admin role required
+
+**URL Parameters**:
+
+- `provider`: AI provider identifier ("openai" | "google" | "anthropic" | "mistral" | "xai" | "openrouter" | "google_tts")
+
+**Request Body**:
+
+```typescript
+{
+  apiKey: string;  // Provider API key (will be encrypted)
+}
+```
+
+**Validation Process**:
+
+1. Trims whitespace from API key
+2. Validates key with provider API (makes test call)
+3. If valid: Encrypts with AES-256-GCM and stores
+4. If invalid: Returns error without storing
+5. Creates audit log entry
+
+**Response**:
+
+```typescript
+{
+  success: true
+}
+```
+
+**Error Codes**:
+
+- `400`: Invalid request body or API key failed validation
+- `401`: User not authenticated
+- `403`: User is not admin
+- `500`: Database or encryption error
+
+**Example Validation Errors**:
+
+```json
+{
+  "error": "Invalid API key - authentication failed"
+}
+```
+
+<!-- UPDATE TRIGGER: Update when API signatures change -->
+
+#### DELETE /api/admin/api-keys/:provider
+
+**Status**: ✅ Active in Production
+
+**Purpose**: Delete API key for a specific provider (Admin only)
+
+**Authorization**: Admin role required
+
+**URL Parameters**:
+
+- `provider`: AI provider identifier
+
+**Response**:
+
+```typescript
+{
+  success: true
+}
+```
+
+**Notes**:
+
+- Sets `encrypted_key` and `iv` to empty strings (soft delete)
+- Creates audit log entry
+- Cannot be undone (key must be re-entered)
+
+**Error Codes**:
+
+- `400`: Invalid provider
+- `401`: User not authenticated
+- `403`: User is not admin
+- `404`: API key not found
 - `500`: Database error
 
 <!-- UPDATE TRIGGER: Update when API signatures change -->
@@ -773,9 +936,17 @@ src/
 ADMIN_EMAIL=admin@example.com         # Email for initial admin account
 ADMIN_PASSWORD=your-secure-password   # Password for initial admin account
 ADMIN_NAME=Admin User                 # Display name for admin
+
+# API Key Management (required for encrypted storage)
+ENCRYPTION_KEY=<base64-encoded-32-byte-key>  # Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 ```
 
-**Important**: Change admin password immediately after first login!
+**Important**:
+
+- Change admin password immediately after first login!
+- Keep `ENCRYPTION_KEY` secure and never commit to version control
+- If `ENCRYPTION_KEY` is lost, all stored API keys must be re-entered
+- Use the same `ENCRYPTION_KEY` across all environments for the same database
 
 <!-- UPDATE TRIGGER: Update when new environment variables are added or removed -->
 
@@ -1207,7 +1378,14 @@ pnpm logs | grep Admin
    - Use different credentials for production
    - Rotate admin passwords regularly
 
-5. **HTTPS in Production**
+5. **API Key Security**
+   - All API keys encrypted at rest using AES-256-GCM
+   - Encryption key stored separately in `ENCRYPTION_KEY` environment variable
+   - Back up encryption key in secure password manager
+   - Rotate API keys regularly through admin interface
+   - Never log or expose API keys in plaintext
+
+6. **HTTPS in Production**
    - Always use HTTPS in production
    - Session cookies have `Secure` flag enabled
    - Use HSTS headers
@@ -1240,6 +1418,16 @@ pnpm logs | grep Admin
 - Sessions expire after 30 days of inactivity
 - Secure and HttpOnly flags on session cookies
 - CSRF protection (if implemented)
+
+**API Key Encryption:**
+
+- AES-256-GCM authenticated encryption for all API keys at rest
+- Unique initialization vector (IV) per encryption operation
+- 16-byte authentication tag prevents tampering
+- Keys never exposed in API responses (always masked as "******")
+- Keys never logged in plaintext
+- Automatic validation before storage
+- Admin-only access to all key operations
 
 ---
 
