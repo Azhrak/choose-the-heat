@@ -1,3 +1,13 @@
+/**
+ * Text-to-Speech Client - Text-to-Speech Feature
+ *
+ * Multi-provider TTS client supporting OpenAI, Google Cloud TTS, ElevenLabs, and Azure.
+ * Handles both streaming and non-streaming audio generation with intelligent text chunking.
+ *
+ * @see docs/features/text-to-speech.md - Complete feature documentation
+ * @update-trigger When adding/removing TTS providers or changing generation logic, update the feature doc
+ */
+
 import type { TTSConfig, TTSProvider } from "./config";
 import {
 	generateSpeechAzure,

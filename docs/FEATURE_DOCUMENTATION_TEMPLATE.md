@@ -43,7 +43,7 @@
 1. **Use Case 1**: [User scenario]
    - User action: [what user does]
    - System response: [what happens]
-   
+
 2. **Use Case 2**: [Another scenario]
    - User action: [what user does]
    - System response: [what happens]

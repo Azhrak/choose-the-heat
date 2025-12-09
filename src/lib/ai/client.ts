@@ -1,3 +1,13 @@
+/**
+ * Multi-Provider AI Client - AI Story Generation Feature
+ *
+ * Initializes and manages AI provider clients (OpenAI, Google Gemini, Anthropic Claude, Mistral, xAI, OpenRouter).
+ * Handles API key retrieval from encrypted storage and provider-specific configuration.
+ *
+ * @see docs/features/ai-story-generation.md - Complete feature documentation
+ * @update-trigger When adding/removing providers or changing initialization logic, update the feature doc
+ */
+
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";

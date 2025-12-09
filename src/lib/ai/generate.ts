@@ -1,3 +1,13 @@
+/**
+ * Scene Generation Logic - AI Story Generation Feature
+ *
+ * Core scene generation with caching, context management, and metadata parsing.
+ * Implements token-efficient context using scene metadata summaries (97% reduction).
+ *
+ * @see docs/features/ai-story-generation.md - Complete feature documentation
+ * @update-trigger When modifying generation logic, caching, metadata parsing, or context building, update the feature doc
+ */
+
 import {
 	cacheScene,
 	getCachedScene,

@@ -18,6 +18,7 @@
     "lint:md": "markdownlint-cli2",
     "lint:md:fix": "markdownlint-cli2 --fix",
     "format": "biome format --write .",
+    "docs:validate": "tsx scripts/validate-docs.ts",
     "db:migrate": "tsx --env-file=.env src/lib/db/migrate.ts",
     "db:codegen": "kysely-codegen --out-file=src/lib/db/types.ts",
     "db:seed": "tsx --env-file=.env src/lib/db/seed.ts",

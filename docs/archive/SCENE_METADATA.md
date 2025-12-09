@@ -1,5 +1,17 @@
 # Scene Metadata System
 
+> **⚠️ ARCHIVED DOCUMENTATION**
+>
+> This file has been archived and merged into the new feature-centric documentation structure.
+>
+> **Please refer to:** [features/ai-story-generation.md](../features/ai-story-generation.md)
+>
+> The scene metadata content is now part of the AI Story Generation feature documentation with enhanced detail and context.
+>
+> **Archived on:** 2025-12-09
+
+---
+
 ## Overview
 
 The Scene Metadata system captures structured information about each generated scene to improve continuity, context awareness, and future scene generation.

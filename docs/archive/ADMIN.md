@@ -1,5 +1,17 @@
 # Admin Dashboard - Choose the Heat
 
+> **⚠️ ARCHIVED DOCUMENTATION**
+>
+> This file has been archived and migrated to the new feature-centric documentation structure.
+>
+> **Please refer to:** [features/admin-dashboard.md](../features/admin-dashboard.md)
+>
+> The new documentation includes enhanced content, standardized structure, and AI maintainability features.
+>
+> **Archived on:** 2025-12-09
+
+---
+
 Complete guide to the admin dashboard system for managing users and novel templates.
 
 ---

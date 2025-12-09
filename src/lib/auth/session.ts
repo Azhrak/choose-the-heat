@@ -1,3 +1,13 @@
+/**
+ * Session Management - Authentication Feature
+ *
+ * Handles database-backed session creation, validation, and cleanup.
+ * Sessions use cryptographically secure tokens with 30-day expiry.
+ *
+ * @see docs/features/authentication.md - Complete feature documentation
+ * @update-trigger When modifying session logic, expiry, or cookie settings, update the feature doc
+ */
+
 import { randomBytes } from "node:crypto";
 import { db } from "~/lib/db";
 import type { UserPreferences } from "../types/preferences";

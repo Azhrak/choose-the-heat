@@ -8,12 +8,16 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 
 ### 🔐 Authentication & User Management
 
+**[📖 Feature Documentation](docs/features/authentication.md)**
+
 - Google OAuth + Email/Password authentication
 - Secure session management with httpOnly cookies
 - User profiles with customizable preferences
 - Account management and deletion
 
 ### 📚 AI-Powered Story Generation
+
+**[📖 Feature Documentation](docs/features/ai-story-generation.md)**
 
 - AI-generated romance novels with choice-based branching
 - Real-time streaming content generation (watch stories being written!)
@@ -24,12 +28,16 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 
 ### 🎨 Personalization & Preferences
 
+**[📖 Feature Documentation](docs/features/personalization.md)**
+
 - Custom reading preferences (genres, tropes, spice level, pacing, POV, scene length)
 - Mark stories as favorites with filtering
 - Editable story titles and cover images
 - Preferences management page
 
 ### 🌳 Story Experience
+
+**[📖 Feature Documentation](docs/features/story-experience.md)**
 
 - Interactive choice-based branching
 - Story branching system (explore alternative storylines)
@@ -39,6 +47,8 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - Custom tropes management
 
 ### 👑 Admin Dashboard
+
+**[📖 Feature Documentation](docs/features/admin-dashboard.md)**
 
 - Role-based access control (user, editor, admin)
 - Secure API key management with encryption (AES-256-GCM)
@@ -58,6 +68,8 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 ## Documentation
 
 📚 **[Complete Documentation Index](docs/DOCUMENTATION_INDEX.md)** - Navigate all documentation
+
+🤖 **[AI Agent Guidelines](docs/AI_AGENT_GUIDELINES.md)** - For AI coding assistants: how to maintain feature docs when changing code
 
 ### Getting Started
 
@@ -79,10 +91,16 @@ Full-stack TypeScript app for AI-generated interactive romance novels. Users mak
 - [Refactoring](docs/development/REFACTORING.md) - Refactoring history and guidelines
 - [CI/CD & Migrations](docs/development/CI_MIGRATIONS.md) - Automated deployment & database migrations
 
-### Technical Reference
+### Feature Documentation
 
-- [Admin Dashboard](docs/technical/ADMIN.md) - Admin features and role-based access
-- [AI Metadata System](docs/technical/SCENE_METADATA.md) - Scene metadata and context management
+Complete feature documentation with technical implementation details:
+
+- [Authentication & User Management](docs/features/authentication.md) - Auth system, sessions, and RBAC
+- [AI Story Generation](docs/features/ai-story-generation.md) - AI providers and scene metadata system
+- [Personalization & Preferences](docs/features/personalization.md) - User preference management
+- [Story Experience](docs/features/story-experience.md) - Interactive reading and branching
+- [Text-to-Speech](docs/features/text-to-speech.md) - Audio generation and playback
+- [Admin Dashboard](docs/features/admin-dashboard.md) - Admin features and role-based access
 
 ### Legal & Compliance
 

@@ -1,3 +1,13 @@
+/**
+ * Google Cloud Storage Integration - Text-to-Speech Feature
+ *
+ * Manages audio file upload to GCS with signed URLs and lifecycle policies.
+ * Implements 90-day audio retention and 7-day signed URL expiry.
+ *
+ * @see docs/features/text-to-speech.md - Complete feature documentation
+ * @update-trigger When modifying GCS configuration, lifecycle policies, or signed URL generation, update the feature doc
+ */
+
 import crypto from "node:crypto";
 import { Storage } from "@google-cloud/storage";
 import { getTTSConfig } from "./config";

@@ -1,3 +1,13 @@
+/**
+ * OAuth 2.0 Integration - Authentication Feature
+ *
+ * Google OAuth authentication using Arctic library with PKCE flow.
+ * Handles authorization URL generation, state validation, and token exchange.
+ *
+ * @see docs/features/authentication.md - Complete feature documentation (OAuth section)
+ * @update-trigger When modifying OAuth flow, providers, or PKCE implementation, update the feature doc
+ */
+
 import { randomBytes } from "node:crypto";
 import { Google } from "arctic";
 

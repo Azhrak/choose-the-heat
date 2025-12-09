@@ -1,3 +1,13 @@
+/**
+ * Password Hashing & Validation - Authentication Feature
+ *
+ * Secure password hashing using Argon2id algorithm with recommended OWASP settings.
+ * Includes password strength validation and email format validation.
+ *
+ * @see docs/features/authentication.md - Complete feature documentation
+ * @update-trigger When modifying hashing algorithm, validation rules, or security settings, update the feature doc
+ */
+
 import { hash, verify } from "@node-rs/argon2";
 
 /**

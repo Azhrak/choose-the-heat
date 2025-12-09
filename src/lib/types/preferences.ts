@@ -1,4 +1,14 @@
 /**
+ * User Preference Types - Personalization Feature
+ *
+ * Type definitions and validation rules for user preferences (genres, tropes, spice level, pacing, scene length, POV gender).
+ * Used for both user default preferences and per-story preference overrides.
+ *
+ * @see docs/features/personalization.md - Complete feature documentation
+ * @update-trigger When adding/modifying preference types or validation rules, update the feature doc
+ */
+
+/**
  * User preference types for story customization
  */
 

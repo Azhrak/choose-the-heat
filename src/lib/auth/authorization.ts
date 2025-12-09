@@ -1,3 +1,14 @@
+/**
+ * Role-Based Access Control (RBAC) - Authentication Feature
+ *
+ * Authorization middleware for protecting routes and API endpoints.
+ * Implements User/Editor/Admin role hierarchy with permission checking.
+ *
+ * @see docs/features/authentication.md - Complete feature documentation
+ * @see docs/features/admin-dashboard.md - Role permissions matrix
+ * @update-trigger When modifying role checks or permissions, update both feature docs
+ */
+
 import { json } from "@tanstack/react-start";
 import { db } from "~/lib/db";
 import type { UserRole } from "~/lib/db/types";

@@ -1,5 +1,17 @@
 # Text-to-Speech (TTS) System
 
+> **⚠️ ARCHIVED DOCUMENTATION**
+>
+> This file has been archived and migrated to the new feature-centric documentation structure.
+>
+> **Please refer to:** [features/text-to-speech.md](../features/text-to-speech.md)
+>
+> The new documentation includes enhanced content, standardized structure, and AI maintainability features.
+>
+> **Archived on:** 2025-12-09
+
+---
+
 **Last Updated**: 2025-12-08 | **Status**: ✅ Production Ready (Non-Streaming)
 
 ---
