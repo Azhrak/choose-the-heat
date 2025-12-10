@@ -1,4 +1,5 @@
 import { getSettingsMap } from "../db/queries/settings";
+import { getAllTTSProviders } from "../ai/providers";
 
 /**
  * TTS Provider types
@@ -55,23 +56,33 @@ export function invalidateTTSCache(): void {
 /**
  * Get TTS configuration from environment variables
  * Used as fallback when database settings are not available
+ * Now uses provider registry as single source of truth for models
  */
 function getConfigFromEnv(): TTSConfig {
+	const providers = getAllTTSProviders();
 	const provider = (
 		process.env.TTS_PROVIDER || "openai"
 	).toLowerCase() as TTSProvider;
 
+	// Build available models from provider registry
+	const availableModels: Record<TTSProvider, string[]> = {} as Record<
+		TTSProvider,
+		string[]
+	>;
+	for (const p of providers) {
+		availableModels[p.id as TTSProvider] = p.supportedModels;
+	}
+
+	// Get model from env or provider default
+	const providerMeta = providers.find((p) => p.id === provider);
+	const model = process.env.TTS_MODEL || providerMeta?.defaultModel || "tts-1";
+
 	return {
 		provider,
-		model: process.env.TTS_MODEL || "tts-1",
+		model,
 		gcsBucketName: process.env.GCS_BUCKET_NAME || "",
 		gcsBucketPath: process.env.GCS_BUCKET_PATH || "audio/",
-		availableModels: {
-			openai: ["tts-1", "tts-1-hd"],
-			google: ["gemini-2.5-flash-tts", "gemini-2.5-flash-lite-preview-tts"],
-			elevenlabs: ["Rachel", "Domi"],
-			azure: ["en-US-JennyNeural", "en-US-GuyNeural", "en-US-AriaNeural"],
-		},
+		availableModels,
 		availableVoices: {
 			openai: [
 				{ id: "alloy", name: "Alloy" },
@@ -302,4 +313,32 @@ export async function getAvailableVoices(
 
 	// Return voices for current provider
 	return config.availableVoices[config.provider] || [];
+}
+
+/**
+ * Get default model for a specific TTS provider
+ * Checks setting tts.<provider>.default_model first, falls back to available_models
+ */
+export async function getDefaultModelForTTSProvider(
+	provider: TTSProvider,
+): Promise<string> {
+	const settings = await getSettingsMap({ category: "tts" });
+
+	// Check for provider-specific default
+	const providerDefault = settings[`tts.${provider}.default_model`];
+	if (providerDefault) {
+		return providerDefault;
+	}
+
+	// Fall back to first available model
+	const config = await getTTSConfig();
+	const models = config.availableModels[provider];
+	if (models && models.length > 0) {
+		return models[0];
+	}
+
+	// Last resort: use provider registry default
+	const providers = getAllTTSProviders();
+	const providerMeta = providers.find((p) => p.id === provider);
+	return providerMeta?.defaultModel || "tts-1";
 }

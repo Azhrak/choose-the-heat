@@ -1,5 +1,6 @@
 import { getSettingsMap } from "../db/queries/settings";
 import type { AIProvider } from "./client";
+import { getAllTextProviders } from "./providers";
 
 /**
  * AI Configuration from settings
@@ -43,20 +44,33 @@ export function invalidateSettingsCache(): void {
 /**
  * Get AI configuration from environment variables
  * Used as fallback when database settings are not available
+ * Now uses provider registry as single source of truth
  */
 function getConfigFromEnv(): AIConfig {
+	const providers = getAllTextProviders();
 	const provider = (
 		process.env.AI_PROVIDER || "openai"
 	).toLowerCase() as AIProvider;
 
-	const defaultModels: Record<AIProvider, string> = {
-		openai: process.env.OPENAI_MODEL || "gpt-4o-mini",
-		google: process.env.GOOGLE_MODEL || "gemini-2.5-flash-lite",
-		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
-		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
-		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
-		openrouter: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
-	};
+	// Build default models map from provider registry
+	const defaultModels: Record<AIProvider, string> = {} as Record<
+		AIProvider,
+		string
+	>;
+	for (const p of providers) {
+		const envVarName = `${p.id.toUpperCase()}_MODEL`;
+		defaultModels[p.id as AIProvider] =
+			process.env[envVarName] || p.defaultModel;
+	}
+
+	// Build available models from provider registry
+	const availableModels: Record<AIProvider, string[]> = {} as Record<
+		AIProvider,
+		string[]
+	>;
+	for (const p of providers) {
+		availableModels[p.id as AIProvider] = p.supportedModels;
+	}
 
 	return {
 		provider,
@@ -65,26 +79,7 @@ function getConfigFromEnv(): AIConfig {
 		maxTokens: 2000,
 		fallbackEnabled: false,
 		timeoutSeconds: 60,
-		availableModels: {
-			openai: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"],
-			google: ["gemini-2.5-flash-lite", "gemini-1.5-pro", "gemini-1.5-flash"],
-			anthropic: [
-				"claude-3-5-sonnet-20241022",
-				"claude-3-opus-20240229",
-				"claude-3-haiku-20240307",
-			],
-			mistral: [
-				"mistral-medium-2508",
-				"mistral-small-latest",
-				"mistral-large-latest",
-			],
-			xai: ["grok-4-fast-reasoning", "grok-2", "grok-beta"],
-			openrouter: [
-				"openai/gpt-4o-mini",
-				"anthropic/claude-3.5-sonnet",
-				"nousresearch/hermes-3-llama-3.1-70b",
-			],
-		},
+		availableModels,
 	};
 }
 
@@ -200,6 +195,34 @@ export async function getAllAvailableModels(): Promise<
 > {
 	const config = await getAIConfig();
 	return config.availableModels;
+}
+
+/**
+ * Get default model for a specific provider
+ * Checks setting ai.<provider>.default_model first, falls back to available_models
+ */
+export async function getDefaultModelForProvider(
+	provider: AIProvider,
+): Promise<string> {
+	const settings = await getSettingsMap({ category: "ai" });
+
+	// Check for provider-specific default
+	const providerDefault = settings[`ai.${provider}.default_model`];
+	if (providerDefault) {
+		return providerDefault;
+	}
+
+	// Fall back to first available model
+	const config = await getAIConfig();
+	const models = config.availableModels[provider];
+	if (models && models.length > 0) {
+		return models[0];
+	}
+
+	// Last resort: use provider registry default
+	const providers = getAllTextProviders();
+	const providerMeta = providers.find((p) => p.id === provider);
+	return providerMeta?.defaultModel || "gpt-4o-mini";
 }
 
 /**

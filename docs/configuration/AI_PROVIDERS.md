@@ -253,6 +253,67 @@ You could enhance the app to let users choose their provider per story by:
 
 ---
 
+## Admin UI Configuration
+
+The application includes a unified admin interface for managing AI providers at `/admin/providers`. This interface provides:
+
+### Provider Status Dashboard
+
+The dashboard shows all providers with their current status:
+
+- **✓ Ready** - Provider has a validated API key and configured models
+- **⚠ Incomplete** - Provider has an API key but needs configuration
+- **✗ Invalid** - Provider has an invalid API key
+- **○ Unconfigured** - Provider has no API key set
+
+### Configuring a Provider
+
+1. Navigate to **Admin Panel → AI Providers**
+2. Choose the **Text Generation** or **Text-to-Speech** tab
+3. Find your desired provider in the list
+4. Click the **Configure** button (⚙️ icon)
+5. In the modal:
+   - Enter your API key
+   - Click **Save & Validate** to store and test the key
+   - Or click **Test Existing Key** to validate a previously saved key
+6. The system will automatically encrypt and store your API key
+
+### Activating a Provider
+
+Once a provider is configured (status shows "Ready"):
+
+1. Click the **Activate** button on the provider card
+2. The provider will be set as the active provider for all new story generation
+3. The provider's default model will be automatically selected
+4. The "Active" badge will appear on the provider card
+
+### Provider Information
+
+Each provider card displays:
+
+- **API Key Status** - Valid, Invalid, Untested, or Not set
+- **Models** - Number of configured models for this provider
+- **Default Model** - The model that will be used when this provider is activated
+
+### Summary Statistics
+
+The dashboard shows at-a-glance statistics:
+
+- Count of ready providers (fully configured and working)
+- Count of incomplete providers (need additional configuration)
+- Count of invalid providers (API key issues)
+- Count of unconfigured providers (not yet set up)
+
+### Benefits of Admin UI
+
+- **Single Source of Truth** - All provider configuration in one place
+- **Real-time Status** - See which providers are ready to use
+- **Easy Switching** - Activate different providers with one click
+- **Secure** - API keys are encrypted before storage
+- **Per-Provider Defaults** - Each provider remembers its preferred model
+
+---
+
 ## Troubleshooting
 
 ### "API key not found" Error
