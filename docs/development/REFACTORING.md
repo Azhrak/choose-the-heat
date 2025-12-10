@@ -2,7 +2,7 @@
 
 This document consolidates all refactoring-related documentation for the Choose the Heat project.
 
-**Last Updated**: 2025-11-28
+**Last Updated**: 2025-12-10
 **Overall Code Quality**: 9.4/10 ⭐⭐⭐⭐⭐⭐⭐⭐⭐
 
 ---
@@ -214,6 +214,38 @@ This document consolidates all refactoring-related documentation for the Choose 
 - Consistent form styling and error handling
 - Better accessibility
 
+### Phase 8: AI Provider Management Refactoring (Complete)
+
+**Created Infrastructure (10 new files):**
+
+- `src/lib/ai/providers.ts` - Provider registry (single source of truth)
+- `src/lib/ai/providerStatus.ts` - Provider status system
+- `src/routes/api/admin/providers/status.ts` - Status API endpoint
+- `src/routes/api/admin/providers/activate.ts` - Activation API endpoint
+- `src/hooks/useProviderStatusQuery.ts` - React Query hooks
+- `src/components/admin/ProviderCard.tsx` - Provider display component
+- `src/components/admin/ProviderConfigModal.tsx` - Configuration modal
+- `src/components/admin/AIProviderManagement.tsx` - Main UI component
+- `src/routes/admin/providers/index.tsx` - Provider management page
+- `src/lib/db/migrations/015_add_provider_default_models.ts` - Database migration
+
+**Modified Files (4):**
+
+- `src/lib/ai/config.ts` - Uses provider registry, added getDefaultModelForProvider()
+- `src/lib/tts/config.ts` - Similar updates for TTS providers
+- `src/lib/ai/validator.ts` - Imports test models from registry
+- `src/components/admin/AdminNav.tsx` - Added "AI Providers" menu item
+
+**Impact:**
+
+- Eliminated hard-coded provider constants scattered across 6+ files
+- Created centralized provider registry as single source of truth
+- Unified admin interface for managing AI and TTS providers
+- Clear visibility into provider readiness status (ready/incomplete/invalid/unconfigured)
+- Per-provider default model settings via database (no schema changes)
+- Zero breaking changes - backward compatible with existing system
+- Improved admin UX with status badges, summary stats, and activation workflow
+
 ---
 
 ## Current Progress
@@ -240,6 +272,7 @@ This document consolidates all refactoring-related documentation for the Choose 
 - **Phase 5**: ✅ Complete (Component extraction)
 - **Phase 6**: ✅ Complete (Modal consolidation)
 - **Phase 7**: ✅ Complete (FormInput adoption)
+- **Phase 8**: ✅ Complete (AI provider management)
 
 **Overall Progress**: 100% of planned refactorings complete
 

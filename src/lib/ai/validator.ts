@@ -4,20 +4,30 @@ import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import type { APIKeyProvider } from "../db/queries/apiKeys";
+import { getAllTextProviders, getAllTTSProviders } from "./providers";
 
 /**
  * Test models for each provider (cheapest/fastest)
- * TODO: Update models as providers evolve
+ * Built from provider registry - single source of truth
  */
-const TEST_MODELS: Record<APIKeyProvider, string> = {
-	openai: "gpt-4o-mini",
-	google: "gemini-2.5-flash-lite",
-	anthropic: "claude-haiku-4-5",
-	mistral: "mistral-small-latest",
-	xai: "grok-4-fast-non-reasoning",
-	openrouter: "arcee-ai/trinity-mini:free",
-	google_tts: "gemini-2.5-flash-lite-preview-tts",
-};
+function getTestModels(): Record<APIKeyProvider, string> {
+	const testModels: Record<string, string> = {};
+
+	// Add AI text providers
+	for (const provider of getAllTextProviders()) {
+		testModels[provider.id] = provider.testModel;
+	}
+
+	// Add TTS providers (special handling for google_tts vs google)
+	for (const provider of getAllTTSProviders()) {
+		const key = provider.id === "google" ? "google_tts" : provider.id;
+		testModels[key] = provider.testModel;
+	}
+
+	return testModels as Record<APIKeyProvider, string>;
+}
+
+const TEST_MODELS = getTestModels();
 
 /**
  * Validate an API key by making a minimal API call

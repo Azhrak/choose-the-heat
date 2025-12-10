@@ -69,6 +69,9 @@ export function SettingsField(props: SettingsFieldProps) {
 						<AvailableModelsEditor
 							value={props.value}
 							onChange={props.onChange}
+							onChangeMultiple={props.onChangeMultiple}
+							allSettings={props.allSettings}
+							category="ai"
 							error={props.error}
 						/>
 					);
@@ -80,6 +83,9 @@ export function SettingsField(props: SettingsFieldProps) {
 						<AvailableModelsEditor
 							value={props.value}
 							onChange={props.onChange}
+							onChangeMultiple={props.onChangeMultiple}
+							allSettings={props.allSettings}
+							category="tts"
 							error={props.error}
 						/>
 					);

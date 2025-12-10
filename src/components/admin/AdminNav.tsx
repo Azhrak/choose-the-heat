@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import {
 	ArrowLeft,
 	Beaker,
+	Cpu,
 	FileText,
 	LayoutDashboard,
 	ScrollText,
@@ -61,6 +62,12 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 			label: "Settings",
 			path: "/admin/settings",
 			icon: Settings,
+			roles: ["admin"] as UserRole[],
+		},
+		{
+			label: "AI Providers",
+			path: "/admin/providers",
+			icon: Cpu,
 			roles: ["admin"] as UserRole[],
 		},
 		{
