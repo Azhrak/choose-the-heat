@@ -14,6 +14,7 @@ import {
 	PasswordChange,
 	PreferencesDisplay,
 	ProfileInformation,
+	SubscriptionDisplay,
 } from "~/components/profile";
 import { Stack } from "~/components/ui/Stack";
 import { useChangePasswordMutation } from "~/hooks/useChangePasswordMutation";
@@ -172,6 +173,8 @@ function ProfilePage() {
 						error={profileError}
 						success={profileSuccess}
 					/>
+
+					<SubscriptionDisplay />
 
 					<PasswordChange
 						currentPassword={currentPassword}

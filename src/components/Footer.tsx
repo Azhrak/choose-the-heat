@@ -63,6 +63,30 @@ export function Footer() {
 									Preferences
 								</Link>
 							</li>
+							<li>
+								<Link
+									to="/subscription"
+									className="hover:text-romance-400 transition-colors"
+								>
+									Subscription
+								</Link>
+							</li>
+							<li>
+								<Link
+									to="/about"
+									className="hover:text-romance-400 transition-colors"
+								>
+									About
+								</Link>
+							</li>
+							<li>
+								<Link
+									to="/contact"
+									className="hover:text-romance-400 transition-colors"
+								>
+									Contact
+								</Link>
+							</li>
 						</ul>
 					</Stack>
 

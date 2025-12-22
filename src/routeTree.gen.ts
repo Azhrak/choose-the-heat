@@ -10,13 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PreferencesRouteImport } from './routes/preferences'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as CookiesRouteImport } from './routes/cookies'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as TemplateIdRouteImport } from './routes/template/$id'
@@ -39,10 +42,15 @@ import { Route as StoryIdReadRouteImport } from './routes/story/$id.read'
 import { Route as StoryIdInfoRouteImport } from './routes/story/$id.info'
 import { Route as ApiTtsVoicesRouteImport } from './routes/api/tts/voices'
 import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
+import { Route as ApiSubscriptionsUsageRouteImport } from './routes/api/subscriptions/usage'
+import { Route as ApiSubscriptionsTiersRouteImport } from './routes/api/subscriptions/tiers'
+import { Route as ApiSubscriptionsMySubscriptionRouteImport } from './routes/api/subscriptions/my-subscription'
 import { Route as ApiStoriesUserRouteImport } from './routes/api/stories/user'
 import { Route as ApiStoriesIdRouteImport } from './routes/api/stories/$id'
 import { Route as ApiProfilePasswordRouteImport } from './routes/api/profile/password'
 import { Route as ApiProfileDataRouteImport } from './routes/api/profile/data'
+import { Route as ApiBillingInvoicesRouteImport } from './routes/api/billing/invoices'
+import { Route as ApiBillingDetailsRouteImport } from './routes/api/billing/details'
 import { Route as ApiAuthSignupRouteImport } from './routes/api/auth/signup'
 import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
 import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
@@ -60,6 +68,7 @@ import { Route as ApiStoriesIdSceneRouteImport } from './routes/api/stories/$id.
 import { Route as ApiStoriesIdFavoriteRouteImport } from './routes/api/stories/$id/favorite'
 import { Route as ApiStoriesIdChooseRouteImport } from './routes/api/stories/$id.choose'
 import { Route as ApiStoriesIdBranchRouteImport } from './routes/api/stories/$id.branch'
+import { Route as ApiBillingInvoicesIdRouteImport } from './routes/api/billing/invoices/$id'
 import { Route as ApiAuthCallbackGoogleRouteImport } from './routes/api/auth/callback.google'
 import { Route as ApiAdminUsersStatsRouteImport } from './routes/api/admin/users/stats'
 import { Route as ApiAdminUsersIdRouteImport } from './routes/api/admin/users/$id'
@@ -90,6 +99,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscriptionRoute = SubscriptionRouteImport.update({
+  id: '/subscription',
+  path: '/subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -115,6 +129,11 @@ const CookiesRoute = CookiesRouteImport.update({
   path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BrowseRoute = BrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
@@ -123,6 +142,11 @@ const BrowseRoute = BrowseRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -235,6 +259,22 @@ const ApiTemplatesIdRoute = ApiTemplatesIdRouteImport.update({
   path: '/api/templates/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSubscriptionsUsageRoute = ApiSubscriptionsUsageRouteImport.update({
+  id: '/api/subscriptions/usage',
+  path: '/api/subscriptions/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSubscriptionsTiersRoute = ApiSubscriptionsTiersRouteImport.update({
+  id: '/api/subscriptions/tiers',
+  path: '/api/subscriptions/tiers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSubscriptionsMySubscriptionRoute =
+  ApiSubscriptionsMySubscriptionRouteImport.update({
+    id: '/api/subscriptions/my-subscription',
+    path: '/api/subscriptions/my-subscription',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiStoriesUserRoute = ApiStoriesUserRouteImport.update({
   id: '/api/stories/user',
   path: '/api/stories/user',
@@ -253,6 +293,16 @@ const ApiProfilePasswordRoute = ApiProfilePasswordRouteImport.update({
 const ApiProfileDataRoute = ApiProfileDataRouteImport.update({
   id: '/api/profile/data',
   path: '/api/profile/data',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingInvoicesRoute = ApiBillingInvoicesRouteImport.update({
+  id: '/api/billing/invoices',
+  path: '/api/billing/invoices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingDetailsRoute = ApiBillingDetailsRouteImport.update({
+  id: '/api/billing/details',
+  path: '/api/billing/details',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSignupRoute = ApiAuthSignupRouteImport.update({
@@ -340,6 +390,11 @@ const ApiStoriesIdBranchRoute = ApiStoriesIdBranchRouteImport.update({
   id: '/branch',
   path: '/branch',
   getParentRoute: () => ApiStoriesIdRoute,
+} as any)
+const ApiBillingInvoicesIdRoute = ApiBillingInvoicesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiBillingInvoicesRoute,
 } as any)
 const ApiAuthCallbackGoogleRoute = ApiAuthCallbackGoogleRouteImport.update({
   id: '/api/auth/callback/google',
@@ -475,13 +530,16 @@ const ApiStoriesIdSceneNumberAudioRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/library': typeof LibraryRoute
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/subscription': typeof SubscriptionRoute
   '/terms': typeof TermsRoute
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
@@ -499,10 +557,15 @@ export interface FileRoutesByFullPath {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
+  '/api/billing/details': typeof ApiBillingDetailsRoute
+  '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
+  '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
+  '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
@@ -534,6 +597,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/billing/invoices/$id': typeof ApiBillingInvoicesIdRoute
   '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
@@ -552,12 +616,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/browse': typeof BrowseRoute
+  '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/library': typeof LibraryRoute
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/subscription': typeof SubscriptionRoute
   '/terms': typeof TermsRoute
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
@@ -575,10 +642,15 @@ export interface FileRoutesByTo {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
+  '/api/billing/details': typeof ApiBillingDetailsRoute
+  '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
+  '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
+  '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
@@ -610,6 +682,7 @@ export interface FileRoutesByTo {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/billing/invoices/$id': typeof ApiBillingInvoicesIdRoute
   '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
@@ -629,13 +702,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/browse': typeof BrowseRoute
+  '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
   '/library': typeof LibraryRoute
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/subscription': typeof SubscriptionRoute
   '/terms': typeof TermsRoute
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
@@ -653,10 +729,15 @@ export interface FileRoutesById {
   '/api/auth/login': typeof ApiAuthLoginRoute
   '/api/auth/logout': typeof ApiAuthLogoutRoute
   '/api/auth/signup': typeof ApiAuthSignupRoute
+  '/api/billing/details': typeof ApiBillingDetailsRoute
+  '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
+  '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
+  '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
   '/story/$id/info': typeof StoryIdInfoRoute
@@ -688,6 +769,7 @@ export interface FileRoutesById {
   '/api/admin/users/$id': typeof ApiAdminUsersIdRoute
   '/api/admin/users/stats': typeof ApiAdminUsersStatsRoute
   '/api/auth/callback/google': typeof ApiAuthCallbackGoogleRoute
+  '/api/billing/invoices/$id': typeof ApiBillingInvoicesIdRoute
   '/api/stories/$id/branch': typeof ApiStoriesIdBranchRoute
   '/api/stories/$id/choose': typeof ApiStoriesIdChooseRoute
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
@@ -708,13 +790,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/browse'
+    | '/contact'
     | '/cookies'
     | '/library'
     | '/preferences'
     | '/privacy'
     | '/profile'
+    | '/subscription'
     | '/terms'
     | '/admin/test'
     | '/api/preferences'
@@ -732,10 +817,15 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
+    | '/api/billing/details'
+    | '/api/billing/invoices'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/my-subscription'
+    | '/api/subscriptions/tiers'
+    | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
     | '/story/$id/info'
@@ -767,6 +857,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/billing/invoices/$id'
     | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
@@ -785,12 +876,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/browse'
+    | '/contact'
     | '/cookies'
     | '/library'
     | '/preferences'
     | '/privacy'
     | '/profile'
+    | '/subscription'
     | '/terms'
     | '/admin/test'
     | '/api/preferences'
@@ -808,10 +902,15 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
+    | '/api/billing/details'
+    | '/api/billing/invoices'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/my-subscription'
+    | '/api/subscriptions/tiers'
+    | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
     | '/story/$id/info'
@@ -843,6 +942,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/billing/invoices/$id'
     | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
@@ -861,13 +961,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/browse'
+    | '/contact'
     | '/cookies'
     | '/library'
     | '/preferences'
     | '/privacy'
     | '/profile'
+    | '/subscription'
     | '/terms'
     | '/admin/test'
     | '/api/preferences'
@@ -885,10 +988,15 @@ export interface FileRouteTypes {
     | '/api/auth/login'
     | '/api/auth/logout'
     | '/api/auth/signup'
+    | '/api/billing/details'
+    | '/api/billing/invoices'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/my-subscription'
+    | '/api/subscriptions/tiers'
+    | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
     | '/story/$id/info'
@@ -920,6 +1028,7 @@ export interface FileRouteTypes {
     | '/api/admin/users/$id'
     | '/api/admin/users/stats'
     | '/api/auth/callback/google'
+    | '/api/billing/invoices/$id'
     | '/api/stories/$id/branch'
     | '/api/stories/$id/choose'
     | '/api/stories/$id/favorite'
@@ -939,13 +1048,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   BrowseRoute: typeof BrowseRoute
+  ContactRoute: typeof ContactRoute
   CookiesRoute: typeof CookiesRoute
   LibraryRoute: typeof LibraryRoute
   PreferencesRoute: typeof PreferencesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
+  SubscriptionRoute: typeof SubscriptionRoute
   TermsRoute: typeof TermsRoute
   ApiPreferencesRoute: typeof ApiPreferencesRoute
   AuthLoginRoute: typeof AuthLoginRoute
@@ -959,10 +1071,15 @@ export interface RootRouteChildren {
   ApiAuthLoginRoute: typeof ApiAuthLoginRoute
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthSignupRoute: typeof ApiAuthSignupRoute
+  ApiBillingDetailsRoute: typeof ApiBillingDetailsRoute
+  ApiBillingInvoicesRoute: typeof ApiBillingInvoicesRouteWithChildren
   ApiProfileDataRoute: typeof ApiProfileDataRoute
   ApiProfilePasswordRoute: typeof ApiProfilePasswordRoute
   ApiStoriesIdRoute: typeof ApiStoriesIdRouteWithChildren
   ApiStoriesUserRoute: typeof ApiStoriesUserRoute
+  ApiSubscriptionsMySubscriptionRoute: typeof ApiSubscriptionsMySubscriptionRoute
+  ApiSubscriptionsTiersRoute: typeof ApiSubscriptionsTiersRoute
+  ApiSubscriptionsUsageRoute: typeof ApiSubscriptionsUsageRoute
   ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
   ApiTtsVoicesRoute: typeof ApiTtsVoicesRoute
   StoryIdInfoRoute: typeof StoryIdInfoRoute
@@ -1003,6 +1120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscription': {
+      id: '/subscription'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof SubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -1038,6 +1162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/browse': {
       id: '/browse'
       path: '/browse'
@@ -1050,6 +1181,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -1206,6 +1344,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiTemplatesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/subscriptions/usage': {
+      id: '/api/subscriptions/usage'
+      path: '/api/subscriptions/usage'
+      fullPath: '/api/subscriptions/usage'
+      preLoaderRoute: typeof ApiSubscriptionsUsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/subscriptions/tiers': {
+      id: '/api/subscriptions/tiers'
+      path: '/api/subscriptions/tiers'
+      fullPath: '/api/subscriptions/tiers'
+      preLoaderRoute: typeof ApiSubscriptionsTiersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/subscriptions/my-subscription': {
+      id: '/api/subscriptions/my-subscription'
+      path: '/api/subscriptions/my-subscription'
+      fullPath: '/api/subscriptions/my-subscription'
+      preLoaderRoute: typeof ApiSubscriptionsMySubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stories/user': {
       id: '/api/stories/user'
       path: '/api/stories/user'
@@ -1232,6 +1391,20 @@ declare module '@tanstack/react-router' {
       path: '/api/profile/data'
       fullPath: '/api/profile/data'
       preLoaderRoute: typeof ApiProfileDataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing/invoices': {
+      id: '/api/billing/invoices'
+      path: '/api/billing/invoices'
+      fullPath: '/api/billing/invoices'
+      preLoaderRoute: typeof ApiBillingInvoicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing/details': {
+      id: '/api/billing/details'
+      path: '/api/billing/details'
+      fullPath: '/api/billing/details'
+      preLoaderRoute: typeof ApiBillingDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/signup': {
@@ -1352,6 +1525,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/stories/$id/branch'
       preLoaderRoute: typeof ApiStoriesIdBranchRouteImport
       parentRoute: typeof ApiStoriesIdRoute
+    }
+    '/api/billing/invoices/$id': {
+      id: '/api/billing/invoices/$id'
+      path: '/$id'
+      fullPath: '/api/billing/invoices/$id'
+      preLoaderRoute: typeof ApiBillingInvoicesIdRouteImport
+      parentRoute: typeof ApiBillingInvoicesRoute
     }
     '/api/auth/callback/google': {
       id: '/api/auth/callback/google'
@@ -1554,6 +1734,17 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface ApiBillingInvoicesRouteChildren {
+  ApiBillingInvoicesIdRoute: typeof ApiBillingInvoicesIdRoute
+}
+
+const ApiBillingInvoicesRouteChildren: ApiBillingInvoicesRouteChildren = {
+  ApiBillingInvoicesIdRoute: ApiBillingInvoicesIdRoute,
+}
+
+const ApiBillingInvoicesRouteWithChildren =
+  ApiBillingInvoicesRoute._addFileChildren(ApiBillingInvoicesRouteChildren)
+
 interface ApiStoriesIdSceneRouteChildren {
   ApiStoriesIdSceneStreamRoute: typeof ApiStoriesIdSceneStreamRoute
   ApiStoriesIdSceneNumberAudioRoute: typeof ApiStoriesIdSceneNumberAudioRoute
@@ -1617,13 +1808,16 @@ const ApiAdminTemplatesIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   BrowseRoute: BrowseRoute,
+  ContactRoute: ContactRoute,
   CookiesRoute: CookiesRoute,
   LibraryRoute: LibraryRoute,
   PreferencesRoute: PreferencesRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
+  SubscriptionRoute: SubscriptionRoute,
   TermsRoute: TermsRoute,
   ApiPreferencesRoute: ApiPreferencesRoute,
   AuthLoginRoute: AuthLoginRoute,
@@ -1637,10 +1831,15 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLoginRoute: ApiAuthLoginRoute,
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthSignupRoute: ApiAuthSignupRoute,
+  ApiBillingDetailsRoute: ApiBillingDetailsRoute,
+  ApiBillingInvoicesRoute: ApiBillingInvoicesRouteWithChildren,
   ApiProfileDataRoute: ApiProfileDataRoute,
   ApiProfilePasswordRoute: ApiProfilePasswordRoute,
   ApiStoriesIdRoute: ApiStoriesIdRouteWithChildren,
   ApiStoriesUserRoute: ApiStoriesUserRoute,
+  ApiSubscriptionsMySubscriptionRoute: ApiSubscriptionsMySubscriptionRoute,
+  ApiSubscriptionsTiersRoute: ApiSubscriptionsTiersRoute,
+  ApiSubscriptionsUsageRoute: ApiSubscriptionsUsageRoute,
   ApiTemplatesIdRoute: ApiTemplatesIdRoute,
   ApiTtsVoicesRoute: ApiTtsVoicesRoute,
   StoryIdInfoRoute: StoryIdInfoRoute,

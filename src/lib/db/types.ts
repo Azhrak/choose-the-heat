@@ -8,15 +8,15 @@ import type { ColumnType } from "kysely";
 export type AuditEntityType = "setting" | "template" | "user";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-	? ColumnType<S, I | undefined, U>
-	: ColumnType<T, T | undefined, T>;
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
 
 export type Json = JsonValue;
 
 export type JsonArray = JsonValue[];
 
 export type JsonObject = {
-	[x: string]: JsonValue | undefined;
+  [x: string]: JsonValue | undefined;
 };
 
 export type JsonPrimitive = boolean | number | string | null;
@@ -25,6 +25,8 @@ export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
 export type Numeric = ColumnType<string, number | string, number | string>;
 
+export type SubscriptionTier = "basic" | "free" | "premium" | "premium_plus";
+
 export type TemplateStatus = "archived" | "draft" | "published";
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
@@ -32,187 +34,324 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export type UserRole = "admin" | "editor" | "user";
 
 export interface AdminAuditLogs {
-	action: string;
-	changes: Json | null;
-	created_at: Generated<Timestamp>;
-	entity_id: string;
-	entity_type: AuditEntityType;
-	id: Generated<string>;
-	user_id: string;
+  action: string;
+  changes: Json | null;
+  created_at: Generated<Timestamp>;
+  entity_id: string;
+  entity_type: AuditEntityType;
+  id: Generated<string>;
+  user_id: string;
 }
 
 export interface ApiKeys {
-	auth_tag: string;
-	created_at: Generated<Timestamp>;
-	created_by: string | null;
-	encrypted_key: string;
-	encryption_version: Generated<number>;
-	id: Generated<string>;
-	iv: string;
-	last_tested_at: Timestamp | null;
-	provider: string;
-	test_error: string | null;
-	test_status: string | null;
-	updated_at: Generated<Timestamp>;
-	updated_by: string | null;
+  auth_tag: string;
+  created_at: Generated<Timestamp>;
+  created_by: string | null;
+  encrypted_key: string;
+  encryption_version: Generated<number>;
+  id: Generated<string>;
+  iv: string;
+  last_tested_at: Timestamp | null;
+  provider: string;
+  test_error: string | null;
+  test_status: string | null;
+  updated_at: Generated<Timestamp>;
+  updated_by: string | null;
 }
 
 export interface AppSettings {
-	category: string;
-	created_at: Generated<Timestamp>;
-	default_value: string | null;
-	description: string | null;
-	id: Generated<string>;
-	is_sensitive: Generated<boolean>;
-	key: string;
-	updated_at: Generated<Timestamp>;
-	updated_by: string | null;
-	validation_rules: Json | null;
-	value: string;
-	value_type: string;
+  category: string;
+  created_at: Generated<Timestamp>;
+  default_value: string | null;
+  description: string | null;
+  id: Generated<string>;
+  is_sensitive: Generated<boolean>;
+  key: string;
+  updated_at: Generated<Timestamp>;
+  updated_by: string | null;
+  validation_rules: Json | null;
+  value: string;
+  value_type: string;
+}
+
+export interface BillingDetails {
+  billing_address_line1: string | null;
+  billing_address_line2: string | null;
+  billing_city: string | null;
+  billing_country: string | null;
+  billing_email: string | null;
+  billing_name: string | null;
+  billing_postal_code: string | null;
+  billing_state: string | null;
+  card_brand: string | null;
+  card_exp_month: number | null;
+  card_exp_year: number | null;
+  card_last4: string | null;
+  created_at: Generated<Timestamp>;
+  customer_id: string | null;
+  id: Generated<string>;
+  is_default: Generated<boolean>;
+  payment_method_id: string | null;
+  payment_provider: string | null;
+  tax_id: string | null;
+  tax_id_type: string | null;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface ChoicePoints {
-	created_at: Generated<Timestamp>;
-	id: Generated<string>;
-	options: Json;
-	prompt_text: string;
-	scene_number: number;
-	template_id: string;
+  created_at: Generated<Timestamp>;
+  id: Generated<string>;
+  options: Json;
+  prompt_text: string;
+  scene_number: number;
+  template_id: string;
 }
 
 export interface Choices {
-	choice_point_id: string;
-	created_at: Generated<Timestamp>;
-	id: Generated<string>;
-	selected_option: number;
-	story_id: string;
+  choice_point_id: string;
+  created_at: Generated<Timestamp>;
+  id: Generated<string>;
+  selected_option: number;
+  story_id: string;
+}
+
+export interface InvoiceLineItems {
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+  currency: Generated<string>;
+  description: string;
+  id: Generated<string>;
+  invoice_id: string;
+  metadata: Json | null;
+  period_end: Timestamp | null;
+  period_start: Timestamp | null;
+  quantity: Generated<number>;
+  unit_amount: Numeric;
+}
+
+export interface Invoices {
+  billing_period_end: Timestamp;
+  billing_period_start: Timestamp;
+  card_last4: string | null;
+  coupon_code: string | null;
+  coupon_description: string | null;
+  created_at: Generated<Timestamp>;
+  currency: Generated<string>;
+  discount_amount: Generated<Numeric>;
+  due_date: Timestamp | null;
+  hosted_invoice_url: string | null;
+  id: Generated<string>;
+  invoice_number: string;
+  metadata: Json | null;
+  notes: string | null;
+  paid_at: Timestamp | null;
+  payment_intent_id: string | null;
+  payment_method: string | null;
+  payment_provider: string | null;
+  payment_provider_invoice_id: string | null;
+  pdf_url: string | null;
+  status: string;
+  subscription_tier: SubscriptionTier;
+  subtotal: Numeric;
+  tax_amount: Generated<Numeric>;
+  total_amount: Numeric;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface NovelTemplates {
-	archived_at: Timestamp | null;
-	archived_by: string | null;
-	base_tropes: string[];
-	cover_gradient: string;
-	cover_url: string | null;
-	created_at: Generated<Timestamp>;
-	description: string;
-	estimated_scenes: number;
-	id: Generated<string>;
-	status: Generated<TemplateStatus>;
-	title: string;
-	updated_at: Generated<Timestamp>;
+  archived_at: Timestamp | null;
+  archived_by: string | null;
+  base_tropes: string[];
+  cover_gradient: string;
+  cover_url: string | null;
+  created_at: Generated<Timestamp>;
+  description: string;
+  estimated_scenes: number;
+  id: Generated<string>;
+  status: Generated<TemplateStatus>;
+  title: string;
+  updated_at: Generated<Timestamp>;
 }
 
 export interface OauthAccounts {
-	access_token: string | null;
-	created_at: Generated<Timestamp>;
-	expires_at: Timestamp | null;
-	id: Generated<string>;
-	provider: string;
-	provider_user_id: string;
-	refresh_token: string | null;
-	user_id: string;
+  access_token: string | null;
+  created_at: Generated<Timestamp>;
+  expires_at: Timestamp | null;
+  id: Generated<string>;
+  provider: string;
+  provider_user_id: string;
+  refresh_token: string | null;
+  user_id: string;
 }
 
 export interface PasswordAccounts {
-	created_at: Generated<Timestamp>;
-	hashed_password: string;
-	id: Generated<string>;
-	updated_at: Generated<Timestamp>;
-	user_id: string;
+  created_at: Generated<Timestamp>;
+  hashed_password: string;
+  id: Generated<string>;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
+}
+
+export interface PaymentMethods {
+  card_brand: string | null;
+  card_exp_month: number | null;
+  card_exp_year: number | null;
+  card_last4: string | null;
+  created_at: Generated<Timestamp>;
+  id: Generated<string>;
+  is_default: Generated<boolean>;
+  is_verified: Generated<boolean>;
+  metadata: Json | null;
+  payment_provider: string;
+  payment_provider_method_id: string;
+  paypal_email: string | null;
+  status: Generated<string>;
+  type: string;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface SceneAudio {
-	audio_url: string;
-	created_at: Generated<Timestamp>;
-	duration: Numeric;
-	file_size: number;
-	generated_at: Generated<Timestamp>;
-	id: Generated<string>;
-	scene_number: number;
-	story_id: string;
-	tts_provider: string;
-	voice_id: string;
-	voice_name: string;
+  audio_url: string;
+  created_at: Generated<Timestamp>;
+  duration: Numeric;
+  file_size: number;
+  generated_at: Generated<Timestamp>;
+  id: Generated<string>;
+  scene_number: number;
+  story_id: string;
+  tts_provider: string;
+  voice_id: string;
+  voice_name: string;
 }
 
 export interface Scenes {
-	content: string;
-	created_at: Generated<Timestamp>;
-	id: Generated<string>;
-	metadata: Json | null;
-	scene_number: number;
-	story_id: string;
-	summary: string | null;
-	word_count: number;
+  content: string;
+  created_at: Generated<Timestamp>;
+  id: Generated<string>;
+  metadata: Json | null;
+  scene_number: number;
+  story_id: string;
+  summary: string | null;
+  word_count: number;
 }
 
 export interface Sessions {
-	created_at: Generated<Timestamp>;
-	expires_at: Timestamp;
-	id: string;
-	user_id: string;
+  created_at: Generated<Timestamp>;
+  expires_at: Timestamp;
+  id: string;
+  user_id: string;
+}
+
+export interface SubscriptionTierLimits {
+  created_at: Generated<Timestamp>;
+  description: string | null;
+  features: Json | null;
+  is_active: Generated<boolean>;
+  name: string;
+  price_monthly: Numeric;
+  price_yearly: Numeric | null;
+  text_generations_per_day: number;
+  tier: SubscriptionTier;
+  updated_at: Generated<Timestamp>;
+  voice_generations_per_day: number;
+}
+
+export interface SubscriptionTransactions {
+  amount: Numeric;
+  created_at: Generated<Timestamp>;
+  currency: Generated<string>;
+  id: Generated<string>;
+  metadata: Json | null;
+  payment_provider: string | null;
+  payment_provider_id: string | null;
+  status: string;
+  tier: SubscriptionTier;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface Tropes {
-	created_at: Generated<Timestamp>;
-	description: string | null;
-	id: Generated<string>;
-	key: string;
-	label: string;
-	updated_at: Generated<Timestamp>;
+  created_at: Generated<Timestamp>;
+  description: string | null;
+  id: Generated<string>;
+  key: string;
+  label: string;
+  updated_at: Generated<Timestamp>;
+}
+
+export interface UsageTracking {
+  created_at: Generated<Timestamp>;
+  date: Timestamp;
+  id: Generated<string>;
+  text_generations: Generated<number>;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
+  voice_generations: Generated<number>;
 }
 
 export interface Users {
-	avatar_url: string | null;
-	created_at: Generated<Timestamp>;
-	default_preferences: Json | null;
-	default_tts_provider: string | null;
-	default_tts_voice_id: string | null;
-	default_tts_voice_name: string | null;
-	email: string;
-	email_verified: Generated<boolean>;
-	id: Generated<string>;
-	name: string | null;
-	role: Generated<UserRole>;
-	updated_at: Generated<Timestamp>;
+  avatar_url: string | null;
+  created_at: Generated<Timestamp>;
+  default_preferences: Json | null;
+  default_tts_provider: string | null;
+  default_tts_voice_id: string | null;
+  default_tts_voice_name: string | null;
+  email: string;
+  email_verified: Generated<boolean>;
+  id: Generated<string>;
+  name: string | null;
+  role: Generated<UserRole>;
+  subscription_auto_renew: Generated<boolean>;
+  subscription_end_date: Timestamp | null;
+  subscription_start_date: Timestamp | null;
+  subscription_tier: Generated<SubscriptionTier>;
+  updated_at: Generated<Timestamp>;
 }
 
 export interface UserStories {
-	ai_model: string | null;
-	ai_provider: string | null;
-	ai_temperature: Numeric | null;
-	branched_at_scene: number | null;
-	branched_from_story_id: string | null;
-	created_at: Generated<Timestamp>;
-	current_scene: Generated<number>;
-	favorited_at: Timestamp | null;
-	id: Generated<string>;
-	preferences: Json;
-	status: Generated<string>;
-	story_title: string | null;
-	template_id: string;
-	tts_provider: string | null;
-	tts_voice_id: string | null;
-	tts_voice_name: string | null;
-	updated_at: Generated<Timestamp>;
-	user_id: string;
+  ai_model: string | null;
+  ai_provider: string | null;
+  ai_temperature: Numeric | null;
+  branched_at_scene: number | null;
+  branched_from_story_id: string | null;
+  created_at: Generated<Timestamp>;
+  current_scene: Generated<number>;
+  favorited_at: Timestamp | null;
+  id: Generated<string>;
+  preferences: Json;
+  status: Generated<string>;
+  story_title: string | null;
+  template_id: string;
+  tts_provider: string | null;
+  tts_voice_id: string | null;
+  tts_voice_name: string | null;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
 }
 
 export interface DB {
-	admin_audit_logs: AdminAuditLogs;
-	api_keys: ApiKeys;
-	app_settings: AppSettings;
-	choice_points: ChoicePoints;
-	choices: Choices;
-	novel_templates: NovelTemplates;
-	oauth_accounts: OauthAccounts;
-	password_accounts: PasswordAccounts;
-	scene_audio: SceneAudio;
-	scenes: Scenes;
-	sessions: Sessions;
-	tropes: Tropes;
-	user_stories: UserStories;
-	users: Users;
+  admin_audit_logs: AdminAuditLogs;
+  api_keys: ApiKeys;
+  app_settings: AppSettings;
+  billing_details: BillingDetails;
+  choice_points: ChoicePoints;
+  choices: Choices;
+  invoice_line_items: InvoiceLineItems;
+  invoices: Invoices;
+  novel_templates: NovelTemplates;
+  oauth_accounts: OauthAccounts;
+  password_accounts: PasswordAccounts;
+  payment_methods: PaymentMethods;
+  scene_audio: SceneAudio;
+  scenes: Scenes;
+  sessions: Sessions;
+  subscription_tier_limits: SubscriptionTierLimits;
+  subscription_transactions: SubscriptionTransactions;
+  tropes: Tropes;
+  usage_tracking: UsageTracking;
+  user_stories: UserStories;
+  users: Users;
 }
