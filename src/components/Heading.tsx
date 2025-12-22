@@ -41,20 +41,26 @@ const variantStyles = {
 	danger: "text-red-900",
 };
 
-export function Heading({
-	level,
-	variant = "default",
-	size,
-	className,
-	children,
-}: HeadingProps) {
-	const Component = level;
-
-	const sizeClass = size ? sizeStyles[size] : levelStyles[level];
+/**
+ * Heading - Semantic heading component with responsive sizes
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.level - Semantic heading level (h1-h6)
+ * @param props.variant - Color variant (default: "default")
+ * @param props.size - Size preset (overrides level default)
+ * @param props.className - Additional CSS classes
+ * @param props.children - Heading content
+ */
+export function Heading(props: HeadingProps) {
+	const Component = props.level;
+	const variant = props.variant || "default";
+	const sizeClass = props.size ? sizeStyles[props.size] : levelStyles[props.level];
 
 	return (
-		<Component className={cn(sizeClass, variantStyles[variant], className)}>
-			{children}
+		<Component
+			className={cn(sizeClass, variantStyles[variant], props.className)}
+		>
+			{props.children}
 		</Component>
 	);
 }

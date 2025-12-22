@@ -43,21 +43,31 @@ const alignClasses = {
 	},
 };
 
-export function Stack({
-	direction = "vertical",
-	gap = "md",
-	align = "stretch",
-	className = "",
-	children,
-}: StackProps) {
+/**
+ * Stack - Layout component for vertical or horizontal stacking with consistent gaps
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.direction - Stack direction (default: "vertical")
+ * @param props.gap - Gap size between items (default: "md")
+ * @param props.align - Alignment of items (default: "stretch")
+ * @param props.className - Additional CSS classes
+ * @param props.children - Stack content
+ */
+export function Stack(props: StackProps) {
+	const direction = props.direction || "vertical";
+	const gap = props.gap || "md";
+	const align = props.align || "stretch";
+
 	const isHorizontal = direction === "horizontal";
 	const gapClass = gapClasses[direction][gap];
 	const alignClass = alignClasses[direction][align];
 	const flexDirection = isHorizontal ? "flex-row" : "flex-col";
 
 	return (
-		<div className={cn("flex", flexDirection, gapClass, alignClass, className)}>
-			{children}
+		<div
+			className={cn("flex", flexDirection, gapClass, alignClass, props.className)}
+		>
+			{props.children}
 		</div>
 	);
 }

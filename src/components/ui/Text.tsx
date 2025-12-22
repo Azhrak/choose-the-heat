@@ -72,16 +72,24 @@ const weightClasses = {
 	bold: "font-bold",
 };
 
-export function Text({
-	as = "p",
-	variant = "primary",
-	size = "base",
-	weight = "normal",
-	mono = false,
-	className,
-	children,
-}: TextProps) {
-	const Component = as;
+/**
+ * Text - Polymorphic text component with variants, sizes, and weights
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.as - HTML element to render (default: "p")
+ * @param props.variant - Text color variant (default: "primary")
+ * @param props.size - Text size (default: "base")
+ * @param props.weight - Font weight (default: "normal")
+ * @param props.mono - Use monospace font (default: false)
+ * @param props.className - Additional CSS classes
+ * @param props.children - Text content
+ */
+export function Text(props: TextProps) {
+	const Component = props.as || "p";
+	const variant = props.variant || "primary";
+	const size = props.size || "base";
+	const weight = props.weight || "normal";
+	const mono = props.mono || false;
 
 	return (
 		<Component
@@ -90,10 +98,10 @@ export function Text({
 				sizeClasses[size],
 				weightClasses[weight],
 				mono && "font-mono",
-				className,
+				props.className,
 			)}
 		>
-			{children}
+			{props.children}
 		</Component>
 	);
 }

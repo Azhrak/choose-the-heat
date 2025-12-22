@@ -18,13 +18,18 @@ const variantClasses = {
 	info: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-400",
 };
 
-export function Alert({
-	message,
-	variant = "error",
-	className = "",
-	children,
-}: AlertProps) {
-	const content = message || children;
+/**
+ * Alert - Alert message component with variants
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.message - Alert message text
+ * @param props.variant - Alert style variant (default: "error")
+ * @param props.className - Additional CSS classes
+ * @param props.children - Alert content (alternative to message)
+ */
+export function Alert(props: AlertProps) {
+	const variant = props.variant || "error";
+	const content = props.message || props.children;
 
 	if (!content) return null;
 
@@ -33,7 +38,7 @@ export function Alert({
 			className={cn(
 				"p-3 border rounded-lg text-sm",
 				variantClasses[variant],
-				className,
+				props.className,
 			)}
 		>
 			{content}

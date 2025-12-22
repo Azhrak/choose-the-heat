@@ -27,15 +27,33 @@ const sizeClasses = {
 	lg: "px-8 py-4 text-lg",
 };
 
-export function Button({
-	variant = "primary",
-	size = "md",
-	loading = false,
-	children,
-	className = "",
-	disabled,
-	...props
-}: ButtonProps) {
+/**
+ * Button - Reusable button component with variants, sizes, and loading state
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.variant - Button style variant (default: "primary")
+ * @param props.size - Button size (default: "md")
+ * @param props.loading - Show loading spinner and disable button
+ * @param props.disabled - Disable button interaction
+ * @param props.children - Button content
+ * @param props.className - Additional CSS classes
+ */
+export function Button(props: ButtonProps) {
+	const variant = props.variant || "primary";
+	const size = props.size || "md";
+	const loading = props.loading || false;
+
+	// Separate ButtonProps from HTML button props
+	const {
+		variant: _variant,
+		size: _size,
+		loading: _loading,
+		children,
+		className,
+		disabled,
+		...buttonProps
+	} = props;
+
 	return (
 		<button
 			className={cn(
@@ -46,7 +64,7 @@ export function Button({
 				className,
 			)}
 			disabled={disabled || loading}
-			{...props}
+			{...buttonProps}
 		>
 			{loading && <Loader2 className="w-5 h-5 animate-spin" />}
 			{children}

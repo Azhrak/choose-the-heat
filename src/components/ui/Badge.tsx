@@ -23,22 +23,29 @@ const sizeClasses = {
 	md: "px-2.5 py-1 text-sm",
 };
 
-export function Badge({
-	variant = "default",
-	size = "md",
-	className = "",
-	children,
-}: BadgeProps) {
+/**
+ * Badge - Small inline badge component with variants
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.variant - Badge style variant (default: "default")
+ * @param props.size - Badge size (default: "md")
+ * @param props.className - Additional CSS classes
+ * @param props.children - Badge content
+ */
+export function Badge(props: BadgeProps) {
+	const variant = props.variant || "default";
+	const size = props.size || "md";
+
 	return (
 		<span
 			className={cn(
 				"inline-flex items-center rounded-full font-medium",
 				variantClasses[variant],
 				sizeClasses[size],
-				className,
+				props.className,
 			)}
 		>
-			{children}
+			{props.children}
 		</span>
 	);
 }
