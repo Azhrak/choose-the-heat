@@ -34,28 +34,32 @@ const activeColorClasses = {
 	romance: "!bg-romance-600 hover:!bg-romance-700 !text-white",
 };
 
-export function FilterBar<T extends string = string>({
-	label,
-	filters,
-	activeFilter,
-	onChange,
-}: FilterBarProps<T>) {
+/**
+ * FilterBar - Horizontal filter buttons with counts
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.label - Label for the filter bar
+ * @param props.filters - Array of filter options with counts
+ * @param props.activeFilter - Currently active filter value
+ * @param props.onChange - Callback when filter changes
+ */
+export function FilterBar<T extends string = string>(props: FilterBarProps<T>) {
 	return (
 		<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4">
 			<div className="flex items-center gap-3">
 				<span className="text-sm font-medium text-slate-700 dark:text-gray-300">
-					{label}
+					{props.label}
 				</span>
 				<div className="flex gap-2">
-					{filters.map((filter) => (
+					{props.filters.map((filter) => (
 						<Button
 							key={filter.value as string}
 							type="button"
 							variant="secondary"
 							size="sm"
-							onClick={() => onChange(filter.value)}
+							onClick={() => props.onChange(filter.value)}
 							className={
-								activeFilter === filter.value
+								props.activeFilter === filter.value
 									? activeColorClasses[filter.activeColor]
 									: ""
 							}

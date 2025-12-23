@@ -14,24 +14,29 @@ interface TropeSelectorProps {
 	helperText?: string;
 }
 
-export function TropeSelector({
-	label,
-	selectedTropeKeys,
-	onChange,
-	required = false,
-	helperText,
-}: TropeSelectorProps) {
+/**
+ * TropeSelector - Multi-select component for choosing tropes with search
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.label - Label for the selector
+ * @param props.selectedTropeKeys - Currently selected trope keys
+ * @param props.onChange - Callback when selection changes
+ * @param props.required - Whether selection is required (default: false)
+ * @param props.helperText - Optional helper text
+ */
+export function TropeSelector(props: TropeSelectorProps) {
+	const required = props.required || false;
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isExpanded, setIsExpanded] = useState(false);
 	const { data: tropesData, isLoading, error } = useTropesQuery();
 
 	const handleToggle = (tropeKey: string) => {
-		if (selectedTropeKeys.includes(tropeKey)) {
+		if (props.selectedTropeKeys.includes(tropeKey)) {
 			// Remove the trope
-			onChange(selectedTropeKeys.filter((key) => key !== tropeKey));
+			props.onChange(props.selectedTropeKeys.filter((key) => key !== tropeKey));
 		} else {
 			// Add the trope
-			onChange([...selectedTropeKeys, tropeKey]);
+			props.onChange([...props.selectedTropeKeys, tropeKey]);
 		}
 	};
 
@@ -39,7 +44,7 @@ export function TropeSelector({
 		return (
 			<Stack gap="xs">
 				<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
-					{label} {required && <span className="text-red-500">*</span>}
+					{props.label} {required && <span className="text-red-500">*</span>}
 				</div>
 				<div className="flex items-center justify-center p-8 border border-slate-300 dark:border-gray-600 rounded-lg">
 					<LoadingSpinner />
@@ -52,7 +57,7 @@ export function TropeSelector({
 		return (
 			<Stack gap="xs">
 				<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
-					{label} {required && <span className="text-red-500">*</span>}
+					{props.label} {required && <span className="text-red-500">*</span>}
 				</div>
 				<Alert message="Failed to load tropes" variant="error" />
 			</Stack>
@@ -75,12 +80,12 @@ export function TropeSelector({
 	return (
 		<Stack gap="xs">
 			<div className="block text-sm font-medium text-slate-900 dark:text-gray-100">
-				{label} {required && <span className="text-red-500">*</span>}
+				{props.label} {required && <span className="text-red-500">*</span>}
 			</div>
 
-			{helperText && (
+			{props.helperText && (
 				<p className="text-sm text-slate-600 dark:text-gray-400">
-					{helperText}
+					{props.helperText}
 				</p>
 			)}
 
@@ -117,7 +122,7 @@ export function TropeSelector({
 								className="p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors"
 							>
 								<Checkbox
-									checked={selectedTropeKeys.includes(trope.key)}
+									checked={props.selectedTropeKeys.includes(trope.key)}
 									onChange={() => handleToggle(trope.key)}
 									label={trope.label}
 									description={trope.description ?? undefined}
@@ -147,9 +152,9 @@ export function TropeSelector({
 				</button>
 			</div>
 
-			{selectedTropeKeys.length > 0 && (
+			{props.selectedTropeKeys.length > 0 && (
 				<div className="flex flex-wrap gap-2 mt-2">
-					{selectedTropeKeys.map((key) => {
+					{props.selectedTropeKeys.map((key) => {
 						const trope = tropes.find((t) => t.key === key);
 						return (
 							<span

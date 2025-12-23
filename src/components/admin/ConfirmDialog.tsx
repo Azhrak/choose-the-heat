@@ -14,17 +14,25 @@ interface ConfirmDialogProps {
 	loading?: boolean;
 }
 
-export function ConfirmDialog({
-	isOpen,
-	onClose,
-	onConfirm,
-	title,
-	message,
-	confirmText = "Confirm",
-	confirmVariant = "primary",
-	loading = false,
-}: ConfirmDialogProps) {
-	if (!isOpen) return null;
+/**
+ * ConfirmDialog - Modal dialog for confirming destructive actions
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.isOpen - Whether dialog is visible
+ * @param props.onClose - Callback to close dialog
+ * @param props.onConfirm - Callback when user confirms
+ * @param props.title - Dialog title
+ * @param props.message - Dialog message (string or ReactNode)
+ * @param props.confirmText - Confirm button text (default: "Confirm")
+ * @param props.confirmVariant - Confirm button variant (default: "primary")
+ * @param props.loading - Loading state (default: false)
+ */
+export function ConfirmDialog(props: ConfirmDialogProps) {
+	const confirmText = props.confirmText || "Confirm";
+	const confirmVariant = props.confirmVariant || "primary";
+	const loading = props.loading || false;
+
+	if (!props.isOpen) return null;
 
 	return (
 		<div className="fixed inset-0 z-50 overflow-y-auto">
@@ -32,8 +40,8 @@ export function ConfirmDialog({
 			<button
 				type="button"
 				className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 transition-opacity"
-				onClick={onClose}
-				onKeyDown={(e) => e.key === "Escape" && onClose()}
+				onClick={props.onClose}
+				onKeyDown={(e) => e.key === "Escape" && props.onClose()}
 				aria-label="Close dialog"
 			/>
 			{/* Dialog */}
@@ -41,7 +49,7 @@ export function ConfirmDialog({
 				<div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
 					{/* Close button */}
 					<Button
-						onClick={onClose}
+						onClick={props.onClose}
 						variant="ghost"
 						size="sm"
 						className="absolute top-4 right-4 text-slate-400 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-200"
@@ -57,17 +65,17 @@ export function ConfirmDialog({
 						<Stack gap="xs">
 							{/* Content */}
 							<h3 className="text-lg font-semibold text-slate-900 dark:text-gray-100">
-								{title}
+								{props.title}
 							</h3>
 							<div className="text-sm text-slate-600 dark:text-gray-300">
-								{message}
+								{props.message}
 							</div>
 						</Stack>
 						{/* Actions */}
 						<div className="flex gap-3 justify-end">
 							<Button
 								variant="secondary"
-								onClick={onClose}
+								onClick={props.onClose}
 								disabled={loading}
 								size="sm"
 							>
@@ -75,7 +83,7 @@ export function ConfirmDialog({
 							</Button>
 							<Button
 								variant={confirmVariant}
-								onClick={onConfirm}
+								onClick={props.onConfirm}
 								loading={loading}
 								size="sm"
 							>

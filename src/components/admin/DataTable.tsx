@@ -21,16 +21,23 @@ interface DataTableProps<T> {
 	onSelectionChange?: (selectedIds: Set<string>) => void;
 }
 
-export function DataTable<T extends { id: string }>({
-	columns,
-	data,
-	onRowClick,
-	emptyMessage = "No data available",
-	className,
-	selectable = false,
-	selectedIds = new Set(),
-	onSelectionChange,
-}: DataTableProps<T>) {
+/**
+ * DataTable - Generic table component with sorting and selection
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.columns - Column definitions
+ * @param props.data - Array of data rows
+ * @param props.onRowClick - Optional click handler for rows
+ * @param props.emptyMessage - Message when no data (default: "No data available")
+ * @param props.className - Additional CSS classes
+ * @param props.selectable - Enable row selection (default: false)
+ * @param props.selectedIds - Set of selected row IDs
+ * @param props.onSelectionChange - Callback when selection changes
+ */
+export function DataTable<T extends { id: string }>(props: DataTableProps<T>) {
+	const emptyMessage = props.emptyMessage || "No data available";
+	const selectable = props.selectable || false;
+	const selectedIds = props.selectedIds || new Set();
 	const getCellValue = (row: T, column: Column<T>) => {
 		if (typeof column.accessor === "function") {
 			return column.accessor(row);
@@ -39,18 +46,18 @@ export function DataTable<T extends { id: string }>({
 	};
 
 	const handleSelectAll = (checked: boolean) => {
-		if (!onSelectionChange) return;
+		if (!props.onSelectionChange) return;
 
 		if (checked) {
-			const allIds = new Set(data.map((row) => row.id));
-			onSelectionChange(allIds);
+			const allIds = new Set(props.data.map((row) => row.id));
+			props.onSelectionChange(allIds);
 		} else {
-			onSelectionChange(new Set());
+			props.onSelectionChange(new Set());
 		}
 	};
 
 	const handleSelectRow = (rowId: string, checked: boolean) => {
-		if (!onSelectionChange) return;
+		if (!props.onSelectionChange) return;
 
 		const newSelection = new Set(selectedIds);
 		if (checked) {
@@ -58,13 +65,13 @@ export function DataTable<T extends { id: string }>({
 		} else {
 			newSelection.delete(rowId);
 		}
-		onSelectionChange(newSelection);
+		props.onSelectionChange(newSelection);
 	};
 
-	const isAllSelected = data.length > 0 && selectedIds.size === data.length;
-	const isSomeSelected = selectedIds.size > 0 && selectedIds.size < data.length;
+	const isAllSelected = props.data.length > 0 && selectedIds.size === props.data.length;
+	const isSomeSelected = selectedIds.size > 0 && selectedIds.size < props.data.length;
 
-	if (data.length === 0) {
+	if (props.data.length === 0) {
 		return (
 			<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-12 text-center">
 				<p className="text-slate-500 dark:text-gray-400">{emptyMessage}</p>
@@ -76,7 +83,7 @@ export function DataTable<T extends { id: string }>({
 		<div
 			className={cn(
 				"bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden",
-				className,
+				props.className,
 			)}
 		>
 			<div className="overflow-x-auto">
@@ -92,7 +99,7 @@ export function DataTable<T extends { id: string }>({
 									/>
 								</th>
 							)}
-							{columns.map((column, index) => (
+							{props.columns.map((column, index) => (
 								<th
 									key={column.key ?? `column-${index}`}
 									className={cn(
@@ -106,15 +113,15 @@ export function DataTable<T extends { id: string }>({
 						</tr>
 					</thead>
 					<tbody className="divide-y divide-slate-200 dark:divide-gray-700">
-						{data.map((row) => (
+						{props.data.map((row) => (
 							<tr
 								key={row.id}
-								onClick={() => onRowClick?.(row)}
+								onClick={() => props.onRowClick?.(row)}
 								className={cn(
 									"hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors",
 									selectedIds.has(row.id) &&
 										"bg-romance-50 dark:bg-romance-500/20",
-									onRowClick && "cursor-pointer",
+									props.onRowClick && "cursor-pointer",
 								)}
 							>
 								{selectable && (
@@ -135,7 +142,7 @@ export function DataTable<T extends { id: string }>({
 										/>
 									</td>
 								)}
-								{columns.map((column, index) => (
+								{props.columns.map((column, index) => (
 									<td
 										key={column.key ?? `column-${index}`}
 										className={cn(

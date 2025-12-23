@@ -33,22 +33,29 @@ const accentColorClasses = {
 		"bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700",
 };
 
-export function BulkActionsToolbar({
-	selectedCount,
-	onClearSelection,
-	actions,
-	isLoading = false,
-	itemLabel,
-	userRole,
-	error,
-	accentColor = "romance",
-}: BulkActionsToolbarProps) {
-	if (selectedCount === 0) {
+/**
+ * BulkActionsToolbar - Toolbar for bulk operations on selected items
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedCount - Number of items selected
+ * @param props.onClearSelection - Callback to clear selection
+ * @param props.actions - Array of bulk action buttons
+ * @param props.isLoading - Loading state (default: false)
+ * @param props.itemLabel - Label for items (e.g., "template")
+ * @param props.userRole - User role for filtering admin-only actions
+ * @param props.error - Error message to display
+ * @param props.accentColor - Color theme (default: "romance")
+ */
+export function BulkActionsToolbar(props: BulkActionsToolbarProps) {
+	const isLoading = props.isLoading || false;
+	const accentColor = props.accentColor || "romance";
+
+	if (props.selectedCount === 0) {
 		return null;
 	}
 
-	const filteredActions = actions.filter(
-		(action) => !action.requiresAdmin || userRole === "admin",
+	const filteredActions = props.actions.filter(
+		(action) => !action.requiresAdmin || props.userRole === "admin",
 	);
 
 	return (
@@ -58,10 +65,10 @@ export function BulkActionsToolbar({
 			>
 				<div className="flex items-center gap-4">
 					<span className="text-sm font-medium text-slate-900 dark:text-gray-100">
-						{selectedCount} {itemLabel}
-						{selectedCount !== 1 ? "s" : ""} selected
+						{props.selectedCount} {props.itemLabel}
+						{props.selectedCount !== 1 ? "s" : ""} selected
 					</span>
-					<Button size="sm" variant="ghost" onClick={onClearSelection}>
+					<Button size="sm" variant="ghost" onClick={props.onClearSelection}>
 						<X className="w-4 h-4" />
 						Clear
 					</Button>
@@ -83,7 +90,7 @@ export function BulkActionsToolbar({
 				</div>
 			</div>
 
-			{error && <ErrorMessage message={error} />}
+			{props.error && <ErrorMessage message={props.error} />}
 		</Stack>
 	);
 }

@@ -8,19 +8,23 @@ interface AdminLayoutProps {
 	userRole: UserRole;
 }
 
-export function AdminLayout({
-	children,
-	currentPath,
-	userRole,
-}: AdminLayoutProps) {
+/**
+ * AdminLayout - Layout wrapper for admin pages with sidebar navigation
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.children - Page content to render
+ * @param props.currentPath - Current page path for active state
+ * @param props.userRole - User role for conditional navigation
+ */
+export function AdminLayout(props: AdminLayoutProps) {
 	return (
 		<div className="flex min-h-screen bg-slate-50 dark:bg-gray-900">
 			{/* Sidebar Navigation */}
-			<AdminNav currentPath={currentPath} userRole={userRole} />
+			<AdminNav currentPath={props.currentPath} userRole={props.userRole} />
 
 			{/* Main Content */}
 			<main className="flex-1 p-8">
-				<div className="max-w-7xl mx-auto">{children}</div>
+				<div className="max-w-7xl mx-auto">{props.children}</div>
 			</main>
 		</div>
 	);

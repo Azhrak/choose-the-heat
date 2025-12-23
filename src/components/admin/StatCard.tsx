@@ -10,26 +10,34 @@ interface StatCardProps {
 }
 
 /**
- * Reusable stat card component for admin dashboards
+ * StatCard - Reusable stat card component for admin dashboards
+ * Follows props object pattern (no destructuring)
  * Displays a metric with an icon in a colored background
+ *
+ * @param props.title - Card title text
+ * @param props.value - Metric value (number or string)
+ * @param props.icon - Lucide icon component
+ * @param props.color - Tailwind background color class (e.g., "bg-blue-500")
  */
-export function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
+export function StatCard(props: StatCardProps) {
+	const Icon = props.icon;
+
 	return (
 		<Card padding="md" className="border border-slate-200 dark:border-gray-700">
 			<Stack gap="md">
 				<div className="flex items-center justify-between">
 					<div
-						className={`p-3 rounded-lg ${color} bg-opacity-10 dark:bg-opacity-20`}
+						className={`p-3 rounded-lg ${props.color} bg-opacity-10 dark:bg-opacity-20`}
 					>
-						<Icon className={`w-6 h-6 ${color.replace("bg-", "text-")}`} />
+						<Icon className={`w-6 h-6 ${props.color.replace("bg-", "text-")}`} />
 					</div>
 				</div>
 				<Stack gap="xs">
 					<h3 className="text-sm font-medium text-slate-600 dark:text-gray-400">
-						{title}
+						{props.title}
 					</h3>
 					<p className="text-3xl font-bold text-slate-900 dark:text-gray-100">
-						{value}
+						{props.value}
 					</p>
 				</Stack>
 			</Stack>

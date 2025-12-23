@@ -13,7 +13,13 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+/**
+ * ToastProvider - Context provider for toast notifications
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.children - Child components
+ */
+export function ToastProvider(props: { children: ReactNode }) {
 	const [toast, setToast] = useState<ToastOptions | null>(null);
 
 	const showToast = (options: ToastOptions) => {
@@ -31,7 +37,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
 	return (
 		<ToastContext.Provider value={{ showToast }}>
-			{children}
+			{props.children}
 			{toast && (
 				<Toast
 					message={toast.message}

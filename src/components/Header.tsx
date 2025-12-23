@@ -11,7 +11,16 @@ interface HeaderProps {
 	userRole?: UserRole;
 }
 
-export function Header({ currentPath = "", userRole }: HeaderProps) {
+/**
+ * Header - Navigation header with mobile menu
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.currentPath - Current page path for active state (default: "")
+ * @param props.userRole - User role for conditional admin access
+ */
+export function Header(props: HeaderProps) {
+	const currentPath = props.currentPath || "";
+	const userRole = props.userRole;
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const isEditorOrAdmin = userRole === "editor" || userRole === "admin";
 

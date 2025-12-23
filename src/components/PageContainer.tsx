@@ -15,15 +15,22 @@ const maxWidthClasses = {
 	full: "max-w-7xl",
 };
 
-export function PageContainer({
-	children,
-	maxWidth = "full",
-	className = "",
-}: PageContainerProps) {
+/**
+ * PageContainer - Container with responsive max-width and padding
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.children - Content to render inside container
+ * @param props.maxWidth - Maximum width preset (default: "full")
+ * @param props.className - Additional CSS classes
+ */
+export function PageContainer(props: PageContainerProps) {
+	const maxWidth = props.maxWidth || "full";
+	const className = props.className || "";
+
 	return (
 		<div className="container mx-auto px-4 py-12">
 			<div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
-				{children}
+				{props.children}
 			</div>
 		</div>
 	);

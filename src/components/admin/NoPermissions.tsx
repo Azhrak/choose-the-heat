@@ -9,13 +9,22 @@ interface NoPermissionsProps {
 	backLabel?: string;
 }
 
-export function NoPermissions({
-	title = "Access Denied",
-	message = "You don't have permission to access this page.",
-	backTo = "/browse",
-	backLabel,
-}: NoPermissionsProps) {
+/**
+ * NoPermissions - Error page for unauthorized access
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.title - Error page title (default: "Access Denied")
+ * @param props.message - Error message (default: "You don't have permission to access this page.")
+ * @param props.backTo - Navigation target (default: "/browse")
+ * @param props.backLabel - Button label (auto-generated based on backTo if not provided)
+ */
+export function NoPermissions(props: NoPermissionsProps) {
 	const navigate = useNavigate();
+
+	const title = props.title || "Access Denied";
+	const message = props.message || "You don't have permission to access this page.";
+	const backTo = props.backTo || "/browse";
+	const backLabel = props.backLabel;
 
 	const defaultBackLabel =
 		backTo === "/admin" ? "Back to Dashboard" : "Back to Browse";

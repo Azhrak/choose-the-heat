@@ -42,15 +42,19 @@ type TropeModalProps =
 			error?: string;
 	  };
 
-export function TropeModal({
-	mode,
-	isOpen,
-	trope,
-	onClose,
-	onSubmit,
-	isLoading,
-	error,
-}: TropeModalProps) {
+/**
+ * TropeModal - Modal dialog for adding or editing tropes
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.mode - "add" or "edit" mode
+ * @param props.isOpen - Whether modal is visible
+ * @param props.onClose - Callback to close modal
+ * @param props.onSubmit - Callback when form is submitted
+ * @param props.isLoading - Loading state
+ * @param props.error - Error message
+ * @param props.trope - Trope to edit (edit mode only)
+ */
+export function TropeModal(props: TropeModalProps) {
 	const [key, setKey] = useState("");
 	const [label, setLabel] = useState("");
 	const [description, setDescription] = useState("");
@@ -58,23 +62,23 @@ export function TropeModal({
 
 	// Populate form when trope changes (edit mode)
 	useEffect(() => {
-		if (mode === "edit" && trope) {
-			setKey(trope.key);
-			setLabel(trope.label);
-			setDescription(trope.description || "");
+		if (props.mode === "edit" && props.trope) {
+			setKey(props.trope.key);
+			setLabel(props.trope.label);
+			setDescription(props.trope.description || "");
 			setValidationError("");
 		}
-	}, [mode, trope]);
+	}, [props.mode, props.trope]);
 
 	// Don't render if not open, or if edit mode without trope
-	if (!isOpen || (mode === "edit" && !trope)) return null;
+	if (!props.isOpen || (props.mode === "edit" && !props.trope)) return null;
 
 	const handleClose = () => {
 		setKey("");
 		setLabel("");
 		setDescription("");
 		setValidationError("");
-		onClose();
+		props.onClose();
 	};
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -106,16 +110,16 @@ export function TropeModal({
 			description: description.trim() || undefined,
 		};
 
-		if (mode === "edit" && trope) {
+		if (props.mode === "edit" && props.trope) {
 			(
-				onSubmit as (
+				props.onSubmit as (
 					tropeId: string,
 					data: { key: string; label: string; description?: string },
 				) => void
-			)(trope.id, data);
+			)(props.trope.id, data);
 		} else {
 			(
-				onSubmit as (data: {
+				props.onSubmit as (data: {
 					key: string;
 					label: string;
 					description?: string;
@@ -129,17 +133,17 @@ export function TropeModal({
 			icon: Plus,
 			title: "Add New Trope",
 			description: "Add a new trope that can be assigned to story templates.",
-			submitText: isLoading ? "Adding..." : "Add Trope",
+			submitText: props.isLoading ? "Adding..." : "Add Trope",
 		},
 		edit: {
 			icon: Edit2,
 			title: "Edit Trope",
 			description: "Update the trope information below.",
-			submitText: isLoading ? "Updating..." : "Update Trope",
+			submitText: props.isLoading ? "Updating..." : "Update Trope",
 		},
 	};
 
-	const { icon: Icon, title, description: desc, submitText } = config[mode];
+	const { icon: Icon, title, description: desc, submitText } = config[props.mode];
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -160,7 +164,7 @@ export function TropeModal({
 						placeholder="enemies-to-lovers"
 						helperText="Lowercase letters, numbers, and hyphens only"
 						required
-						disabled={isLoading}
+						disabled={props.isLoading}
 					/>
 
 					<FormInput
@@ -170,7 +174,7 @@ export function TropeModal({
 						onChange={(e) => setLabel(e.target.value)}
 						placeholder="Enemies to Lovers"
 						required
-						disabled={isLoading}
+						disabled={props.isLoading}
 					/>
 
 					<FormTextarea
@@ -179,16 +183,16 @@ export function TropeModal({
 						onChange={(e) => setDescription(e.target.value)}
 						placeholder="Characters start as adversaries and develop romantic feelings"
 						rows={3}
-						disabled={isLoading}
+						disabled={props.isLoading}
 					/>
 
-					<Alert message={validationError || error} variant="error" />
+					<Alert message={validationError || props.error} variant="error" />
 
 					<Stack direction="horizontal" gap="sm">
 						<Button
 							type="button"
 							onClick={handleClose}
-							disabled={isLoading}
+							disabled={props.isLoading}
 							variant="secondary"
 							className="flex-1"
 						>
@@ -196,7 +200,7 @@ export function TropeModal({
 						</Button>
 						<Button
 							type="submit"
-							disabled={isLoading || !key || !label}
+							disabled={props.isLoading || !key || !label}
 							variant="primary"
 							className="flex-1"
 						>

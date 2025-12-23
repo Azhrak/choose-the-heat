@@ -18,12 +18,19 @@ interface AdminNavProps {
 	userRole: UserRole;
 }
 
-export function AdminNav({ currentPath, userRole }: AdminNavProps) {
+/**
+ * AdminNav - Sidebar navigation for admin panel
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.currentPath - Current page path for active state
+ * @param props.userRole - User role for conditional navigation items
+ */
+export function AdminNav(props: AdminNavProps) {
 	const isActive = (path: string) => {
 		if (path === "/admin") {
-			return currentPath === "/admin";
+			return props.currentPath === "/admin";
 		}
-		return currentPath.startsWith(path);
+		return props.currentPath.startsWith(path);
 	};
 
 	const navItems = [
@@ -71,7 +78,7 @@ export function AdminNav({ currentPath, userRole }: AdminNavProps) {
 		},
 	];
 
-	const visibleItems = navItems.filter((item) => item.roles.includes(userRole));
+	const visibleItems = navItems.filter((item) => item.roles.includes(props.userRole));
 
 	return (
 		<nav className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 min-h-screen p-6">
