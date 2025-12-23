@@ -18,18 +18,22 @@ interface PasswordChangeProps {
 	success?: string;
 }
 
-export function PasswordChange({
-	currentPassword,
-	newPassword,
-	confirmPassword,
-	onCurrentPasswordChange,
-	onNewPasswordChange,
-	onConfirmPasswordChange,
-	onSubmit,
-	isUpdating,
-	error,
-	success,
-}: PasswordChangeProps) {
+/**
+ * PasswordChange - Form for changing user password
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.currentPassword - Current password value
+ * @param props.newPassword - New password value
+ * @param props.confirmPassword - Password confirmation value
+ * @param props.onCurrentPasswordChange - Callback when current password changes
+ * @param props.onNewPasswordChange - Callback when new password changes
+ * @param props.onConfirmPasswordChange - Callback when confirmation changes
+ * @param props.onSubmit - Form submit handler
+ * @param props.isUpdating - Loading state
+ * @param props.error - Error message (optional)
+ * @param props.success - Success message (optional)
+ */
+export function PasswordChange(props: PasswordChangeProps) {
 	return (
 		<Card>
 			<Stack gap="md">
@@ -40,34 +44,34 @@ export function PasswordChange({
 					</h2>
 				</div>
 
-				<form onSubmit={onSubmit} className="space-y-4">
+				<form onSubmit={props.onSubmit} className="space-y-4">
 					<FormInput
 						label="Current Password"
 						type="password"
-						value={currentPassword}
-						onChange={(e) => onCurrentPasswordChange(e.target.value)}
+						value={props.currentPassword}
+						onChange={(e) => props.onCurrentPasswordChange(e.target.value)}
 						required
 					/>
 					<FormInput
 						label="New Password"
 						type="password"
-						value={newPassword}
-						onChange={(e) => onNewPasswordChange(e.target.value)}
+						value={props.newPassword}
+						onChange={(e) => props.onNewPasswordChange(e.target.value)}
 						required
 						helperText="At least 8 characters with uppercase, lowercase, and numbers"
 					/>
 					<FormInput
 						label="Confirm New Password"
 						type="password"
-						value={confirmPassword}
-						onChange={(e) => onConfirmPasswordChange(e.target.value)}
+						value={props.confirmPassword}
+						onChange={(e) => props.onConfirmPasswordChange(e.target.value)}
 						required
 					/>
-					<Alert message={error} variant="error" />
+					<Alert message={props.error} variant="error" />
 
-					<Alert message={success} variant="success" />
+					<Alert message={props.success} variant="success" />
 
-					<Button type="submit" loading={isUpdating} variant="primary">
+					<Button type="submit" loading={props.isUpdating} variant="primary">
 						Change Password
 					</Button>
 				</form>

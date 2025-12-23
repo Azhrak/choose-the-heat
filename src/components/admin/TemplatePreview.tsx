@@ -11,20 +11,27 @@ interface TemplatePreviewProps {
 	allTropes?: Array<{ key: string; label: string; description: string | null }>;
 }
 
-export function TemplatePreview({
-	template,
-	warnings = [],
-	allTropes = [],
-}: TemplatePreviewProps) {
+/**
+ * TemplatePreview - Preview generated template with warnings
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.template - Generated template to preview
+ * @param props.warnings - Array of warning messages (default: [])
+ * @param props.allTropes - All available tropes for label lookup (default: [])
+ */
+export function TemplatePreview(props: TemplatePreviewProps) {
+	const warnings = props.warnings || [];
+	const allTropes = props.allTropes || [];
+
 	// Get trope labels for display
-	const tropeLabels = template.base_tropes.map((key) => {
+	const tropeLabels = props.template.base_tropes.map((key) => {
 		const trope = allTropes.find((t) => t.key === key);
 		return trope?.label || key;
 	});
 
 	// Get gradient label
 	const gradientOption = GRADIENT_OPTIONS.find(
-		(g) => g.value === template.cover_gradient,
+		(g) => g.value === props.template.cover_gradient,
 	);
 
 	return (
@@ -58,7 +65,7 @@ export function TemplatePreview({
 					Title
 				</Text>
 				<Text size="lg" weight="semibold">
-					{template.title}
+					{props.template.title}
 				</Text>
 			</Stack>
 
@@ -71,7 +78,7 @@ export function TemplatePreview({
 				>
 					Description
 				</Text>
-				<Text>{template.description}</Text>
+				<Text>{props.template.description}</Text>
 			</Stack>
 
 			{/* Tropes */}
@@ -81,12 +88,12 @@ export function TemplatePreview({
 					size="sm"
 					className="text-slate-600 dark:text-gray-400"
 				>
-					Base Tropes ({template.base_tropes.length})
+					Base Tropes ({props.template.base_tropes.length})
 				</Text>
 				<div className="flex flex-wrap gap-2">
 					{tropeLabels.map((label, i) => (
 						<span
-							key={template.base_tropes[i]}
+							key={props.template.base_tropes[i]}
 							className="px-4 py-2 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-romance-700 dark:text-pink-200 font-medium"
 						>
 							{label}
@@ -104,7 +111,7 @@ export function TemplatePreview({
 				>
 					Estimated Scenes
 				</Text>
-				<Text>{template.estimated_scenes} scenes</Text>
+				<Text>{props.template.estimated_scenes} scenes</Text>
 			</Stack>
 
 			{/* Cover Gradient */}
@@ -118,10 +125,10 @@ export function TemplatePreview({
 				</Text>
 				<div className="space-y-2">
 					<div
-						className={`h-32 rounded-lg bg-linear-to-br ${template.cover_gradient} shadow-sm`}
+						className={`h-32 rounded-lg bg-linear-to-br ${props.template.cover_gradient} shadow-sm`}
 					/>
 					<Text size="sm" className="text-slate-600 dark:text-gray-400">
-						{gradientOption?.label || template.cover_gradient}
+						{gradientOption?.label || props.template.cover_gradient}
 					</Text>
 				</div>
 			</Stack>
@@ -133,10 +140,10 @@ export function TemplatePreview({
 					size="sm"
 					className="text-slate-600 dark:text-gray-400"
 				>
-					Choice Points ({template.choicePoints.length})
+					Choice Points ({props.template.choicePoints.length})
 				</Text>
 				<div className="space-y-4">
-					{template.choicePoints.map((cp, index) => (
+					{props.template.choicePoints.map((cp, index) => (
 						<div
 							key={`choice-point-${cp.scene_number}-${index}`}
 							className="border border-slate-200 dark:border-gray-700 rounded-lg p-4 bg-slate-50 dark:bg-gray-800/50"

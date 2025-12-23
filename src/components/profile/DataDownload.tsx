@@ -6,6 +6,10 @@ import { Card } from "~/components/ui/Card";
 import { Stack } from "~/components/ui/Stack";
 import { useDownloadUserData } from "~/hooks/useDownloadUserData";
 
+/**
+ * DataDownload - Allows users to download their personal data
+ * Follows props object pattern (no props)
+ */
 export function DataDownload() {
 	const downloadData = useDownloadUserData();
 	const [success, setSuccess] = useState("");

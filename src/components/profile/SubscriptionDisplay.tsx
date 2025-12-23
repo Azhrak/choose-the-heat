@@ -4,6 +4,10 @@ import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
 import { useSubscriptionTiersQuery, useUserSubscriptionQuery, useUserUsageQuery } from "~/hooks/useSubscriptionQuery";
 
+/**
+ * SubscriptionDisplay - Shows user's subscription tier and usage on profile
+ * Follows props object pattern (no props)
+ */
 export function SubscriptionDisplay() {
 	const { data: tiers } = useSubscriptionTiersQuery();
 	const { data: subscription } = useUserSubscriptionQuery();

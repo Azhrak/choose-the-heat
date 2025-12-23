@@ -17,25 +17,29 @@ interface ChoicePointOptionProps {
 	onRemove: () => void;
 }
 
-export function ChoicePointOption({
-	option,
-	optionIndex,
-	choicePointIndex,
-	canRemove,
-	onUpdate,
-	onRemove,
-}: ChoicePointOptionProps) {
+/**
+ * ChoicePointOption - Single option within a choice point
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.option - Choice option data
+ * @param props.optionIndex - Index in options array
+ * @param props.choicePointIndex - Index of parent choice point
+ * @param props.canRemove - Whether option can be removed
+ * @param props.onUpdate - Callback when option updates
+ * @param props.onRemove - Callback to remove option
+ */
+export function ChoicePointOption(props: ChoicePointOptionProps) {
 	return (
 		<div className="bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 rounded-lg p-4">
 			<div className="space-y-3">
 				<div className="flex items-center justify-between">
 					<span className="text-sm font-medium text-slate-700 dark:text-gray-300">
-						Option {optionIndex + 1}
+						Option {props.optionIndex + 1}
 					</span>
-					{canRemove && (
+					{props.canRemove && (
 						<button
 							type="button"
-							onClick={onRemove}
+							onClick={props.onRemove}
 							className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
 							aria-label="Remove option"
 						>
@@ -48,9 +52,9 @@ export function ChoicePointOption({
 					<FormInput
 						label="Text *"
 						type="text"
-						id={`option-text-${choicePointIndex}-${optionIndex}`}
-						value={option.text}
-						onChange={(e) => onUpdate({ text: e.target.value })}
+						id={`option-text-${props.choicePointIndex}-${props.optionIndex}`}
+						value={props.option.text}
+						onChange={(e) => props.onUpdate({ text: e.target.value })}
 						className="px-3 py-2 text-sm"
 						labelClassName="text-xs"
 						placeholder="e.g., Challenge them with skepticism"
@@ -61,9 +65,9 @@ export function ChoicePointOption({
 						<FormInput
 							label="Tone *"
 							type="text"
-							id={`option-tone-${choicePointIndex}-${optionIndex}`}
-							value={option.tone}
-							onChange={(e) => onUpdate({ tone: e.target.value })}
+							id={`option-tone-${props.choicePointIndex}-${props.optionIndex}`}
+							value={props.option.tone}
+							onChange={(e) => props.onUpdate({ tone: e.target.value })}
 							className="px-3 py-2 text-sm"
 							labelClassName="text-xs"
 							placeholder="e.g., confrontational"
@@ -72,9 +76,9 @@ export function ChoicePointOption({
 						<FormInput
 							label="Impact *"
 							type="text"
-							id={`option-impact-${choicePointIndex}-${optionIndex}`}
-							value={option.impact}
-							onChange={(e) => onUpdate({ impact: e.target.value })}
+							id={`option-impact-${props.choicePointIndex}-${props.optionIndex}`}
+							value={props.option.impact}
+							onChange={(e) => props.onUpdate({ impact: e.target.value })}
 							className="px-3 py-2 text-sm"
 							labelClassName="text-xs"
 							placeholder="e.g., bold"

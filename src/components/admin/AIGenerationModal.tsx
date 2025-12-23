@@ -39,23 +39,27 @@ type ModalState =
 	  }
 	| { type: "error"; error: string; lastInput?: GenerateTemplateInput };
 
-export function AIGenerationModal({
-	isOpen,
-	onClose,
-	onAccept,
-}: AIGenerationModalProps) {
+/**
+ * AIGenerationModal - Modal for AI-powered template generation
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.isOpen - Whether modal is visible
+ * @param props.onClose - Callback to close modal
+ * @param props.onAccept - Callback when template is accepted
+ */
+export function AIGenerationModal(props: AIGenerationModalProps) {
 	const [state, setState] = useState<ModalState>({ type: "select" });
 	const [promptInput, setPromptInput] = useState("");
 	const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
 
 	// Reset to select mode when modal opens
 	useEffect(() => {
-		if (isOpen) {
+		if (props.isOpen) {
 			setState({ type: "select" });
 			setPromptInput("");
 			setShowCloseConfirmation(false);
 		}
-	}, [isOpen]);
+	}, [props.isOpen]);
 
 	// Handle close attempts - show confirmation if in preview state
 	const handleCloseAttempt = () => {
@@ -68,12 +72,12 @@ export function AIGenerationModal({
 
 	const confirmClose = () => {
 		setShowCloseConfirmation(false);
-		onClose();
+		props.onClose();
 	};
 
 	// Close modal with escape key
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!props.isOpen) return;
 
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -82,14 +86,14 @@ export function AIGenerationModal({
 				} else if (state.type === "preview") {
 					setShowCloseConfirmation(true);
 				} else if (state.type !== "generating") {
-					onClose();
+					props.onClose();
 				}
 			}
 		};
 
 		window.addEventListener("keydown", handleEscape);
 		return () => window.removeEventListener("keydown", handleEscape);
-	}, [isOpen, onClose, state.type, showCloseConfirmation]);
+	}, [props.isOpen, props.onClose, state.type, showCloseConfirmation]);
 
 	const handleGenerate = async (input: GenerateTemplateInput) => {
 		setState({ type: "generating", mode: input.mode });
@@ -124,7 +128,7 @@ export function AIGenerationModal({
 
 	const handleAccept = () => {
 		if (state.type === "preview") {
-			onAccept(state.template);
+			props.onAccept(state.template);
 		}
 	};
 

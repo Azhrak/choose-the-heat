@@ -17,17 +17,21 @@ interface ProfileInformationProps {
 	success?: string;
 }
 
-export function ProfileInformation({
-	name,
-	email,
-	createdAt,
-	onNameChange,
-	onEmailChange,
-	onSubmit,
-	isUpdating,
-	error,
-	success,
-}: ProfileInformationProps) {
+/**
+ * ProfileInformation - Form for editing user profile data
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.name - User's name
+ * @param props.email - User's email
+ * @param props.createdAt - Account creation date (optional)
+ * @param props.onNameChange - Callback when name changes
+ * @param props.onEmailChange - Callback when email changes
+ * @param props.onSubmit - Form submit handler
+ * @param props.isUpdating - Loading state
+ * @param props.error - Error message (optional)
+ * @param props.success - Success message (optional)
+ */
+export function ProfileInformation(props: ProfileInformationProps) {
 	return (
 		<Card>
 			<Stack gap="md">
@@ -38,32 +42,32 @@ export function ProfileInformation({
 					</h2>
 				</div>
 
-				<form onSubmit={onSubmit} className="space-y-4">
+				<form onSubmit={props.onSubmit} className="space-y-4">
 					<FormInput
 						label="Name"
 						type="text"
-						value={name}
-						onChange={(e) => onNameChange(e.target.value)}
+						value={props.name}
+						onChange={(e) => props.onNameChange(e.target.value)}
 						required
 					/>
 					<FormInput
 						label="Email"
 						type="email"
-						value={email}
-						onChange={(e) => onEmailChange(e.target.value)}
+						value={props.email}
+						onChange={(e) => props.onEmailChange(e.target.value)}
 						required
 					/>
-					{createdAt && (
+					{props.createdAt && (
 						<div className="text-sm text-slate-600 dark:text-gray-400">
-							Account created: {new Date(createdAt).toLocaleDateString()}
+							Account created: {new Date(props.createdAt).toLocaleDateString()}
 						</div>
 					)}
 
-					<Alert message={error} variant="error" />
+					<Alert message={props.error} variant="error" />
 
-					<Alert message={success} variant="success" />
+					<Alert message={props.success} variant="success" />
 
-					<Button type="submit" loading={isUpdating} variant="primary">
+					<Button type="submit" loading={props.isUpdating} variant="primary">
 						Update Profile
 					</Button>
 				</form>

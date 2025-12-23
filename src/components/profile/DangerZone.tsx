@@ -8,7 +8,13 @@ interface DangerZoneProps {
 	onDeleteClick: () => void;
 }
 
-export function DangerZone({ onDeleteClick }: DangerZoneProps) {
+/**
+ * DangerZone - Warning section for account deletion
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.onDeleteClick - Callback when delete button clicked
+ */
+export function DangerZone(props: DangerZoneProps) {
 	return (
 		<Card className="border-2 border-red-200">
 			<Stack gap="md">
@@ -26,7 +32,7 @@ export function DangerZone({ onDeleteClick }: DangerZoneProps) {
 
 				<Button
 					type="button"
-					onClick={onDeleteClick}
+					onClick={props.onDeleteClick}
 					variant="danger"
 					className="px-6 py-3"
 				>

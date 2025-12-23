@@ -9,18 +9,22 @@ interface AvailableModelsEditorProps {
 
 type ModelsData = Record<string, string[]>;
 
-export function AvailableModelsEditor({
-	value,
-	onChange,
-	error,
-}: AvailableModelsEditorProps) {
+/**
+ * AvailableModelsEditor - Editor for provider-model JSON configuration
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.value - JSON string of available models by provider
+ * @param props.onChange - Callback when value changes
+ * @param props.error - Error message (optional)
+ */
+export function AvailableModelsEditor(props: AvailableModelsEditorProps) {
 	const [newProvider, setNewProvider] = useState("");
 	const [newModels, setNewModels] = useState<Record<string, string>>({});
 
 	// Parse JSON value
 	const parseValue = (): ModelsData => {
 		try {
-			return JSON.parse(value);
+			return JSON.parse(props.value);
 		} catch {
 			return {};
 		}
@@ -33,14 +37,14 @@ export function AvailableModelsEditor({
 		if (!newProvider.trim() || data[newProvider]) return;
 
 		const updated = { ...data, [newProvider.trim()]: [] };
-		onChange(JSON.stringify(updated));
+		props.onChange(JSON.stringify(updated));
 		setNewProvider("");
 	};
 
 	const handleRemoveProvider = (provider: string) => {
 		const updated = { ...data };
 		delete updated[provider];
-		onChange(JSON.stringify(updated));
+		props.onChange(JSON.stringify(updated));
 	};
 
 	const handleAddModel = (provider: string) => {
@@ -51,7 +55,7 @@ export function AvailableModelsEditor({
 			...data,
 			[provider]: [...(data[provider] || []), modelName],
 		};
-		onChange(JSON.stringify(updated));
+		props.onChange(JSON.stringify(updated));
 		setNewModels({ ...newModels, [provider]: "" });
 	};
 
@@ -60,7 +64,7 @@ export function AvailableModelsEditor({
 			...data,
 			[provider]: data[provider].filter((_, i) => i !== modelIndex),
 		};
-		onChange(JSON.stringify(updated));
+		props.onChange(JSON.stringify(updated));
 	};
 
 	const handleModelInputKeyDown = (
@@ -179,8 +183,8 @@ export function AvailableModelsEditor({
 				</div>
 			</div>
 
-			{error && (
-				<p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+			{props.error && (
+				<p className="text-sm text-red-600 dark:text-red-400">{props.error}</p>
 			)}
 		</div>
 	);

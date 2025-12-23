@@ -8,8 +8,14 @@ interface PreferencesDisplayProps {
 	preferences: UserPreferences | string | null;
 }
 
-export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
-	if (!preferences) {
+/**
+ * PreferencesDisplay - Shows user's reading preferences on profile page
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.preferences - User preferences object or JSON string
+ */
+export function PreferencesDisplay(props: PreferencesDisplayProps) {
+	if (!props.preferences) {
 		return (
 			<Card>
 				<Stack gap="sm">
@@ -36,7 +42,7 @@ export function PreferencesDisplay({ preferences }: PreferencesDisplayProps) {
 	let prefs: UserPreferences;
 	try {
 		prefs =
-			typeof preferences === "string" ? JSON.parse(preferences) : preferences;
+			typeof props.preferences === "string" ? JSON.parse(props.preferences) : props.preferences;
 	} catch {
 		return null;
 	}

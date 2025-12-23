@@ -9,11 +9,16 @@ interface TemplateStatusManagerProps {
 	isLoading?: boolean;
 }
 
-export function TemplateStatusManager({
-	currentStatus,
-	onStatusChange,
-	isLoading = false,
-}: TemplateStatusManagerProps) {
+/**
+ * TemplateStatusManager - UI for changing template status
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.currentStatus - Current template status
+ * @param props.onStatusChange - Callback when status changes
+ * @param props.isLoading - Loading state (default: false)
+ */
+export function TemplateStatusManager(props: TemplateStatusManagerProps) {
+	const isLoading = props.isLoading || false;
 	const [showDialog, setShowDialog] = useState(false);
 	const [pendingStatus, setPendingStatus] = useState<TemplateStatus | null>(
 		null,
@@ -26,7 +31,7 @@ export function TemplateStatusManager({
 
 	const confirmStatusChange = () => {
 		if (pendingStatus) {
-			onStatusChange(pendingStatus);
+			props.onStatusChange(pendingStatus);
 			setShowDialog(false);
 			setPendingStatus(null);
 		}
@@ -50,7 +55,7 @@ export function TemplateStatusManager({
 	return (
 		<>
 			<div className="flex flex-wrap gap-3">
-				{currentStatus !== "draft" && (
+				{props.currentStatus !== "draft" && (
 					<button
 						type="button"
 						onClick={() => handleStatusClick("draft")}
@@ -61,7 +66,7 @@ export function TemplateStatusManager({
 						Set as Draft
 					</button>
 				)}
-				{currentStatus !== "published" && (
+				{props.currentStatus !== "published" && (
 					<button
 						type="button"
 						onClick={() => handleStatusClick("published")}
@@ -72,7 +77,7 @@ export function TemplateStatusManager({
 						Publish
 					</button>
 				)}
-				{currentStatus !== "archived" && (
+				{props.currentStatus !== "archived" && (
 					<button
 						type="button"
 						onClick={() => handleStatusClick("archived")}
@@ -83,7 +88,7 @@ export function TemplateStatusManager({
 						Archive
 					</button>
 				)}
-				{currentStatus === "archived" && (
+				{props.currentStatus === "archived" && (
 					<button
 						type="button"
 						onClick={() => handleStatusClick("published")}

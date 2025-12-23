@@ -11,6 +11,19 @@ interface SettingsFieldProps {
 	onChangeMultiple?: (changes: Record<string, string>) => void;
 }
 
+/**
+ * SettingsField - Dynamic form field for app settings
+ * Follows props object pattern (no destructuring)
+ * Renders appropriate input type based on setting value_type
+ *
+ * @param props.setting - App setting configuration
+ * @param props.value - Current value
+ * @param props.onChange - Callback when value changes
+ * @param props.error - Error message (optional)
+ * @param props.allSettings - All settings for dependencies (optional)
+ * @param props.getSettingValue - Function to get setting value (optional)
+ * @param props.onChangeMultiple - Callback for multiple changes (optional)
+ */
 export function SettingsField(props: SettingsFieldProps) {
 	const renderInput = () => {
 		switch (props.setting.value_type) {
