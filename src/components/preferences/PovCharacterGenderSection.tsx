@@ -15,10 +15,14 @@ interface PovCharacterGenderSectionProps {
 	onSelect: (gender: PovCharacterGender) => void;
 }
 
-export function PovCharacterGenderSection({
-	selectedGender,
-	onSelect,
-}: PovCharacterGenderSectionProps) {
+/**
+ * PovCharacterGenderSection - POV character gender selector
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedGender - Currently selected gender
+ * @param props.onSelect - Callback when gender selected
+ */
+export function PovCharacterGenderSection(props: PovCharacterGenderSectionProps) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">
@@ -35,8 +39,8 @@ export function PovCharacterGenderSection({
 					{POV_CHARACTER_GENDER_OPTIONS.map((gender) => (
 						<RadioButton
 							key={gender}
-							selected={selectedGender === gender}
-							onClick={() => onSelect(gender)}
+							selected={props.selectedGender === gender}
+							onClick={() => props.onSelect(gender)}
 						>
 							<div className="font-semibold text-slate-900 dark:text-gray-100">
 								{POV_CHARACTER_GENDER_LABELS[gender].label}

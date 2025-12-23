@@ -14,10 +14,14 @@ interface SceneLengthSectionProps {
 	onSelect: (length: SceneLengthOption) => void;
 }
 
-export function SceneLengthSection({
-	selectedLength,
-	onSelect,
-}: SceneLengthSectionProps) {
+/**
+ * SceneLengthSection - Scene length preference selector
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedLength - Currently selected scene length
+ * @param props.onSelect - Callback when length selected
+ */
+export function SceneLengthSection(props: SceneLengthSectionProps) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">
@@ -36,9 +40,9 @@ export function SceneLengthSection({
 						<button
 							key={length}
 							type="button"
-							onClick={() => onSelect(length)}
+							onClick={() => props.onSelect(length)}
 							className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-								selectedLength === length
+								props.selectedLength === length
 									? "border-romance-500 bg-romance-50 dark:bg-romance-500/20"
 									: "border-slate-200 dark:border-gray-600 hover:border-romance-300 dark:hover:border-romance-500"
 							}`}
@@ -57,12 +61,12 @@ export function SceneLengthSection({
 								</div>
 								<div
 									className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-										selectedLength === length
+										props.selectedLength === length
 											? "border-romance-500 bg-romance-500"
 											: "border-slate-300 dark:border-gray-600"
 									}`}
 								>
-									{selectedLength === length && (
+									{props.selectedLength === length && (
 										<div className="w-2 h-2 bg-white rounded-full" />
 									)}
 								</div>

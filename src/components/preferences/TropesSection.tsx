@@ -11,10 +11,14 @@ interface TropesSectionProps {
 	onToggle: (trope: Trope) => void;
 }
 
-export function TropesSection({
-	selectedTropes,
-	onToggle,
-}: TropesSectionProps) {
+/**
+ * TropesSection - Trope selection for user preferences
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedTropes - Currently selected tropes
+ * @param props.onToggle - Callback when trope toggled
+ */
+export function TropesSection(props: TropesSectionProps) {
 	const { data: tropesData, isLoading } = useTropesQuery();
 
 	return (
@@ -42,9 +46,9 @@ export function TropesSection({
 							<button
 								key={trope.key}
 								type="button"
-								onClick={() => onToggle(trope.key)}
+								onClick={() => props.onToggle(trope.key)}
 								className={`p-4 rounded-lg border-2 transition-all text-left ${
-									selectedTropes.includes(trope.key)
+									props.selectedTropes.includes(trope.key)
 										? "border-romance-500 bg-romance-50 dark:bg-romance-500/20 text-romance-700 dark:text-pink-200"
 										: "border-slate-200 dark:border-gray-600 hover:border-romance-300 dark:hover:border-romance-500 text-slate-700 dark:text-gray-200"
 								}`}

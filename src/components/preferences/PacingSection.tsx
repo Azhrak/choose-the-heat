@@ -15,10 +15,14 @@ interface PacingSectionProps {
 	onSelect: (pacing: PacingOption) => void;
 }
 
-export function PacingSection({
-	selectedPacing,
-	onSelect,
-}: PacingSectionProps) {
+/**
+ * PacingSection - Pacing preference selector
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedPacing - Currently selected pacing option
+ * @param props.onSelect - Callback when pacing selected
+ */
+export function PacingSection(props: PacingSectionProps) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">
@@ -35,8 +39,8 @@ export function PacingSection({
 					{PACING_OPTIONS.map((pacing) => (
 						<RadioButton
 							key={pacing}
-							selected={selectedPacing === pacing}
-							onClick={() => onSelect(pacing)}
+							selected={props.selectedPacing === pacing}
+							onClick={() => props.onSelect(pacing)}
 						>
 							<div className="font-semibold text-slate-900 dark:text-gray-100">
 								{PACING_LABELS[pacing].label}

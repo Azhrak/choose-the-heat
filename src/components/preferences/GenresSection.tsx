@@ -10,10 +10,14 @@ interface GenresSectionProps {
 	onToggle: (genre: Genre) => void;
 }
 
-export function GenresSection({
-	selectedGenres,
-	onToggle,
-}: GenresSectionProps) {
+/**
+ * GenresSection - Genre selection for user preferences
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedGenres - Currently selected genres
+ * @param props.onToggle - Callback when genre toggled
+ */
+export function GenresSection(props: GenresSectionProps) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">
@@ -29,9 +33,9 @@ export function GenresSection({
 						<button
 							key={genre}
 							type="button"
-							onClick={() => onToggle(genre)}
+							onClick={() => props.onToggle(genre)}
 							className={`p-4 rounded-lg border-2 transition-all ${
-								selectedGenres.includes(genre)
+								props.selectedGenres.includes(genre)
 									? "border-romance-500 bg-romance-50 dark:bg-romance-500/20 text-romance-700 dark:text-pink-200"
 									: "border-slate-200 dark:border-gray-600 hover:border-romance-300 dark:hover:border-romance-500 text-slate-700 dark:text-gray-200"
 							}`}

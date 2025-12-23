@@ -10,10 +10,14 @@ interface SpiceLevelSectionProps {
 	onSelect: (level: SpiceLevel) => void;
 }
 
-export function SpiceLevelSection({
-	selectedLevel,
-	onSelect,
-}: SpiceLevelSectionProps) {
+/**
+ * SpiceLevelSection - Spice level selector for user preferences
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.selectedLevel - Currently selected spice level
+ * @param props.onSelect - Callback when level selected
+ */
+export function SpiceLevelSection(props: SpiceLevelSectionProps) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">
@@ -29,9 +33,9 @@ export function SpiceLevelSection({
 						<button
 							key={level}
 							type="button"
-							onClick={() => onSelect(level)}
+							onClick={() => props.onSelect(level)}
 							className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
-								selectedLevel === level
+								props.selectedLevel === level
 									? "border-romance-500 bg-romance-50 dark:bg-romance-500/20"
 									: "border-slate-200 dark:border-gray-600 hover:border-romance-300 dark:hover:border-romance-500"
 							}`}
@@ -58,12 +62,12 @@ export function SpiceLevelSection({
 								</div>
 								<div
 									className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-										selectedLevel === level
+										props.selectedLevel === level
 											? "border-romance-500 bg-romance-500"
 											: "border-slate-300 dark:border-gray-600"
 									}`}
 								>
-									{selectedLevel === level && (
+									{props.selectedLevel === level && (
 										<div className="w-2 h-2 bg-white rounded-full" />
 									)}
 								</div>
