@@ -28,43 +28,47 @@ interface StoryCardProps {
 	isTogglingFavorite: boolean;
 }
 
-export function StoryCard({
-	id,
-	storyTitle,
-	templateTitle,
-	templateDescription,
-	baseTropes,
-	coverGradient,
-	coverUrl,
-	createdAt,
-	currentScene,
-	totalScenes,
-	status,
-	isFavorite,
-	branchedFromStoryId,
-	branchedAtScene,
-	parentStoryTitle,
-	onDelete,
-	onToggleFavorite,
-	isDeleting,
-	isTogglingFavorite,
-}: StoryCardProps) {
+/**
+ * StoryCard - Displays user story with progress and actions
+ * Follows props object pattern (no destructuring)
+ *
+ * @param props.id - Story ID
+ * @param props.storyTitle - Custom story title
+ * @param props.templateTitle - Template title
+ * @param props.templateDescription - Template description
+ * @param props.baseTropes - Story tropes
+ * @param props.coverGradient - Cover gradient class
+ * @param props.coverUrl - Optional cover image URL
+ * @param props.createdAt - Creation timestamp
+ * @param props.currentScene - Current scene number
+ * @param props.totalScenes - Total scenes
+ * @param props.status - Story status
+ * @param props.isFavorite - Whether favorited
+ * @param props.branchedFromStoryId - Parent story ID if branched
+ * @param props.branchedAtScene - Branch point scene number
+ * @param props.parentStoryTitle - Parent story title
+ * @param props.onDelete - Delete callback
+ * @param props.onToggleFavorite - Toggle favorite callback
+ * @param props.isDeleting - Delete loading state
+ * @param props.isTogglingFavorite - Favorite loading state
+ */
+export function StoryCard(props: StoryCardProps) {
 	const tropeMap = useTropeMap();
-	const displayTitle = storyTitle || templateTitle;
-	const isBranch = !!branchedFromStoryId;
+	const displayTitle = props.storyTitle || props.templateTitle;
+	const isBranch = !!props.branchedFromStoryId;
 
 	return (
 		<div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg dark:shadow-black/20 overflow-hidden hover:shadow-xl dark:hover:shadow-black/30 transition-shadow h-full flex flex-col">
 			{/* Cover */}
 			<Link
 				to="/story/$id/read"
-				params={{ id }}
-				search={{ scene: currentScene }}
+				params={{ id: props.id }}
+				search={{ scene: props.currentScene }}
 			>
-				{coverUrl ? (
+				{props.coverUrl ? (
 					<div className="h-40 relative cursor-pointer hover:opacity-95 transition-opacity overflow-hidden">
 						<img
-							src={coverUrl}
+							src={props.coverUrl}
 							alt={displayTitle}
 							className="w-full h-full object-cover object-top"
 						/>
@@ -74,15 +78,15 @@ export function StoryCard({
 							onClick={(e) => {
 								e.preventDefault();
 								e.stopPropagation();
-								onToggleFavorite(id, !isFavorite);
+								props.onToggleFavorite(props.id, !props.isFavorite);
 							}}
-							disabled={isTogglingFavorite}
+							disabled={props.isTogglingFavorite}
 							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
-							title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+							title={props.isFavorite ? "Remove from favorites" : "Add to favorites"}
 						>
 							<Heart
 								className={`w-5 h-5 transition-colors ${
-									isFavorite
+									props.isFavorite
 										? "fill-red-500 text-red-500"
 										: "text-slate-600 hover:text-red-500"
 								}`}
@@ -91,7 +95,7 @@ export function StoryCard({
 					</div>
 				) : (
 					<div
-						className={`h-40 bg-linear-to-br ${coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
+						className={`h-40 bg-linear-to-br ${props.coverGradient} flex items-center justify-center cursor-pointer hover:opacity-95 transition-opacity relative`}
 					>
 						{/* Dark mode overlay to tone down bright gradients */}
 						<div className="absolute inset-0 bg-black/20 dark:block hidden" />
@@ -102,15 +106,15 @@ export function StoryCard({
 							onClick={(e) => {
 								e.preventDefault();
 								e.stopPropagation();
-								onToggleFavorite(id, !isFavorite);
+								props.onToggleFavorite(props.id, !props.isFavorite);
 							}}
-							disabled={isTogglingFavorite}
+							disabled={props.isTogglingFavorite}
 							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
-							title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+							title={props.isFavorite ? "Remove from favorites" : "Add to favorites"}
 						>
 							<Heart
 								className={`w-5 h-5 transition-colors ${
-									isFavorite
+									props.isFavorite
 										? "fill-red-500 text-red-500"
 										: "text-slate-600 hover:text-red-500"
 								}`}
@@ -128,7 +132,7 @@ export function StoryCard({
 					</Heading>
 					<p className="text-xs text-slate-500 dark:text-slate-400">
 						Started{" "}
-						{new Date(createdAt).toLocaleDateString("en-US", {
+						{new Date(props.createdAt).toLocaleDateString("en-US", {
 							month: "short",
 							day: "numeric",
 							year: "numeric",
@@ -146,29 +150,29 @@ export function StoryCard({
 							</p>
 							<p className="text-xs text-purple-700 dark:text-purple-300 truncate">
 								From{" "}
-								{branchedFromStoryId && (
+								{props.branchedFromStoryId && (
 									<Link
 										to="/story/$id/read"
-										params={{ id: branchedFromStoryId }}
-										search={{ scene: branchedAtScene ?? undefined }}
+										params={{ id: props.branchedFromStoryId }}
+										search={{ scene: props.branchedAtScene ?? undefined }}
 										className="hover:underline font-medium"
 									>
-										{parentStoryTitle || "Original Story"}
+										{props.parentStoryTitle || "Original Story"}
 									</Link>
 								)}{" "}
-								(Scene {branchedAtScene})
+								(Scene {props.branchedAtScene})
 							</p>
 						</div>
 					</div>
 				)}
 
 				<p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">
-					{templateDescription}
+					{props.templateDescription}
 				</p>
 
 				{/* Tropes */}
 				<div className="flex flex-wrap gap-2">
-					{baseTropes.slice(0, 3).map((trope) => (
+					{props.baseTropes.slice(0, 3).map((trope) => (
 						<span
 							key={trope}
 							className="px-2 py-1 bg-romance-50 dark:bg-romance-500/20 border border-romance-200 dark:border-romance-500/30 rounded-full text-xs text-romance-700 dark:text-pink-200 font-medium"
@@ -179,15 +183,15 @@ export function StoryCard({
 				</div>
 
 				{/* Progress or Scene Count */}
-				{status === "in-progress" ? (
+				{props.status === "in-progress" ? (
 					<StoryProgressBar
-						currentScene={currentScene}
-						totalScenes={totalScenes}
-						status={status}
+						currentScene={props.currentScene}
+						totalScenes={props.totalScenes}
+						status={props.status}
 					/>
 				) : (
 					<div className="text-sm text-slate-600 py-2">
-						{totalScenes} scenes
+						{props.totalScenes} scenes
 					</div>
 				)}
 
@@ -195,17 +199,17 @@ export function StoryCard({
 				<div className="flex gap-2 mt-auto">
 					<LinkButton
 						to="/story/$id/read"
-						params={{ id }}
-						search={{ scene: currentScene }}
+						params={{ id: props.id }}
+						search={{ scene: props.currentScene }}
 						variant="primary"
 						size="md"
 						className="flex-1"
 					>
-						{status === "in-progress" ? "Continue Reading" : "Read Again"}
+						{props.status === "in-progress" ? "Continue Reading" : "Read Again"}
 					</LinkButton>
 					<LinkButton
 						to="/story/$id/info"
-						params={{ id }}
+						params={{ id: props.id }}
 						variant="secondary"
 						size="sm"
 						title="Story info"
@@ -213,8 +217,8 @@ export function StoryCard({
 						<Info className="w-5 h-5" />
 					</LinkButton>
 					<Button
-						onClick={() => onDelete(id, displayTitle)}
-						loading={isDeleting}
+						onClick={() => props.onDelete(props.id, displayTitle)}
+						loading={props.isDeleting}
 						variant="danger"
 						size="sm"
 						className="bg-red-50 text-red-600 hover:bg-red-100"

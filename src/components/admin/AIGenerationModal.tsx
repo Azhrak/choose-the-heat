@@ -66,7 +66,7 @@ export function AIGenerationModal(props: AIGenerationModalProps) {
 		if (state.type === "preview") {
 			setShowCloseConfirmation(true);
 		} else if (state.type !== "generating") {
-			onClose();
+			props.onClose();
 		}
 	};
 
@@ -161,7 +161,7 @@ export function AIGenerationModal(props: AIGenerationModalProps) {
 		}
 	};
 
-	if (!isOpen) return null;
+	if (!props.isOpen) return null;
 
 	return (
 		<div className="fixed inset-0 z-50 overflow-y-auto">
@@ -261,7 +261,7 @@ export function AIGenerationModal(props: AIGenerationModalProps) {
 									: setState({ type: "select" })
 							}
 							onBack={returnToInput}
-							onCancel={onClose}
+							onCancel={props.onClose}
 						/>
 					)}
 
@@ -310,11 +310,7 @@ export function AIGenerationModal(props: AIGenerationModalProps) {
 }
 
 // Mode Selection
-function SelectMode({
-	onSelectPrompt,
-	onSelectTropeBased,
-	onSelectRandom,
-}: {
+function SelectMode(props: {
 	onSelectPrompt: () => void;
 	onSelectTropeBased: () => void;
 	onSelectRandom: () => void;
@@ -328,31 +324,26 @@ function SelectMode({
 					icon={<MessageSquare className="w-6 h-6" />}
 					title="Simple Prompt"
 					description="Describe your story idea in a few words"
-					onClick={onSelectPrompt}
+					onClick={props.onSelectPrompt}
 				/>
 				<ModeCard
 					icon={<Tag className="w-6 h-6" />}
 					title="Trope-Based"
 					description="Select tropes and let AI generate the rest"
-					onClick={onSelectTropeBased}
+					onClick={props.onSelectTropeBased}
 				/>
 				<ModeCard
 					icon={<Sparkles className="w-6 h-6" />}
 					title="Full Random"
 					description="Generate a complete surprise romance"
-					onClick={onSelectRandom}
+					onClick={props.onSelectRandom}
 				/>
 			</div>
 		</Stack>
 	);
 }
 
-function ModeCard({
-	icon,
-	title,
-	description,
-	onClick,
-}: {
+function ModeCard(props: {
 	icon: React.ReactNode;
 	title: string;
 	description: string;
@@ -361,18 +352,18 @@ function ModeCard({
 	return (
 		<button
 			type="button"
-			onClick={onClick}
+			onClick={props.onClick}
 			className="flex items-start gap-4 p-4 border-2 border-slate-200 dark:border-gray-700 rounded-lg hover:border-romance-500 dark:hover:border-romance-400 hover:bg-romance-50 dark:hover:bg-romance-900/20 transition-colors text-left group"
 		>
-			<div className="flex-shrink-0 text-romance-600 dark:text-romance-400 group-hover:scale-110 transition-transform">
-				{icon}
+			<div className="shrink-0 text-romance-600 dark:text-romance-400 group-hover:scale-110 transition-transform">
+				{props.icon}
 			</div>
 			<div>
 				<Text weight="semibold" className="mb-1">
-					{title}
+					{props.title}
 				</Text>
 				<Text size="sm" className="text-slate-600 dark:text-gray-400">
-					{description}
+					{props.description}
 				</Text>
 			</div>
 		</button>
@@ -380,12 +371,7 @@ function ModeCard({
 }
 
 // Prompt Input
-function PromptInput({
-	value,
-	onChange,
-	onGenerate,
-	onBack,
-}: {
+function PromptInput(props: {
 	value: string;
 	onChange: (value: string) => void;
 	onGenerate: () => void;
@@ -396,20 +382,20 @@ function PromptInput({
 			<Text>Describe your romance novel concept:</Text>
 
 			<textarea
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
+				value={props.value}
+				onChange={(e) => props.onChange(e.target.value)}
 				placeholder="e.g., A royal prince falls for a commoner artist in a magical kingdom..."
 				className="w-full px-4 py-3 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-romance-500 focus:border-romance-500 dark:bg-gray-700 dark:text-gray-100 min-h-32 resize-y"
 			/>
 
 			<Stack direction="horizontal" gap="sm">
-				<Button variant="ghost" onClick={onBack} className="flex-1">
+				<Button variant="ghost" onClick={props.onBack} className="flex-1">
 					Back
 				</Button>
 				<Button
 					variant="primary"
-					onClick={onGenerate}
-					disabled={!value.trim()}
+					onClick={props.onGenerate}
+					disabled={!props.value.trim()}
 					className="flex-1"
 				>
 					<Sparkles className="w-5 h-5" />
@@ -421,12 +407,7 @@ function PromptInput({
 }
 
 // Trope Input
-function TropeInput({
-	selectedTropes,
-	onTropesChange,
-	onGenerate,
-	onBack,
-}: {
+function TropeInput(props: {
 	selectedTropes: string[];
 	onTropesChange: (tropes: string[]) => void;
 	onGenerate: () => void;
@@ -436,20 +417,20 @@ function TropeInput({
 		<Stack gap="md">
 			<TropeSelector
 				label="Select Tropes"
-				selectedTropeKeys={selectedTropes}
-				onChange={onTropesChange}
+				selectedTropeKeys={props.selectedTropes}
+				onChange={props.onTropesChange}
 				required
 				helperText="Choose 1-5 tropes for your story"
 			/>
 
 			<Stack direction="horizontal" gap="sm">
-				<Button variant="ghost" onClick={onBack} className="flex-1">
+				<Button variant="ghost" onClick={props.onBack} className="flex-1">
 					Back
 				</Button>
 				<Button
 					variant="primary"
-					onClick={onGenerate}
-					disabled={selectedTropes.length === 0}
+					onClick={props.onGenerate}
+					disabled={props.selectedTropes.length === 0}
 					className="flex-1"
 				>
 					<Sparkles className="w-5 h-5" />
@@ -461,7 +442,7 @@ function TropeInput({
 }
 
 // Generating State
-function GeneratingState({ mode }: { mode: string }) {
+function GeneratingState(props: { mode: string }) {
 	const modeLabels: Record<string, string> = {
 		prompt: "based on your prompt",
 		"trope-based": "using your selected tropes",
@@ -476,7 +457,7 @@ function GeneratingState({ mode }: { mode: string }) {
 					Generating your romance template...
 				</Text>
 				<Text size="sm" className="text-slate-600 dark:text-gray-400">
-					Creating {modeLabels[mode] || "your template"}
+					Creating {modeLabels[props.mode] || "your template"}
 				</Text>
 				<Text size="sm" className="text-slate-500 dark:text-gray-500">
 					This may take 10-20 seconds
@@ -487,14 +468,7 @@ function GeneratingState({ mode }: { mode: string }) {
 }
 
 // Preview State
-function PreviewState({
-	template,
-	warnings,
-	onAccept,
-	onRegenerate,
-	onModify,
-	onCancel,
-}: {
+function PreviewState(props: {
 	template: GeneratedTemplate;
 	warnings?: string[];
 	onAccept: () => void;
@@ -508,25 +482,25 @@ function PreviewState({
 				Review Your Template
 			</Text>
 
-			<TemplatePreview template={template} warnings={warnings} />
+			<TemplatePreview template={props.template} warnings={props.warnings} />
 
 			<Stack
 				direction="horizontal"
 				gap="sm"
 				className="pt-4 border-t border-slate-200 dark:border-gray-700"
 			>
-				<Button variant="ghost" onClick={onCancel}>
+				<Button variant="ghost" onClick={props.onCancel}>
 					Cancel
 				</Button>
-				<Button variant="secondary" onClick={onModify}>
+				<Button variant="secondary" onClick={props.onModify}>
 					<Edit2 className="w-4 h-4" />
 					Modify Input
 				</Button>
-				<Button variant="secondary" onClick={onRegenerate}>
+				<Button variant="secondary" onClick={props.onRegenerate}>
 					<RefreshCw className="w-4 h-4" />
 					Regenerate
 				</Button>
-				<Button variant="primary" onClick={onAccept}>
+				<Button variant="primary" onClick={props.onAccept}>
 					Accept & Use Template
 				</Button>
 			</Stack>
@@ -535,12 +509,7 @@ function PreviewState({
 }
 
 // Error State
-function ErrorState({
-	error,
-	onRetry,
-	onBack,
-	onCancel,
-}: {
+function ErrorState(props: {
 	error: string;
 	onRetry: () => void;
 	onBack: () => void;
@@ -551,19 +520,19 @@ function ErrorState({
 			<Alert variant="error">
 				<Stack gap="sm">
 					<Text weight="semibold">Generation Failed</Text>
-					<Text size="sm">{error}</Text>
+					<Text size="sm">{props.error}</Text>
 				</Stack>
 			</Alert>
 
 			<Stack direction="horizontal" gap="sm">
-				<Button variant="ghost" onClick={onCancel}>
+				<Button variant="ghost" onClick={props.onCancel}>
 					Cancel
 				</Button>
-				<Button variant="secondary" onClick={onBack}>
+				<Button variant="secondary" onClick={props.onBack}>
 					<Edit2 className="w-4 h-4" />
 					Modify Input
 				</Button>
-				<Button variant="primary" onClick={onRetry}>
+				<Button variant="primary" onClick={props.onRetry}>
 					<RefreshCw className="w-4 h-4" />
 					Try Again
 				</Button>

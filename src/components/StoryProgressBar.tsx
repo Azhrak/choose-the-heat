@@ -13,15 +13,13 @@ interface StoryProgressBarProps {
  * Progress is based on completed scenes (currentScene - 1), not the current scene being read.
  * Shows 100% only when status is "completed" and currentScene equals totalScenes.
  */
-export function StoryProgressBar({
-	currentScene,
-	totalScenes,
-	showPercentage = true,
-	status = "in-progress",
-}: StoryProgressBarProps) {
+export function StoryProgressBar(props: StoryProgressBarProps) {
+	const showPercentage = props.showPercentage ?? true;
+	const status = props.status ?? "in-progress";
+
 	const { percentage, width } = calculateStoryProgress(
-		currentScene,
-		totalScenes,
+		props.currentScene,
+		props.totalScenes,
 		status,
 	);
 
@@ -29,7 +27,7 @@ export function StoryProgressBar({
 		<Stack gap="xs">
 			<div className="flex justify-between text-sm text-slate-600 dark:text-gray-300">
 				<span>
-					Scene {currentScene} of {totalScenes}
+					Scene {props.currentScene} of {props.totalScenes}
 				</span>
 				{showPercentage && <span>{percentage}%</span>}
 			</div>

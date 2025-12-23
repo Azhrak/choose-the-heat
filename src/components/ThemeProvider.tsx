@@ -13,15 +13,15 @@ type Props = PropsWithChildren<{ theme: Theme }>;
 
 const ThemeContext = createContext<ThemeContextVal | null>(null);
 
-export function ThemeProvider({ children, theme }: Props) {
+export function ThemeProvider(props: Props) {
 	const router = useRouter();
 
 	// Update HTML class when theme prop changes
 	useEffect(() => {
 		const root = window.document.documentElement;
 		root.classList.remove("light", "dark");
-		root.classList.add(theme);
-	}, [theme]);
+		root.classList.add(props.theme);
+	}, [props.theme]);
 
 	const setTheme = useCallback(
 		(val: Theme) => {
@@ -37,8 +37,8 @@ export function ThemeProvider({ children, theme }: Props) {
 	);
 
 	return (
-		<ThemeContext.Provider value={{ theme, setTheme }}>
-			{children}
+		<ThemeContext.Provider value={{ theme: props.theme, setTheme }}>
+			{props.children}
 		</ThemeContext.Provider>
 	);
 }

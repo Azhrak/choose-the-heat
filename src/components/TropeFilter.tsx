@@ -9,7 +9,7 @@ interface TropeFilterProps {
 	onChange: (tropeKeys: string[]) => void;
 }
 
-export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
+export function TropeFilter(props: TropeFilterProps) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,15 +36,15 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 	}, [isOpen]);
 
 	const handleToggle = (tropeKey: string) => {
-		if (selectedTropeKeys.includes(tropeKey)) {
-			onChange(selectedTropeKeys.filter((key) => key !== tropeKey));
+		if (props.selectedTropeKeys.includes(tropeKey)) {
+			props.onChange(props.selectedTropeKeys.filter((key) => key !== tropeKey));
 		} else {
-			onChange([...selectedTropeKeys, tropeKey]);
+			props.onChange([...props.selectedTropeKeys, tropeKey]);
 		}
 	};
 
 	const handleRemoveAll = () => {
-		onChange([]);
+		props.onChange([]);
 	};
 
 	if (error || !tropesData) {
@@ -61,7 +61,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 	});
 
 	const selectedTropes = tropes.filter((trope) =>
-		selectedTropeKeys.includes(trope.key),
+		props.selectedTropeKeys.includes(trope.key),
 	);
 
 	return (
@@ -76,9 +76,9 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 					<Filter className="w-4 h-4" />
 					<span>
 						Filter by Tropes
-						{selectedTropeKeys.length > 0 && (
+						{props.selectedTropeKeys.length > 0 && (
 							<span className="ml-1.5 px-2 py-0.5 bg-romance-100 dark:bg-romance-900/30 text-romance-700 dark:text-romance-700 rounded-full text-xs font-semibold">
-								{selectedTropeKeys.length}
+								{props.selectedTropeKeys.length}
 							</span>
 						)}
 					</span>
@@ -121,7 +121,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 									{filteredTropes.map((trope) => (
 										<Checkbox
 											key={trope.id}
-											checked={selectedTropeKeys.includes(trope.key)}
+											checked={props.selectedTropeKeys.includes(trope.key)}
 											onChange={() => handleToggle(trope.key)}
 											label={trope.label}
 											className="p-2 rounded hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors w-full"
@@ -132,7 +132,7 @@ export function TropeFilter({ selectedTropeKeys, onChange }: TropeFilterProps) {
 						</div>
 
 						{/* Footer with Clear All */}
-						{selectedTropeKeys.length > 0 && (
+						{props.selectedTropeKeys.length > 0 && (
 							<div className="p-3 border-t border-slate-200 dark:border-gray-700">
 								<button
 									type="button"

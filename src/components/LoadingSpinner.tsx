@@ -12,11 +12,10 @@ const sizeClasses = {
 	lg: "w-12 h-12",
 };
 
-export function LoadingSpinner({
-	size = "md",
-	message,
-	className = "",
-}: LoadingSpinnerProps) {
+export function LoadingSpinner(props: LoadingSpinnerProps) {
+	const size = props.size ?? "md";
+	const className = props.className ?? "";
+
 	return (
 		<div
 			className={`flex flex-col items-center justify-center py-20 ${className}`}
@@ -24,9 +23,9 @@ export function LoadingSpinner({
 			<Loader2
 				className={`${sizeClasses[size]} text-romance-600 animate-spin`}
 			/>
-			{message && (
+			{props.message && (
 				<p className="mt-4 text-slate-600 dark:text-slate-300 text-lg">
-					{message}
+					{props.message}
 				</p>
 			)}
 		</div>

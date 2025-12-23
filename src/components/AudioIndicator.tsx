@@ -9,8 +9,11 @@ interface AudioIndicatorProps {
 /**
  * Small indicator showing that audio is available for a scene
  */
-export function AudioIndicator({ storyId, sceneNumber }: AudioIndicatorProps) {
-	const { audio, isLoading } = useAudioGeneration(storyId, sceneNumber);
+export function AudioIndicator(props: AudioIndicatorProps) {
+	const { audio, isLoading } = useAudioGeneration(
+		props.storyId,
+		props.sceneNumber,
+	);
 
 	// Don't show anything if audio doesn't exist or still loading
 	if (!audio?.exists || isLoading) {

@@ -12,15 +12,13 @@ import {
 	X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-	AdminLayout,
-	BulkActionsToolbar,
-	DataTable,
-	FilterBar,
-	PaginationControls,
-	StatCard,
-	StatusBadge,
-} from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
+import { BulkActionsToolbar } from "~/components/admin/BulkActionsToolbar";
+import { DataTable } from "~/components/admin/DataTable";
+import { FilterBar } from "~/components/admin/FilterBar";
+import { PaginationControls } from "~/components/admin/PaginationControls";
+import { StatCard } from "~/components/admin/StatCard";
+import { StatusBadge } from "~/components/admin/StatusBadge";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";

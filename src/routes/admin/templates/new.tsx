@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Save, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout, ChoicePointForm } from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
 import { AIGenerationModal } from "~/components/admin/AIGenerationModal";
 import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
+import { ChoicePointForm } from "~/components/admin/ChoicePointForm";
 import { TropeSelector } from "~/components/admin/TropeSelector";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";

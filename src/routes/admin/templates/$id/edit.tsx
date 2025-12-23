@@ -1,14 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
-import {
-	AdminLayout,
-	ChoicePointForm,
-	ConfirmDialog,
-	StatusBadge,
-	TemplateStatusManager,
-} from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
 import type { ChoicePoint } from "~/components/admin/ChoicePointForm";
+import { ChoicePointForm } from "~/components/admin/ChoicePointForm";
+import { ConfirmDialog } from "~/components/admin/ConfirmDialog";
+import { StatusBadge } from "~/components/admin/StatusBadge";
+import { TemplateStatusManager } from "~/components/admin/TemplateStatusManager";
 import { TropeSelector } from "~/components/admin/TropeSelector";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";

@@ -3,14 +3,13 @@ interface GoogleAuthButtonProps {
 	text?: string;
 }
 
-export function GoogleAuthButton({
-	onClick,
-	text = "Continue with Google",
-}: GoogleAuthButtonProps) {
+export function GoogleAuthButton(props: GoogleAuthButtonProps) {
+	const text = props.text ?? "Continue with Google";
+
 	return (
 		<button
 			type="button"
-			onClick={onClick}
+			onClick={props.onClick}
 			className="w-full px-4 py-3 border-2 border-slate-300 dark:border-gray-600 rounded-lg font-medium text-slate-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 cursor-pointer"
 		>
 			<svg className="w-5 h-5" viewBox="0 0 24 24">

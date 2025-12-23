@@ -9,19 +9,13 @@ interface SceneNavigationProps {
 	onNavigateScene: (sceneNumber: number) => void;
 }
 
-export function SceneNavigation({
-	currentScene,
-	totalScenes,
-	hasChoicePoint,
-	hasAlreadyMadeChoice,
-	onNavigateScene,
-}: SceneNavigationProps) {
+export function SceneNavigation(props: SceneNavigationProps) {
 	return (
 		<div className="flex items-center justify-between">
 			<Button
 				type="button"
-				onClick={() => onNavigateScene(currentScene - 1)}
-				disabled={currentScene === 1}
+				onClick={() => props.onNavigateScene(props.currentScene - 1)}
+				disabled={props.currentScene === 1}
 				variant="ghost"
 				size="sm"
 				className="text-gray-600 dark:text-gray-300 hover:text-rose-600 dark:hover:text-rose-400"
@@ -32,16 +26,16 @@ export function SceneNavigation({
 
 			<Button
 				type="button"
-				onClick={() => onNavigateScene(currentScene + 1)}
+				onClick={() => props.onNavigateScene(props.currentScene + 1)}
 				disabled={
-					currentScene >= totalScenes ||
-					(hasChoicePoint && !hasAlreadyMadeChoice)
+					props.currentScene >= props.totalScenes ||
+					(props.hasChoicePoint && !props.hasAlreadyMadeChoice)
 				}
 				variant="ghost"
 				size="sm"
 				className="text-gray-600 dark:text-gray-300 hover:text-rose-600 dark:hover:text-rose-400"
 				title={
-					hasChoicePoint && !hasAlreadyMadeChoice
+					props.hasChoicePoint && !props.hasAlreadyMadeChoice
 						? "Make a choice to unlock the next scene"
 						: ""
 				}

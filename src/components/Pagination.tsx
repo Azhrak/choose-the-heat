@@ -8,13 +8,8 @@ interface PaginationProps {
 	className?: string;
 }
 
-export function Pagination({
-	currentPage,
-	totalPages,
-	onPageChange,
-	className,
-}: PaginationProps) {
-	if (totalPages <= 1) {
+export function Pagination(props: PaginationProps) {
+	if (props.totalPages <= 1) {
 		return null;
 	}
 
@@ -22,9 +17,9 @@ export function Pagination({
 		const pages: (number | string)[] = [];
 		const maxVisiblePages = 7;
 
-		if (totalPages <= maxVisiblePages) {
+		if (props.totalPages <= maxVisiblePages) {
 			// Show all pages if total is small
-			for (let i = 1; i <= totalPages; i++) {
+			for (let i = 1; i <= props.totalPages; i++) {
 				pages.push(i);
 			}
 		} else {
@@ -32,14 +27,14 @@ export function Pagination({
 			pages.push(1);
 
 			// Calculate range around current page
-			let startPage = Math.max(2, currentPage - 1);
-			let endPage = Math.min(totalPages - 1, currentPage + 1);
+			let startPage = Math.max(2, props.currentPage - 1);
+			let endPage = Math.min(props.totalPages - 1, props.currentPage + 1);
 
 			// Adjust range if near start or end
-			if (currentPage <= 3) {
+			if (props.currentPage <= 3) {
 				endPage = 5;
-			} else if (currentPage >= totalPages - 2) {
-				startPage = totalPages - 4;
+			} else if (props.currentPage >= props.totalPages - 2) {
+				startPage = props.totalPages - 4;
 			}
 
 			// Add ellipsis after first page if needed
@@ -53,27 +48,29 @@ export function Pagination({
 			}
 
 			// Add ellipsis before last page if needed
-			if (endPage < totalPages - 1) {
+			if (endPage < props.totalPages - 1) {
 				pages.push("...");
 			}
 
 			// Always show last page
-			pages.push(totalPages);
+			pages.push(props.totalPages);
 		}
 
 		return pages;
 	};
 
 	return (
-		<div className={cn("flex items-center justify-center gap-2", className)}>
+		<div
+			className={cn("flex items-center justify-center gap-2", props.className)}
+		>
 			{/* Previous Button */}
 			<button
 				type="button"
-				onClick={() => onPageChange(currentPage - 1)}
-				disabled={currentPage === 1}
+				onClick={() => props.onPageChange(props.currentPage - 1)}
+				disabled={props.currentPage === 1}
 				className={cn(
 					"flex items-center justify-center w-10 h-10 rounded-lg border transition-colors",
-					currentPage === 1
+					props.currentPage === 1
 						? "border-slate-200 text-slate-400 cursor-not-allowed"
 						: "border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-romance-300",
 				)}
@@ -99,13 +96,13 @@ export function Pagination({
 				}
 
 				const pageNumber = page as number;
-				const isActive = pageNumber === currentPage;
+				const isActive = pageNumber === props.currentPage;
 
 				return (
 					<button
 						type="button"
 						key={pageNumber}
-						onClick={() => onPageChange(pageNumber)}
+						onClick={() => props.onPageChange(pageNumber)}
 						className={cn(
 							"flex items-center justify-center w-10 h-10 rounded-lg border font-medium transition-colors",
 							isActive
@@ -123,11 +120,11 @@ export function Pagination({
 			{/* Next Button */}
 			<button
 				type="button"
-				onClick={() => onPageChange(currentPage + 1)}
-				disabled={currentPage === totalPages}
+				onClick={() => props.onPageChange(props.currentPage + 1)}
+				disabled={props.currentPage === props.totalPages}
 				className={cn(
 					"flex items-center justify-center w-10 h-10 rounded-lg border transition-colors",
-					currentPage === totalPages
+					props.currentPage === props.totalPages
 						? "border-slate-200 text-slate-400 cursor-not-allowed"
 						: "border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-romance-300",
 				)}

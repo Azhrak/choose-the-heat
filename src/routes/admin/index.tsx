@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Archive, Eye, FilePlus, FileText, Users } from "lucide-react";
-import { AdminLayout, NoPermissions, StatCard } from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
+import { NoPermissions } from "~/components/admin/NoPermissions";
+import { StatCard } from "~/components/admin/StatCard";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";

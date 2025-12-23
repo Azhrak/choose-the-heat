@@ -10,12 +10,9 @@ interface AudioPlayerProps {
 /**
  * Floating audio player with full controls
  */
-export function AudioPlayer({
-	audioUrl,
-	onClose,
-	className = "",
-}: AudioPlayerProps) {
-	const player = useAudioPlayer(audioUrl);
+export function AudioPlayer(props: AudioPlayerProps) {
+	const className = props.className ?? "";
+	const player = useAudioPlayer(props.audioUrl);
 
 	const formatTime = (seconds: number) => {
 		if (!Number.isFinite(seconds)) return "0:00";
@@ -102,10 +99,10 @@ export function AudioPlayer({
 				</select>
 
 				{/* Close Button */}
-				{onClose && (
+				{props.onClose && (
 					<button
 						type="button"
-						onClick={onClose}
+						onClick={props.onClose}
 						className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
 						aria-label="Close player"
 					>

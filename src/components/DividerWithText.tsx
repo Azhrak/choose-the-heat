@@ -2,7 +2,7 @@ interface DividerWithTextProps {
 	text: string;
 }
 
-export function DividerWithText({ text }: DividerWithTextProps) {
+export function DividerWithText(props: DividerWithTextProps) {
 	return (
 		<div className="relative">
 			<div className="absolute inset-0 flex items-center">
@@ -10,7 +10,7 @@ export function DividerWithText({ text }: DividerWithTextProps) {
 			</div>
 			<div className="relative flex justify-center text-sm">
 				<span className="px-2 bg-white dark:bg-gray-900 text-slate-500 dark:text-gray-400">
-					{text}
+					{props.text}
 				</span>
 			</div>
 		</div>

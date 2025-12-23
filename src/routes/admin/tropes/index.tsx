@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout, NoPermissions } from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
+import { NoPermissions } from "~/components/admin/NoPermissions";
 import { TropeModal } from "~/components/admin/TropeModal";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";

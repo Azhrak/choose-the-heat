@@ -1,6 +1,6 @@
 import { Archive, ArchiveRestore, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { ConfirmDialog } from "~/components/admin";
+import { ConfirmDialog } from "~/components/admin/ConfirmDialog";
 import type { TemplateStatus } from "~/lib/api/types";
 
 interface TemplateStatusManagerProps {

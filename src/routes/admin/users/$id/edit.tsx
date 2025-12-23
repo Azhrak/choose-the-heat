@@ -1,12 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Save, Shield, Trash2 } from "lucide-react";
 import { useState } from "react";
-import {
-	AdminLayout,
-	ConfirmDialog,
-	NoPermissions,
-	RoleBadge,
-} from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
+import { ConfirmDialog } from "~/components/admin/ConfirmDialog";
+import { NoPermissions } from "~/components/admin/NoPermissions";
+import { RoleBadge } from "~/components/admin/RoleBadge";
 import { Button } from "~/components/Button";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { FormInput } from "~/components/FormInput";

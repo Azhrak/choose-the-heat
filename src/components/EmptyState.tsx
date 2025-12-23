@@ -17,28 +17,26 @@ interface EmptyStateProps {
 	children?: ReactNode;
 }
 
-export function EmptyState({
-	icon: Icon,
-	title,
-	description,
-	action,
-	className = "",
-	children,
-}: EmptyStateProps) {
+export function EmptyState(props: EmptyStateProps) {
+	const Icon = props.icon;
+	const className = props.className ?? "";
+
 	return (
 		<Card className={cn("text-center space-y-4", className)} padding="lg">
 			<Icon className="w-16 h-16 text-slate-300 mx-auto" />
 			<h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-				{title}
+				{props.title}
 			</h2>
 			<Stack gap="md">
-				<p className="text-slate-600 dark:text-slate-300">{description}</p>
-				{action && (
-					<LinkButton to={action.href} variant="primary">
-						{action.label}
+				<p className="text-slate-600 dark:text-slate-300">
+					{props.description}
+				</p>
+				{props.action && (
+					<LinkButton to={props.action.href} variant="primary">
+						{props.action.label}
 					</LinkButton>
 				)}
-				{children}
+				{props.children}
 			</Stack>
 		</Card>
 	);

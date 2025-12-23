@@ -44,12 +44,7 @@ const PROVIDERS = [
 	{ id: "google_tts", name: "Google TTS", description: "Text-to-Speech API" },
 ] as const;
 
-export function APIKeysSettings({
-	apiKeys,
-	onUpdate,
-	onTest,
-	onDelete,
-}: APIKeysSettingsProps) {
+export function APIKeysSettings(props: APIKeysSettingsProps) {
 	const { showToast } = useToast();
 	const [editingProvider, setEditingProvider] = useState<string | null>(null);
 	const [editValue, setEditValue] = useState("");
@@ -58,7 +53,7 @@ export function APIKeysSettings({
 	const [testingAll, setTestingAll] = useState(false);
 
 	const getKeyData = (providerId: string) => {
-		return apiKeys.find((k) => k.provider === providerId);
+		return props.apiKeys.find((k) => k.provider === providerId);
 	};
 
 	const handleEdit = (providerId: string) => {
@@ -78,7 +73,7 @@ export function APIKeysSettings({
 		setLoading(providerId);
 
 		try {
-			await onUpdate(providerId, editValue);
+			await props.onUpdate(providerId, editValue);
 			setEditingProvider(null);
 			setEditValue("");
 			showToast({
@@ -98,7 +93,7 @@ export function APIKeysSettings({
 		setLoading(providerId);
 
 		try {
-			const result = await onTest(providerId);
+			const result = await props.onTest(providerId);
 			const providerName = PROVIDERS.find((p) => p.id === providerId)?.name;
 			if (result.valid) {
 				showToast({
@@ -136,7 +131,7 @@ export function APIKeysSettings({
 		for (const provider of providersWithKeys) {
 			setLoading(provider.id);
 			try {
-				const result = await onTest(provider.id);
+				const result = await props.onTest(provider.id);
 				if (result.valid) {
 					validCount++;
 				} else {
@@ -182,7 +177,7 @@ export function APIKeysSettings({
 		setLoading(providerId);
 
 		try {
-			await onDelete(providerId);
+			await props.onDelete(providerId);
 			showToast({
 				message: `${providerName} API key deleted successfully`,
 				type: "success",
@@ -240,10 +235,14 @@ export function APIKeysSettings({
 	};
 
 	// Check if any keys have production failures
-	const hasProductionFailures = apiKeys.some((key) => isProductionFailure(key));
+	const hasProductionFailures = props.apiKeys.some((key) =>
+		isProductionFailure(key),
+	);
 
 	// Count configured keys
-	const configuredKeysCount = apiKeys.filter((k) => k.encryptedKey).length;
+	const configuredKeysCount = props.apiKeys.filter(
+		(k) => k.encryptedKey,
+	).length;
 
 	return (
 		<div className="space-y-6">

@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Beaker } from "lucide-react";
 import { useState } from "react";
-import { AdminLayout, NoPermissions } from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
 import { AudioGenerationSection } from "~/components/admin/AudioGenerationSection";
 import { CurrentSettingsDisplay } from "~/components/admin/CurrentSettingsDisplay";
+import { NoPermissions } from "~/components/admin/NoPermissions";
 import { TextGenerationSection } from "~/components/admin/TextGenerationSection";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";

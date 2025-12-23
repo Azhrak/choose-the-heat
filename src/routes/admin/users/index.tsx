@@ -1,14 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Edit2, Shield, Users as UsersIcon } from "lucide-react";
-import {
-	AdminLayout,
-	DataTable,
-	FilterBar,
-	NoPermissions,
-	PaginationControls,
-	RoleBadge,
-	StatCard,
-} from "~/components/admin";
+import { AdminLayout } from "~/components/admin/AdminLayout";
+import { DataTable } from "~/components/admin/DataTable";
+import { FilterBar } from "~/components/admin/FilterBar";
+import { NoPermissions } from "~/components/admin/NoPermissions";
+import { PaginationControls } from "~/components/admin/PaginationControls";
+import { RoleBadge } from "~/components/admin/RoleBadge";
+import { StatCard } from "~/components/admin/StatCard";
 import { ErrorMessage } from "~/components/ErrorMessage";
 import { Heading } from "~/components/Heading";
 import { LoadingSpinner } from "~/components/LoadingSpinner";

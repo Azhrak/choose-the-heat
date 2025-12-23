@@ -20,22 +20,13 @@ interface BranchConfirmationDialogProps {
 	isLoading?: boolean;
 }
 
-export function BranchConfirmationDialog({
-	isOpen,
-	onClose,
-	onConfirm,
-	onNavigateToExisting,
-	storyTitle,
-	sceneNumber,
-	originalChoice,
-	newChoice,
-	existingBranch,
-	isCheckingExisting = false,
-	isLoading = false,
-}: BranchConfirmationDialogProps) {
-	if (!isOpen) return null;
+export function BranchConfirmationDialog(props: BranchConfirmationDialogProps) {
+	const isCheckingExisting = props.isCheckingExisting ?? false;
+	const isLoading = props.isLoading ?? false;
 
-	const hasExistingBranch = !!existingBranch;
+	if (!props.isOpen) return null;
+
+	const hasExistingBranch = !!props.existingBranch;
 
 	return (
 		<>
@@ -43,7 +34,7 @@ export function BranchConfirmationDialog({
 			<button
 				type="button"
 				className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-40 cursor-default"
-				onClick={onClose}
+				onClick={props.onClose}
 				aria-label="Close dialog"
 			/>
 
@@ -65,7 +56,7 @@ export function BranchConfirmationDialog({
 								<p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
 									{hasExistingBranch
 										? "You've already created a branch with this choice"
-										: `Create an alternate timeline from Scene ${sceneNumber}`}
+										: `Create an alternate timeline from Scene ${props.sceneNumber}`}
 								</p>
 							</div>
 						</div>
@@ -81,10 +72,10 @@ export function BranchConfirmationDialog({
 										</p>
 										<p className="text-amber-700 dark:text-amber-300">
 											You've already created a story where you chose "
-											{newChoice}" at Scene {sceneNumber}:
+											{props.newChoice}" at Scene {props.sceneNumber}:
 										</p>
 										<p className="font-medium text-amber-900 dark:text-amber-200">
-											"{existingBranch.story_title || "Untitled Branch"}"
+											"{props.existingBranch?.story_title || "Untitled Branch"}"
 										</p>
 										<p className="text-amber-700 dark:text-amber-300">
 											Would you like to continue that story instead?
@@ -103,7 +94,7 @@ export function BranchConfirmationDialog({
 											From story:
 										</p>
 										<p className="text-base text-gray-900 dark:text-gray-100">
-											{storyTitle}
+											{props.storyTitle}
 										</p>
 									</div>
 									<div>
@@ -111,7 +102,7 @@ export function BranchConfirmationDialog({
 											Original choice:
 										</p>
 										<p className="text-sm text-gray-600 dark:text-gray-400 italic">
-											"{originalChoice}"
+											"{props.originalChoice}"
 										</p>
 									</div>
 									<div>
@@ -119,7 +110,7 @@ export function BranchConfirmationDialog({
 											New choice:
 										</p>
 										<p className="text-sm text-purple-600 dark:text-purple-400 font-medium italic">
-											"{newChoice}"
+											"{props.newChoice}"
 										</p>
 									</div>
 								</div>
@@ -135,7 +126,8 @@ export function BranchConfirmationDialog({
 											<ul className="space-y-1 list-disc list-inside">
 												<li>A new story will be created in your library</li>
 												<li>
-													All progress up to Scene {sceneNumber} will be copied
+													All progress up to Scene {props.sceneNumber} will be
+													copied
 												</li>
 												<li>You'll continue from there with your new choice</li>
 												<li>
@@ -154,7 +146,7 @@ export function BranchConfirmationDialog({
 								<>
 									<Button
 										type="button"
-										onClick={onClose}
+										onClick={props.onClose}
 										disabled={isLoading}
 										variant="outline"
 										className="flex-1"
@@ -163,7 +155,7 @@ export function BranchConfirmationDialog({
 									</Button>
 									<Button
 										type="button"
-										onClick={onNavigateToExisting}
+										onClick={props.onNavigateToExisting}
 										disabled={isLoading}
 										variant="primary"
 										className="flex-1 bg-linear-to-r from-purple-600 to-rose-600 hover:from-purple-700 hover:to-rose-700"
@@ -176,7 +168,7 @@ export function BranchConfirmationDialog({
 								<>
 									<Button
 										type="button"
-										onClick={onClose}
+										onClick={props.onClose}
 										disabled={isLoading}
 										variant="outline"
 										className="flex-1"
@@ -185,7 +177,7 @@ export function BranchConfirmationDialog({
 									</Button>
 									<Button
 										type="button"
-										onClick={onConfirm}
+										onClick={props.onConfirm}
 										loading={isLoading}
 										disabled={isLoading || isCheckingExisting}
 										variant="primary"

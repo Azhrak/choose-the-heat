@@ -8,12 +8,10 @@ interface ErrorMessageProps {
 	children?: ReactNode;
 }
 
-export function ErrorMessage({
-	message,
-	variant = "inline",
-	className = "",
-	children,
-}: ErrorMessageProps) {
+export function ErrorMessage(props: ErrorMessageProps) {
+	const variant = props.variant ?? "inline";
+	const className = props.className ?? "";
+
 	if (variant === "centered") {
 		return (
 			<div
@@ -21,8 +19,10 @@ export function ErrorMessage({
 			>
 				<div className="space-y-3">
 					<AlertTriangle className="w-8 h-8 text-red-500 dark:text-red-400 mx-auto" />
-					<p className="text-red-800 dark:text-red-200 text-lg">{message}</p>
-					{children}
+					<p className="text-red-800 dark:text-red-200 text-lg">
+						{props.message}
+					</p>
+					{props.children}
 				</div>
 			</div>
 		);
@@ -32,8 +32,8 @@ export function ErrorMessage({
 		<div
 			className={`bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 ${className}`}
 		>
-			<p className="text-red-800 dark:text-red-200 text-sm">{message}</p>
-			{children}
+			<p className="text-red-800 dark:text-red-200 text-sm">{props.message}</p>
+			{props.children}
 		</div>
 	);
 }

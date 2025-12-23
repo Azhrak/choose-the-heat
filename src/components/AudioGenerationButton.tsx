@@ -18,29 +18,25 @@ interface AudioGenerationButtonProps {
  * Shows different states: generate, loading, ready
  * Disabled while scene is still being generated
  */
-export function AudioGenerationButton({
-	storyId,
-	sceneNumber,
-	onAudioReady,
-	onStartStreaming,
-	isSceneGenerating = false,
-	isSceneComplete = false,
-	sceneError = null,
-}: AudioGenerationButtonProps) {
+export function AudioGenerationButton(props: AudioGenerationButtonProps) {
+	const isSceneGenerating = props.isSceneGenerating ?? false;
+	const isSceneComplete = props.isSceneComplete ?? false;
+	const sceneError = props.sceneError ?? null;
+
 	const { audio, isLoading, generate, isGenerating } = useAudioGeneration(
-		storyId,
-		sceneNumber,
+		props.storyId,
+		props.sceneNumber,
 	);
 	const [isQueued, setIsQueued] = useState(false);
 	const [progress, setProgress] = useState(0);
 
 	// Notify parent when audio becomes available
 	useEffect(() => {
-		if (audio?.audioUrl && onAudioReady) {
-			onAudioReady(audio.audioUrl);
+		if (audio?.audioUrl && props.onAudioReady) {
+			props.onAudioReady(audio.audioUrl);
 			setProgress(0); // Reset progress when audio is ready
 		}
-	}, [audio?.audioUrl, onAudioReady]);
+	}, [audio?.audioUrl, props.onAudioReady]);
 
 	// Handle queued generation when scene completes
 	useEffect(() => {
@@ -51,8 +47,8 @@ export function AudioGenerationButton({
 			} else if (isSceneComplete) {
 				// Start audio generation now that scene is ready
 				setIsQueued(false);
-				if (onStartStreaming) {
-					onStartStreaming();
+				if (props.onStartStreaming) {
+					props.onStartStreaming();
 				} else {
 					setProgress(0);
 					generate({
@@ -67,7 +63,7 @@ export function AudioGenerationButton({
 		isSceneComplete,
 		sceneError,
 		generate,
-		onStartStreaming,
+		props.onStartStreaming,
 	]);
 
 	// Don't show button if audio already exists
@@ -94,8 +90,8 @@ export function AudioGenerationButton({
 					setIsQueued(true);
 				} else {
 					// Trigger streaming playback
-					if (onStartStreaming) {
-						onStartStreaming();
+					if (props.onStartStreaming) {
+						props.onStartStreaming();
 					} else {
 						// Fallback to old approach if no streaming callback provided
 						setProgress(0);
