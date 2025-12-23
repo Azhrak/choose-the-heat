@@ -1,0 +1,306 @@
+# GitHub Copilot Agent Configuration
+
+## Required Reading
+
+All GitHub Copilot agents MUST read and follow the coding practices defined in:
+
+- [docs/development/CODING_PRACTICES.md](docs/development/CODING_PRACTICES.md)
+
+## Key Principles
+
+1. Before creating new code:
+   - Check for existing hooks in `src/hooks/`
+   - Check for existing components in `src/components/`
+   - Check for existing types in `src/lib/api/types.ts`
+   - Check for existing constants in `src/lib/constants/`
+
+2. Code Quality Rules:
+   - ❌ NO `any` types — always use proper TypeScript types
+   - ❌ NO duplicate interface definitions — use shared types
+   - ❌ NO inline form inputs — use `FormInput` component
+   - ❌ NO repeated query patterns — create custom hooks (3+ uses)
+   - ❌ NO margins on reusable components — parent layouts control spacing
+   - ✅ Proper error handling on all API calls
+   - ✅ JSDoc documentation on hooks and complex functions
+   - ✅ Extract reusable code
+   - ✅ Use gap/space-y for spacing (parent controls layout)
+
+3. Layout and Spacing Principles:
+   - Components should NEVER set their own margins (mb-, mt-, mx-, my-)
+   - Parent layouts control spacing using `gap`, `space-y`, `space-x`, or specific margins
+   - Exception: Padding (p-, px-, py-) is allowed for components with backgrounds
+   - Use flexbox/grid with gap for consistent spacing
+
+     ```tsx
+     // ✅ Good — parent controls spacing
+     <div className="flex flex-col gap-4">
+       <Heading level="h1">Title</Heading>
+       <p>Description</p>
+     </div>
+
+     // ❌ Bad — component sets its own margin
+     const Heading = () => <h1 className="mb-4">Title</h1>
+     ```
+
+4. Pattern Enforcement:
+   - Query/mutation used 3+ times → Extract to custom hook in `src/hooks/`
+   - UI pattern used 2+ times → Extract to component in `src/components/`
+   - Type used in 2+ files → Add to `src/lib/api/types.ts`
+   - Hardcoded values used 2+ times → Extract to `src/lib/constants/`
+
+5. Import Shared Resources:
+
+   ```ts
+   // Always use existing hooks
+   import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
+
+   // Always use existing components
+   import { FormInput } from "~/components/FormInput";
+   import { FullPageLoader } from "~/components/FullPageLoader";
+   ```
+
+# TypeScript & React Best Practices
+
+## Core Principle: Local Types
+
+Define types where they're used, not in global type files. Each component should only know about its own data structure.
+
+## Props: No Destructuring Rule
+
+Always use a single `props` object. Only destructure functions when required for dependency array stability.
+
+```ts
+// ❌ Never destructure props
+function UserCard({ name, email, onUpdate }: Props) {}
+
+// ✅ Always use props object
+function UserCard(props: Props) {
+  return <div>{props.name}</div>;
+}
+
+// ✅ Exception: Functions in dependency arrays
+function UserCard(props: Props) {
+  const { onUpdate } = props; // Stable reference needed
+  useEffect(() => {
+    onUpdate(props.data);
+  }, [onUpdate, props.data]);
+}
+```
+
+Why? Clearer data flow, easier refactoring, better DevTools, no naming conflicts.
+
+## Avoid Shared Types
+
+Don't create central type definition folders. Define types locally where they're used.
+
+```ts
+// ❌ Shared types in central file
+// types/user.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+}
+
+// components/UserCard.tsx
+import { User } from "@/types/user";
+function UserCard(props: { user: User }) {}
+
+// ✅ Local types — component defines what it needs
+function UserCard(props: { name: string }) {
+  return <div>{props.name}</div>;
+}
+
+// ✅ OK: Share via API layer return types
+export async function getUser(id: string) {
+  return { id: "...", name: "...", email: "..." };
+}
+export type User = Awaited<ReturnType<typeof getUser>>;
+```
+
+Why avoid shared types? Tight coupling, unnecessary dependencies, harder refactoring, components know more than they need.
+
+## Avoid Barrel Files (index.ts)
+
+Don't use index.ts files to re-export multiple modules. Import directly from source files.
+
+```ts
+// ❌ Barrel file pattern
+// components/index.ts
+export { Button } from "./Button";
+export { Card } from "./Card";
+export { Modal } from "./Modal";
+
+// app.tsx
+import { Button, Card } from "@/components"; // Imports entire barrel
+
+// ✅ Direct imports
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
+```
+
+Why avoid barrels?
+- Bundle size: Imports entire barrel file, not tree-shakeable
+- Slow builds: Bundler must parse all re-exports
+- Circular dependencies: Easy to create import cycles
+- Poor IDE performance: Editor loads more files than needed
+- Unclear dependencies: Can't see where things actually come from
+
+Exception: Barrel files are OK for small, tightly-coupled modules that are always used together (e.g., a UI component with its types and hooks in one folder).
+
+## Type Definition Patterns
+
+```ts
+// Small components — inline types
+function Button(props: { label: string; onClick: () => void }) {
+  return <button onClick={props.onClick}>{props.label}</button>;
+}
+
+// Complex components — adjacent type
+type UserProfileProps = {
+  userId: string;
+  onUpdate?: (data: { name: string; bio: string }) => void;
+};
+
+function UserProfile(props: UserProfileProps) {
+  return <div>{props.userId}</div>;
+}
+
+// Share types via return types, not separate files
+function getUser(id: string) {
+  return { id, name: "...", email: "..." };
+}
+export type GetUser = Awaited<ReturnType<typeof getUser>>;
+```
+
+## Type Inference Over Explicit
+
+```ts
+// ❌ Redundant
+const items: string[] = ["a", "b", "c"];
+
+// ✅ Inferred
+const items = ["a", "b", "c"];
+
+// ✅ Explicit only when needed
+const config = { timeout: 5000 } as const;
+```
+
+## Avoid Type Bloat
+
+```ts
+// ❌ Over-typed — passing entire nested object
+ type Props = {
+  data: { user: { profile: { name: string } } };
+};
+
+// ✅ Extract what you need at boundary
+ type Props = { userName: string };
+<UserCard userName={data.user.profile.name} />
+```
+
+## Zod for Runtime + Types
+
+```ts
+import { z } from "zod";
+
+const UserSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+const user = UserSchema.parse(apiResponse);
+```
+
+## Discriminated Unions for States
+
+```ts
+ type State =
+  | { status: "loading" }
+  | { status: "success"; data: string[] }
+  | { status: "error"; error: Error };
+
+function render(props: { state: State }) {
+  switch (props.state.status) {
+    case "loading":
+      return <Spinner />;
+    case "success":
+      return <List items={props.state.data} />;
+    case "error":
+      return <Error message={props.state.error.message} />;
+  }
+}
+```
+
+## Generic Components — Use Sparingly
+
+```ts
+// ✅ Good: Reusable data structures
+function List<T>(props: {
+  items: T[];
+  renderItem: (item: T) => React.ReactNode;
+}) {
+  return <>{props.items.map(props.renderItem)}</>;
+}
+
+// ❌ Avoid: Over-engineering one-off components
+```
+
+## API Layer Pattern
+
+```ts
+// api/users.ts
+export async function fetchUser(id: string) {
+  const res = await fetch(`/api/users/${id}`);
+  return (await res.json()) as { id: string; name: string };
+}
+
+// Component infers from API
+function UserDisplay(props: { userId: string }) {
+  const { data } = useQuery({
+    queryKey: ["user", props.userId],
+    queryFn: () => fetchUser(props.userId),
+  });
+  return <div>{data?.name}</div>;
+}
+```
+
+## Additional Rules
+
+- Use `unknown` over `any` — forces type checking
+- Prefer `interface` for objects, `type` for unions/intersections
+- Enable `strict: true` in tsconfig.json
+- Use `satisfies` for autocomplete without widening types
+- Avoid `as` casts — sign of poor type design
+- Co-locate types with implementation
+- Import directly from source files, not index.ts barrels
+
+## Red Flags to Avoid
+
+- Destructuring props at function signature
+- Shared `types/` folders with many unrelated type files
+- Barrel files (index.ts re-exports)
+- Components importing types from 3+ levels deep
+- Using `any` as escape hatch
+- Complex utility type gymnastics
+- Premature type abstraction
+
+## Checklist for Every Change
+
+- [ ] Read CODING_PRACTICES.md before making changes
+- [ ] Check for existing implementations before creating new ones
+- [ ] Use shared types from `src/lib/api/types.ts`
+- [ ] Use existing custom hooks where applicable
+- [ ] Use existing reusable components (especially `FormInput`)
+- [ ] Add JSDoc comments to new hooks and complex functions
+- [ ] Ensure all types are properly defined (no `any`)
+- [ ] Follow the established file and naming conventions
+- [ ] Add proper error handling to API calls
+- [ ] Test that TypeScript compilation passes
+
+---
+
+Note: Keep this file aligned with [.clauderc](.clauderc). If guidance diverges, prefer the stricter rule set and update the other file to match.
