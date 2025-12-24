@@ -11,7 +11,9 @@ export type APIKeyProvider =
 	| "mistral"
 	| "xai"
 	| "openrouter"
-	| "google_tts";
+	| "google_tts"
+	| "elevenlabs"
+	| "azure";
 
 /**
  * API key test status

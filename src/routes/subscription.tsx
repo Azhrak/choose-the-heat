@@ -128,7 +128,9 @@ function SubscriptionPage() {
 								description={tier.description || ""}
 								priceMonthly={Number.parseFloat(tier.price_monthly)}
 								priceYearly={
-									tier.price_yearly ? Number.parseFloat(tier.price_yearly) : null
+									tier.price_yearly
+										? Number.parseFloat(tier.price_yearly)
+										: null
 								}
 								textGenerations={tier.text_generations_per_day}
 								voiceGenerations={tier.voice_generations_per_day}

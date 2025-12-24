@@ -1,13 +1,13 @@
+import { Eye, EyeOff, Save } from "lucide-react";
 import { useState } from "react";
-import { Save, Eye, EyeOff } from "lucide-react";
 import { Modal } from "~/components/ui/Modal";
-import { useToast } from "./ToastContext";
 import {
-	useUpdateAPIKeyMutation,
 	useTestAPIKeyMutation,
+	useUpdateAPIKeyMutation,
 } from "~/hooks/useAPIKeysQuery";
 import { useUpdateSettingsMutation } from "~/hooks/useAppSettingsQuery";
 import type { ProviderStatusInfo } from "~/lib/ai/providerStatus";
+import { useToast } from "./ToastContext";
 
 interface ProviderConfigModalProps {
 	providerId: string;
@@ -18,7 +18,7 @@ interface ProviderConfigModalProps {
 
 export function ProviderConfigModal({
 	providerId,
-	category,
+	category: _category,
 	providerStatus,
 	onClose,
 }: ProviderConfigModalProps) {
@@ -29,7 +29,7 @@ export function ProviderConfigModal({
 
 	const updateApiKeyMutation = useUpdateAPIKeyMutation();
 	const testApiKeyMutation = useTestAPIKeyMutation();
-	const updateSettingsMutation = useUpdateSettingsMutation();
+	const _updateSettingsMutation = useUpdateSettingsMutation();
 
 	const handleSave = async () => {
 		if (!apiKey.trim()) {
@@ -54,9 +54,10 @@ export function ProviderConfigModal({
 			});
 
 			onClose();
-		} catch (error: any) {
+		} catch (error) {
 			showToast({
-				message: error?.message || "Failed to save API key",
+				message:
+					error instanceof Error ? error.message : "Failed to save API key",
 				type: "error",
 			});
 		} finally {
@@ -86,9 +87,10 @@ export function ProviderConfigModal({
 					type: "error",
 				});
 			}
-		} catch (error: any) {
+		} catch (error) {
 			showToast({
-				message: error?.message || "Failed to test API key",
+				message:
+					error instanceof Error ? error.message : "Failed to test API key",
 				type: "error",
 			});
 		}
@@ -183,7 +185,9 @@ export function ProviderConfigModal({
 								disabled={testApiKeyMutation.isPending}
 								className="px-4 py-2 border border-slate-300 dark:border-gray-600 text-slate-700 dark:text-gray-200 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 							>
-								{testApiKeyMutation.isPending ? "Testing..." : "Test Existing Key"}
+								{testApiKeyMutation.isPending
+									? "Testing..."
+									: "Test Existing Key"}
 							</button>
 						)}
 					</div>

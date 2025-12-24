@@ -7,7 +7,7 @@
  * - Default model is set
  */
 
-import { hasApiKey, listApiKeys } from "../db/queries/apiKeys";
+import { listApiKeys } from "../db/queries/apiKeys";
 import { getSettingsMap } from "../db/queries/settings";
 import {
 	getAllTextProviders,
@@ -15,7 +15,11 @@ import {
 	type ProviderMetadata,
 } from "./providers";
 
-export type ProviderStatus = "ready" | "incomplete" | "invalid" | "unconfigured";
+export type ProviderStatus =
+	| "ready"
+	| "incomplete"
+	| "invalid"
+	| "unconfigured";
 
 export interface ProviderStatusInfo {
 	provider: string;
@@ -63,7 +67,8 @@ export async function getProviderStatus(
 	}
 
 	// Get default model for this provider
-	const defaultModel = settings[`${settingsCategory}.${providerId}.default_model`];
+	const defaultModel =
+		settings[`${settingsCategory}.${providerId}.default_model`];
 
 	// Check if this is the active provider
 	const activeProvider = settings[`${settingsCategory}.provider`];

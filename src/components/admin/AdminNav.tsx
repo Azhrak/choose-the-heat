@@ -85,7 +85,9 @@ export function AdminNav(props: AdminNavProps) {
 		},
 	];
 
-	const visibleItems = navItems.filter((item) => item.roles.includes(props.userRole));
+	const visibleItems = navItems.filter((item) =>
+		item.roles.includes(props.userRole),
+	);
 
 	return (
 		<nav className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 min-h-screen p-6">

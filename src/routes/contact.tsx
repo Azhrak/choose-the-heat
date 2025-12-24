@@ -208,11 +208,7 @@ function ContactPage() {
 										)}
 									</Button>
 
-									<Text
-										variant="muted"
-										size="xs"
-										className="text-center"
-									>
+									<Text variant="muted" size="xs" className="text-center">
 										We typically respond within 24-48 hours
 									</Text>
 								</Stack>

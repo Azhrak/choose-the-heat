@@ -1,8 +1,12 @@
-import { Crown, Sparkles, Volume2, ArrowUpCircle } from "lucide-react";
+import { ArrowUpCircle, Crown, Sparkles, Volume2 } from "lucide-react";
 import { Card } from "~/components/ui/Card";
 import { LinkButton } from "~/components/ui/LinkButton";
 import { Stack } from "~/components/ui/Stack";
-import { useSubscriptionTiersQuery, useUserSubscriptionQuery, useUserUsageQuery } from "~/hooks/useSubscriptionQuery";
+import {
+	useSubscriptionTiersQuery,
+	useUserSubscriptionQuery,
+	useUserUsageQuery,
+} from "~/hooks/useSubscriptionQuery";
 
 /**
  * SubscriptionDisplay - Shows user's subscription tier and usage on profile
@@ -13,25 +17,25 @@ export function SubscriptionDisplay() {
 	const { data: subscription } = useUserSubscriptionQuery();
 	const { data: usage } = useUserUsageQuery();
 
-	const currentTier = subscription?.subscription_tier || 'free';
-	const tierInfo = tiers?.find(t => t.tier === currentTier);
+	const currentTier = subscription?.subscription_tier || "free";
+	const tierInfo = tiers?.find((t) => t.tier === currentTier);
 
 	const getTierBadgeColor = (tier: string) => {
 		switch (tier) {
-			case 'premium_plus':
-				return 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white';
-			case 'premium':
-				return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white';
-			case 'basic':
-				return 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white';
+			case "premium_plus":
+				return "bg-gradient-to-r from-yellow-400 to-orange-500 text-white";
+			case "premium":
+				return "bg-gradient-to-r from-purple-500 to-pink-500 text-white";
+			case "basic":
+				return "bg-gradient-to-r from-blue-500 to-cyan-500 text-white";
 			default:
-				return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+				return "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300";
 		}
 	};
 
 	const formatLimit = (limit: number) => {
-		if (limit === -1) return 'Unlimited';
-		if (limit === 0) return 'None';
+		if (limit === -1) return "Unlimited";
+		if (limit === 0) return "None";
 		return limit.toString();
 	};
 
@@ -42,9 +46,9 @@ export function SubscriptionDisplay() {
 	};
 
 	const getProgressBarColor = (percentage: number) => {
-		if (percentage >= 90) return 'bg-red-500';
-		if (percentage >= 70) return 'bg-yellow-500';
-		return 'bg-green-500';
+		if (percentage >= 90) return "bg-red-500";
+		if (percentage >= 70) return "bg-yellow-500";
+		return "bg-green-500";
 	};
 
 	return (
@@ -58,7 +62,9 @@ export function SubscriptionDisplay() {
 						</h2>
 					</div>
 					{tierInfo && (
-						<span className={`px-3 py-1 rounded-full text-sm font-semibold ${getTierBadgeColor(currentTier)}`}>
+						<span
+							className={`px-3 py-1 rounded-full text-sm font-semibold ${getTierBadgeColor(currentTier)}`}
+						>
 							{tierInfo.name}
 						</span>
 					)}
@@ -72,7 +78,9 @@ export function SubscriptionDisplay() {
 								<span className="text-3xl font-bold text-slate-900 dark:text-gray-100">
 									${parseFloat(tierInfo.price_monthly).toFixed(2)}
 								</span>
-								<span className="text-slate-600 dark:text-gray-400">/month</span>
+								<span className="text-slate-600 dark:text-gray-400">
+									/month
+								</span>
 							</div>
 							{tierInfo.description && (
 								<p className="text-sm text-slate-600 dark:text-gray-400 mt-1">
@@ -97,17 +105,21 @@ export function SubscriptionDisplay() {
 										</span>
 									</div>
 									<span className="text-sm font-semibold text-slate-900 dark:text-gray-100">
-										{usage?.text_generations || 0} / {formatLimit(tierInfo.text_generations_per_day)}
+										{usage?.text_generations || 0} /{" "}
+										{formatLimit(tierInfo.text_generations_per_day)}
 									</span>
 								</div>
 								{tierInfo.text_generations_per_day !== -1 && (
 									<div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
 										<div
 											className={`h-2 rounded-full transition-all ${getProgressBarColor(
-												getUsagePercentage(usage?.text_generations || 0, tierInfo.text_generations_per_day)
+												getUsagePercentage(
+													usage?.text_generations || 0,
+													tierInfo.text_generations_per_day,
+												),
 											)}`}
 											style={{
-												width: `${getUsagePercentage(usage?.text_generations || 0, tierInfo.text_generations_per_day)}%`
+												width: `${getUsagePercentage(usage?.text_generations || 0, tierInfo.text_generations_per_day)}%`,
 											}}
 										/>
 									</div>
@@ -124,21 +136,26 @@ export function SubscriptionDisplay() {
 										</span>
 									</div>
 									<span className="text-sm font-semibold text-slate-900 dark:text-gray-100">
-										{usage?.voice_generations || 0} / {formatLimit(tierInfo.voice_generations_per_day)}
+										{usage?.voice_generations || 0} /{" "}
+										{formatLimit(tierInfo.voice_generations_per_day)}
 									</span>
 								</div>
-								{tierInfo.voice_generations_per_day !== -1 && tierInfo.voice_generations_per_day !== 0 && (
-									<div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-										<div
-											className={`h-2 rounded-full transition-all ${getProgressBarColor(
-												getUsagePercentage(usage?.voice_generations || 0, tierInfo.voice_generations_per_day)
-											)}`}
-											style={{
-												width: `${getUsagePercentage(usage?.voice_generations || 0, tierInfo.voice_generations_per_day)}%`
-											}}
-										/>
-									</div>
-								)}
+								{tierInfo.voice_generations_per_day !== -1 &&
+									tierInfo.voice_generations_per_day !== 0 && (
+										<div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+											<div
+												className={`h-2 rounded-full transition-all ${getProgressBarColor(
+													getUsagePercentage(
+														usage?.voice_generations || 0,
+														tierInfo.voice_generations_per_day,
+													),
+												)}`}
+												style={{
+													width: `${getUsagePercentage(usage?.voice_generations || 0, tierInfo.voice_generations_per_day)}%`,
+												}}
+											/>
+										</div>
+									)}
 							</div>
 						</Stack>
 
@@ -172,8 +189,12 @@ export function SubscriptionDisplay() {
 						)}
 
 						{/* Upgrade Button */}
-						{currentTier === 'free' ? (
-							<LinkButton to="/subscription" variant="primary" className="flex items-center justify-center gap-2">
+						{currentTier === "free" ? (
+							<LinkButton
+								to="/subscription"
+								variant="primary"
+								className="flex items-center justify-center gap-2"
+							>
 								<ArrowUpCircle className="w-4 h-4" />
 								Upgrade to Premium
 							</LinkButton>

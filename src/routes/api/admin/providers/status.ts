@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
-import { requireAdmin } from "~/lib/auth/authorization";
 import { getAllProviderStatuses } from "~/lib/ai/providerStatus";
+import { requireAdmin } from "~/lib/auth/authorization";
 
 export const Route = createFileRoute("/api/admin/providers/status")({
 	server: {

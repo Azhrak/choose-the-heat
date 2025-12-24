@@ -131,7 +131,7 @@ export async function addPaymentMethod(data: {
 	cardExpYear?: number;
 	paypalEmail?: string;
 	isDefault?: boolean;
-	metadata?: any;
+	metadata?: Record<string, unknown>;
 }) {
 	// If this is set as default, unset other defaults
 	if (data.isDefault) {
@@ -164,7 +164,10 @@ export async function addPaymentMethod(data: {
 /**
  * Set a payment method as default
  */
-export async function setDefaultPaymentMethod(userId: string, methodId: string) {
+export async function setDefaultPaymentMethod(
+	userId: string,
+	methodId: string,
+) {
 	// Unset all defaults for this user
 	await db
 		.updateTable("payment_methods")
@@ -250,14 +253,14 @@ export async function createInvoice(data: {
 	paymentProviderInvoiceId?: string;
 	couponCode?: string;
 	couponDescription?: string;
-	metadata?: any;
+	metadata?: Record<string, unknown>;
 }) {
 	return await db
 		.insertInto("invoices")
 		.values({
 			user_id: data.userId,
 			invoice_number: data.invoiceNumber,
-			subscription_tier: data.subscriptionTier as any,
+			subscription_tier: data.subscriptionTier,
 			billing_period_start: data.billingPeriodStart.toISOString(),
 			billing_period_end: data.billingPeriodEnd.toISOString(),
 			subtotal: data.subtotal.toString(),
@@ -310,7 +313,7 @@ export async function addInvoiceLineItems(
 		currency?: string;
 		periodStart?: Date;
 		periodEnd?: Date;
-		metadata?: any;
+		metadata?: Record<string, unknown>;
 	}>,
 ) {
 	const values = items.map((item) => ({

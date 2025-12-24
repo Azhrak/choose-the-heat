@@ -10,7 +10,7 @@ export interface SubscriptionTierInfo {
 	price_yearly: string | null;
 	text_generations_per_day: number;
 	voice_generations_per_day: number;
-	features: any;
+	features: Record<string, unknown>;
 	is_active: boolean;
 }
 
@@ -50,7 +50,9 @@ export function useUserSubscriptionQuery() {
 	return useQuery({
 		queryKey: userSubscriptionQueryKey,
 		queryFn: async () => {
-			return await api.get<UserSubscriptionInfo>("/api/subscriptions/my-subscription");
+			return await api.get<UserSubscriptionInfo>(
+				"/api/subscriptions/my-subscription",
+			);
 		},
 	});
 }

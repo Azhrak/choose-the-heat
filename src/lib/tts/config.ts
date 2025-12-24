@@ -1,5 +1,6 @@
-import { getSettingsMap } from "../db/queries/settings";
 import { getAllTTSProviders } from "../ai/providers";
+import { getDefaultModelForProvider } from "../db/queries/aiModels";
+import { getSettingsMap } from "../db/queries/settings";
 
 /**
  * TTS Provider types
@@ -180,7 +181,9 @@ function getConfigFromEnv(): TTSConfig {
 /**
  * Parse settings from database into TTSConfig
  */
-function parseSettings(settings: Record<string, string>): TTSConfig {
+async function parseSettings(
+	settings: Record<string, string>,
+): Promise<TTSConfig> {
 	const envFallback = getConfigFromEnv();
 
 	// Parse available models JSON
@@ -193,9 +196,19 @@ function parseSettings(settings: Record<string, string>): TTSConfig {
 		console.error("Failed to parse tts.available_models:", error);
 	}
 
+	const provider = (settings["tts.provider"] ||
+		envFallback.provider) as TTSProvider;
+
+	// Get the default model for this provider from the database
+	let model = envFallback.model;
+	const defaultModel = await getDefaultModelForProvider(provider, "tts");
+	if (defaultModel && defaultModel.status === "enabled") {
+		model = defaultModel.model_id;
+	}
+
 	const config = {
-		provider: (settings["tts.provider"] || envFallback.provider) as TTSProvider,
-		model: settings["tts.model"] || envFallback.model,
+		provider,
+		model,
 		gcsBucketName: settings["tts.gcs_bucket_name"] || envFallback.gcsBucketName,
 		gcsBucketPath: settings["tts.gcs_bucket_path"] || envFallback.gcsBucketPath,
 		availableVoices: envFallback.availableVoices, // Use env default for voices
@@ -225,12 +238,14 @@ export async function getTTSConfig(): Promise<TTSConfig> {
 		return cache.data;
 	}
 
+	let config: TTSConfig;
+
 	try {
 		// Try to load from database
 		const settings = await getSettingsMap({ category: "tts" });
 
 		if (Object.keys(settings).length > 0) {
-			const config = parseSettings(settings);
+			config = await parseSettings(settings);
 
 			// Update cache
 			cache.data = config;
@@ -243,13 +258,13 @@ export async function getTTSConfig(): Promise<TTSConfig> {
 	}
 
 	// Fall back to environment variables
-	const envConfig = getConfigFromEnv();
+	config = getConfigFromEnv();
 
 	// Cache env config as well
-	cache.data = envConfig;
+	cache.data = config;
 	cache.timestamp = now;
 
-	return envConfig;
+	return config;
 }
 
 /**

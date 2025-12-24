@@ -106,16 +106,26 @@ export async function bulkUpdateSettings(
 
 	const oldSettingsMap = new Map(oldSettings.map((s) => [s.key, s]));
 
-	// Validate all keys exist
-	for (const update of updates) {
+	// Filter out updates for settings that don't exist (skip silently)
+	const validUpdates = updates.filter((update) => {
 		if (!oldSettingsMap.has(update.key)) {
-			throw new Error(`Setting with key "${update.key}" not found`);
+			console.warn(
+				`[Settings] Skipping update for non-existent setting: ${update.key}`,
+			);
+			return false;
 		}
+		return true;
+	});
+
+	// If no valid updates, return early
+	if (validUpdates.length === 0) {
+		console.warn("[Settings] No valid settings to update");
+		return;
 	}
 
 	// Update all settings in a transaction
 	await db.transaction().execute(async (trx) => {
-		for (const update of updates) {
+		for (const update of validUpdates) {
 			await trx
 				.updateTable("app_settings")
 				.set({
@@ -129,7 +139,7 @@ export async function bulkUpdateSettings(
 
 		// Create a single audit log for bulk update
 		const allChanges: Record<string, { old: string; new: string }> = {};
-		for (const update of updates) {
+		for (const update of validUpdates) {
 			const oldSetting = oldSettingsMap.get(update.key);
 			if (oldSetting && oldSetting.value !== update.value) {
 				allChanges[update.key] = {
@@ -268,4 +278,46 @@ export async function getParsedSetting(
 		return null;
 	}
 	return parseSettingValue(setting);
+}
+
+/**
+ * Upsert a setting (insert or update)
+ * Creates an audit log entry
+ */
+export async function upsertSetting(data: {
+	key: string;
+	value: string;
+	value_type: string;
+	category: string;
+	description?: string;
+	updated_by: string;
+}): Promise<void> {
+	const existing = await getSetting(data.key);
+
+	if (existing) {
+		// Update existing setting
+		await updateSetting(data.key, data.value, data.updated_by);
+	} else {
+		// Insert new setting
+		await db
+			.insertInto("app_settings")
+			.values({
+				key: data.key,
+				value: data.value,
+				value_type: data.value_type,
+				category: data.category,
+				description: data.description,
+				updated_by: data.updated_by,
+			})
+			.execute();
+
+		// Create audit log
+		await createAuditLog({
+			userId: data.updated_by,
+			action: "create",
+			entityType: "setting",
+			entityId: data.key,
+			changes: { value: { old: null, new: data.value } },
+		});
+	}
 }

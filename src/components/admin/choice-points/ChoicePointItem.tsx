@@ -83,14 +83,16 @@ export function ChoicePointItem(props: ChoicePointItemProps) {
 		let minSceneNumber = 1;
 		if (props.choicePointIndex > 0) {
 			// Must be greater than the previous choice point's scene number
-			minSceneNumber = props.allChoicePoints[props.choicePointIndex - 1].scene_number + 1;
+			minSceneNumber =
+				props.allChoicePoints[props.choicePointIndex - 1].scene_number + 1;
 		}
 
 		// Find the maximum scene number based on the next choice point
 		let maxSceneNumber = props.maxScenes - 1;
 		if (props.choicePointIndex < props.allChoicePoints.length - 1) {
 			// Must be less than the next choice point's scene number
-			maxSceneNumber = props.allChoicePoints[props.choicePointIndex + 1].scene_number - 1;
+			maxSceneNumber =
+				props.allChoicePoints[props.choicePointIndex + 1].scene_number - 1;
 		}
 
 		// Generate available scene numbers from min to max
@@ -132,9 +134,9 @@ export function ChoicePointItem(props: ChoicePointItemProps) {
 					{getAvailableSceneNumbers().length === 0 ? (
 						<div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-4">
 							<p className="text-sm text-amber-800 dark:text-amber-300">
-								No available scene numbers. The story has {props.maxScenes} scenes.
-								Please adjust the scene numbers of previous choice points to
-								make room for additional choices.
+								No available scene numbers. The story has {props.maxScenes}{" "}
+								scenes. Please adjust the scene numbers of previous choice
+								points to make room for additional choices.
 							</p>
 						</div>
 					) : (

@@ -1,3 +1,7 @@
+import {
+	getDefaultModelForProvider,
+	getModelByProviderId,
+} from "../db/queries/aiModels";
 import { getSettingsMap } from "../db/queries/settings";
 import type { AIProvider } from "./client";
 import { getAllTextProviders } from "./providers";
@@ -86,7 +90,9 @@ function getConfigFromEnv(): AIConfig {
 /**
  * Parse settings from database into AIConfig
  */
-function parseSettings(settings: Record<string, string>): AIConfig {
+async function parseSettings(
+	settings: Record<string, string>,
+): Promise<AIConfig> {
 	const envFallback = getConfigFromEnv();
 
 	// Parse available models JSON
@@ -99,9 +105,19 @@ function parseSettings(settings: Record<string, string>): AIConfig {
 		console.error("Failed to parse ai.available_models:", error);
 	}
 
+	const provider = (settings["ai.provider"] ||
+		envFallback.provider) as AIProvider;
+
+	// Get the default model for this provider from the database
+	let model = envFallback.model;
+	const defaultModel = await getDefaultModelForProvider(provider, "text");
+	if (defaultModel && defaultModel.status === "enabled") {
+		model = defaultModel.model_id;
+	}
+
 	return {
-		provider: (settings["ai.provider"] || envFallback.provider) as AIProvider,
-		model: settings["ai.model"] || envFallback.model,
+		provider,
+		model,
 		temperature: settings["ai.temperature"]
 			? Number.parseFloat(settings["ai.temperature"])
 			: envFallback.temperature,
@@ -134,12 +150,14 @@ export async function getAIConfig(): Promise<AIConfig> {
 		return cache.data;
 	}
 
+	let config: AIConfig;
+
 	try {
 		// Try to load from database
 		const settings = await getSettingsMap({ category: "ai" });
 
 		if (Object.keys(settings).length > 0) {
-			const config = parseSettings(settings);
+			config = await parseSettings(settings);
 
 			// Update cache
 			cache.data = config;
@@ -152,13 +170,13 @@ export async function getAIConfig(): Promise<AIConfig> {
 	}
 
 	// Fall back to environment variables
-	const envConfig = getConfigFromEnv();
+	config = getConfigFromEnv();
 
 	// Cache env config as well
-	cache.data = envConfig;
+	cache.data = config;
 	cache.timestamp = now;
 
-	return envConfig;
+	return config;
 }
 
 /**
@@ -198,10 +216,11 @@ export async function getAllAvailableModels(): Promise<
 }
 
 /**
- * Get default model for a specific provider
+ * Get default model name for a specific provider (string only)
  * Checks setting ai.<provider>.default_model first, falls back to available_models
+ * @deprecated Use getDefaultModelForProvider from aiModels.ts instead
  */
-export async function getDefaultModelForProvider(
+export async function getDefaultModelName(
 	provider: AIProvider,
 ): Promise<string> {
 	const settings = await getSettingsMap({ category: "ai" });
@@ -229,6 +248,7 @@ export async function getDefaultModelForProvider(
  * Get AI configuration for a specific story, with fallback to current settings
  * If the story has saved AI settings, use those (if still valid)
  * Otherwise, use the current app settings
+ * Now uses database validation for model status
  */
 export async function getAIConfigForStory(
 	storyProvider?: string | null,
@@ -251,12 +271,39 @@ export async function getAIConfigForStory(
 		return currentConfig;
 	}
 
-	// Validate that the model still exists for this provider
-	const availableModels = currentConfig.availableModels[provider];
-	if (!availableModels.includes(storyModel)) {
+	// Check if story's model is still enabled in database
+	const modelRecord = await getModelByProviderId(provider, "text", storyModel);
+
+	if (
+		!modelRecord ||
+		modelRecord.status === "deprecated" ||
+		modelRecord.status === "disabled"
+	) {
 		console.log(
-			`[AI Config] Story model "${storyModel}" no longer available for provider "${provider}", falling back to current model "${currentConfig.model}"`,
+			`[AI Config] Story model "${storyModel}" is ${modelRecord?.status || "not found"}, falling back to provider default`,
 		);
+
+		// Fall back to provider's default model
+		const defaultModel = await getDefaultModelForProvider(provider, "text");
+
+		if (defaultModel && defaultModel.status === "enabled") {
+			// Parse temperature
+			const temperature =
+				typeof storyTemperature === "string"
+					? Number.parseFloat(storyTemperature)
+					: typeof storyTemperature === "number"
+						? storyTemperature
+						: currentConfig.temperature;
+
+			return {
+				...currentConfig,
+				provider,
+				model: defaultModel.model_id,
+				temperature,
+			};
+		}
+
+		// Ultimate fallback: current app config
 		return currentConfig;
 	}
 

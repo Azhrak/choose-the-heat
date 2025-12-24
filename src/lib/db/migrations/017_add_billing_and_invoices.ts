@@ -66,7 +66,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 			col.notNull().defaultTo(sql`0.00`),
 		)
 		.addColumn("total_amount", sql`decimal(10,2)`, (col) => col.notNull())
-		.addColumn("currency", "varchar(3)", (col) => col.notNull().defaultTo("USD"))
+		.addColumn("currency", "varchar(3)", (col) =>
+			col.notNull().defaultTo("USD"),
+		)
 		// Payment status
 		.addColumn("status", "varchar(20)", (col) => col.notNull()) // draft, open, paid, void, uncollectible
 		.addColumn("paid_at", "timestamp")
@@ -108,7 +110,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("quantity", "integer", (col) => col.notNull().defaultTo(1))
 		.addColumn("unit_amount", sql`decimal(10,2)`, (col) => col.notNull())
 		.addColumn("amount", sql`decimal(10,2)`, (col) => col.notNull())
-		.addColumn("currency", "varchar(3)", (col) => col.notNull().defaultTo("USD"))
+		.addColumn("currency", "varchar(3)", (col) =>
+			col.notNull().defaultTo("USD"),
+		)
 		.addColumn("period_start", "timestamp")
 		.addColumn("period_end", "timestamp")
 		.addColumn("metadata", "jsonb")
@@ -140,8 +144,12 @@ export async function up(db: Kysely<any>): Promise<void> {
 		.addColumn("paypal_email", "varchar(255)")
 		// Status
 		.addColumn("is_default", "boolean", (col) => col.notNull().defaultTo(false))
-		.addColumn("is_verified", "boolean", (col) => col.notNull().defaultTo(false))
-		.addColumn("status", "varchar(20)", (col) => col.notNull().defaultTo("active")) // active, expired, failed
+		.addColumn("is_verified", "boolean", (col) =>
+			col.notNull().defaultTo(false),
+		)
+		.addColumn("status", "varchar(20)", (col) =>
+			col.notNull().defaultTo("active"),
+		) // active, expired, failed
 		.addColumn("metadata", "jsonb")
 		.addColumn("created_at", "timestamp", (col) =>
 			col.notNull().defaultTo(sql`now()`),
@@ -201,24 +209,15 @@ export async function down(db: Kysely<any>): Promise<void> {
 		.dropIndex("payment_methods_is_default_idx")
 		.ifExists()
 		.execute();
-	await db.schema
-		.dropIndex("payment_methods_user_id_idx")
-		.ifExists()
-		.execute();
+	await db.schema.dropIndex("payment_methods_user_id_idx").ifExists().execute();
 	await db.schema
 		.dropIndex("invoice_line_items_invoice_id_idx")
 		.ifExists()
 		.execute();
-	await db.schema
-		.dropIndex("invoices_created_at_idx")
-		.ifExists()
-		.execute();
+	await db.schema.dropIndex("invoices_created_at_idx").ifExists().execute();
 	await db.schema.dropIndex("invoices_status_idx").ifExists().execute();
 	await db.schema.dropIndex("invoices_user_id_idx").ifExists().execute();
-	await db.schema
-		.dropIndex("billing_details_user_id_idx")
-		.ifExists()
-		.execute();
+	await db.schema.dropIndex("billing_details_user_id_idx").ifExists().execute();
 
 	// Drop tables
 	await db.schema.dropTable("payment_methods").ifExists().execute();

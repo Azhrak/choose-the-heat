@@ -22,7 +22,8 @@ export function NoPermissions(props: NoPermissionsProps) {
 	const navigate = useNavigate();
 
 	const title = props.title || "Access Denied";
-	const message = props.message || "You don't have permission to access this page.";
+	const message =
+		props.message || "You don't have permission to access this page.";
 	const backTo = props.backTo || "/browse";
 	const backLabel = props.backLabel;
 

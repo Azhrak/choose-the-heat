@@ -143,7 +143,12 @@ export function TropeModal(props: TropeModalProps) {
 		},
 	};
 
-	const { icon: Icon, title, description: desc, submitText } = config[props.mode];
+	const {
+		icon: Icon,
+		title,
+		description: desc,
+		submitText,
+	} = config[props.mode];
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">

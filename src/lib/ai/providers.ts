@@ -1,5 +1,5 @@
-import type { AIProvider } from "./client";
 import type { TTSProvider } from "../tts/config";
+import type { AIProvider } from "./client";
 
 /**
  * Provider Registry - Single Source of Truth

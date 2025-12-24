@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "~/lib/api/client";
 import type { ProviderStatusInfo } from "~/lib/ai/providerStatus";
+import { api } from "~/lib/api/client";
 
 interface ProviderStatusResponse {
 	statuses: ProviderStatusInfo[];

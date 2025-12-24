@@ -1,4 +1,11 @@
-import { FileText, Download, Eye, CheckCircle, Clock, XCircle } from "lucide-react";
+import {
+	CheckCircle,
+	Clock,
+	Download,
+	Eye,
+	FileText,
+	XCircle,
+} from "lucide-react";
 import { useInvoicesQuery } from "~/hooks/useBillingQuery";
 
 export function InvoiceHistory() {
@@ -51,7 +58,10 @@ export function InvoiceHistory() {
 					<div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
 					<div className="space-y-3">
 						{[1, 2, 3].map((i) => (
-							<div key={i} className="h-20 bg-gray-200 dark:bg-gray-700 rounded" />
+							<div
+								key={i}
+								className="h-20 bg-gray-200 dark:bg-gray-700 rounded"
+							/>
 						))}
 					</div>
 				</div>
@@ -71,7 +81,9 @@ export function InvoiceHistory() {
 			{!invoices || invoices.length === 0 ? (
 				<div className="text-center py-12">
 					<FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-					<p className="text-gray-600 dark:text-gray-400 mb-2">No invoices yet</p>
+					<p className="text-gray-600 dark:text-gray-400 mb-2">
+						No invoices yet
+					</p>
 					<p className="text-sm text-gray-500 dark:text-gray-500">
 						Invoices will appear here after your first payment
 					</p>
@@ -98,11 +110,14 @@ export function InvoiceHistory() {
 									</div>
 
 									<div className="flex flex-wrap items-center gap-3 text-sm">
-										<span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(invoice.status)}`}>
+										<span
+											className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(invoice.status)}`}
+										>
 											{invoice.status}
 										</span>
 										<span className="text-gray-600 dark:text-gray-400">
-											{formatDate(invoice.billing_period_start)} - {formatDate(invoice.billing_period_end)}
+											{formatDate(invoice.billing_period_start)} -{" "}
+											{formatDate(invoice.billing_period_end)}
 										</span>
 										{invoice.subscription_tier && (
 											<span className="text-gray-600 dark:text-gray-400 capitalize">
@@ -155,7 +170,9 @@ export function InvoiceHistory() {
 								<div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
 									{invoice.card_last4 && (
 										<div className="flex items-center gap-2">
-											<span className="capitalize">{invoice.payment_method || "card"}</span>
+											<span className="capitalize">
+												{invoice.payment_method || "card"}
+											</span>
 											<span>•••• {invoice.card_last4}</span>
 										</div>
 									)}
@@ -164,11 +181,17 @@ export function InvoiceHistory() {
 											<span className="text-green-600 dark:text-green-400 font-medium">
 												Coupon: {invoice.coupon_code}
 											</span>
-											{invoice.discount_amount && parseFloat(invoice.discount_amount) > 0 && (
-												<span>
-													(-{formatAmount(invoice.discount_amount, invoice.currency)})
-												</span>
-											)}
+											{invoice.discount_amount &&
+												parseFloat(invoice.discount_amount) > 0 && (
+													<span>
+														(-
+														{formatAmount(
+															invoice.discount_amount,
+															invoice.currency,
+														)}
+														)
+													</span>
+												)}
 										</div>
 									)}
 								</div>
@@ -181,7 +204,8 @@ export function InvoiceHistory() {
 			{invoices && invoices.length > 0 && (
 				<div className="mt-6 text-center">
 					<p className="text-sm text-gray-500 dark:text-gray-400">
-						Showing {invoices.length} most recent invoice{invoices.length !== 1 ? "s" : ""}
+						Showing {invoices.length} most recent invoice
+						{invoices.length !== 1 ? "s" : ""}
 					</p>
 				</div>
 			)}

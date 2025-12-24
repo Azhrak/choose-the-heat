@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
 
 export interface BillingDetails {
@@ -71,7 +71,7 @@ export function useBillingDetailsQuery() {
 		queryFn: async () => {
 			try {
 				return await api.get<BillingDetails | null>("/api/billing/details");
-			} catch (error) {
+			} catch (_error) {
 				// Return null if no billing details exist yet
 				return null;
 			}

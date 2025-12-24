@@ -1,18 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
+import { invalidateSettingsCache } from "~/lib/ai/config";
 import { requireAdmin } from "~/lib/auth/authorization";
-import { bulkUpdateSettings } from "~/lib/db/queries/settings";
-import {
-	invalidateSettingsCache,
-	getDefaultModelForProvider,
-} from "~/lib/ai/config";
-import {
-	invalidateTTSCache,
-	getDefaultModelForTTSProvider,
-} from "~/lib/tts/config";
-import type { AIProvider } from "~/lib/ai/client";
-import type { TTSProvider } from "~/lib/tts/config";
+import { updateSetting } from "~/lib/db/queries/settings";
+import { invalidateTTSCache } from "~/lib/tts/config";
 
 const activateProviderSchema = z.object({
 	provider: z.string(),
@@ -23,7 +15,7 @@ export const Route = createFileRoute("/api/admin/providers/activate")({
 	server: {
 		handlers: {
 			// POST /api/admin/providers/activate
-			// Activates a provider and sets its default model as the current model
+			// Activates a provider (model is determined dynamically from database)
 			POST: async ({ request }) => {
 				try {
 					const user = await requireAdmin(request);
@@ -32,20 +24,9 @@ export const Route = createFileRoute("/api/admin/providers/activate")({
 
 					const prefix = category === "text" ? "ai" : "tts";
 
-					// Get default model for this provider
-					const defaultModel =
-						category === "text"
-							? await getDefaultModelForProvider(provider as AIProvider)
-							: await getDefaultModelForTTSProvider(provider as TTSProvider);
-
-					// Update both provider and model
-					await bulkUpdateSettings(
-						[
-							{ key: `${prefix}.provider`, value: provider },
-							{ key: `${prefix}.model`, value: defaultModel },
-						],
-						user.userId,
-					);
+					// Only update the provider setting
+					// The model will be determined dynamically from the database
+					await updateSetting(`${prefix}.provider`, provider, user.userId);
 
 					// Invalidate cache
 					if (category === "text") {
@@ -54,7 +35,7 @@ export const Route = createFileRoute("/api/admin/providers/activate")({
 						invalidateTTSCache();
 					}
 
-					return json({ success: true, provider, model: defaultModel });
+					return json({ success: true, provider });
 				} catch (error) {
 					if (error instanceof Response) throw error;
 

@@ -1,13 +1,13 @@
+import { AlertTriangle, CheckCircle, Circle, Cpu, XCircle } from "lucide-react";
 import { useState } from "react";
-import { Cpu, CheckCircle, AlertTriangle, XCircle, Circle } from "lucide-react";
+import {
+	useActivateProviderMutation,
+	useProviderStatusQuery,
+} from "~/hooks/useProviderStatusQuery";
+import type { ProviderStatusInfo } from "~/lib/ai/providerStatus";
 import { ProviderCard } from "./ProviderCard";
 import { ProviderConfigModal } from "./ProviderConfigModal";
 import { useToast } from "./ToastContext";
-import {
-	useProviderStatusQuery,
-	useActivateProviderMutation,
-} from "~/hooks/useProviderStatusQuery";
-import type { ProviderStatusInfo } from "~/lib/ai/providerStatus";
 
 type CategoryTab = "text" | "tts";
 
@@ -58,9 +58,12 @@ export function AIProviderManagement() {
 				message: `${providerName} activated successfully`,
 				type: "success",
 			});
-		} catch (error: any) {
+		} catch (error) {
 			showToast({
-				message: error?.message || "Failed to activate provider",
+				message:
+					error instanceof Error
+						? error.message
+						: "Failed to activate provider",
 				type: "error",
 			});
 		}
@@ -96,7 +99,8 @@ export function AIProviderManagement() {
 					</h1>
 				</div>
 				<p className="text-slate-600 dark:text-gray-400">
-					Configure and manage AI providers for text generation and text-to-speech
+					Configure and manage AI providers for text generation and
+					text-to-speech
 				</p>
 			</div>
 

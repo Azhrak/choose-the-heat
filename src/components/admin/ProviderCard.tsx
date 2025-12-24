@@ -1,4 +1,4 @@
-import { Check, X, AlertTriangle, Circle, Settings, Play } from "lucide-react";
+import { AlertTriangle, Check, Circle, Play, Settings, X } from "lucide-react";
 import type { ProviderStatusInfo } from "~/lib/ai/providerStatus";
 import { cn } from "~/lib/utils";
 
@@ -24,9 +24,7 @@ export function ProviderCard({
 					<AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
 				);
 			case "unconfigured":
-				return (
-					<Circle className="w-5 h-5 text-slate-400 dark:text-gray-500" />
-				);
+				return <Circle className="w-5 h-5 text-slate-400 dark:text-gray-500" />;
 		}
 	};
 
@@ -43,7 +41,7 @@ export function ProviderCard({
 		}
 	};
 
-	const getStatusText = () => {
+	const _getStatusText = () => {
 		switch (status.status) {
 			case "ready":
 				return "Ready to use";

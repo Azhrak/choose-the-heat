@@ -54,7 +54,9 @@ const variantStyles = {
 export function Heading(props: HeadingProps) {
 	const Component = props.level;
 	const variant = props.variant || "default";
-	const sizeClass = props.size ? sizeStyles[props.size] : levelStyles[props.level];
+	const sizeClass = props.size
+		? sizeStyles[props.size]
+		: levelStyles[props.level];
 
 	return (
 		<Component

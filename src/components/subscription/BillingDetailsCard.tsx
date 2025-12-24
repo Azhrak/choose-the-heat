@@ -1,6 +1,16 @@
-import { CreditCard, MapPin, Edit, Plus, CheckCircle, AlertCircle } from "lucide-react";
-import { useState, FormEvent } from "react";
-import { useBillingDetailsQuery, useUpdateBillingDetailsMutation } from "~/hooks/useBillingQuery";
+import {
+	AlertCircle,
+	CheckCircle,
+	CreditCard,
+	Edit,
+	MapPin,
+	Plus,
+} from "lucide-react";
+import { type FormEvent, useState } from "react";
+import {
+	useBillingDetailsQuery,
+	useUpdateBillingDetailsMutation,
+} from "~/hooks/useBillingQuery";
 
 export function BillingDetailsCard() {
 	const { data: billingDetails, isLoading } = useBillingDetailsQuery();
@@ -31,7 +41,7 @@ export function BillingDetailsCard() {
 			setSuccess("Billing details updated successfully!");
 			setIsEditing(false);
 			setTimeout(() => setSuccess(""), 3000);
-		} catch (err) {
+		} catch (_err) {
 			setError("Failed to update billing details. Please try again.");
 		}
 	};
@@ -99,7 +109,9 @@ export function BillingDetailsCard() {
 			{success && (
 				<div className="mb-4 flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
 					<CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-					<p className="text-sm text-green-600 dark:text-green-400">{success}</p>
+					<p className="text-sm text-green-600 dark:text-green-400">
+						{success}
+					</p>
 				</div>
 			)}
 			{error && (
@@ -124,12 +136,15 @@ export function BillingDetailsCard() {
 								{billingDetails.cardBrand} •••• {billingDetails.cardLast4}
 							</p>
 							<p className="text-xs text-gray-500 dark:text-gray-400">
-								Expires {billingDetails.cardExpMonth}/{billingDetails.cardExpYear}
+								Expires {billingDetails.cardExpMonth}/
+								{billingDetails.cardExpYear}
 							</p>
 						</div>
 					</div>
 					<p className="mt-3 text-xs text-gray-600 dark:text-gray-400">
-						Payment method managed by {billingDetails.paymentProvider || "payment provider"}. Update your payment method during checkout.
+						Payment method managed by{" "}
+						{billingDetails.paymentProvider || "payment provider"}. Update your
+						payment method during checkout.
 					</p>
 				</div>
 			)}
@@ -145,7 +160,9 @@ export function BillingDetailsCard() {
 							<input
 								type="text"
 								value={formData.billingName}
-								onChange={(e) => setFormData({ ...formData, billingName: e.target.value })}
+								onChange={(e) =>
+									setFormData({ ...formData, billingName: e.target.value })
+								}
 								className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 								placeholder="John Doe"
 							/>
@@ -157,7 +174,9 @@ export function BillingDetailsCard() {
 							<input
 								type="email"
 								value={formData.billingEmail}
-								onChange={(e) => setFormData({ ...formData, billingEmail: e.target.value })}
+								onChange={(e) =>
+									setFormData({ ...formData, billingEmail: e.target.value })
+								}
 								className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 								placeholder="john@example.com"
 							/>
@@ -171,7 +190,12 @@ export function BillingDetailsCard() {
 						<input
 							type="text"
 							value={formData.billingAddressLine1}
-							onChange={(e) => setFormData({ ...formData, billingAddressLine1: e.target.value })}
+							onChange={(e) =>
+								setFormData({
+									...formData,
+									billingAddressLine1: e.target.value,
+								})
+							}
 							className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 							placeholder="123 Main Street"
 						/>
@@ -184,7 +208,12 @@ export function BillingDetailsCard() {
 						<input
 							type="text"
 							value={formData.billingAddressLine2}
-							onChange={(e) => setFormData({ ...formData, billingAddressLine2: e.target.value })}
+							onChange={(e) =>
+								setFormData({
+									...formData,
+									billingAddressLine2: e.target.value,
+								})
+							}
 							className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 							placeholder="Apartment, suite, etc."
 						/>
@@ -198,7 +227,9 @@ export function BillingDetailsCard() {
 							<input
 								type="text"
 								value={formData.billingCity}
-								onChange={(e) => setFormData({ ...formData, billingCity: e.target.value })}
+								onChange={(e) =>
+									setFormData({ ...formData, billingCity: e.target.value })
+								}
 								className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 								placeholder="New York"
 							/>
@@ -210,7 +241,9 @@ export function BillingDetailsCard() {
 							<input
 								type="text"
 								value={formData.billingState}
-								onChange={(e) => setFormData({ ...formData, billingState: e.target.value })}
+								onChange={(e) =>
+									setFormData({ ...formData, billingState: e.target.value })
+								}
 								className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 								placeholder="NY"
 							/>
@@ -222,7 +255,12 @@ export function BillingDetailsCard() {
 							<input
 								type="text"
 								value={formData.billingPostalCode}
-								onChange={(e) => setFormData({ ...formData, billingPostalCode: e.target.value })}
+								onChange={(e) =>
+									setFormData({
+										...formData,
+										billingPostalCode: e.target.value,
+									})
+								}
 								className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
 								placeholder="10001"
 							/>
@@ -268,7 +306,8 @@ export function BillingDetailsCard() {
 								</p>
 							)}
 							<p className="text-sm text-gray-600 dark:text-gray-400">
-								{billingDetails.billingCity}, {billingDetails.billingState} {billingDetails.billingPostalCode}
+								{billingDetails.billingCity}, {billingDetails.billingState}{" "}
+								{billingDetails.billingPostalCode}
 							</p>
 							<p className="text-sm text-gray-600 dark:text-gray-400">
 								{billingDetails.billingCountry}
@@ -295,7 +334,8 @@ export function BillingDetailsCard() {
 			{!hasPaymentMethod && !isEditing && (
 				<div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
 					<p className="text-sm text-blue-900 dark:text-blue-200">
-						<strong>Note:</strong> Payment methods are securely managed during checkout. Your card details are never stored on our servers.
+						<strong>Note:</strong> Payment methods are securely managed during
+						checkout. Your card details are never stored on our servers.
 					</p>
 				</div>
 			)}
