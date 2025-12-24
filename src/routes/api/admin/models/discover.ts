@@ -27,9 +27,8 @@ export const Route = createFileRoute("/api/admin/models/discover")({
 					}
 
 					// Discover models
-					let results: Awaited<
-						ReturnType<typeof discoverModelsForProvider>
-					>[] = [];
+					let results: Awaited<ReturnType<typeof discoverModelsForProvider>>[] =
+						[];
 					if (provider) {
 						// Single provider
 						const result = await discoverModelsForProvider(

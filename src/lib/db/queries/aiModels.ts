@@ -313,16 +313,34 @@ export async function updateModel(
 	id: string,
 	data: UpdateModelData,
 ): Promise<AIModel> {
-	const updates: UpdateModelData & { updated_at: Date } = {
-		...data,
+	const updates: {
+		display_name?: string;
+		description?: string;
+		context_window?: number;
+		supports_streaming?: boolean;
+		status?: ModelStatus;
+		admin_notes?: string;
+		provider_metadata?: string;
+		enabled_at?: Date | null;
+		deprecated_at?: Date | null;
+		updated_by?: string;
+		updated_at: Date;
+	} = {
+		display_name: data.display_name,
+		description: data.description,
+		context_window: data.context_window,
+		supports_streaming: data.supports_streaming,
+		status: data.status,
+		admin_notes: data.admin_notes,
+		enabled_at: data.enabled_at,
+		deprecated_at: data.deprecated_at,
+		updated_by: data.updated_by,
 		updated_at: new Date(),
 	};
 
 	// Serialize provider_metadata if present
 	if (data.provider_metadata) {
-		updates.provider_metadata = JSON.parse(
-			JSON.stringify(data.provider_metadata),
-		);
+		updates.provider_metadata = JSON.stringify(data.provider_metadata);
 	}
 
 	const model = await db
@@ -347,12 +365,28 @@ export async function bulkUpdateModels(
 ): Promise<number> {
 	if (ids.length === 0) return 0;
 
-	const updateData: UpdateModelData & {
+	const updateData: {
+		display_name?: string;
+		description?: string;
+		context_window?: number;
+		supports_streaming?: boolean;
+		status?: ModelStatus;
+		admin_notes?: string;
+		provider_metadata?: string;
+		enabled_at?: Date | null;
+		deprecated_at?: Date | null;
+		updated_by?: string;
 		updated_at: Date;
-		enabled_at?: Date;
-		deprecated_at?: Date;
 	} = {
-		...updates,
+		display_name: updates.display_name,
+		description: updates.description,
+		context_window: updates.context_window,
+		supports_streaming: updates.supports_streaming,
+		status: updates.status,
+		admin_notes: updates.admin_notes,
+		enabled_at: updates.enabled_at,
+		deprecated_at: updates.deprecated_at,
+		updated_by: updates.updated_by,
 		updated_at: new Date(),
 	};
 

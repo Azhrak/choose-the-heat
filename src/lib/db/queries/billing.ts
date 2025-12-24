@@ -1,4 +1,5 @@
 import { db } from "~/lib/db";
+import type { SubscriptionTier } from "~/lib/db/types";
 
 /**
  * Get user's billing details
@@ -260,7 +261,7 @@ export async function createInvoice(data: {
 		.values({
 			user_id: data.userId,
 			invoice_number: data.invoiceNumber,
-			subscription_tier: data.subscriptionTier,
+			subscription_tier: data.subscriptionTier as SubscriptionTier,
 			billing_period_start: data.billingPeriodStart.toISOString(),
 			billing_period_end: data.billingPeriodEnd.toISOString(),
 			subtotal: data.subtotal.toString(),

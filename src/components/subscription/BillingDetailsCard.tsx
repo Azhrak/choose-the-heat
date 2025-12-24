@@ -87,6 +87,7 @@ export function BillingDetailsCard() {
 				</div>
 				{!isEditing && (
 					<button
+						type="button"
 						onClick={() => setIsEditing(true)}
 						className="flex items-center gap-2 text-sm text-rose-600 dark:text-rose-400 hover:underline"
 					>
@@ -154,10 +155,14 @@ export function BillingDetailsCard() {
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label
+								htmlFor="billingName"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+							>
 								Full Name
 							</label>
 							<input
+								id="billingName"
 								type="text"
 								value={formData.billingName}
 								onChange={(e) =>
@@ -168,10 +173,14 @@ export function BillingDetailsCard() {
 							/>
 						</div>
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label
+								htmlFor="billingEmail"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+							>
 								Email
 							</label>
 							<input
+								id="billingEmail"
 								type="email"
 								value={formData.billingEmail}
 								onChange={(e) =>
@@ -184,10 +193,14 @@ export function BillingDetailsCard() {
 					</div>
 
 					<div>
-						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+						<label
+							htmlFor="billingAddressLine1"
+							className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+						>
 							Address Line 1
 						</label>
 						<input
+							id="billingAddressLine1"
 							type="text"
 							value={formData.billingAddressLine1}
 							onChange={(e) =>
@@ -202,10 +215,14 @@ export function BillingDetailsCard() {
 					</div>
 
 					<div>
-						<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+						<label
+							htmlFor="billingAddressLine2"
+							className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+						>
 							Address Line 2 (Optional)
 						</label>
 						<input
+							id="billingAddressLine2"
 							type="text"
 							value={formData.billingAddressLine2}
 							onChange={(e) =>
@@ -221,10 +238,14 @@ export function BillingDetailsCard() {
 
 					<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label
+								htmlFor="billingCity"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+							>
 								City
 							</label>
 							<input
+								id="billingCity"
 								type="text"
 								value={formData.billingCity}
 								onChange={(e) =>
@@ -235,10 +256,14 @@ export function BillingDetailsCard() {
 							/>
 						</div>
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label
+								htmlFor="billingState"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+							>
 								State/Province
 							</label>
 							<input
+								id="billingState"
 								type="text"
 								value={formData.billingState}
 								onChange={(e) =>
@@ -249,10 +274,14 @@ export function BillingDetailsCard() {
 							/>
 						</div>
 						<div>
-							<label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+							<label
+								htmlFor="billingPostalCode"
+								className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+							>
 								Postal Code
 							</label>
 							<input
+								id="billingPostalCode"
 								type="text"
 								value={formData.billingPostalCode}
 								onChange={(e) =>
@@ -322,6 +351,7 @@ export function BillingDetailsCard() {
 						No billing details on file
 					</p>
 					<button
+						type="button"
 						onClick={() => setIsEditing(true)}
 						className="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
 					>

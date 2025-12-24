@@ -64,6 +64,7 @@ CREATE INDEX idx_ai_models_status ON ai_models(status);
 ```
 
 **Status lifecycle**:
+
 - `pending`: Discovered from API, awaiting admin approval
 - `enabled`: Admin approved, available for selection
 - `disabled`: Admin explicitly disabled (can re-enable)
@@ -173,6 +174,7 @@ Response: {
 ```
 
 **Logic**:
+
 1. Rate limiting check (don't spam provider APIs - track last sync time)
 2. Fetch models from provider API(s)
 3. Compare with database (`ai_models` table)
@@ -339,6 +341,7 @@ Apply the same model validation and fallback logic for TTS providers.
 Create unified component for managing models:
 
 **Layout**:
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │ Model Management                                     │
@@ -370,6 +373,7 @@ Create unified component for managing models:
 ```
 
 **Features**:
+
 - Provider dropdown to filter models
 - "Refresh Models" button triggers discovery API
 - Three sections: Pending, Enabled, Deprecated
@@ -469,6 +473,7 @@ Add pending models indicator:
 ### 7.2 Provider Without Listing API
 
 For providers like Anthropic that don't support model listing:
+
 - Maintain curated list in `src/lib/ai/curatedModels.ts`
 - Discovery service falls back to curated list
 - Admin sees note: "Using curated list (provider API doesn't support discovery)"
@@ -518,6 +523,7 @@ async function getEnabledModelsForProvider(provider: string, category: string) {
 ### 8.2 Database Indexing
 
 Already included in schema:
+
 ```sql
 CREATE INDEX idx_ai_models_provider_category ON ai_models(provider, category);
 CREATE INDEX idx_ai_models_status ON ai_models(status);
@@ -539,6 +545,7 @@ await db.updateTable('ai_models')
 ## Critical Files to Modify
 
 ### New Files
+
 - `src/lib/db/migrations/018_add_ai_models_table.ts`
 - `src/lib/db/migrations/019_seed_existing_models.ts`
 - `src/lib/ai/modelDiscovery.ts`
@@ -549,6 +556,7 @@ await db.updateTable('ai_models')
 - `src/components/admin/ModelManagementPanel.tsx`
 
 ### Modified Files
+
 - `src/lib/ai/client.ts` - Add model validation before use
 - `src/lib/ai/config.ts` - Update `getAIConfigForStory()` fallback logic
 - `src/lib/tts/client.ts` - Mirror changes for TTS
@@ -558,6 +566,7 @@ await db.updateTable('ai_models')
 - `src/components/admin/ProviderCard.tsx` - Add pending models indicator
 
 ### Files to Eventually Deprecate (after 3 months)
+
 - Hardcoded `supportedModels` arrays in `src/lib/ai/providers.ts` (keep for fallback initially)
 - `src/components/admin/AvailableModelsEditor.tsx` (replaced by ModelManagementPanel)
 
@@ -566,18 +575,21 @@ await db.updateTable('ai_models')
 ## Testing Strategy
 
 ### Unit Tests
+
 - Model discovery service with mocked API responses
 - Fallback logic for deprecated models
 - Database queries (CRUD operations)
 - Status determination logic
 
 ### Integration Tests
+
 1. Discover models from OpenAI → verify database inserts
 2. Approve pending model → verify status change to "enabled"
 3. Generate story with deprecated model → verify fallback to provider default
 4. Set default model → verify it's used when provider is activated
 
 ### E2E Tests
+
 1. Admin refreshes models → sees pending count
 2. Admin approves models → models appear in enabled list
 3. Admin sets default → activating provider uses new default

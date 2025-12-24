@@ -1,11 +1,6 @@
 import { Check, Crown, Sparkles, Star, Volume2, Zap } from "lucide-react";
+import type { TierFeatures } from "~/hooks/useSubscriptionQuery";
 import type { SubscriptionTier } from "~/lib/db/types";
-
-interface TierFeatures {
-	priority_support: boolean;
-	advanced_ai_models: boolean;
-	early_access: boolean;
-}
 
 interface SubscriptionCardProps {
 	tier: SubscriptionTier;

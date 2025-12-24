@@ -762,6 +762,7 @@ while (true) {
 ```
 
 **Status Values**:
+
 - `ready`: Provider fully configured with valid API key and models
 - `incomplete`: Has API key but missing configuration (models/default)
 - `invalid`: API key test failed
@@ -816,6 +817,7 @@ if (openai?.status === 'ready') {
 ```
 
 **Side Effects**:
+
 - Updates `ai.provider` or `tts.provider` setting in database
 - Invalidates configuration cache
 - Makes provider active for all new generation requests
