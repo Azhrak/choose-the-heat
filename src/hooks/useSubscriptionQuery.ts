@@ -2,6 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "~/lib/api/client";
 import type { SubscriptionTier } from "~/lib/db/types";
 
+export interface TierFeatures {
+	priority_support?: boolean;
+	advanced_ai_models?: boolean;
+	early_access?: boolean;
+	[key: string]: unknown;
+}
+
 export interface SubscriptionTierInfo {
 	tier: SubscriptionTier;
 	name: string;
@@ -10,7 +17,7 @@ export interface SubscriptionTierInfo {
 	price_yearly: string | null;
 	text_generations_per_day: number;
 	voice_generations_per_day: number;
-	features: any;
+	features: TierFeatures;
 	is_active: boolean;
 }
 
@@ -50,7 +57,9 @@ export function useUserSubscriptionQuery() {
 	return useQuery({
 		queryKey: userSubscriptionQueryKey,
 		queryFn: async () => {
-			return await api.get<UserSubscriptionInfo>("/api/subscriptions/my-subscription");
+			return await api.get<UserSubscriptionInfo>(
+				"/api/subscriptions/my-subscription",
+			);
 		},
 	});
 }

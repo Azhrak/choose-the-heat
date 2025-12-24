@@ -253,6 +253,103 @@ You could enhance the app to let users choose their provider per story by:
 
 ---
 
+## Admin UI Configuration
+
+The application includes a unified admin interface for managing AI providers at `/admin/providers`. This interface provides comprehensive provider management with real-time status monitoring.
+
+### Provider Status Dashboard
+
+The dashboard shows all providers with their current status:
+
+- **✓ Ready** - Provider has a validated API key and configured models (green)
+- **⚠ Incomplete** - Provider has an API key but needs configuration or validation (yellow)
+- **✗ Invalid** - Provider has an invalid or failed API key (red)
+- **○ Unconfigured** - Provider has no API key set (gray)
+
+**Access:** Admin Panel → AI Providers (`/admin/providers`)
+
+### Configuring a Provider
+
+**Step-by-step guide:**
+
+1. Navigate to **Admin Panel → AI Providers** (admin-only access)
+2. Choose the **Text Generation** or **Text-to-Speech** tab
+3. Find your desired provider in the list
+4. Click the **Configure** button (⚙️ icon)
+5. In the configuration modal:
+   - Enter your API key in the text field
+   - Use the eye icon to toggle visibility
+   - Click **Save & Validate** to store and test the key
+   - Or click **Test Existing Key** to validate a previously saved key
+6. The system will:
+   - Encrypt your API key before storage
+   - Test the key against the provider's API
+   - Update the provider status automatically
+   - Display success or error messages
+
+**Security:** All API keys are encrypted using AES-256 encryption before storage in the database.
+
+### Activating a Provider
+
+Once a provider is configured (status shows "Ready"):
+
+1. Click the **Activate** button (▶ icon) on the provider card
+2. The system will:
+   - Set the provider as active for all new story generation
+   - Automatically select the provider's default model
+   - Invalidate configuration caches to apply changes immediately
+   - Display a success confirmation
+3. The "Active" badge will appear on the provider card
+4. All other providers will show as inactive
+
+**Note:** Only providers with "Ready" status can be activated. Incomplete or unconfigured providers cannot be activated.
+
+### Provider Information Display
+
+Each provider card shows:
+
+- **Provider Name** - Display name with provider logo/icon
+- **Status Badge** - Visual indicator (Ready, Incomplete, Invalid, Unconfigured)
+- **Active Badge** - Shows which provider is currently active
+- **API Key Status** - Valid, Invalid, Untested, or Not set
+- **Models Count** - Number of configured models for this provider
+- **Default Model** - The model that will be used when this provider is activated
+- **Action Buttons** - Configure (⚙️) and Activate (▶) buttons
+
+### Summary Statistics
+
+The dashboard displays at-a-glance statistics at the top:
+
+- **Ready** (green) - Fully configured and working providers
+- **Incomplete** (yellow) - Providers needing configuration or validation
+- **Invalid** (red) - Providers with API key issues
+- **Unconfigured** (gray) - Providers not yet set up
+
+### Provider Status Logic
+
+The system determines provider status based on:
+
+1. **Unconfigured**: No API key stored
+2. **Invalid**: API key test failed
+3. **Incomplete**: Has API key but:
+   - No models configured, OR
+   - No default model set, OR
+   - API key not tested yet
+4. **Ready**: API key valid AND models configured AND default model set
+
+### Benefits of Admin UI
+
+- **Centralized Management** - All provider configuration in one unified interface
+- **Real-time Status** - Live status updates show which providers are ready to use
+- **Easy Switching** - Activate different providers with a single click
+- **Secure Storage** - API keys encrypted with AES-256 before storage
+- **Model Management** - Each provider tracks its own models and default selection
+- **Category Support** - Separate configuration for Text Generation and Text-to-Speech
+- **Validation Built-in** - Test API keys before activation
+- **Status Monitoring** - Visual indicators for quick health checks
+
+---
+
 ## Troubleshooting
 
 ### "API key not found" Error

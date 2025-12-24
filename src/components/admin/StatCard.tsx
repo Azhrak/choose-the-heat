@@ -29,7 +29,9 @@ export function StatCard(props: StatCardProps) {
 					<div
 						className={`p-3 rounded-lg ${props.color} bg-opacity-10 dark:bg-opacity-20`}
 					>
-						<Icon className={`w-6 h-6 ${props.color.replace("bg-", "text-")}`} />
+						<Icon
+							className={`w-6 h-6 ${props.color.replace("bg-", "text-")}`}
+						/>
 					</div>
 				</div>
 				<Stack gap="xs">

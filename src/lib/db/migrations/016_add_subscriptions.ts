@@ -42,7 +42,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 		)
 		.addColumn("tier", sql`subscription_tier`, (col) => col.notNull())
 		.addColumn("amount", sql`decimal(10,2)`, (col) => col.notNull())
-		.addColumn("currency", "varchar(3)", (col) => col.notNull().defaultTo("USD"))
+		.addColumn("currency", "varchar(3)", (col) =>
+			col.notNull().defaultTo("USD"),
+		)
 		.addColumn("status", "varchar(20)", (col) => col.notNull()) // pending, completed, failed, refunded
 		.addColumn("payment_provider", "varchar(50)") // stripe, paypal, etc.
 		.addColumn("payment_provider_id", "varchar(255)") // external transaction ID
@@ -65,7 +67,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 			col.notNull().references("users.id").onDelete("cascade"),
 		)
 		.addColumn("date", "date", (col) => col.notNull())
-		.addColumn("text_generations", "integer", (col) => col.notNull().defaultTo(0))
+		.addColumn("text_generations", "integer", (col) =>
+			col.notNull().defaultTo(0),
+		)
 		.addColumn("voice_generations", "integer", (col) =>
 			col.notNull().defaultTo(0),
 		)
@@ -200,10 +204,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 		.dropIndex("subscription_transactions_user_id_idx")
 		.ifExists()
 		.execute();
-	await db.schema
-		.dropIndex("users_subscription_tier_idx")
-		.ifExists()
-		.execute();
+	await db.schema.dropIndex("users_subscription_tier_idx").ifExists().execute();
 
 	// Drop tables
 	await db.schema.dropTable("subscription_tier_limits").ifExists().execute();

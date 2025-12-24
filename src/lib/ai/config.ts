@@ -1,5 +1,10 @@
+import {
+	getDefaultModelForProvider,
+	getModelByProviderId,
+} from "../db/queries/aiModels";
 import { getSettingsMap } from "../db/queries/settings";
 import type { AIProvider } from "./client";
+import { getAllTextProviders } from "./providers";
 
 /**
  * AI Configuration from settings
@@ -43,20 +48,33 @@ export function invalidateSettingsCache(): void {
 /**
  * Get AI configuration from environment variables
  * Used as fallback when database settings are not available
+ * Now uses provider registry as single source of truth
  */
 function getConfigFromEnv(): AIConfig {
+	const providers = getAllTextProviders();
 	const provider = (
 		process.env.AI_PROVIDER || "openai"
 	).toLowerCase() as AIProvider;
 
-	const defaultModels: Record<AIProvider, string> = {
-		openai: process.env.OPENAI_MODEL || "gpt-4o-mini",
-		google: process.env.GOOGLE_MODEL || "gemini-2.5-flash-lite",
-		anthropic: process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022",
-		mistral: process.env.MISTRAL_MODEL || "mistral-medium-2508",
-		xai: process.env.XAI_MODEL || "grok-4-fast-reasoning",
-		openrouter: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
-	};
+	// Build default models map from provider registry
+	const defaultModels: Record<AIProvider, string> = {} as Record<
+		AIProvider,
+		string
+	>;
+	for (const p of providers) {
+		const envVarName = `${p.id.toUpperCase()}_MODEL`;
+		defaultModels[p.id as AIProvider] =
+			process.env[envVarName] || p.defaultModel;
+	}
+
+	// Build available models from provider registry
+	const availableModels: Record<AIProvider, string[]> = {} as Record<
+		AIProvider,
+		string[]
+	>;
+	for (const p of providers) {
+		availableModels[p.id as AIProvider] = p.supportedModels;
+	}
 
 	return {
 		provider,
@@ -65,33 +83,16 @@ function getConfigFromEnv(): AIConfig {
 		maxTokens: 2000,
 		fallbackEnabled: false,
 		timeoutSeconds: 60,
-		availableModels: {
-			openai: ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"],
-			google: ["gemini-2.5-flash-lite", "gemini-1.5-pro", "gemini-1.5-flash"],
-			anthropic: [
-				"claude-3-5-sonnet-20241022",
-				"claude-3-opus-20240229",
-				"claude-3-haiku-20240307",
-			],
-			mistral: [
-				"mistral-medium-2508",
-				"mistral-small-latest",
-				"mistral-large-latest",
-			],
-			xai: ["grok-4-fast-reasoning", "grok-2", "grok-beta"],
-			openrouter: [
-				"openai/gpt-4o-mini",
-				"anthropic/claude-3.5-sonnet",
-				"nousresearch/hermes-3-llama-3.1-70b",
-			],
-		},
+		availableModels,
 	};
 }
 
 /**
  * Parse settings from database into AIConfig
  */
-function parseSettings(settings: Record<string, string>): AIConfig {
+async function parseSettings(
+	settings: Record<string, string>,
+): Promise<AIConfig> {
 	const envFallback = getConfigFromEnv();
 
 	// Parse available models JSON
@@ -104,9 +105,19 @@ function parseSettings(settings: Record<string, string>): AIConfig {
 		console.error("Failed to parse ai.available_models:", error);
 	}
 
+	const provider = (settings["ai.provider"] ||
+		envFallback.provider) as AIProvider;
+
+	// Get the default model for this provider from the database
+	let model = envFallback.model;
+	const defaultModel = await getDefaultModelForProvider(provider, "text");
+	if (defaultModel && defaultModel.status === "enabled") {
+		model = defaultModel.model_id;
+	}
+
 	return {
-		provider: (settings["ai.provider"] || envFallback.provider) as AIProvider,
-		model: settings["ai.model"] || envFallback.model,
+		provider,
+		model,
 		temperature: settings["ai.temperature"]
 			? Number.parseFloat(settings["ai.temperature"])
 			: envFallback.temperature,
@@ -139,12 +150,14 @@ export async function getAIConfig(): Promise<AIConfig> {
 		return cache.data;
 	}
 
+	let config: AIConfig;
+
 	try {
 		// Try to load from database
 		const settings = await getSettingsMap({ category: "ai" });
 
 		if (Object.keys(settings).length > 0) {
-			const config = parseSettings(settings);
+			config = await parseSettings(settings);
 
 			// Update cache
 			cache.data = config;
@@ -157,13 +170,13 @@ export async function getAIConfig(): Promise<AIConfig> {
 	}
 
 	// Fall back to environment variables
-	const envConfig = getConfigFromEnv();
+	config = getConfigFromEnv();
 
 	// Cache env config as well
-	cache.data = envConfig;
+	cache.data = config;
 	cache.timestamp = now;
 
-	return envConfig;
+	return config;
 }
 
 /**
@@ -203,9 +216,39 @@ export async function getAllAvailableModels(): Promise<
 }
 
 /**
+ * Get default model name for a specific provider (string only)
+ * Checks setting ai.<provider>.default_model first, falls back to available_models
+ * @deprecated Use getDefaultModelForProvider from aiModels.ts instead
+ */
+export async function getDefaultModelName(
+	provider: AIProvider,
+): Promise<string> {
+	const settings = await getSettingsMap({ category: "ai" });
+
+	// Check for provider-specific default
+	const providerDefault = settings[`ai.${provider}.default_model`];
+	if (providerDefault) {
+		return providerDefault;
+	}
+
+	// Fall back to first available model
+	const config = await getAIConfig();
+	const models = config.availableModels[provider];
+	if (models && models.length > 0) {
+		return models[0];
+	}
+
+	// Last resort: use provider registry default
+	const providers = getAllTextProviders();
+	const providerMeta = providers.find((p) => p.id === provider);
+	return providerMeta?.defaultModel || "gpt-4o-mini";
+}
+
+/**
  * Get AI configuration for a specific story, with fallback to current settings
  * If the story has saved AI settings, use those (if still valid)
  * Otherwise, use the current app settings
+ * Now uses database validation for model status
  */
 export async function getAIConfigForStory(
 	storyProvider?: string | null,
@@ -228,12 +271,39 @@ export async function getAIConfigForStory(
 		return currentConfig;
 	}
 
-	// Validate that the model still exists for this provider
-	const availableModels = currentConfig.availableModels[provider];
-	if (!availableModels.includes(storyModel)) {
+	// Check if story's model is still enabled in database
+	const modelRecord = await getModelByProviderId(provider, "text", storyModel);
+
+	if (
+		!modelRecord ||
+		modelRecord.status === "deprecated" ||
+		modelRecord.status === "disabled"
+	) {
 		console.log(
-			`[AI Config] Story model "${storyModel}" no longer available for provider "${provider}", falling back to current model "${currentConfig.model}"`,
+			`[AI Config] Story model "${storyModel}" is ${modelRecord?.status || "not found"}, falling back to provider default`,
 		);
+
+		// Fall back to provider's default model
+		const defaultModel = await getDefaultModelForProvider(provider, "text");
+
+		if (defaultModel && defaultModel.status === "enabled") {
+			// Parse temperature
+			const temperature =
+				typeof storyTemperature === "string"
+					? Number.parseFloat(storyTemperature)
+					: typeof storyTemperature === "number"
+						? storyTemperature
+						: currentConfig.temperature;
+
+			return {
+				...currentConfig,
+				provider,
+				model: defaultModel.model_id,
+				temperature,
+			};
+		}
+
+		// Ultimate fallback: current app config
 		return currentConfig;
 	}
 

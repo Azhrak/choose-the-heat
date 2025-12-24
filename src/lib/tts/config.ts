@@ -1,3 +1,5 @@
+import { getAllTTSProviders } from "../ai/providers";
+import { getDefaultModelForProvider } from "../db/queries/aiModels";
 import { getSettingsMap } from "../db/queries/settings";
 
 /**
@@ -55,23 +57,33 @@ export function invalidateTTSCache(): void {
 /**
  * Get TTS configuration from environment variables
  * Used as fallback when database settings are not available
+ * Now uses provider registry as single source of truth for models
  */
 function getConfigFromEnv(): TTSConfig {
+	const providers = getAllTTSProviders();
 	const provider = (
 		process.env.TTS_PROVIDER || "openai"
 	).toLowerCase() as TTSProvider;
 
+	// Build available models from provider registry
+	const availableModels: Record<TTSProvider, string[]> = {} as Record<
+		TTSProvider,
+		string[]
+	>;
+	for (const p of providers) {
+		availableModels[p.id as TTSProvider] = p.supportedModels;
+	}
+
+	// Get model from env or provider default
+	const providerMeta = providers.find((p) => p.id === provider);
+	const model = process.env.TTS_MODEL || providerMeta?.defaultModel || "tts-1";
+
 	return {
 		provider,
-		model: process.env.TTS_MODEL || "tts-1",
+		model,
 		gcsBucketName: process.env.GCS_BUCKET_NAME || "",
 		gcsBucketPath: process.env.GCS_BUCKET_PATH || "audio/",
-		availableModels: {
-			openai: ["tts-1", "tts-1-hd"],
-			google: ["gemini-2.5-flash-tts", "gemini-2.5-flash-lite-preview-tts"],
-			elevenlabs: ["Rachel", "Domi"],
-			azure: ["en-US-JennyNeural", "en-US-GuyNeural", "en-US-AriaNeural"],
-		},
+		availableModels,
 		availableVoices: {
 			openai: [
 				{ id: "alloy", name: "Alloy" },
@@ -169,7 +181,9 @@ function getConfigFromEnv(): TTSConfig {
 /**
  * Parse settings from database into TTSConfig
  */
-function parseSettings(settings: Record<string, string>): TTSConfig {
+async function parseSettings(
+	settings: Record<string, string>,
+): Promise<TTSConfig> {
 	const envFallback = getConfigFromEnv();
 
 	// Parse available models JSON
@@ -182,9 +196,19 @@ function parseSettings(settings: Record<string, string>): TTSConfig {
 		console.error("Failed to parse tts.available_models:", error);
 	}
 
+	const provider = (settings["tts.provider"] ||
+		envFallback.provider) as TTSProvider;
+
+	// Get the default model for this provider from the database
+	let model = envFallback.model;
+	const defaultModel = await getDefaultModelForProvider(provider, "tts");
+	if (defaultModel && defaultModel.status === "enabled") {
+		model = defaultModel.model_id;
+	}
+
 	const config = {
-		provider: (settings["tts.provider"] || envFallback.provider) as TTSProvider,
-		model: settings["tts.model"] || envFallback.model,
+		provider,
+		model,
 		gcsBucketName: settings["tts.gcs_bucket_name"] || envFallback.gcsBucketName,
 		gcsBucketPath: settings["tts.gcs_bucket_path"] || envFallback.gcsBucketPath,
 		availableVoices: envFallback.availableVoices, // Use env default for voices
@@ -214,12 +238,14 @@ export async function getTTSConfig(): Promise<TTSConfig> {
 		return cache.data;
 	}
 
+	let config: TTSConfig;
+
 	try {
 		// Try to load from database
 		const settings = await getSettingsMap({ category: "tts" });
 
 		if (Object.keys(settings).length > 0) {
-			const config = parseSettings(settings);
+			config = await parseSettings(settings);
 
 			// Update cache
 			cache.data = config;
@@ -232,13 +258,13 @@ export async function getTTSConfig(): Promise<TTSConfig> {
 	}
 
 	// Fall back to environment variables
-	const envConfig = getConfigFromEnv();
+	config = getConfigFromEnv();
 
 	// Cache env config as well
-	cache.data = envConfig;
+	cache.data = config;
 	cache.timestamp = now;
 
-	return envConfig;
+	return config;
 }
 
 /**
@@ -302,4 +328,32 @@ export async function getAvailableVoices(
 
 	// Return voices for current provider
 	return config.availableVoices[config.provider] || [];
+}
+
+/**
+ * Get default model for a specific TTS provider
+ * Checks setting tts.<provider>.default_model first, falls back to available_models
+ */
+export async function getDefaultModelForTTSProvider(
+	provider: TTSProvider,
+): Promise<string> {
+	const settings = await getSettingsMap({ category: "tts" });
+
+	// Check for provider-specific default
+	const providerDefault = settings[`tts.${provider}.default_model`];
+	if (providerDefault) {
+		return providerDefault;
+	}
+
+	// Fall back to first available model
+	const config = await getTTSConfig();
+	const models = config.availableModels[provider];
+	if (models && models.length > 0) {
+		return models[0];
+	}
+
+	// Last resort: use provider registry default
+	const providers = getAllTTSProviders();
+	const providerMeta = providers.find((p) => p.id === provider);
+	return providerMeta?.defaultModel || "tts-1";
 }

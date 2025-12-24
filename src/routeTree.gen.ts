@@ -37,6 +37,7 @@ import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminTropesIndexRouteImport } from './routes/admin/tropes/index'
 import { Route as AdminTemplatesIndexRouteImport } from './routes/admin/templates/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
+import { Route as AdminProvidersIndexRouteImport } from './routes/admin/providers/index'
 import { Route as AdminAuditLogsIndexRouteImport } from './routes/admin/audit-logs/index'
 import { Route as StoryIdReadRouteImport } from './routes/story/$id.read'
 import { Route as StoryIdInfoRouteImport } from './routes/story/$id.info'
@@ -63,6 +64,7 @@ import { Route as ApiAdminUsersIndexRouteImport } from './routes/api/admin/users
 import { Route as ApiAdminTropesIndexRouteImport } from './routes/api/admin/tropes/index'
 import { Route as ApiAdminTemplatesIndexRouteImport } from './routes/api/admin/templates/index'
 import { Route as ApiAdminSettingsIndexRouteImport } from './routes/api/admin/settings/index'
+import { Route as ApiAdminModelsIndexRouteImport } from './routes/api/admin/models/index'
 import { Route as ApiAdminApiKeysIndexRouteImport } from './routes/api/admin/api-keys/index'
 import { Route as ApiStoriesIdSceneRouteImport } from './routes/api/stories/$id.scene'
 import { Route as ApiStoriesIdFavoriteRouteImport } from './routes/api/stories/$id/favorite'
@@ -84,6 +86,11 @@ import { Route as ApiAdminTemplatesIdRouteImport } from './routes/api/admin/temp
 import { Route as ApiAdminSettingsImportRouteImport } from './routes/api/admin/settings/import'
 import { Route as ApiAdminSettingsExportRouteImport } from './routes/api/admin/settings/export'
 import { Route as ApiAdminSettingsKeyRouteImport } from './routes/api/admin/settings/$key'
+import { Route as ApiAdminProvidersStatusRouteImport } from './routes/api/admin/providers/status'
+import { Route as ApiAdminProvidersActivateRouteImport } from './routes/api/admin/providers/activate'
+import { Route as ApiAdminModelsSetDefaultRouteImport } from './routes/api/admin/models/set-default'
+import { Route as ApiAdminModelsDiscoverRouteImport } from './routes/api/admin/models/discover'
+import { Route as ApiAdminModelsIdRouteImport } from './routes/api/admin/models/$id'
 import { Route as ApiAdminApiKeysProviderRouteImport } from './routes/api/admin/api-keys/$provider'
 import { Route as AdminUsersIdEditRouteImport } from './routes/admin/users/$id/edit'
 import { Route as AdminTemplatesIdEditRouteImport } from './routes/admin/templates/$id/edit'
@@ -234,6 +241,11 @@ const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
   path: '/settings/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProvidersIndexRoute = AdminProvidersIndexRouteImport.update({
+  id: '/providers/',
+  path: '/providers/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAuditLogsIndexRoute = AdminAuditLogsIndexRouteImport.update({
   id: '/audit-logs/',
   path: '/audit-logs/',
@@ -366,6 +378,11 @@ const ApiAdminSettingsIndexRoute = ApiAdminSettingsIndexRouteImport.update({
   path: '/api/admin/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminModelsIndexRoute = ApiAdminModelsIndexRouteImport.update({
+  id: '/api/admin/models/',
+  path: '/api/admin/models/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminApiKeysIndexRoute = ApiAdminApiKeysIndexRouteImport.update({
   id: '/api/admin/api-keys/',
   path: '/api/admin/api-keys/',
@@ -477,6 +494,33 @@ const ApiAdminSettingsKeyRoute = ApiAdminSettingsKeyRouteImport.update({
   path: '/api/admin/settings/$key',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminProvidersStatusRoute = ApiAdminProvidersStatusRouteImport.update({
+  id: '/api/admin/providers/status',
+  path: '/api/admin/providers/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminProvidersActivateRoute =
+  ApiAdminProvidersActivateRouteImport.update({
+    id: '/api/admin/providers/activate',
+    path: '/api/admin/providers/activate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminModelsSetDefaultRoute =
+  ApiAdminModelsSetDefaultRouteImport.update({
+    id: '/api/admin/models/set-default',
+    path: '/api/admin/models/set-default',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminModelsDiscoverRoute = ApiAdminModelsDiscoverRouteImport.update({
+  id: '/api/admin/models/discover',
+  path: '/api/admin/models/discover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminModelsIdRoute = ApiAdminModelsIdRouteImport.update({
+  id: '/api/admin/models/$id',
+  path: '/api/admin/models/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminApiKeysProviderRoute = ApiAdminApiKeysProviderRouteImport.update({
   id: '/api/admin/api-keys/$provider',
   path: '/api/admin/api-keys/$provider',
@@ -571,6 +615,7 @@ export interface FileRoutesByFullPath {
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
+  '/admin/providers': typeof AdminProvidersIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
   '/admin/tropes': typeof AdminTropesIndexRoute
@@ -582,6 +627,11 @@ export interface FileRoutesByFullPath {
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
+  '/api/admin/models/$id': typeof ApiAdminModelsIdRoute
+  '/api/admin/models/discover': typeof ApiAdminModelsDiscoverRoute
+  '/api/admin/models/set-default': typeof ApiAdminModelsSetDefaultRoute
+  '/api/admin/providers/activate': typeof ApiAdminProvidersActivateRoute
+  '/api/admin/providers/status': typeof ApiAdminProvidersStatusRoute
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -603,6 +653,7 @@ export interface FileRoutesByFullPath {
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
   '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
+  '/api/admin/models': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
@@ -656,6 +707,7 @@ export interface FileRoutesByTo {
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
+  '/admin/providers': typeof AdminProvidersIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
   '/admin/tropes': typeof AdminTropesIndexRoute
@@ -667,6 +719,11 @@ export interface FileRoutesByTo {
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
+  '/api/admin/models/$id': typeof ApiAdminModelsIdRoute
+  '/api/admin/models/discover': typeof ApiAdminModelsDiscoverRoute
+  '/api/admin/models/set-default': typeof ApiAdminModelsSetDefaultRoute
+  '/api/admin/providers/activate': typeof ApiAdminProvidersActivateRoute
+  '/api/admin/providers/status': typeof ApiAdminProvidersStatusRoute
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -688,6 +745,7 @@ export interface FileRoutesByTo {
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
   '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
+  '/api/admin/models': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
@@ -743,6 +801,7 @@ export interface FileRoutesById {
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs/': typeof AdminAuditLogsIndexRoute
+  '/admin/providers/': typeof AdminProvidersIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
   '/admin/templates/': typeof AdminTemplatesIndexRoute
   '/admin/tropes/': typeof AdminTropesIndexRoute
@@ -754,6 +813,11 @@ export interface FileRoutesById {
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
+  '/api/admin/models/$id': typeof ApiAdminModelsIdRoute
+  '/api/admin/models/discover': typeof ApiAdminModelsDiscoverRoute
+  '/api/admin/models/set-default': typeof ApiAdminModelsSetDefaultRoute
+  '/api/admin/providers/activate': typeof ApiAdminProvidersActivateRoute
+  '/api/admin/providers/status': typeof ApiAdminProvidersStatusRoute
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
@@ -775,6 +839,7 @@ export interface FileRoutesById {
   '/api/stories/$id/favorite': typeof ApiStoriesIdFavoriteRoute
   '/api/stories/$id/scene': typeof ApiStoriesIdSceneRouteWithChildren
   '/api/admin/api-keys/': typeof ApiAdminApiKeysIndexRoute
+  '/api/admin/models/': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings/': typeof ApiAdminSettingsIndexRoute
   '/api/admin/templates/': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes/': typeof ApiAdminTropesIndexRoute
@@ -831,6 +896,7 @@ export interface FileRouteTypes {
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
+    | '/admin/providers'
     | '/admin/settings'
     | '/admin/templates'
     | '/admin/tropes'
@@ -842,6 +908,11 @@ export interface FileRouteTypes {
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
+    | '/api/admin/models/$id'
+    | '/api/admin/models/discover'
+    | '/api/admin/models/set-default'
+    | '/api/admin/providers/activate'
+    | '/api/admin/providers/status'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -863,6 +934,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
     | '/api/admin/api-keys'
+    | '/api/admin/models'
     | '/api/admin/settings'
     | '/api/admin/templates'
     | '/api/admin/tropes'
@@ -916,6 +988,7 @@ export interface FileRouteTypes {
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
+    | '/admin/providers'
     | '/admin/settings'
     | '/admin/templates'
     | '/admin/tropes'
@@ -927,6 +1000,11 @@ export interface FileRouteTypes {
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
+    | '/api/admin/models/$id'
+    | '/api/admin/models/discover'
+    | '/api/admin/models/set-default'
+    | '/api/admin/providers/activate'
+    | '/api/admin/providers/status'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -948,6 +1026,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
     | '/api/admin/api-keys'
+    | '/api/admin/models'
     | '/api/admin/settings'
     | '/api/admin/templates'
     | '/api/admin/tropes'
@@ -1002,6 +1081,7 @@ export interface FileRouteTypes {
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs/'
+    | '/admin/providers/'
     | '/admin/settings/'
     | '/admin/templates/'
     | '/admin/tropes/'
@@ -1013,6 +1093,11 @@ export interface FileRouteTypes {
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
+    | '/api/admin/models/$id'
+    | '/api/admin/models/discover'
+    | '/api/admin/models/set-default'
+    | '/api/admin/providers/activate'
+    | '/api/admin/providers/status'
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
@@ -1034,6 +1119,7 @@ export interface FileRouteTypes {
     | '/api/stories/$id/favorite'
     | '/api/stories/$id/scene'
     | '/api/admin/api-keys/'
+    | '/api/admin/models/'
     | '/api/admin/settings/'
     | '/api/admin/templates/'
     | '/api/admin/tropes/'
@@ -1089,6 +1175,11 @@ export interface RootRouteChildren {
   ApiTemplatesIndexRoute: typeof ApiTemplatesIndexRoute
   ApiTropesIndexRoute: typeof ApiTropesIndexRoute
   ApiAdminApiKeysProviderRoute: typeof ApiAdminApiKeysProviderRouteWithChildren
+  ApiAdminModelsIdRoute: typeof ApiAdminModelsIdRoute
+  ApiAdminModelsDiscoverRoute: typeof ApiAdminModelsDiscoverRoute
+  ApiAdminModelsSetDefaultRoute: typeof ApiAdminModelsSetDefaultRoute
+  ApiAdminProvidersActivateRoute: typeof ApiAdminProvidersActivateRoute
+  ApiAdminProvidersStatusRoute: typeof ApiAdminProvidersStatusRoute
   ApiAdminSettingsKeyRoute: typeof ApiAdminSettingsKeyRoute
   ApiAdminSettingsExportRoute: typeof ApiAdminSettingsExportRoute
   ApiAdminSettingsImportRoute: typeof ApiAdminSettingsImportRoute
@@ -1105,6 +1196,7 @@ export interface RootRouteChildren {
   ApiAdminUsersStatsRoute: typeof ApiAdminUsersStatsRoute
   ApiAuthCallbackGoogleRoute: typeof ApiAuthCallbackGoogleRoute
   ApiAdminApiKeysIndexRoute: typeof ApiAdminApiKeysIndexRoute
+  ApiAdminModelsIndexRoute: typeof ApiAdminModelsIndexRoute
   ApiAdminSettingsIndexRoute: typeof ApiAdminSettingsIndexRoute
   ApiAdminTemplatesIndexRoute: typeof ApiAdminTemplatesIndexRoute
   ApiAdminTropesIndexRoute: typeof ApiAdminTropesIndexRoute
@@ -1309,6 +1401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/providers/': {
+      id: '/admin/providers/'
+      path: '/providers'
+      fullPath: '/admin/providers'
+      preLoaderRoute: typeof AdminProvidersIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/audit-logs/': {
       id: '/admin/audit-logs/'
       path: '/audit-logs'
@@ -1491,6 +1590,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminSettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/models/': {
+      id: '/api/admin/models/'
+      path: '/api/admin/models'
+      fullPath: '/api/admin/models'
+      preLoaderRoute: typeof ApiAdminModelsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/api-keys/': {
       id: '/api/admin/api-keys/'
       path: '/api/admin/api-keys'
@@ -1638,6 +1744,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminSettingsKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/providers/status': {
+      id: '/api/admin/providers/status'
+      path: '/api/admin/providers/status'
+      fullPath: '/api/admin/providers/status'
+      preLoaderRoute: typeof ApiAdminProvidersStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/providers/activate': {
+      id: '/api/admin/providers/activate'
+      path: '/api/admin/providers/activate'
+      fullPath: '/api/admin/providers/activate'
+      preLoaderRoute: typeof ApiAdminProvidersActivateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/models/set-default': {
+      id: '/api/admin/models/set-default'
+      path: '/api/admin/models/set-default'
+      fullPath: '/api/admin/models/set-default'
+      preLoaderRoute: typeof ApiAdminModelsSetDefaultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/models/discover': {
+      id: '/api/admin/models/discover'
+      path: '/api/admin/models/discover'
+      fullPath: '/api/admin/models/discover'
+      preLoaderRoute: typeof ApiAdminModelsDiscoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/models/$id': {
+      id: '/api/admin/models/$id'
+      path: '/api/admin/models/$id'
+      fullPath: '/api/admin/models/$id'
+      preLoaderRoute: typeof ApiAdminModelsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/api-keys/$provider': {
       id: '/api/admin/api-keys/$provider'
       path: '/api/admin/api-keys/$provider'
@@ -1710,6 +1851,7 @@ interface AdminRouteChildren {
   AdminTemplatesBulkImportRoute: typeof AdminTemplatesBulkImportRoute
   AdminTemplatesNewRoute: typeof AdminTemplatesNewRoute
   AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
+  AdminProvidersIndexRoute: typeof AdminProvidersIndexRoute
   AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
   AdminTemplatesIndexRoute: typeof AdminTemplatesIndexRoute
   AdminTropesIndexRoute: typeof AdminTropesIndexRoute
@@ -1724,6 +1866,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminTemplatesBulkImportRoute: AdminTemplatesBulkImportRoute,
   AdminTemplatesNewRoute: AdminTemplatesNewRoute,
   AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,
+  AdminProvidersIndexRoute: AdminProvidersIndexRoute,
   AdminSettingsIndexRoute: AdminSettingsIndexRoute,
   AdminTemplatesIndexRoute: AdminTemplatesIndexRoute,
   AdminTropesIndexRoute: AdminTropesIndexRoute,
@@ -1849,6 +1992,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApiTemplatesIndexRoute: ApiTemplatesIndexRoute,
   ApiTropesIndexRoute: ApiTropesIndexRoute,
   ApiAdminApiKeysProviderRoute: ApiAdminApiKeysProviderRouteWithChildren,
+  ApiAdminModelsIdRoute: ApiAdminModelsIdRoute,
+  ApiAdminModelsDiscoverRoute: ApiAdminModelsDiscoverRoute,
+  ApiAdminModelsSetDefaultRoute: ApiAdminModelsSetDefaultRoute,
+  ApiAdminProvidersActivateRoute: ApiAdminProvidersActivateRoute,
+  ApiAdminProvidersStatusRoute: ApiAdminProvidersStatusRoute,
   ApiAdminSettingsKeyRoute: ApiAdminSettingsKeyRoute,
   ApiAdminSettingsExportRoute: ApiAdminSettingsExportRoute,
   ApiAdminSettingsImportRoute: ApiAdminSettingsImportRoute,
@@ -1865,6 +2013,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminUsersStatsRoute: ApiAdminUsersStatsRoute,
   ApiAuthCallbackGoogleRoute: ApiAuthCallbackGoogleRoute,
   ApiAdminApiKeysIndexRoute: ApiAdminApiKeysIndexRoute,
+  ApiAdminModelsIndexRoute: ApiAdminModelsIndexRoute,
   ApiAdminSettingsIndexRoute: ApiAdminSettingsIndexRoute,
   ApiAdminTemplatesIndexRoute: ApiAdminTemplatesIndexRoute,
   ApiAdminTropesIndexRoute: ApiAdminTropesIndexRoute,

@@ -1,6 +1,6 @@
+import { sql } from "kysely";
 import { db } from "~/lib/db";
 import type { SubscriptionTier } from "~/lib/db/types";
-import { sql } from "kysely";
 
 /**
  * Get all subscription tier limits with their pricing and features
@@ -220,7 +220,7 @@ export async function createSubscriptionTransaction(data: {
 	status: string;
 	paymentProvider?: string;
 	paymentProviderId?: string;
-	metadata?: any;
+	metadata?: Record<string, unknown>;
 }) {
 	return await db
 		.insertInto("subscription_transactions")

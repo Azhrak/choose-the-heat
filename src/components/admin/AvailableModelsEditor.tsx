@@ -1,25 +1,35 @@
-import { Plus, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import {
+	getAllTextProviders,
+	getAllTTSProviders,
+	type ProviderMetadata,
+} from "~/lib/ai/providers";
 
 interface AvailableModelsEditorProps {
 	value: string;
 	onChange: (value: string) => void;
+	onChangeMultiple?: (changes: Record<string, string>) => void;
+	allSettings?: { key: string; value: string }[];
+	category: "ai" | "tts";
 	error?: string;
 }
 
 type ModelsData = Record<string, string[]>;
 
-/**
- * AvailableModelsEditor - Editor for provider-model JSON configuration
- * Follows props object pattern (no destructuring)
- *
- * @param props.value - JSON string of available models by provider
- * @param props.onChange - Callback when value changes
- * @param props.error - Error message (optional)
- */
 export function AvailableModelsEditor(props: AvailableModelsEditorProps) {
-	const [newProvider, setNewProvider] = useState("");
-	const [newModels, setNewModels] = useState<Record<string, string>>({});
+	// Get providers based on category
+	const allProviders: ProviderMetadata[] =
+		props.category === "ai" ? getAllTextProviders() : getAllTTSProviders();
+
+	// Get default model for a provider from settings
+	const getDefaultModel = (providerId: string): string | undefined => {
+		if (!props.allSettings) return undefined;
+		const settingKey =
+			props.category === "ai"
+				? `ai.text.default_model.${providerId}`
+				: `ai.tts.default_model.${providerId}`;
+		const setting = props.allSettings.find((s) => s.key === settingKey);
+		return setting?.value;
+	};
 
 	// Parse JSON value
 	const parseValue = (): ModelsData => {
@@ -31,161 +41,131 @@ export function AvailableModelsEditor(props: AvailableModelsEditorProps) {
 	};
 
 	const data = parseValue();
-	const providers = Object.keys(data).sort();
 
-	const handleAddProvider = () => {
-		if (!newProvider.trim() || data[newProvider]) return;
-
-		const updated = { ...data, [newProvider.trim()]: [] };
-		props.onChange(JSON.stringify(updated));
-		setNewProvider("");
-	};
-
-	const handleRemoveProvider = (provider: string) => {
-		const updated = { ...data };
-		delete updated[provider];
-		props.onChange(JSON.stringify(updated));
-	};
-
-	const handleAddModel = (provider: string) => {
-		const modelName = newModels[provider]?.trim();
-		if (!modelName || data[provider]?.includes(modelName)) return;
+	const handleToggleModel = (providerId: string, model: string) => {
+		const currentModels = data[providerId] || [];
+		const isAvailable = currentModels.includes(model);
 
 		const updated = {
 			...data,
-			[provider]: [...(data[provider] || []), modelName],
-		};
-		props.onChange(JSON.stringify(updated));
-		setNewModels({ ...newModels, [provider]: "" });
-	};
-
-	const handleRemoveModel = (provider: string, modelIndex: number) => {
-		const updated = {
-			...data,
-			[provider]: data[provider].filter((_, i) => i !== modelIndex),
+			[providerId]: isAvailable
+				? currentModels.filter((m) => m !== model)
+				: [...currentModels, model],
 		};
 		props.onChange(JSON.stringify(updated));
 	};
 
-	const handleModelInputKeyDown = (
-		e: React.KeyboardEvent<HTMLInputElement>,
-		provider: string,
-	) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			handleAddModel(provider);
-		}
-	};
+	const handleSetDefaultModel = (providerId: string, model: string) => {
+		if (!props.onChangeMultiple) return;
 
-	const handleProviderInputKeyDown = (
-		e: React.KeyboardEvent<HTMLInputElement>,
-	) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			handleAddProvider();
-		}
+		const settingKey =
+			props.category === "ai"
+				? `ai.text.default_model.${providerId}`
+				: `ai.tts.default_model.${providerId}`;
+
+		const changes = { [settingKey]: model };
+		props.onChangeMultiple(changes);
 	};
 
 	return (
 		<div className="space-y-4">
-			{/* Providers list */}
-			<div className="space-y-4">
-				{providers.map((provider) => (
+			{allProviders.map((provider) => {
+				const availableModels = data[provider.id] || [];
+				const defaultModel = getDefaultModel(provider.id);
+
+				return (
 					<div
-						key={provider}
+						key={provider.id}
 						className="border border-slate-200 dark:border-gray-700 rounded-lg p-4 bg-slate-50 dark:bg-gray-900"
 					>
 						{/* Provider header */}
-						<div className="flex items-center justify-between mb-3">
-							<h3 className="font-semibold text-slate-900 dark:text-gray-100 capitalize">
-								{provider}
+						<div className="mb-3">
+							<h3 className="font-semibold text-slate-900 dark:text-gray-100">
+								{provider.name}
 							</h3>
-							<button
-								type="button"
-								onClick={() => handleRemoveProvider(provider)}
-								className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 p-1"
-								title="Remove provider"
-							>
-								<Trash2 className="w-4 h-4" />
-							</button>
+							<p className="text-xs text-slate-600 dark:text-gray-400 mt-1">
+								{provider.description}
+							</p>
 						</div>
 
 						{/* Models list */}
-						<div className="space-y-2">
-							{[...(data[provider] || [])].sort().map((model) => (
-								<div
-									key={model}
-									className="flex items-center justify-between bg-white dark:bg-gray-800 px-3 py-2 rounded border border-slate-200 dark:border-gray-700"
-								>
-									<span className="text-sm text-slate-900 dark:text-gray-100 font-mono">
-										{model}
-									</span>
-									<button
-										type="button"
-										onClick={() =>
-											handleRemoveModel(provider, data[provider].indexOf(model))
-										}
-										className="text-slate-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400"
-										title="Remove model"
+						<div className="space-y-1.5">
+							{provider.supportedModels.map((model) => {
+								const isAvailable = availableModels.includes(model);
+								const isDefault = defaultModel === model;
+
+								return (
+									<div
+										key={model}
+										className="flex items-center gap-3 bg-white dark:bg-gray-800 px-3 py-2.5 rounded border border-slate-200 dark:border-gray-700"
 									>
-										<X className="w-4 h-4" />
-									</button>
-								</div>
-							))}
+										{/* Checkbox for availability */}
+										<label className="flex items-center gap-2 flex-1 cursor-pointer">
+											<input
+												type="checkbox"
+												checked={isAvailable}
+												onChange={() => handleToggleModel(provider.id, model)}
+												className="w-4 h-4 text-romance-600 border-slate-300 dark:border-gray-600 rounded focus:ring-romance-500 focus:ring-2"
+											/>
+											<span className="text-sm text-slate-900 dark:text-gray-100 font-mono">
+												{model}
+											</span>
+										</label>
 
-							{/* Add model input */}
-							<div className="flex gap-2 mt-2">
-								<input
-									type="text"
-									value={newModels[provider] || ""}
-									onChange={(e) =>
-										setNewModels({ ...newModels, [provider]: e.target.value })
-									}
-									onKeyDown={(e) => handleModelInputKeyDown(e, provider)}
-									placeholder="Add model name..."
-									className="flex-1 px-3 py-2 text-sm border border-slate-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-								/>
-								<button
-									type="button"
-									onClick={() => handleAddModel(provider)}
-									disabled={!newModels[provider]?.trim()}
-									className="px-3 py-2 bg-romance-600 text-white rounded hover:bg-romance-700 disabled:opacity-50 disabled:cursor-not-allowed"
-									title="Add model"
-								>
-									<Plus className="w-4 h-4" />
-								</button>
-							</div>
+										{/* Radio button for default */}
+										<label
+											className={`flex items-center gap-1.5 text-xs ${
+												isAvailable
+													? "text-slate-600 dark:text-gray-400 cursor-pointer"
+													: "text-slate-400 dark:text-gray-600 cursor-not-allowed"
+											}`}
+											title={
+												isAvailable ? "Set as default" : "Enable model first"
+											}
+										>
+											<input
+												type="radio"
+												name={`default-${provider.id}`}
+												checked={isDefault}
+												disabled={!isAvailable}
+												onChange={() =>
+													handleSetDefaultModel(provider.id, model)
+												}
+												className="w-3.5 h-3.5 text-romance-600 border-slate-300 dark:border-gray-600 focus:ring-romance-500 focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+											/>
+											<span className="font-medium">Default</span>
+										</label>
+									</div>
+								);
+							})}
 						</div>
-					</div>
-				))}
-			</div>
 
-			{/* Add provider */}
-			<div className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg p-4">
-				<div className="flex gap-2">
-					<input
-						type="text"
-						value={newProvider}
-						onChange={(e) => setNewProvider(e.target.value)}
-						onKeyDown={handleProviderInputKeyDown}
-						placeholder="Add new provider (e.g., openai, anthropic)..."
-						className="flex-1 px-4 py-2 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-romance-500"
-					/>
-					<button
-						type="button"
-						onClick={handleAddProvider}
-						disabled={!newProvider.trim() || !!data[newProvider]}
-						className="flex items-center gap-2 px-4 py-2 bg-romance-600 text-white rounded-lg hover:bg-romance-700 disabled:opacity-50 disabled:cursor-not-allowed"
-					>
-						<Plus className="w-4 h-4" />
-						Add Provider
-					</button>
-				</div>
-			</div>
+						{/* Current default indicator */}
+						{defaultModel && (
+							<div className="mt-3 px-3 py-2 bg-romance-50 dark:bg-romance-900/20 border border-romance-200 dark:border-romance-800 rounded text-xs">
+								<span className="text-romance-700 dark:text-romance-300 font-medium">
+									Current default:
+								</span>{" "}
+								<span className="text-romance-900 dark:text-romance-100 font-mono">
+									{defaultModel}
+								</span>
+							</div>
+						)}
+					</div>
+				);
+			})}
 
 			{props.error && (
 				<p className="text-sm text-red-600 dark:text-red-400">{props.error}</p>
 			)}
+
+			<div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+				<p className="text-xs text-blue-800 dark:text-blue-300">
+					<strong>Tip:</strong> Check models to make them available for
+					selection, then use the "Default" radio button to set which model is
+					used by default for each provider.
+				</p>
+			</div>
 		</div>
 	);
 }

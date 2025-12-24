@@ -68,8 +68,10 @@ export function DataTable<T extends { id: string }>(props: DataTableProps<T>) {
 		props.onSelectionChange(newSelection);
 	};
 
-	const isAllSelected = props.data.length > 0 && selectedIds.size === props.data.length;
-	const isSomeSelected = selectedIds.size > 0 && selectedIds.size < props.data.length;
+	const isAllSelected =
+		props.data.length > 0 && selectedIds.size === props.data.length;
+	const isSomeSelected =
+		selectedIds.size > 0 && selectedIds.size < props.data.length;
 
 	if (props.data.length === 0) {
 		return (

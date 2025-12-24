@@ -65,7 +65,13 @@ export function Stack(props: StackProps) {
 
 	return (
 		<div
-			className={cn("flex", flexDirection, gapClass, alignClass, props.className)}
+			className={cn(
+				"flex",
+				flexDirection,
+				gapClass,
+				alignClass,
+				props.className,
+			)}
 		>
 			{props.children}
 		</div>

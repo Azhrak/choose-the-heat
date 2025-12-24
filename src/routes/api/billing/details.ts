@@ -2,7 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSessionFromRequest } from "~/lib/auth/session";
-import { getBillingDetails, upsertBillingDetails } from "~/lib/db/queries/billing";
+import {
+	getBillingDetails,
+	upsertBillingDetails,
+} from "~/lib/db/queries/billing";
 
 const updateBillingDetailsSchema = z.object({
 	billingName: z.string().optional(),
@@ -78,7 +81,10 @@ export const Route = createFileRoute("/api/billing/details")({
 						);
 					}
 
-					const updated = await upsertBillingDetails(session.userId, result.data);
+					const updated = await upsertBillingDetails(
+						session.userId,
+						result.data,
+					);
 
 					if (!updated) {
 						return json(

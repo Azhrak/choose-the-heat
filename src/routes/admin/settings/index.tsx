@@ -3,6 +3,7 @@ import { Download, Save, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { AdminLayout } from "~/components/admin/AdminLayout";
 import { APIKeysSettings } from "~/components/admin/APIKeysSettings";
+import { ModelManagementPanel } from "~/components/admin/ModelManagementPanel";
 import { SettingsField } from "~/components/admin/SettingsField";
 import { useToast } from "~/components/admin/ToastContext";
 import {
@@ -298,7 +299,103 @@ function SettingsPage() {
 							}}
 						/>
 					)
-				) : // Other Settings Tabs
+				) : activeTab === "ai" ? (
+					// Text Generation Tab - Show both settings and model management
+					isLoading ? (
+						<div className="flex items-center justify-center py-12">
+							<div className="text-slate-600 dark:text-gray-400">
+								Loading settings...
+							</div>
+						</div>
+					) : (
+						<div className="space-y-6">
+							{/* AI Configuration Settings */}
+							<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
+								<h2 className="text-lg font-semibold text-slate-900 dark:text-gray-100 mb-4">
+									AI Configuration
+								</h2>
+								<div className="space-y-6">
+									{settings
+										.filter(
+											(s) =>
+												!s.key.includes("available_models") &&
+												!s.key.includes("default_model"),
+										)
+										.map((setting) => (
+											<SettingsField
+												key={setting.key}
+												setting={setting}
+												value={getValue(setting)}
+												onChange={(value) =>
+													handleFieldChange(setting.key, value)
+												}
+												onChangeMultiple={handleMultipleFieldChanges}
+												error={errors[setting.key]}
+												allSettings={settings}
+												getSettingValue={getValue}
+											/>
+										))}
+								</div>
+							</div>
+
+							{/* Model Management */}
+							<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
+								<h2 className="text-lg font-semibold text-slate-900 dark:text-gray-100 mb-4">
+									Model Management
+								</h2>
+								<ModelManagementPanel category="text" />
+							</div>
+						</div>
+					)
+				) : activeTab === "tts" ? (
+					// TTS Tab - Show both settings and model management
+					isLoading ? (
+						<div className="flex items-center justify-center py-12">
+							<div className="text-slate-600 dark:text-gray-400">
+								Loading settings...
+							</div>
+						</div>
+					) : (
+						<div className="space-y-6">
+							{/* TTS Configuration Settings */}
+							<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
+								<h2 className="text-lg font-semibold text-slate-900 dark:text-gray-100 mb-4">
+									TTS Configuration
+								</h2>
+								<div className="space-y-6">
+									{settings
+										.filter(
+											(s) =>
+												!s.key.includes("available_models") &&
+												!s.key.includes("default_model"),
+										)
+										.map((setting) => (
+											<SettingsField
+												key={setting.key}
+												setting={setting}
+												value={getValue(setting)}
+												onChange={(value) =>
+													handleFieldChange(setting.key, value)
+												}
+												onChangeMultiple={handleMultipleFieldChanges}
+												error={errors[setting.key]}
+												allSettings={settings}
+												getSettingValue={getValue}
+											/>
+										))}
+								</div>
+							</div>
+
+							{/* Model Management */}
+							<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-6">
+								<h2 className="text-lg font-semibold text-slate-900 dark:text-gray-100 mb-4">
+									Voice Model Management
+								</h2>
+								<ModelManagementPanel category="tts" />
+							</div>
+						</div>
+					)
+				) : // Other Settings Tabs (prompts)
 				isLoading ? (
 					<div className="flex items-center justify-center py-12">
 						<div className="text-slate-600 dark:text-gray-400">

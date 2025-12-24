@@ -42,7 +42,9 @@ export function PreferencesDisplay(props: PreferencesDisplayProps) {
 	let prefs: UserPreferences;
 	try {
 		prefs =
-			typeof props.preferences === "string" ? JSON.parse(props.preferences) : props.preferences;
+			typeof props.preferences === "string"
+				? JSON.parse(props.preferences)
+				: props.preferences;
 	} catch {
 		return null;
 	}

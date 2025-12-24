@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import {
 	ArrowLeft,
 	Beaker,
+	Cpu,
 	FileText,
 	LayoutDashboard,
 	ScrollText,
@@ -71,6 +72,12 @@ export function AdminNav(props: AdminNavProps) {
 			roles: ["admin"] as UserRole[],
 		},
 		{
+			label: "AI Providers",
+			path: "/admin/providers",
+			icon: Cpu,
+			roles: ["admin"] as UserRole[],
+		},
+		{
 			label: "Test Generation",
 			path: "/admin/test",
 			icon: Beaker,
@@ -78,7 +85,9 @@ export function AdminNav(props: AdminNavProps) {
 		},
 	];
 
-	const visibleItems = navItems.filter((item) => item.roles.includes(props.userRole));
+	const visibleItems = navItems.filter((item) =>
+		item.roles.includes(props.userRole),
+	);
 
 	return (
 		<nav className="w-64 bg-white dark:bg-gray-800 border-r border-slate-200 dark:border-gray-700 min-h-screen p-6">

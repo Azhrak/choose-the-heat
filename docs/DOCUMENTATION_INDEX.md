@@ -2,7 +2,7 @@
 
 This index helps navigate the Choose the Heat project documentation.
 
-**Last Updated**: 2025-12-09
+**Last Updated**: 2025-12-24
 
 ---
 
@@ -68,8 +68,12 @@ Complete feature documentation following standardized templates for AI-maintaina
 ### AI Configuration
 
 - **[AI Providers](configuration/AI_PROVIDERS.md)** - Configure OpenAI, Google Gemini, Anthropic Claude, Mistral, or xAI
-  - API key setup for each provider
+  - Admin UI for provider management (`/admin/providers`)
+  - Provider status monitoring (ready, incomplete, invalid, unconfigured)
+  - Secure API key storage with AES-256 encryption
+  - API key setup and validation for each provider
   - Model selection and configuration
+  - Provider activation and switching
   - Cost estimation
 
 ---

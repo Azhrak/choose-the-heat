@@ -22,7 +22,9 @@ interface PovCharacterGenderSectionProps {
  * @param props.selectedGender - Currently selected gender
  * @param props.onSelect - Callback when gender selected
  */
-export function PovCharacterGenderSection(props: PovCharacterGenderSectionProps) {
+export function PovCharacterGenderSection(
+	props: PovCharacterGenderSectionProps,
+) {
 	return (
 		<Card padding="md">
 			<Stack gap="md">

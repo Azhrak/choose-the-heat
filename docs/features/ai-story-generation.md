@@ -12,7 +12,7 @@
 | Property | Value |
 |----------|-------|
 | **Feature Status** | ✅ Production Ready |
-| **Last Updated** | 2025-12-09 |
+| **Last Updated** | 2025-12-24 |
 | **Related Features** | [Authentication](./authentication.md), [Personalization](./personalization.md), [Story Experience](./story-experience.md), [Text-to-Speech](./text-to-speech.md), [Admin Dashboard](./admin-dashboard.md) |
 | **Primary Maintainer** | Core Team |
 | **API Stability** | Stable |
@@ -32,6 +32,9 @@ The AI Story Generation system powers the core narrative experience by generatin
 ### Key Capabilities
 
 - **Multi-Provider Support**: OpenAI, Google Gemini, Anthropic Claude, Mistral, xAI, OpenRouter
+- **Admin Provider Management**: Unified UI for provider configuration, activation, and status monitoring
+- **Provider Status System**: Real-time status tracking (ready, incomplete, invalid, unconfigured)
+- **Secure API Key Storage**: AES-256 encrypted API key storage with validation
 - **Template-Based Generation**: Trope-based and prompt-based story templates
 - **Scene Generation**: Contextually-aware scene generation with metadata
 - **Scene Metadata System**: Tracks emotional beats, tension threads, relationship progress, characters, POV, and setting
@@ -74,6 +77,7 @@ The AI Story Generation system powers the core narrative experience by generatin
 | Story Creation | `/story/create` route | User |
 | Reading Page | Continue story / Make choice | User |
 | Admin Test Page | `/admin/test` | Admin |
+| **Provider Management** | **`/admin/providers`** | **Admin** |
 
 <!-- UPDATE TRIGGER: Update when new UI access points are added -->
 
@@ -100,6 +104,15 @@ The AI Story Generation system powers the core narrative experience by generatin
    - Purpose: Test AI providers and models
    - User actions: Select provider/model, generate test text
    - Visual location: `/admin/test`
+
+5. **Provider Management** ([src/routes/admin/providers/index.tsx](../../src/routes/admin/providers/index.tsx))
+   - Purpose: Configure and manage AI providers
+   - User actions: Configure API keys, activate providers, view status
+   - Visual location: `/admin/providers`
+   - Components:
+     - [AIProviderManagement](../../src/components/admin/AIProviderManagement.tsx) - Main management UI
+     - [ProviderCard](../../src/components/admin/ProviderCard.tsx) - Individual provider display
+     - [ProviderConfigModal](../../src/components/admin/ProviderConfigModal.tsx) - API key configuration
 
 <!-- UPDATE TRIGGER: Update when UI components are added, removed, or significantly refactored -->
 
@@ -191,6 +204,10 @@ graph TB
 | Story Creation | [src/routes/story/create.tsx](../../src/routes/story/create.tsx) | Story initialization |
 | Reading Page | [src/routes/story/$id/read.tsx](../../src/routes/story/$id/read.tsx) | Scene display with streaming |
 | Admin Test | [src/routes/admin/test.tsx](../../src/routes/admin/test.tsx) | AI provider testing |
+| **Provider Management** | **[src/routes/admin/providers/index.tsx](../../src/routes/admin/providers/index.tsx)** | **Provider configuration UI** |
+| **Provider Card** | **[src/components/admin/ProviderCard.tsx](../../src/components/admin/ProviderCard.tsx)** | **Individual provider display** |
+| **Config Modal** | **[src/components/admin/ProviderConfigModal.tsx](../../src/components/admin/ProviderConfigModal.tsx)** | **API key configuration** |
+| **Provider Status** | **[src/lib/ai/providerStatus.ts](../../src/lib/ai/providerStatus.ts)** | **Status determination logic** |
 
 <!-- UPDATE TRIGGER: Update when components are added, removed, moved, or renamed -->
 
@@ -203,6 +220,8 @@ graph TB
 | Get Scene | GET | [src/routes/api/stories/$id/scene/$number.ts](../../src/routes/api/stories/$id/scene/$number.ts) | Fetch cached scene |
 | Create Story | POST | [src/routes/api/stories/index.ts](../../src/routes/api/stories/index.ts) | Initialize new story |
 | List Templates | GET | [src/routes/api/templates/index.ts](../../src/routes/api/templates/index.ts) | Get available templates |
+| **Provider Status** | **GET** | **[src/routes/api/admin/providers/status.ts](../../src/routes/api/admin/providers/status.ts)** | **Get all provider statuses** |
+| **Activate Provider** | **POST** | **[src/routes/api/admin/providers/activate.ts](../../src/routes/api/admin/providers/activate.ts)** | **Activate AI provider** |
 
 <!-- UPDATE TRIGGER: Update when API routes are added, removed, or significantly changed -->
 
@@ -703,6 +722,126 @@ while (true) {
   };
 }
 ```
+
+<!-- UPDATE TRIGGER: Update when API signatures change -->
+
+#### GET /api/admin/providers/status
+
+**Status**: ✅ Active in Production
+
+**Purpose**: Get comprehensive status for all AI providers
+
+**Authentication**: Admin only
+
+**Query Parameters**:
+
+- `category` (optional): `text` or `tts` (default: `text`)
+
+**Response**:
+
+```typescript
+{
+  statuses: Array<{
+    provider: string;                    // Provider ID (e.g., "openai", "anthropic")
+    status: "ready" | "incomplete" | "invalid" | "unconfigured";
+    metadata: {
+      id: string;
+      name: string;
+      description: string;
+      requiresKey: boolean;
+      models: string[];
+    };
+    hasApiKey: boolean;
+    apiKeyStatus: "valid" | "invalid" | "untested" | null;
+    apiKeyError?: string | null;
+    availableModels: string[];
+    defaultModel?: string;
+    isActive: boolean;
+  }>;
+}
+```
+
+**Status Values**:
+
+- `ready`: Provider fully configured with valid API key and models
+- `incomplete`: Has API key but missing configuration (models/default)
+- `invalid`: API key test failed
+- `unconfigured`: No API key set
+
+**Example Usage**:
+
+```typescript
+const response = await fetch('/api/admin/providers/status?category=text');
+const { statuses } = await response.json();
+
+// Check if provider is ready
+const openai = statuses.find(s => s.provider === 'openai');
+if (openai?.status === 'ready') {
+  // Provider is ready to use
+}
+```
+
+**Error Codes**:
+
+- `401`: User not authenticated
+- `403`: User is not admin
+- `400`: Invalid category parameter
+- `500`: Server error
+
+<!-- UPDATE TRIGGER: Update when API signatures change -->
+
+#### POST /api/admin/providers/activate
+
+**Status**: ✅ Active in Production
+
+**Purpose**: Activate an AI provider for story generation
+
+**Authentication**: Admin only
+
+**Request Body**:
+
+```typescript
+{
+  provider: string;              // Provider ID (e.g., "openai")
+  category: "text" | "tts";      // Provider category
+}
+```
+
+**Response**:
+
+```typescript
+{
+  success: boolean;
+  provider: string;              // Activated provider ID
+}
+```
+
+**Side Effects**:
+
+- Updates `ai.provider` or `tts.provider` setting in database
+- Invalidates configuration cache
+- Makes provider active for all new generation requests
+
+**Example Usage**:
+
+```typescript
+const response = await fetch('/api/admin/providers/activate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    provider: 'anthropic',
+    category: 'text'
+  })
+});
+const { success, provider } = await response.json();
+```
+
+**Error Codes**:
+
+- `401`: User not authenticated
+- `403`: User is not admin
+- `400`: Validation failed (invalid provider or category)
+- `500`: Failed to activate provider
 
 <!-- UPDATE TRIGGER: Update when API signatures change -->
 

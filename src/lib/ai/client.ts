@@ -13,8 +13,13 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createMistral } from "@ai-sdk/mistral";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import {
+	getDefaultModelForProvider,
+	getModelByProviderId,
+} from "../db/queries/aiModels";
 import { getApiKey } from "../db/queries/apiKeys";
 import { type AIConfig, getAIConfig } from "./config";
+import { getProviderMetadata } from "./providers";
 
 /**
  * Supported AI providers
@@ -29,10 +34,48 @@ export type AIProvider =
 
 /**
  * Initialize AI provider based on configuration
+ * Validates that the model is enabled before use, falls back to provider default if deprecated
  */
 async function getAIModel(modelOverride?: string, configOverride?: AIConfig) {
 	const config = configOverride || (await getAIConfig());
-	const modelName = modelOverride || config.model;
+	let modelName = modelOverride || config.model;
+
+	// Validate model status in database
+	const modelRecord = await getModelByProviderId(
+		config.provider,
+		"text",
+		modelName,
+	);
+
+	if (!modelRecord || modelRecord.status === "deprecated") {
+		console.warn(
+			`[AI Client] Model "${modelName}" is ${modelRecord?.status || "not found"}, falling back to provider default`,
+		);
+
+		// Try to get provider's default model from database
+		const defaultModel = await getDefaultModelForProvider(
+			config.provider,
+			"text",
+		);
+
+		if (defaultModel && defaultModel.status === "enabled") {
+			modelName = defaultModel.model_id;
+			console.log(`[AI Client] Using provider default model: ${modelName}`);
+		} else {
+			// Ultimate fallback: use hardcoded default from provider registry
+			const providerMeta = getProviderMetadata(config.provider);
+			if (providerMeta) {
+				modelName = providerMeta.defaultModel;
+				console.log(`[AI Client] Using hardcoded fallback model: ${modelName}`);
+			} else {
+				throw new Error(`No valid model found for provider ${config.provider}`);
+			}
+		}
+	} else if (modelRecord.status !== "enabled") {
+		throw new Error(
+			`Model "${modelName}" is ${modelRecord.status}. Please select an enabled model.`,
+		);
+	}
 
 	switch (config.provider) {
 		case "openai": {

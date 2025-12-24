@@ -82,7 +82,9 @@ export function StoryCard(props: StoryCardProps) {
 							}}
 							disabled={props.isTogglingFavorite}
 							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
-							title={props.isFavorite ? "Remove from favorites" : "Add to favorites"}
+							title={
+								props.isFavorite ? "Remove from favorites" : "Add to favorites"
+							}
 						>
 							<Heart
 								className={`w-5 h-5 transition-colors ${
@@ -110,7 +112,9 @@ export function StoryCard(props: StoryCardProps) {
 							}}
 							disabled={props.isTogglingFavorite}
 							className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-colors disabled:opacity-50 cursor-pointer z-10"
-							title={props.isFavorite ? "Remove from favorites" : "Add to favorites"}
+							title={
+								props.isFavorite ? "Remove from favorites" : "Add to favorites"
+							}
 						>
 							<Heart
 								className={`w-5 h-5 transition-colors ${
