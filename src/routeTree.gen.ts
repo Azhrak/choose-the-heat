@@ -23,12 +23,14 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as TemplateIdRouteImport } from './routes/template/$id'
+import { Route as SubscriptionSuccessRouteImport } from './routes/subscription/success'
 import { Route as StoryCreateRouteImport } from './routes/story/create'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthOnboardingRouteImport } from './routes/auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiPreferencesRouteImport } from './routes/api/preferences'
 import { Route as AdminTestRouteImport } from './routes/admin/test'
+import { Route as AdminSubscriptionTiersRouteImport } from './routes/admin/subscription-tiers'
 import { Route as ApiTropesIndexRouteImport } from './routes/api/tropes/index'
 import { Route as ApiTemplatesIndexRouteImport } from './routes/api/templates/index'
 import { Route as ApiStoriesIndexRouteImport } from './routes/api/stories/index'
@@ -41,15 +43,20 @@ import { Route as AdminProvidersIndexRouteImport } from './routes/admin/provider
 import { Route as AdminAuditLogsIndexRouteImport } from './routes/admin/audit-logs/index'
 import { Route as StoryIdReadRouteImport } from './routes/story/$id.read'
 import { Route as StoryIdInfoRouteImport } from './routes/story/$id.info'
+import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 import { Route as ApiTtsVoicesRouteImport } from './routes/api/tts/voices'
 import { Route as ApiTemplatesIdRouteImport } from './routes/api/templates/$id'
 import { Route as ApiSubscriptionsUsageRouteImport } from './routes/api/subscriptions/usage'
 import { Route as ApiSubscriptionsTiersRouteImport } from './routes/api/subscriptions/tiers'
 import { Route as ApiSubscriptionsMySubscriptionRouteImport } from './routes/api/subscriptions/my-subscription'
+import { Route as ApiSubscriptionsChangeTierRouteImport } from './routes/api/subscriptions/change-tier'
+import { Route as ApiSubscriptionsCancelRouteImport } from './routes/api/subscriptions/cancel'
 import { Route as ApiStoriesUserRouteImport } from './routes/api/stories/user'
 import { Route as ApiStoriesIdRouteImport } from './routes/api/stories/$id'
 import { Route as ApiProfilePasswordRouteImport } from './routes/api/profile/password'
 import { Route as ApiProfileDataRouteImport } from './routes/api/profile/data'
+import { Route as ApiCheckoutSuccessRouteImport } from './routes/api/checkout/success'
+import { Route as ApiCheckoutCreateSessionRouteImport } from './routes/api/checkout/create-session'
 import { Route as ApiBillingInvoicesRouteImport } from './routes/api/billing/invoices'
 import { Route as ApiBillingDetailsRouteImport } from './routes/api/billing/details'
 import { Route as ApiAuthSignupRouteImport } from './routes/api/auth/signup'
@@ -63,6 +70,7 @@ import { Route as AdminTemplatesBulkImportRouteImport } from './routes/admin/tem
 import { Route as ApiAdminUsersIndexRouteImport } from './routes/api/admin/users/index'
 import { Route as ApiAdminTropesIndexRouteImport } from './routes/api/admin/tropes/index'
 import { Route as ApiAdminTemplatesIndexRouteImport } from './routes/api/admin/templates/index'
+import { Route as ApiAdminSubscriptionTiersIndexRouteImport } from './routes/api/admin/subscription-tiers/index'
 import { Route as ApiAdminSettingsIndexRouteImport } from './routes/api/admin/settings/index'
 import { Route as ApiAdminModelsIndexRouteImport } from './routes/api/admin/models/index'
 import { Route as ApiAdminApiKeysIndexRouteImport } from './routes/api/admin/api-keys/index'
@@ -83,6 +91,8 @@ import { Route as ApiAdminTemplatesBulkUpdateRouteImport } from './routes/api/ad
 import { Route as ApiAdminTemplatesBulkImportRouteImport } from './routes/api/admin/templates/bulk-import'
 import { Route as ApiAdminTemplatesBulkDeleteRouteImport } from './routes/api/admin/templates/bulk-delete'
 import { Route as ApiAdminTemplatesIdRouteImport } from './routes/api/admin/templates/$id'
+import { Route as ApiAdminSubscriptionTiersSyncStripeRouteImport } from './routes/api/admin/subscription-tiers/sync-stripe'
+import { Route as ApiAdminSubscriptionTiersIdRouteImport } from './routes/api/admin/subscription-tiers/$id'
 import { Route as ApiAdminSettingsImportRouteImport } from './routes/api/admin/settings/import'
 import { Route as ApiAdminSettingsExportRouteImport } from './routes/api/admin/settings/export'
 import { Route as ApiAdminSettingsKeyRouteImport } from './routes/api/admin/settings/$key'
@@ -94,6 +104,7 @@ import { Route as ApiAdminModelsIdRouteImport } from './routes/api/admin/models/
 import { Route as ApiAdminApiKeysProviderRouteImport } from './routes/api/admin/api-keys/$provider'
 import { Route as AdminUsersIdEditRouteImport } from './routes/admin/users/$id/edit'
 import { Route as AdminTemplatesIdEditRouteImport } from './routes/admin/templates/$id/edit'
+import { Route as AdminSubscriptionTiersIdEditRouteImport } from './routes/admin/subscription-tiers/$id/edit'
 import { Route as ApiStoriesIdSceneStreamRouteImport } from './routes/api/stories/$id.scene.stream'
 import { Route as ApiAdminTemplatesIdStatusRouteImport } from './routes/api/admin/templates/$id.status'
 import { Route as ApiAdminTemplatesIdChoicePointsRouteImport } from './routes/api/admin/templates/$id/choice-points'
@@ -171,6 +182,11 @@ const TemplateIdRoute = TemplateIdRouteImport.update({
   path: '/template/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscriptionSuccessRoute = SubscriptionSuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => SubscriptionRoute,
+} as any)
 const StoryCreateRoute = StoryCreateRouteImport.update({
   id: '/story/create',
   path: '/story/create',
@@ -199,6 +215,11 @@ const ApiPreferencesRoute = ApiPreferencesRouteImport.update({
 const AdminTestRoute = AdminTestRouteImport.update({
   id: '/test',
   path: '/test',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSubscriptionTiersRoute = AdminSubscriptionTiersRouteImport.update({
+  id: '/subscription-tiers',
+  path: '/subscription-tiers',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiTropesIndexRoute = ApiTropesIndexRouteImport.update({
@@ -261,6 +282,11 @@ const StoryIdInfoRoute = StoryIdInfoRouteImport.update({
   path: '/story/$id/info',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
+  id: '/api/webhooks/stripe',
+  path: '/api/webhooks/stripe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiTtsVoicesRoute = ApiTtsVoicesRouteImport.update({
   id: '/api/tts/voices',
   path: '/api/tts/voices',
@@ -287,6 +313,17 @@ const ApiSubscriptionsMySubscriptionRoute =
     path: '/api/subscriptions/my-subscription',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiSubscriptionsChangeTierRoute =
+  ApiSubscriptionsChangeTierRouteImport.update({
+    id: '/api/subscriptions/change-tier',
+    path: '/api/subscriptions/change-tier',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiSubscriptionsCancelRoute = ApiSubscriptionsCancelRouteImport.update({
+  id: '/api/subscriptions/cancel',
+  path: '/api/subscriptions/cancel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiStoriesUserRoute = ApiStoriesUserRouteImport.update({
   id: '/api/stories/user',
   path: '/api/stories/user',
@@ -307,6 +344,17 @@ const ApiProfileDataRoute = ApiProfileDataRouteImport.update({
   path: '/api/profile/data',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCheckoutSuccessRoute = ApiCheckoutSuccessRouteImport.update({
+  id: '/api/checkout/success',
+  path: '/api/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutCreateSessionRoute =
+  ApiCheckoutCreateSessionRouteImport.update({
+    id: '/api/checkout/create-session',
+    path: '/api/checkout/create-session',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiBillingInvoicesRoute = ApiBillingInvoicesRouteImport.update({
   id: '/api/billing/invoices',
   path: '/api/billing/invoices',
@@ -373,6 +421,12 @@ const ApiAdminTemplatesIndexRoute = ApiAdminTemplatesIndexRouteImport.update({
   path: '/api/admin/templates/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminSubscriptionTiersIndexRoute =
+  ApiAdminSubscriptionTiersIndexRouteImport.update({
+    id: '/api/admin/subscription-tiers/',
+    path: '/api/admin/subscription-tiers/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAdminSettingsIndexRoute = ApiAdminSettingsIndexRouteImport.update({
   id: '/api/admin/settings/',
   path: '/api/admin/settings/',
@@ -479,6 +533,18 @@ const ApiAdminTemplatesIdRoute = ApiAdminTemplatesIdRouteImport.update({
   path: '/api/admin/templates/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAdminSubscriptionTiersSyncStripeRoute =
+  ApiAdminSubscriptionTiersSyncStripeRouteImport.update({
+    id: '/api/admin/subscription-tiers/sync-stripe',
+    path: '/api/admin/subscription-tiers/sync-stripe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAdminSubscriptionTiersIdRoute =
+  ApiAdminSubscriptionTiersIdRouteImport.update({
+    id: '/api/admin/subscription-tiers/$id',
+    path: '/api/admin/subscription-tiers/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAdminSettingsImportRoute = ApiAdminSettingsImportRouteImport.update({
   id: '/api/admin/settings/import',
   path: '/api/admin/settings/import',
@@ -536,6 +602,12 @@ const AdminTemplatesIdEditRoute = AdminTemplatesIdEditRouteImport.update({
   path: '/templates/$id/edit',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSubscriptionTiersIdEditRoute =
+  AdminSubscriptionTiersIdEditRouteImport.update({
+    id: '/$id/edit',
+    path: '/$id/edit',
+    getParentRoute: () => AdminSubscriptionTiersRoute,
+  } as any)
 const ApiStoriesIdSceneStreamRoute = ApiStoriesIdSceneStreamRouteImport.update({
   id: '/stream',
   path: '/stream',
@@ -583,14 +655,16 @@ export interface FileRoutesByFullPath {
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
-  '/subscription': typeof SubscriptionRoute
+  '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
   '/story/create': typeof StoryCreateRoute
+  '/subscription/success': typeof SubscriptionSuccessRoute
   '/template/$id': typeof TemplateIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/templates/bulk-import': typeof AdminTemplatesBulkImportRoute
@@ -603,15 +677,20 @@ export interface FileRoutesByFullPath {
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/billing/details': typeof ApiBillingDetailsRoute
   '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
+  '/api/checkout/create-session': typeof ApiCheckoutCreateSessionRoute
+  '/api/checkout/success': typeof ApiCheckoutSuccessRoute
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/cancel': typeof ApiSubscriptionsCancelRoute
+  '/api/subscriptions/change-tier': typeof ApiSubscriptionsChangeTierRoute
   '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
   '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
   '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
@@ -624,6 +703,7 @@ export interface FileRoutesByFullPath {
   '/api/stories': typeof ApiStoriesIndexRoute
   '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/tropes': typeof ApiTropesIndexRoute
+  '/admin/subscription-tiers/$id/edit': typeof AdminSubscriptionTiersIdEditRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
@@ -635,6 +715,8 @@ export interface FileRoutesByFullPath {
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
+  '/api/admin/subscription-tiers/$id': typeof ApiAdminSubscriptionTiersIdRoute
+  '/api/admin/subscription-tiers/sync-stripe': typeof ApiAdminSubscriptionTiersSyncStripeRoute
   '/api/admin/templates/$id': typeof ApiAdminTemplatesIdRouteWithChildren
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
@@ -655,6 +737,7 @@ export interface FileRoutesByFullPath {
   '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/models': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
+  '/api/admin/subscription-tiers': typeof ApiAdminSubscriptionTiersIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
@@ -675,14 +758,16 @@ export interface FileRoutesByTo {
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
-  '/subscription': typeof SubscriptionRoute
+  '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
   '/story/create': typeof StoryCreateRoute
+  '/subscription/success': typeof SubscriptionSuccessRoute
   '/template/$id': typeof TemplateIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/templates/bulk-import': typeof AdminTemplatesBulkImportRoute
@@ -695,15 +780,20 @@ export interface FileRoutesByTo {
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/billing/details': typeof ApiBillingDetailsRoute
   '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
+  '/api/checkout/create-session': typeof ApiCheckoutCreateSessionRoute
+  '/api/checkout/success': typeof ApiCheckoutSuccessRoute
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/cancel': typeof ApiSubscriptionsCancelRoute
+  '/api/subscriptions/change-tier': typeof ApiSubscriptionsChangeTierRoute
   '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
   '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
   '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
@@ -716,6 +806,7 @@ export interface FileRoutesByTo {
   '/api/stories': typeof ApiStoriesIndexRoute
   '/api/templates': typeof ApiTemplatesIndexRoute
   '/api/tropes': typeof ApiTropesIndexRoute
+  '/admin/subscription-tiers/$id/edit': typeof AdminSubscriptionTiersIdEditRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
@@ -727,6 +818,8 @@ export interface FileRoutesByTo {
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
+  '/api/admin/subscription-tiers/$id': typeof ApiAdminSubscriptionTiersIdRoute
+  '/api/admin/subscription-tiers/sync-stripe': typeof ApiAdminSubscriptionTiersSyncStripeRoute
   '/api/admin/templates/$id': typeof ApiAdminTemplatesIdRouteWithChildren
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
@@ -747,6 +840,7 @@ export interface FileRoutesByTo {
   '/api/admin/api-keys': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/models': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings': typeof ApiAdminSettingsIndexRoute
+  '/api/admin/subscription-tiers': typeof ApiAdminSubscriptionTiersIndexRoute
   '/api/admin/templates': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes': typeof ApiAdminTropesIndexRoute
   '/api/admin/users': typeof ApiAdminUsersIndexRoute
@@ -769,14 +863,16 @@ export interface FileRoutesById {
   '/preferences': typeof PreferencesRoute
   '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
-  '/subscription': typeof SubscriptionRoute
+  '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/onboarding': typeof AuthOnboardingRoute
   '/auth/signup': typeof AuthSignupRoute
   '/story/create': typeof StoryCreateRoute
+  '/subscription/success': typeof SubscriptionSuccessRoute
   '/template/$id': typeof TemplateIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/templates/bulk-import': typeof AdminTemplatesBulkImportRoute
@@ -789,15 +885,20 @@ export interface FileRoutesById {
   '/api/auth/signup': typeof ApiAuthSignupRoute
   '/api/billing/details': typeof ApiBillingDetailsRoute
   '/api/billing/invoices': typeof ApiBillingInvoicesRouteWithChildren
+  '/api/checkout/create-session': typeof ApiCheckoutCreateSessionRoute
+  '/api/checkout/success': typeof ApiCheckoutSuccessRoute
   '/api/profile/data': typeof ApiProfileDataRoute
   '/api/profile/password': typeof ApiProfilePasswordRoute
   '/api/stories/$id': typeof ApiStoriesIdRouteWithChildren
   '/api/stories/user': typeof ApiStoriesUserRoute
+  '/api/subscriptions/cancel': typeof ApiSubscriptionsCancelRoute
+  '/api/subscriptions/change-tier': typeof ApiSubscriptionsChangeTierRoute
   '/api/subscriptions/my-subscription': typeof ApiSubscriptionsMySubscriptionRoute
   '/api/subscriptions/tiers': typeof ApiSubscriptionsTiersRoute
   '/api/subscriptions/usage': typeof ApiSubscriptionsUsageRoute
   '/api/templates/$id': typeof ApiTemplatesIdRoute
   '/api/tts/voices': typeof ApiTtsVoicesRoute
+  '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/story/$id/info': typeof StoryIdInfoRoute
   '/story/$id/read': typeof StoryIdReadRoute
   '/admin/audit-logs/': typeof AdminAuditLogsIndexRoute
@@ -810,6 +911,7 @@ export interface FileRoutesById {
   '/api/stories/': typeof ApiStoriesIndexRoute
   '/api/templates/': typeof ApiTemplatesIndexRoute
   '/api/tropes/': typeof ApiTropesIndexRoute
+  '/admin/subscription-tiers/$id/edit': typeof AdminSubscriptionTiersIdEditRoute
   '/admin/templates/$id/edit': typeof AdminTemplatesIdEditRoute
   '/admin/users/$id/edit': typeof AdminUsersIdEditRoute
   '/api/admin/api-keys/$provider': typeof ApiAdminApiKeysProviderRouteWithChildren
@@ -821,6 +923,8 @@ export interface FileRoutesById {
   '/api/admin/settings/$key': typeof ApiAdminSettingsKeyRoute
   '/api/admin/settings/export': typeof ApiAdminSettingsExportRoute
   '/api/admin/settings/import': typeof ApiAdminSettingsImportRoute
+  '/api/admin/subscription-tiers/$id': typeof ApiAdminSubscriptionTiersIdRoute
+  '/api/admin/subscription-tiers/sync-stripe': typeof ApiAdminSubscriptionTiersSyncStripeRoute
   '/api/admin/templates/$id': typeof ApiAdminTemplatesIdRouteWithChildren
   '/api/admin/templates/bulk-delete': typeof ApiAdminTemplatesBulkDeleteRoute
   '/api/admin/templates/bulk-import': typeof ApiAdminTemplatesBulkImportRoute
@@ -841,6 +945,7 @@ export interface FileRoutesById {
   '/api/admin/api-keys/': typeof ApiAdminApiKeysIndexRoute
   '/api/admin/models/': typeof ApiAdminModelsIndexRoute
   '/api/admin/settings/': typeof ApiAdminSettingsIndexRoute
+  '/api/admin/subscription-tiers/': typeof ApiAdminSubscriptionTiersIndexRoute
   '/api/admin/templates/': typeof ApiAdminTemplatesIndexRoute
   '/api/admin/tropes/': typeof ApiAdminTropesIndexRoute
   '/api/admin/users/': typeof ApiAdminUsersIndexRoute
@@ -866,12 +971,14 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
+    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
     | '/story/create'
+    | '/subscription/success'
     | '/template/$id'
     | '/admin/'
     | '/admin/templates/bulk-import'
@@ -884,15 +991,20 @@ export interface FileRouteTypes {
     | '/api/auth/signup'
     | '/api/billing/details'
     | '/api/billing/invoices'
+    | '/api/checkout/create-session'
+    | '/api/checkout/success'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/cancel'
+    | '/api/subscriptions/change-tier'
     | '/api/subscriptions/my-subscription'
     | '/api/subscriptions/tiers'
     | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
+    | '/api/webhooks/stripe'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
@@ -905,6 +1017,7 @@ export interface FileRouteTypes {
     | '/api/stories'
     | '/api/templates'
     | '/api/tropes'
+    | '/admin/subscription-tiers/$id/edit'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
@@ -916,6 +1029,8 @@ export interface FileRouteTypes {
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
+    | '/api/admin/subscription-tiers/$id'
+    | '/api/admin/subscription-tiers/sync-stripe'
     | '/api/admin/templates/$id'
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
@@ -936,6 +1051,7 @@ export interface FileRouteTypes {
     | '/api/admin/api-keys'
     | '/api/admin/models'
     | '/api/admin/settings'
+    | '/api/admin/subscription-tiers'
     | '/api/admin/templates'
     | '/api/admin/tropes'
     | '/api/admin/users'
@@ -958,12 +1074,14 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
+    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
     | '/story/create'
+    | '/subscription/success'
     | '/template/$id'
     | '/admin'
     | '/admin/templates/bulk-import'
@@ -976,15 +1094,20 @@ export interface FileRouteTypes {
     | '/api/auth/signup'
     | '/api/billing/details'
     | '/api/billing/invoices'
+    | '/api/checkout/create-session'
+    | '/api/checkout/success'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/cancel'
+    | '/api/subscriptions/change-tier'
     | '/api/subscriptions/my-subscription'
     | '/api/subscriptions/tiers'
     | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
+    | '/api/webhooks/stripe'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs'
@@ -997,6 +1120,7 @@ export interface FileRouteTypes {
     | '/api/stories'
     | '/api/templates'
     | '/api/tropes'
+    | '/admin/subscription-tiers/$id/edit'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
@@ -1008,6 +1132,8 @@ export interface FileRouteTypes {
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
+    | '/api/admin/subscription-tiers/$id'
+    | '/api/admin/subscription-tiers/sync-stripe'
     | '/api/admin/templates/$id'
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
@@ -1028,6 +1154,7 @@ export interface FileRouteTypes {
     | '/api/admin/api-keys'
     | '/api/admin/models'
     | '/api/admin/settings'
+    | '/api/admin/subscription-tiers'
     | '/api/admin/templates'
     | '/api/admin/tropes'
     | '/api/admin/users'
@@ -1051,12 +1178,14 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
+    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
     | '/auth/onboarding'
     | '/auth/signup'
     | '/story/create'
+    | '/subscription/success'
     | '/template/$id'
     | '/admin/'
     | '/admin/templates/bulk-import'
@@ -1069,15 +1198,20 @@ export interface FileRouteTypes {
     | '/api/auth/signup'
     | '/api/billing/details'
     | '/api/billing/invoices'
+    | '/api/checkout/create-session'
+    | '/api/checkout/success'
     | '/api/profile/data'
     | '/api/profile/password'
     | '/api/stories/$id'
     | '/api/stories/user'
+    | '/api/subscriptions/cancel'
+    | '/api/subscriptions/change-tier'
     | '/api/subscriptions/my-subscription'
     | '/api/subscriptions/tiers'
     | '/api/subscriptions/usage'
     | '/api/templates/$id'
     | '/api/tts/voices'
+    | '/api/webhooks/stripe'
     | '/story/$id/info'
     | '/story/$id/read'
     | '/admin/audit-logs/'
@@ -1090,6 +1224,7 @@ export interface FileRouteTypes {
     | '/api/stories/'
     | '/api/templates/'
     | '/api/tropes/'
+    | '/admin/subscription-tiers/$id/edit'
     | '/admin/templates/$id/edit'
     | '/admin/users/$id/edit'
     | '/api/admin/api-keys/$provider'
@@ -1101,6 +1236,8 @@ export interface FileRouteTypes {
     | '/api/admin/settings/$key'
     | '/api/admin/settings/export'
     | '/api/admin/settings/import'
+    | '/api/admin/subscription-tiers/$id'
+    | '/api/admin/subscription-tiers/sync-stripe'
     | '/api/admin/templates/$id'
     | '/api/admin/templates/bulk-delete'
     | '/api/admin/templates/bulk-import'
@@ -1121,6 +1258,7 @@ export interface FileRouteTypes {
     | '/api/admin/api-keys/'
     | '/api/admin/models/'
     | '/api/admin/settings/'
+    | '/api/admin/subscription-tiers/'
     | '/api/admin/templates/'
     | '/api/admin/tropes/'
     | '/api/admin/users/'
@@ -1143,7 +1281,7 @@ export interface RootRouteChildren {
   PreferencesRoute: typeof PreferencesRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
-  SubscriptionRoute: typeof SubscriptionRoute
+  SubscriptionRoute: typeof SubscriptionRouteWithChildren
   TermsRoute: typeof TermsRoute
   ApiPreferencesRoute: typeof ApiPreferencesRoute
   AuthLoginRoute: typeof AuthLoginRoute
@@ -1159,15 +1297,20 @@ export interface RootRouteChildren {
   ApiAuthSignupRoute: typeof ApiAuthSignupRoute
   ApiBillingDetailsRoute: typeof ApiBillingDetailsRoute
   ApiBillingInvoicesRoute: typeof ApiBillingInvoicesRouteWithChildren
+  ApiCheckoutCreateSessionRoute: typeof ApiCheckoutCreateSessionRoute
+  ApiCheckoutSuccessRoute: typeof ApiCheckoutSuccessRoute
   ApiProfileDataRoute: typeof ApiProfileDataRoute
   ApiProfilePasswordRoute: typeof ApiProfilePasswordRoute
   ApiStoriesIdRoute: typeof ApiStoriesIdRouteWithChildren
   ApiStoriesUserRoute: typeof ApiStoriesUserRoute
+  ApiSubscriptionsCancelRoute: typeof ApiSubscriptionsCancelRoute
+  ApiSubscriptionsChangeTierRoute: typeof ApiSubscriptionsChangeTierRoute
   ApiSubscriptionsMySubscriptionRoute: typeof ApiSubscriptionsMySubscriptionRoute
   ApiSubscriptionsTiersRoute: typeof ApiSubscriptionsTiersRoute
   ApiSubscriptionsUsageRoute: typeof ApiSubscriptionsUsageRoute
   ApiTemplatesIdRoute: typeof ApiTemplatesIdRoute
   ApiTtsVoicesRoute: typeof ApiTtsVoicesRoute
+  ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   StoryIdInfoRoute: typeof StoryIdInfoRoute
   StoryIdReadRoute: typeof StoryIdReadRoute
   ApiProfileIndexRoute: typeof ApiProfileIndexRoute
@@ -1183,6 +1326,8 @@ export interface RootRouteChildren {
   ApiAdminSettingsKeyRoute: typeof ApiAdminSettingsKeyRoute
   ApiAdminSettingsExportRoute: typeof ApiAdminSettingsExportRoute
   ApiAdminSettingsImportRoute: typeof ApiAdminSettingsImportRoute
+  ApiAdminSubscriptionTiersIdRoute: typeof ApiAdminSubscriptionTiersIdRoute
+  ApiAdminSubscriptionTiersSyncStripeRoute: typeof ApiAdminSubscriptionTiersSyncStripeRoute
   ApiAdminTemplatesIdRoute: typeof ApiAdminTemplatesIdRouteWithChildren
   ApiAdminTemplatesBulkDeleteRoute: typeof ApiAdminTemplatesBulkDeleteRoute
   ApiAdminTemplatesBulkImportRoute: typeof ApiAdminTemplatesBulkImportRoute
@@ -1198,6 +1343,7 @@ export interface RootRouteChildren {
   ApiAdminApiKeysIndexRoute: typeof ApiAdminApiKeysIndexRoute
   ApiAdminModelsIndexRoute: typeof ApiAdminModelsIndexRoute
   ApiAdminSettingsIndexRoute: typeof ApiAdminSettingsIndexRoute
+  ApiAdminSubscriptionTiersIndexRoute: typeof ApiAdminSubscriptionTiersIndexRoute
   ApiAdminTemplatesIndexRoute: typeof ApiAdminTemplatesIndexRoute
   ApiAdminTropesIndexRoute: typeof ApiAdminTropesIndexRoute
   ApiAdminUsersIndexRoute: typeof ApiAdminUsersIndexRoute
@@ -1303,6 +1449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TemplateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscription/success': {
+      id: '/subscription/success'
+      path: '/success'
+      fullPath: '/subscription/success'
+      preLoaderRoute: typeof SubscriptionSuccessRouteImport
+      parentRoute: typeof SubscriptionRoute
+    }
     '/story/create': {
       id: '/story/create'
       path: '/story/create'
@@ -1343,6 +1496,13 @@ declare module '@tanstack/react-router' {
       path: '/test'
       fullPath: '/admin/test'
       preLoaderRoute: typeof AdminTestRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/subscription-tiers': {
+      id: '/admin/subscription-tiers'
+      path: '/subscription-tiers'
+      fullPath: '/admin/subscription-tiers'
+      preLoaderRoute: typeof AdminSubscriptionTiersRouteImport
       parentRoute: typeof AdminRoute
     }
     '/api/tropes/': {
@@ -1429,6 +1589,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoryIdInfoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/webhooks/stripe': {
+      id: '/api/webhooks/stripe'
+      path: '/api/webhooks/stripe'
+      fullPath: '/api/webhooks/stripe'
+      preLoaderRoute: typeof ApiWebhooksStripeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/tts/voices': {
       id: '/api/tts/voices'
       path: '/api/tts/voices'
@@ -1464,6 +1631,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSubscriptionsMySubscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/subscriptions/change-tier': {
+      id: '/api/subscriptions/change-tier'
+      path: '/api/subscriptions/change-tier'
+      fullPath: '/api/subscriptions/change-tier'
+      preLoaderRoute: typeof ApiSubscriptionsChangeTierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/subscriptions/cancel': {
+      id: '/api/subscriptions/cancel'
+      path: '/api/subscriptions/cancel'
+      fullPath: '/api/subscriptions/cancel'
+      preLoaderRoute: typeof ApiSubscriptionsCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/stories/user': {
       id: '/api/stories/user'
       path: '/api/stories/user'
@@ -1490,6 +1671,20 @@ declare module '@tanstack/react-router' {
       path: '/api/profile/data'
       fullPath: '/api/profile/data'
       preLoaderRoute: typeof ApiProfileDataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout/success': {
+      id: '/api/checkout/success'
+      path: '/api/checkout/success'
+      fullPath: '/api/checkout/success'
+      preLoaderRoute: typeof ApiCheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout/create-session': {
+      id: '/api/checkout/create-session'
+      path: '/api/checkout/create-session'
+      fullPath: '/api/checkout/create-session'
+      preLoaderRoute: typeof ApiCheckoutCreateSessionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/billing/invoices': {
@@ -1581,6 +1776,13 @@ declare module '@tanstack/react-router' {
       path: '/api/admin/templates'
       fullPath: '/api/admin/templates'
       preLoaderRoute: typeof ApiAdminTemplatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/subscription-tiers/': {
+      id: '/api/admin/subscription-tiers/'
+      path: '/api/admin/subscription-tiers'
+      fullPath: '/api/admin/subscription-tiers'
+      preLoaderRoute: typeof ApiAdminSubscriptionTiersIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/admin/settings/': {
@@ -1723,6 +1925,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAdminTemplatesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/admin/subscription-tiers/sync-stripe': {
+      id: '/api/admin/subscription-tiers/sync-stripe'
+      path: '/api/admin/subscription-tiers/sync-stripe'
+      fullPath: '/api/admin/subscription-tiers/sync-stripe'
+      preLoaderRoute: typeof ApiAdminSubscriptionTiersSyncStripeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/subscription-tiers/$id': {
+      id: '/api/admin/subscription-tiers/$id'
+      path: '/api/admin/subscription-tiers/$id'
+      fullPath: '/api/admin/subscription-tiers/$id'
+      preLoaderRoute: typeof ApiAdminSubscriptionTiersIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/settings/import': {
       id: '/api/admin/settings/import'
       path: '/api/admin/settings/import'
@@ -1800,6 +2016,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTemplatesIdEditRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/subscription-tiers/$id/edit': {
+      id: '/admin/subscription-tiers/$id/edit'
+      path: '/$id/edit'
+      fullPath: '/admin/subscription-tiers/$id/edit'
+      preLoaderRoute: typeof AdminSubscriptionTiersIdEditRouteImport
+      parentRoute: typeof AdminSubscriptionTiersRoute
+    }
     '/api/stories/$id/scene/stream': {
       id: '/api/stories/$id/scene/stream'
       path: '/stream'
@@ -1845,7 +2068,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminSubscriptionTiersRouteChildren {
+  AdminSubscriptionTiersIdEditRoute: typeof AdminSubscriptionTiersIdEditRoute
+}
+
+const AdminSubscriptionTiersRouteChildren: AdminSubscriptionTiersRouteChildren =
+  {
+    AdminSubscriptionTiersIdEditRoute: AdminSubscriptionTiersIdEditRoute,
+  }
+
+const AdminSubscriptionTiersRouteWithChildren =
+  AdminSubscriptionTiersRoute._addFileChildren(
+    AdminSubscriptionTiersRouteChildren,
+  )
+
 interface AdminRouteChildren {
+  AdminSubscriptionTiersRoute: typeof AdminSubscriptionTiersRouteWithChildren
   AdminTestRoute: typeof AdminTestRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminTemplatesBulkImportRoute: typeof AdminTemplatesBulkImportRoute
@@ -1861,6 +2099,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminSubscriptionTiersRoute: AdminSubscriptionTiersRouteWithChildren,
   AdminTestRoute: AdminTestRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminTemplatesBulkImportRoute: AdminTemplatesBulkImportRoute,
@@ -1876,6 +2115,18 @@ const AdminRouteChildren: AdminRouteChildren = {
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface SubscriptionRouteChildren {
+  SubscriptionSuccessRoute: typeof SubscriptionSuccessRoute
+}
+
+const SubscriptionRouteChildren: SubscriptionRouteChildren = {
+  SubscriptionSuccessRoute: SubscriptionSuccessRoute,
+}
+
+const SubscriptionRouteWithChildren = SubscriptionRoute._addFileChildren(
+  SubscriptionRouteChildren,
+)
 
 interface ApiBillingInvoicesRouteChildren {
   ApiBillingInvoicesIdRoute: typeof ApiBillingInvoicesIdRoute
@@ -1960,7 +2211,7 @@ const rootRouteChildren: RootRouteChildren = {
   PreferencesRoute: PreferencesRoute,
   PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
-  SubscriptionRoute: SubscriptionRoute,
+  SubscriptionRoute: SubscriptionRouteWithChildren,
   TermsRoute: TermsRoute,
   ApiPreferencesRoute: ApiPreferencesRoute,
   AuthLoginRoute: AuthLoginRoute,
@@ -1976,15 +2227,20 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthSignupRoute: ApiAuthSignupRoute,
   ApiBillingDetailsRoute: ApiBillingDetailsRoute,
   ApiBillingInvoicesRoute: ApiBillingInvoicesRouteWithChildren,
+  ApiCheckoutCreateSessionRoute: ApiCheckoutCreateSessionRoute,
+  ApiCheckoutSuccessRoute: ApiCheckoutSuccessRoute,
   ApiProfileDataRoute: ApiProfileDataRoute,
   ApiProfilePasswordRoute: ApiProfilePasswordRoute,
   ApiStoriesIdRoute: ApiStoriesIdRouteWithChildren,
   ApiStoriesUserRoute: ApiStoriesUserRoute,
+  ApiSubscriptionsCancelRoute: ApiSubscriptionsCancelRoute,
+  ApiSubscriptionsChangeTierRoute: ApiSubscriptionsChangeTierRoute,
   ApiSubscriptionsMySubscriptionRoute: ApiSubscriptionsMySubscriptionRoute,
   ApiSubscriptionsTiersRoute: ApiSubscriptionsTiersRoute,
   ApiSubscriptionsUsageRoute: ApiSubscriptionsUsageRoute,
   ApiTemplatesIdRoute: ApiTemplatesIdRoute,
   ApiTtsVoicesRoute: ApiTtsVoicesRoute,
+  ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   StoryIdInfoRoute: StoryIdInfoRoute,
   StoryIdReadRoute: StoryIdReadRoute,
   ApiProfileIndexRoute: ApiProfileIndexRoute,
@@ -2000,6 +2256,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminSettingsKeyRoute: ApiAdminSettingsKeyRoute,
   ApiAdminSettingsExportRoute: ApiAdminSettingsExportRoute,
   ApiAdminSettingsImportRoute: ApiAdminSettingsImportRoute,
+  ApiAdminSubscriptionTiersIdRoute: ApiAdminSubscriptionTiersIdRoute,
+  ApiAdminSubscriptionTiersSyncStripeRoute:
+    ApiAdminSubscriptionTiersSyncStripeRoute,
   ApiAdminTemplatesIdRoute: ApiAdminTemplatesIdRouteWithChildren,
   ApiAdminTemplatesBulkDeleteRoute: ApiAdminTemplatesBulkDeleteRoute,
   ApiAdminTemplatesBulkImportRoute: ApiAdminTemplatesBulkImportRoute,
@@ -2015,6 +2274,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAdminApiKeysIndexRoute: ApiAdminApiKeysIndexRoute,
   ApiAdminModelsIndexRoute: ApiAdminModelsIndexRoute,
   ApiAdminSettingsIndexRoute: ApiAdminSettingsIndexRoute,
+  ApiAdminSubscriptionTiersIndexRoute: ApiAdminSubscriptionTiersIndexRoute,
   ApiAdminTemplatesIndexRoute: ApiAdminTemplatesIndexRoute,
   ApiAdminTropesIndexRoute: ApiAdminTropesIndexRoute,
   ApiAdminUsersIndexRoute: ApiAdminUsersIndexRoute,

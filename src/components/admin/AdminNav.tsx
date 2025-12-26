@@ -3,6 +3,7 @@ import {
 	ArrowLeft,
 	Beaker,
 	Cpu,
+	CreditCard,
 	FileText,
 	LayoutDashboard,
 	ScrollText,
@@ -57,6 +58,12 @@ export function AdminNav(props: AdminNavProps) {
 			label: "Users",
 			path: "/admin/users",
 			icon: Users,
+			roles: ["admin"] as UserRole[],
+		},
+		{
+			label: "Subscription Tiers",
+			path: "/admin/subscription-tiers",
+			icon: CreditCard,
 			roles: ["admin"] as UserRole[],
 		},
 		{

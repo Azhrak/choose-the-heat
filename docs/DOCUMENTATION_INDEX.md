@@ -2,7 +2,7 @@
 
 This index helps navigate the Choose the Heat project documentation.
 
-**Last Updated**: 2025-12-24
+**Last Updated**: 2025-12-26
 
 ---
 
@@ -56,6 +56,13 @@ Complete feature documentation following standardized templates for AI-maintaina
   - User management (Admin only)
   - Template management (Editor/Admin)
   - Audit logging and system statistics
+
+- **[Stripe Billing Integration](features/stripe-billing.md)** - 🚧 In Development
+  - Subscription tier management (Free, Basic, Premium, Premium Plus)
+  - Stripe payment processing integration
+  - Invoice tracking and webhook sync
+  - Admin panel for tier management
+  - **Status**: Backend complete, frontend pending
 
 **Template**: See [FEATURE_DOCUMENTATION_TEMPLATE.md](FEATURE_DOCUMENTATION_TEMPLATE.md) for creating new feature docs
 

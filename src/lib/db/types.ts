@@ -3,7 +3,7 @@
  * Please do not edit it manually.
  */
 
-import type { ColumnType, Selectable } from "kysely";
+import type { ColumnType } from "kysely";
 
 export type AuditEntityType = "setting" | "template" | "user";
 
@@ -172,6 +172,7 @@ export interface Invoices {
 	payment_provider_invoice_id: string | null;
 	pdf_url: string | null;
 	status: string;
+	stripe_invoice_object: Json | null;
 	subscription_tier: SubscriptionTier;
 	subtotal: Numeric;
 	tax_amount: Generated<Numeric>;
@@ -273,6 +274,10 @@ export interface SubscriptionTierLimits {
 	name: string;
 	price_monthly: Numeric;
 	price_yearly: Numeric | null;
+	stripe_metadata: Json | null;
+	stripe_price_id_monthly: string | null;
+	stripe_price_id_yearly: string | null;
+	stripe_product_id: string | null;
 	text_generations_per_day: number;
 	tier: SubscriptionTier;
 	updated_at: Generated<Timestamp>;
@@ -324,6 +329,8 @@ export interface Users {
 	id: Generated<string>;
 	name: string | null;
 	role: Generated<UserRole>;
+	stripe_customer_id: string | null;
+	stripe_subscription_id: string | null;
 	subscription_auto_renew: Generated<boolean>;
 	subscription_end_date: Timestamp | null;
 	subscription_start_date: Timestamp | null;
@@ -352,6 +359,17 @@ export interface UserStories {
 	user_id: string;
 }
 
+export interface WebhookEvents {
+	created_at: Generated<Timestamp>;
+	error: string | null;
+	event_id: string;
+	event_type: string;
+	id: Generated<string>;
+	payload: Json;
+	processed: Generated<boolean>;
+	processed_at: Timestamp | null;
+}
+
 export interface DB {
 	admin_audit_logs: AdminAuditLogs;
 	ai_models: AiModels;
@@ -375,7 +393,5 @@ export interface DB {
 	usage_tracking: UsageTracking;
 	user_stories: UserStories;
 	users: Users;
+	webhook_events: WebhookEvents;
 }
-
-// Type aliases for convenience
-export type AIModel = Selectable<AiModels>;

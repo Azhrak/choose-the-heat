@@ -1,4 +1,5 @@
 import { Check, Crown, Sparkles, Star, Volume2, Zap } from "lucide-react";
+import { useState } from "react";
 import type { TierFeatures } from "~/hooks/useSubscriptionQuery";
 import type { SubscriptionTier } from "~/lib/db/types";
 
@@ -29,6 +30,12 @@ interface SubscriptionCardProps {
  * @param props.isCurrentPlan - Whether this is the user's current subscription tier
  */
 export function SubscriptionCard(props: SubscriptionCardProps) {
+	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">(
+		"monthly",
+	);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const isPopular = props.tier === "premium";
 	const isPremiumPlus = props.tier === "premium_plus";
 
@@ -44,6 +51,40 @@ export function SubscriptionCard(props: SubscriptionCardProps) {
 				return <Crown className="w-8 h-8" />;
 			default:
 				return <Star className="w-8 h-8" />;
+		}
+	};
+
+	const handleUpgrade = async () => {
+		if (props.tier === "free" || props.isCurrentPlan) return;
+
+		setIsLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch("/api/checkout/create-session", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					tierId: props.tier,
+					billingPeriod,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error(data.error || "Failed to create checkout session");
+			}
+
+			// Redirect to Stripe Checkout
+			if (data.sessionUrl) {
+				window.location.href = data.sessionUrl;
+			}
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Something went wrong");
+			setIsLoading(false);
 		}
 	};
 
@@ -93,18 +134,52 @@ export function SubscriptionCard(props: SubscriptionCardProps) {
 				<p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
 					{props.description}
 				</p>
+
+				{/* Billing Period Toggle - Only show for paid tiers with yearly option */}
+				{props.tier !== "free" &&
+					props.priceYearly &&
+					props.priceYearly > 0 && (
+						<div className="flex justify-center gap-2 mb-3">
+							<button
+								type="button"
+								onClick={() => setBillingPeriod("monthly")}
+								className={`px-3 py-1 text-xs rounded-full transition-all ${
+									billingPeriod === "monthly"
+										? "bg-rose-500 text-white"
+										: "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+								}`}
+							>
+								Monthly
+							</button>
+							<button
+								type="button"
+								onClick={() => setBillingPeriod("yearly")}
+								className={`px-3 py-1 text-xs rounded-full transition-all ${
+									billingPeriod === "yearly"
+										? "bg-rose-500 text-white"
+										: "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+								}`}
+							>
+								Yearly (Save{" "}
+								{Math.round(
+									(1 - props.priceYearly / (props.priceMonthly * 12)) * 100,
+								)}
+								%)
+							</button>
+						</div>
+					)}
+
 				<div className="mb-4">
 					<span className="text-4xl font-bold text-gray-900 dark:text-white">
-						${props.priceMonthly.toFixed(2)}
+						$
+						{billingPeriod === "yearly" && props.priceYearly
+							? (props.priceYearly / 12).toFixed(2)
+							: props.priceMonthly.toFixed(2)}
 					</span>
 					<span className="text-gray-600 dark:text-gray-400">/month</span>
-					{props.priceYearly && props.priceYearly > 0 && (
+					{billingPeriod === "yearly" && props.priceYearly && (
 						<p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-							or ${props.priceYearly.toFixed(2)}/year (save{" "}
-							{Math.round(
-								(1 - props.priceYearly / (props.priceMonthly * 12)) * 100,
-							)}
-							%)
+							Billed ${props.priceYearly.toFixed(2)} annually
 						</p>
 					)}
 				</div>
@@ -155,11 +230,19 @@ export function SubscriptionCard(props: SubscriptionCardProps) {
 				)}
 			</div>
 
+			{/* Error message */}
+			{error && (
+				<div className="mb-3 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-800 dark:text-red-200">
+					{error}
+				</div>
+			)}
+
 			<button
 				type="button"
-				disabled={props.isCurrentPlan}
+				disabled={props.isCurrentPlan || isLoading}
+				onClick={handleUpgrade}
 				className={`w-full py-3 px-6 rounded-lg font-semibold transition-all ${
-					props.isCurrentPlan
+					props.isCurrentPlan || isLoading
 						? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
 						: isPremiumPlus
 							? "bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white"
@@ -168,11 +251,13 @@ export function SubscriptionCard(props: SubscriptionCardProps) {
 								: "bg-rose-500 hover:bg-rose-600 text-white"
 				}`}
 			>
-				{props.isCurrentPlan
-					? "Current Plan"
-					: props.tier === "free"
+				{isLoading
+					? "Processing..."
+					: props.isCurrentPlan
 						? "Current Plan"
-						: "Upgrade Now"}
+						: props.tier === "free"
+							? "Current Plan"
+							: "Upgrade Now"}
 			</button>
 		</div>
 	);
