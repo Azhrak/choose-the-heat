@@ -41,7 +41,7 @@ export const Route = createFileRoute("/api/admin/settings/import")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Invalid import data format", details: error.errors },
+							{ error: "Invalid import data format", details: error.issues },
 							{ status: 400 },
 						);
 					}

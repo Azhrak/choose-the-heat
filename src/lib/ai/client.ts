@@ -221,7 +221,7 @@ export async function generateCompletion(
 	options?: {
 		model?: string;
 		temperature?: number;
-		maxTokens?: number;
+		maxOutputTokens?: number;
 		config?: AIConfig;
 	},
 ): Promise<string> {
@@ -232,7 +232,7 @@ export async function generateCompletion(
 		system: systemPrompt,
 		prompt: userPrompt,
 		temperature: options?.temperature ?? config.temperature,
-		maxTokens: options?.maxTokens ?? config.maxTokens,
+		maxOutputTokens: options?.maxOutputTokens ?? config.maxOutputTokens,
 	});
 
 	if (!text) {

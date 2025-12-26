@@ -113,7 +113,7 @@ export const Route = createFileRoute("/api/admin/subscription-tiers/$id")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Validation error", details: error.errors },
+							{ error: "Validation error", details: error.issues },
 							{ status: 400 },
 						);
 					}

@@ -3,13 +3,14 @@
  * Please do not edit it manually.
  */
 
-import type { ColumnType } from "kysely";
+import type { ColumnType, Selectable } from "kysely";
 
 export type AuditEntityType = "setting" | "template" | "user";
 
-export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-	? ColumnType<S, I | undefined, U>
-	: ColumnType<T, T | undefined, T>;
+export type Generated<T> =
+	T extends ColumnType<infer S, infer I, infer U>
+		? ColumnType<S, I | undefined, U>
+		: ColumnType<T, T | undefined, T>;
 
 export type Json = JsonValue;
 
@@ -369,6 +370,10 @@ export interface WebhookEvents {
 	processed: Generated<boolean>;
 	processed_at: Timestamp | null;
 }
+
+// Type aliases for backward compatibility
+// Use Selectable to get the actual row type from SELECT queries
+export type AIModel = Selectable<AiModels>;
 
 export interface DB {
 	admin_audit_logs: AdminAuditLogs;

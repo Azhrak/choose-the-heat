@@ -104,7 +104,7 @@ export const Route = createFileRoute("/api/admin/settings/")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Validation failed", details: error.errors },
+							{ error: "Validation failed", details: error.issues },
 							{ status: 400 },
 						);
 					}

@@ -16,11 +16,11 @@ export const Route = createFileRoute("/api/auth/google")({
 				// Store the code verifier for later use in the callback
 				storePKCEVerifier(state, codeVerifier);
 
-				// Arctic's createAuthorizationURL takes the code verifier directly
-				// and generates the challenge internally
-				const url = await google.createAuthorizationURL(state, codeVerifier, {
-					scopes: ["email", "profile"],
-				});
+				// Arctic v3: scopes are passed as the third parameter directly
+				const url = google.createAuthorizationURL(state, codeVerifier, [
+					"email",
+					"profile",
+				]);
 
 				return new Response(null, {
 					status: 302,

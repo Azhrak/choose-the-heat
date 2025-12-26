@@ -212,7 +212,7 @@ function TestPage() {
 						provider: currentAIProvider,
 						model: currentAIModel,
 						temperature: currentTemperature,
-						maxTokens: currentMaxTokens,
+						maxOutputTokens: currentMaxTokens,
 						timeout: currentTimeout,
 					}}
 					ttsSettings={{

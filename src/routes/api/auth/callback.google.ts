@@ -41,12 +41,13 @@ export const Route = createFileRoute("/api/auth/callback/google")({
 						return new Response("Missing code verifier", { status: 400 });
 					}
 
-					// Exchange code for tokens (Arctic's validateAuthorizationCode handles PKCE)
+					// Exchange code for tokens (Arctic v3: validateAuthorizationCode handles PKCE)
 					const tokens = await google.validateAuthorizationCode(
 						code,
 						codeVerifier,
 					);
-					const accessToken = tokens.accessToken;
+					// Arctic v3: accessToken is now a function
+					const accessToken = tokens.accessToken();
 					const googleUser = await getGoogleUser(accessToken);
 
 					// Create or get user

@@ -43,7 +43,7 @@ export const Route = createFileRoute("/api/admin/test/generate-text")({
 						provider,
 						model,
 						temperature: 0.7,
-						maxTokens: 300, // Limit for test (under 200 words)
+						maxOutputTokens: 300, // Limit for test (under 200 words)
 						fallbackEnabled: false,
 						timeoutSeconds: 60,
 						availableModels: {
@@ -63,7 +63,7 @@ export const Route = createFileRoute("/api/admin/test/generate-text")({
 						{
 							model,
 							temperature: 0.7,
-							maxTokens: 300,
+							maxOutputTokens: 300,
 							config: testConfig,
 						},
 					);

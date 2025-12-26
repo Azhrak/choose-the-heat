@@ -162,7 +162,7 @@ export const Route = createFileRoute("/api/admin/templates/bulk-import")({
 						return json(
 							{
 								error: "Validation error",
-								details: error.errors,
+								details: error.issues,
 							},
 							{ status: 400 },
 						);

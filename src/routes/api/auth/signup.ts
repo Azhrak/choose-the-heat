@@ -25,7 +25,7 @@ export const Route = createFileRoute("/api/auth/signup")({
 
 					if (!result.success) {
 						return json(
-							{ error: "Invalid input", details: result.error.errors },
+							{ error: "Invalid input", details: result.error.issues },
 							{ status: 400 },
 						);
 					}

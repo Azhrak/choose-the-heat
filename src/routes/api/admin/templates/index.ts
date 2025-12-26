@@ -195,7 +195,7 @@ export const Route = createFileRoute("/api/admin/templates/")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Validation error", details: error.errors },
+							{ error: "Validation error", details: error.issues },
 							{ status: 400 },
 						);
 					}

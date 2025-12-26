@@ -414,7 +414,7 @@ export function ModelManagementPanel(props: ModelManagementPanelProps) {
 							</h3>
 							<div className="space-y-8">
 								{Object.entries(enabledModelsByProvider).map(
-									([provider, providerModels]) => (
+									([provider, providerModels]: [string, AIModel[]]) => (
 										<div key={provider} className="space-y-4">
 											{/* Provider Header */}
 											<div className="flex items-center gap-2 px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">

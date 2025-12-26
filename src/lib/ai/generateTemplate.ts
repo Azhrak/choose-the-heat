@@ -297,7 +297,7 @@ export async function generateTemplate(
 	// Generate with AI
 	const response = await generateCompletion(systemPrompt, userPrompt, {
 		temperature: 0.7, // Balanced creativity
-		maxTokens: 2000, // Sufficient for complete template
+		maxOutputTokens: 2000, // Sufficient for complete template
 	});
 
 	console.log("[Template Generation] AI response received");

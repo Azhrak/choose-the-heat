@@ -13,7 +13,7 @@ export interface AIConfig {
 	provider: AIProvider;
 	model: string;
 	temperature: number;
-	maxTokens: number;
+	maxOutputTokens: number;
 	fallbackEnabled: boolean;
 	fallbackProvider?: AIProvider;
 	timeoutSeconds: number;
@@ -80,7 +80,7 @@ function getConfigFromEnv(): AIConfig {
 		provider,
 		model: defaultModels[provider],
 		temperature: 0.7,
-		maxTokens: 2000,
+		maxOutputTokens: 2000,
 		fallbackEnabled: false,
 		timeoutSeconds: 60,
 		availableModels,
@@ -121,9 +121,9 @@ async function parseSettings(
 		temperature: settings["ai.temperature"]
 			? Number.parseFloat(settings["ai.temperature"])
 			: envFallback.temperature,
-		maxTokens: settings["ai.max_tokens"]
+		maxOutputTokens: settings["ai.max_tokens"]
 			? Number.parseInt(settings["ai.max_tokens"], 10)
-			: envFallback.maxTokens,
+			: envFallback.maxOutputTokens,
 		fallbackEnabled:
 			settings["ai.fallback_enabled"] === "true" || envFallback.fallbackEnabled,
 		fallbackProvider: settings["ai.fallback_provider"]

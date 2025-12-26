@@ -94,7 +94,7 @@ export const Route = createFileRoute("/api/admin/api-keys/$provider")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Validation failed", details: error.errors },
+							{ error: "Validation failed", details: error.issues },
 							{ status: 400 },
 						);
 					}
@@ -135,7 +135,7 @@ export const Route = createFileRoute("/api/admin/api-keys/$provider")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Invalid provider", details: error.errors },
+							{ error: "Invalid provider", details: error.issues },
 							{ status: 400 },
 						);
 					}

@@ -48,7 +48,7 @@ export async function validateApiKey(
 				await generateText({
 					model: openai(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}
@@ -58,7 +58,7 @@ export async function validateApiKey(
 				await generateText({
 					model: google(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}
@@ -68,7 +68,7 @@ export async function validateApiKey(
 				await generateText({
 					model: anthropic(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}
@@ -78,7 +78,7 @@ export async function validateApiKey(
 				await generateText({
 					model: mistral(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}
@@ -91,7 +91,7 @@ export async function validateApiKey(
 				await generateText({
 					model: xai(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}
@@ -104,7 +104,7 @@ export async function validateApiKey(
 				await generateText({
 					model: openrouter(model),
 					prompt: "Say OK",
-					maxTokens: 10,
+					maxOutputTokens: 10,
 				});
 				return { valid: true };
 			}

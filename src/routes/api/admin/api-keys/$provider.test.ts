@@ -87,7 +87,7 @@ export const Route = createFileRoute("/api/admin/api-keys/$provider/test")({
 
 					if (error instanceof z.ZodError) {
 						return json(
-							{ error: "Invalid provider", details: error.errors },
+							{ error: "Invalid provider", details: error.issues },
 							{ status: 400 },
 						);
 					}

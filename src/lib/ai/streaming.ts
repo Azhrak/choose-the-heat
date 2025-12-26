@@ -139,7 +139,7 @@ export async function streamCompletion(
 	options?: {
 		model?: string;
 		temperature?: number;
-		maxTokens?: number;
+		maxOutputTokens?: number;
 		config?: AIConfig;
 	},
 ) {
@@ -166,7 +166,7 @@ export async function streamCompletion(
 			system: isGoogle ? undefined : systemPrompt,
 			prompt: combinedPrompt,
 			temperature: options?.temperature ?? config.temperature,
-			maxTokens: options?.maxTokens ?? config.maxTokens,
+			maxOutputTokens: options?.maxOutputTokens ?? config.maxOutputTokens,
 		});
 
 		console.log(

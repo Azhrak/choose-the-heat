@@ -23,7 +23,7 @@ interface CurrentSettingsDisplayProps {
 		provider?: string;
 		model?: string;
 		temperature?: string;
-		maxTokens?: string;
+		maxOutputTokens?: string;
 		timeout?: string;
 	};
 	ttsSettings: {
@@ -52,7 +52,7 @@ export function CurrentSettingsDisplay(props: CurrentSettingsDisplayProps) {
 					/>
 					<SettingDisplay
 						label="Max Tokens"
-						value={props.aiSettings.maxTokens || "2000"}
+						value={props.aiSettings.maxOutputTokens || "2000"}
 					/>
 					<SettingDisplay
 						label="Timeout"

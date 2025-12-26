@@ -64,7 +64,7 @@ export const Route = createFileRoute("/api/admin/tropes/")({
 						return json(
 							{
 								error: "Validation failed",
-								details: validationResult.error.errors,
+								details: validationResult.error.issues,
 							},
 							{ status: 400 },
 						);
