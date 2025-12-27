@@ -22,7 +22,7 @@ import {
 } from "~/hooks/useAdminSubscriptionTiersQuery";
 import { useCurrentUserQuery } from "~/hooks/useCurrentUserQuery";
 
-export const Route = createFileRoute("/admin/subscription-tiers")({
+export const Route = createFileRoute("/admin/subscription-tiers/")({
 	component: SubscriptionTiersPage,
 });
 
@@ -47,7 +47,7 @@ function SubscriptionTiersPage() {
 			<div className="flex items-center justify-center min-h-screen">
 				<LoadingSpinner />
 			</div>
-		);
+		)
 	}
 
 	if (error) {
@@ -57,7 +57,7 @@ function SubscriptionTiersPage() {
 					message={error instanceof Error ? error.message : "An error occurred"}
 				/>
 			</div>
-		);
+		)
 	}
 
 	if (!userData) {
@@ -72,7 +72,7 @@ function SubscriptionTiersPage() {
 				message="Subscription tier management is restricted to administrators only."
 				backTo="/admin"
 			/>
-		);
+		)
 	}
 
 	if (!data) {
@@ -96,7 +96,7 @@ function SubscriptionTiersPage() {
 			setSyncMessage({
 				type: "success",
 				text: "Successfully synced all tiers to Stripe!",
-			});
+			})
 			setTimeout(() => setSyncMessage(null), 5000);
 		} catch (error) {
 			setSyncMessage({
@@ -105,15 +105,15 @@ function SubscriptionTiersPage() {
 					error instanceof Error
 						? error.message
 						: "Failed to sync tiers to Stripe",
-			});
+			})
 			setTimeout(() => setSyncMessage(null), 5000);
 		}
-	};
+	}
 
 	// Handle row click to navigate to edit page
 	const handleRowClick = (tier: (typeof tiers)[0]) => {
 		navigate({ to: `/admin/subscription-tiers/${tier.tier}/edit` });
-	};
+	}
 
 	return (
 		<AdminLayout currentPath="/admin/subscription-tiers" userRole={role}>
@@ -177,7 +177,7 @@ function SubscriptionTiersPage() {
 						className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
 					>
 						<RefreshCw
-							className={`w-4 h-4 ${syncMutation.isPending ? "animate-spin" : ""}`}
+							className={`w-4 h-4 ${syncMutation.isPending ? `animate-spin` : ``}`}
 						/>
 						{syncMutation.isPending ? "Syncing..." : "Sync to Stripe"}
 					</button>
@@ -205,8 +205,7 @@ function SubscriptionTiersPage() {
 				)}
 
 				{/* Tiers Table */}
-				<div className="bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden">
-					<DataTable
+				<DataTable
 						data={tiersWithId}
 						columns={[
 							{
@@ -283,7 +282,6 @@ function SubscriptionTiersPage() {
 						onRowClick={handleRowClick}
 						emptyMessage="No subscription tiers found."
 					/>
-				</div>
 
 				<div className="text-sm text-slate-600 dark:text-gray-400">
 					<p>
@@ -294,5 +292,5 @@ function SubscriptionTiersPage() {
 				</div>
 			</Stack>
 		</AdminLayout>
-	);
+	)
 }

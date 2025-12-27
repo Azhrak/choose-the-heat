@@ -30,7 +30,6 @@ import { Route as AuthOnboardingRouteImport } from './routes/auth/onboarding'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiPreferencesRouteImport } from './routes/api/preferences'
 import { Route as AdminTestRouteImport } from './routes/admin/test'
-import { Route as AdminSubscriptionTiersRouteImport } from './routes/admin/subscription-tiers'
 import { Route as ApiTropesIndexRouteImport } from './routes/api/tropes/index'
 import { Route as ApiTemplatesIndexRouteImport } from './routes/api/templates/index'
 import { Route as ApiStoriesIndexRouteImport } from './routes/api/stories/index'
@@ -38,6 +37,7 @@ import { Route as ApiProfileIndexRouteImport } from './routes/api/profile/index'
 import { Route as AdminUsersIndexRouteImport } from './routes/admin/users/index'
 import { Route as AdminTropesIndexRouteImport } from './routes/admin/tropes/index'
 import { Route as AdminTemplatesIndexRouteImport } from './routes/admin/templates/index'
+import { Route as AdminSubscriptionTiersIndexRouteImport } from './routes/admin/subscription-tiers/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminProvidersIndexRouteImport } from './routes/admin/providers/index'
 import { Route as AdminAuditLogsIndexRouteImport } from './routes/admin/audit-logs/index'
@@ -217,11 +217,6 @@ const AdminTestRoute = AdminTestRouteImport.update({
   path: '/test',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSubscriptionTiersRoute = AdminSubscriptionTiersRouteImport.update({
-  id: '/subscription-tiers',
-  path: '/subscription-tiers',
-  getParentRoute: () => AdminRoute,
-} as any)
 const ApiTropesIndexRoute = ApiTropesIndexRouteImport.update({
   id: '/api/tropes/',
   path: '/api/tropes/',
@@ -257,6 +252,12 @@ const AdminTemplatesIndexRoute = AdminTemplatesIndexRouteImport.update({
   path: '/templates/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSubscriptionTiersIndexRoute =
+  AdminSubscriptionTiersIndexRouteImport.update({
+    id: '/subscription-tiers/',
+    path: '/subscription-tiers/',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminSettingsIndexRoute = AdminSettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -604,9 +605,9 @@ const AdminTemplatesIdEditRoute = AdminTemplatesIdEditRouteImport.update({
 } as any)
 const AdminSubscriptionTiersIdEditRoute =
   AdminSubscriptionTiersIdEditRouteImport.update({
-    id: '/$id/edit',
-    path: '/$id/edit',
-    getParentRoute: () => AdminSubscriptionTiersRoute,
+    id: '/subscription-tiers/$id/edit',
+    path: '/subscription-tiers/$id/edit',
+    getParentRoute: () => AdminRoute,
   } as any)
 const ApiStoriesIdSceneStreamRoute = ApiStoriesIdSceneStreamRouteImport.update({
   id: '/stream',
@@ -657,7 +658,6 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
-  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -696,6 +696,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
   '/admin/providers': typeof AdminProvidersIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
+  '/admin/subscription-tiers': typeof AdminSubscriptionTiersIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
   '/admin/tropes': typeof AdminTropesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -760,7 +761,6 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
-  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -799,6 +799,7 @@ export interface FileRoutesByTo {
   '/admin/audit-logs': typeof AdminAuditLogsIndexRoute
   '/admin/providers': typeof AdminProvidersIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
+  '/admin/subscription-tiers': typeof AdminSubscriptionTiersIndexRoute
   '/admin/templates': typeof AdminTemplatesIndexRoute
   '/admin/tropes': typeof AdminTropesIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
@@ -865,7 +866,6 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/subscription': typeof SubscriptionRouteWithChildren
   '/terms': typeof TermsRoute
-  '/admin/subscription-tiers': typeof AdminSubscriptionTiersRouteWithChildren
   '/admin/test': typeof AdminTestRoute
   '/api/preferences': typeof ApiPreferencesRoute
   '/auth/login': typeof AuthLoginRoute
@@ -904,6 +904,7 @@ export interface FileRoutesById {
   '/admin/audit-logs/': typeof AdminAuditLogsIndexRoute
   '/admin/providers/': typeof AdminProvidersIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
+  '/admin/subscription-tiers/': typeof AdminSubscriptionTiersIndexRoute
   '/admin/templates/': typeof AdminTemplatesIndexRoute
   '/admin/tropes/': typeof AdminTropesIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
@@ -971,7 +972,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
-    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
@@ -1010,6 +1010,7 @@ export interface FileRouteTypes {
     | '/admin/audit-logs'
     | '/admin/providers'
     | '/admin/settings'
+    | '/admin/subscription-tiers'
     | '/admin/templates'
     | '/admin/tropes'
     | '/admin/users'
@@ -1074,7 +1075,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
-    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
@@ -1113,6 +1113,7 @@ export interface FileRouteTypes {
     | '/admin/audit-logs'
     | '/admin/providers'
     | '/admin/settings'
+    | '/admin/subscription-tiers'
     | '/admin/templates'
     | '/admin/tropes'
     | '/admin/users'
@@ -1178,7 +1179,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/subscription'
     | '/terms'
-    | '/admin/subscription-tiers'
     | '/admin/test'
     | '/api/preferences'
     | '/auth/login'
@@ -1217,6 +1217,7 @@ export interface FileRouteTypes {
     | '/admin/audit-logs/'
     | '/admin/providers/'
     | '/admin/settings/'
+    | '/admin/subscription-tiers/'
     | '/admin/templates/'
     | '/admin/tropes/'
     | '/admin/users/'
@@ -1498,13 +1499,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTestRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/subscription-tiers': {
-      id: '/admin/subscription-tiers'
-      path: '/subscription-tiers'
-      fullPath: '/admin/subscription-tiers'
-      preLoaderRoute: typeof AdminSubscriptionTiersRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/api/tropes/': {
       id: '/api/tropes/'
       path: '/api/tropes'
@@ -1552,6 +1546,13 @@ declare module '@tanstack/react-router' {
       path: '/templates'
       fullPath: '/admin/templates'
       preLoaderRoute: typeof AdminTemplatesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/subscription-tiers/': {
+      id: '/admin/subscription-tiers/'
+      path: '/subscription-tiers'
+      fullPath: '/admin/subscription-tiers'
+      preLoaderRoute: typeof AdminSubscriptionTiersIndexRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/settings/': {
@@ -2018,10 +2019,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/subscription-tiers/$id/edit': {
       id: '/admin/subscription-tiers/$id/edit'
-      path: '/$id/edit'
+      path: '/subscription-tiers/$id/edit'
       fullPath: '/admin/subscription-tiers/$id/edit'
       preLoaderRoute: typeof AdminSubscriptionTiersIdEditRouteImport
-      parentRoute: typeof AdminSubscriptionTiersRoute
+      parentRoute: typeof AdminRoute
     }
     '/api/stories/$id/scene/stream': {
       id: '/api/stories/$id/scene/stream'
@@ -2068,22 +2069,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminSubscriptionTiersRouteChildren {
-  AdminSubscriptionTiersIdEditRoute: typeof AdminSubscriptionTiersIdEditRoute
-}
-
-const AdminSubscriptionTiersRouteChildren: AdminSubscriptionTiersRouteChildren =
-  {
-    AdminSubscriptionTiersIdEditRoute: AdminSubscriptionTiersIdEditRoute,
-  }
-
-const AdminSubscriptionTiersRouteWithChildren =
-  AdminSubscriptionTiersRoute._addFileChildren(
-    AdminSubscriptionTiersRouteChildren,
-  )
-
 interface AdminRouteChildren {
-  AdminSubscriptionTiersRoute: typeof AdminSubscriptionTiersRouteWithChildren
   AdminTestRoute: typeof AdminTestRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminTemplatesBulkImportRoute: typeof AdminTemplatesBulkImportRoute
@@ -2091,15 +2077,16 @@ interface AdminRouteChildren {
   AdminAuditLogsIndexRoute: typeof AdminAuditLogsIndexRoute
   AdminProvidersIndexRoute: typeof AdminProvidersIndexRoute
   AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
+  AdminSubscriptionTiersIndexRoute: typeof AdminSubscriptionTiersIndexRoute
   AdminTemplatesIndexRoute: typeof AdminTemplatesIndexRoute
   AdminTropesIndexRoute: typeof AdminTropesIndexRoute
   AdminUsersIndexRoute: typeof AdminUsersIndexRoute
+  AdminSubscriptionTiersIdEditRoute: typeof AdminSubscriptionTiersIdEditRoute
   AdminTemplatesIdEditRoute: typeof AdminTemplatesIdEditRoute
   AdminUsersIdEditRoute: typeof AdminUsersIdEditRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminSubscriptionTiersRoute: AdminSubscriptionTiersRouteWithChildren,
   AdminTestRoute: AdminTestRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminTemplatesBulkImportRoute: AdminTemplatesBulkImportRoute,
@@ -2107,9 +2094,11 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditLogsIndexRoute: AdminAuditLogsIndexRoute,
   AdminProvidersIndexRoute: AdminProvidersIndexRoute,
   AdminSettingsIndexRoute: AdminSettingsIndexRoute,
+  AdminSubscriptionTiersIndexRoute: AdminSubscriptionTiersIndexRoute,
   AdminTemplatesIndexRoute: AdminTemplatesIndexRoute,
   AdminTropesIndexRoute: AdminTropesIndexRoute,
   AdminUsersIndexRoute: AdminUsersIndexRoute,
+  AdminSubscriptionTiersIdEditRoute: AdminSubscriptionTiersIdEditRoute,
   AdminTemplatesIdEditRoute: AdminTemplatesIdEditRoute,
   AdminUsersIdEditRoute: AdminUsersIdEditRoute,
 }
